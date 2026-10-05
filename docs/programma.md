@@ -147,6 +147,18 @@ erano senza intestazione, quindi i confini tra i capitoli 2, 3, 4 e 5 vanno conf
 6. Esercizio 81: Completi le frasi! (preposizioni)
 7. Esercizio 82: Il signor … in albergo, con domande (personaggio e albergo da rinominare)
 
+## Capitolo 12
+
+1. Ricapitolazione
+2. Ascolto 12
+3. Lettura: «La prima colazione», con domande
+4. Illustrazioni: i cibi (pane, frutta, contorni) — figure da disegnare
+5. Esercizio 83: Metta al plurale! A. Questo/quel, questa/quella  B. Quale? Questo/a, quel/la  C. Quello studente, ecc.
+6. Esercizio 84: A. Lo — la — li — le (complemento diretto)  B. Gli — le — loro (complemento indiretto)  C. Le — mi — ci (complemento indiretto)
+7. Esercizio 85: Risponda alle domande! (i fiori)
+8. Lettura: «La bella segretaria»
+9. Esercizio 86: Metta le frasi al passato!
+
 ## Figure pronte
 
 bottiglia, tazza, computer
