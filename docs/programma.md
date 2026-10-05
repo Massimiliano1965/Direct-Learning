@@ -46,6 +46,23 @@ Dal libro si prende solo l'ordine: frasi, nomi e figure sono nostri e moderni
 33. Esercizio: Trasformazioni: vari verbi
 34. Esercizio: Perché? Per…
 35. Esercizio: Sostituzioni: verbi e sostantivi
+36. (mancano: esercizi 26 e 27, pagina non ancora vista)
+37. Specchio: I numeri 1 — 1000
+38. Esercizio: Quanto fa…?
+39. Esercizio: Quanti chilometri ci sono…?
+40. Lettura: «La famiglia Rossi» (famiglia da rinominare)
+41. Esercizio: Domande sulla lettura
+42. Esercizio: La famiglia (vocabolario)
+43. Esercizio: Essere o avere
+44. Esercizio: Plurale dei sostantivi: o/i, a/e
+45. Esercizio: C'è un, ci sono due
+46. Esercizio: Plurale (sostantivi e aggettivi): A. Ecco due  B. Quanto costano?
+47. Esercizio: Questo/a/i/e (aggettivi dimostrativi)
+48. Esercizio: Plurale dei sostantivi: e-i
+49. Esercizio: Plurale degli articoli: l'/gli, l'/le
+50. Esercizio: Plurale degli aggettivi dimostrativi: quei/quelle/quegli
+51. Esercizio: Metta le frasi al plurale!
+52. Esercizio: Plurali irregolari
 
 ## Figure pronte per il Capitolo 1
 
@@ -60,4 +77,5 @@ bottiglia, tazza, computer
 5. Gli esercizi 18–25 (bar, ore, «Uno studente») sono ancora Capitolo 1 o già Capitolo 2?
 6. Lezione 2: la finestra come oggetto da scoprire con «Che cos'è?» va bene, o tutte e tre presentate subito?
 7. Durata della lezione: ora circa 10 minuti; allungare verso i 40?
-8. Personaggi delle letture (Carter, Bertini, Pietro): che nomi nuovi usiamo?
+8. Personaggi delle letture (Carter, Bertini, Pietro, famiglia Rossi): che nomi nuovi usiamo?
+9. Manca la pagina dell'indice con gli esercizi 26 e 27.
