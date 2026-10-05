@@ -159,6 +159,99 @@ erano senza intestazione, quindi i confini tra i capitoli 2, 3, 4 e 5 vanno conf
 8. Lettura: «La bella segretaria»
 9. Esercizio 86: Metta le frasi al passato!
 
+## Capitolo 13
+
+1. Ricapitolazione — Ascolto 13
+2. Lettura: «Una cena al ristorante»
+3. Illustrazioni: i cibi (pasta, pesce, carne, ecc.) — figure da disegnare
+4. Lettura: «I pasti in Italia»
+5. Lettura: «Il menù»
+6. Esercizio 87: Risponda con «ne»!
+7. Esercizio 88: Verbi riflessivi: A. alzarsi, sedersi, fermarsi…  B. chiamarsi
+8. Esercizio 89: Metta le frasi al passato!
+9. Esercizio 90: Già — non ancora
+
+## Capitolo 14
+
+1. Ricapitolazione — Ascolto 14
+2. Lettura: «Una telefonata da Milano a Roma», con domande
+3. Esercizio 91: I verbi servili: A. volere  B. potere  C. dovere
+4. Esercizio 92: Metta le frasi al passato!
+5. Esercizio 93: Ancora — non più
+6. Lettura: «Il vino è buono in Italia»
+
+## Capitolo 15
+
+1. Ricapitolazione — Ascolto 15
+2. Lettura: «Il signor … ha dimenticato» (personaggio da rinominare)
+3. Specchio: 1000 domande e 1000 risposte
+4. Lettura: «Perché … vuol sapere l'indirizzo del direttore»
+5. Esercizio 94: L'Italia e gli italiani, con domande
+6. Esercizio 95: Passato con «essere»: A. Coniugazione  B. Verbi riflessivi
+7. Esercizio 96: L'ho visto (complemento diretto)
+8. Esercizio 97: A. Lo — la — li — le — ne (complemento diretto)  B. Mi — Le, gli — le, ci — loro
+9. Esercizio 98: Il primo dettato: «Il signor … è andato alla stazione.»
+
+## Capitolo 16
+
+1. Ricapitolazione — Ascolto 16
+2. Lettura: «… è stanco», con domande (personaggio da rinominare)
+3. Lettura: «… vuol bene a …», con domande (personaggi da rinominare)
+4. Esercizio 99: Il congiuntivo: Io voglio che Lei…
+5. Esercizio 100: Domande sulle illustrazioni
+6. Esercizio 101: A. Di che cosa è fatto…?  B. Ci vuole — ci vogliono
+7. Esercizio 102: Passato con «essere»
+8. Esercizio 103: Il secondo dettato: «Che ore sono?»
+
+## Capitolo 17
+
+1. Ricapitolazione — Ascolto 17
+2. Lettura: «Non c'è luce in casa»
+3. Lettura: «Perché non ho mai tempo per me?»
+4. Esercizio orale: A. «Ecco la lampada» (lettura)  B. Specchietto (verbi riflessivi)
+5. Esercizio 104: Metta le frasi al passato!
+6. Esercizio 105: Metta le frasi al futuro!
+7. Esercizio 106: Completi lo specchio!
+8. Esercizio 107: Qual è il contrario?
+9. Esercizio 108: Il terzo dettato: «Questa lampada non è buona.»
+
+## Capitolo 18
+
+1. Ricapitolazione — Ascolto 18
+2. Lettura: «A lui piace la montagna, ma noi andremo in Riviera», con domande
+3. Lettura: «La signorina … fa la valigia» (personaggio da rinominare)
+4. Lettura: A. «Le quattro stagioni»  B. «Una barzelletta»
+5. Esercizio 109: L'imperfetto: Ora e prima
+6. Esercizio 110: L'Italia e gli italiani, con domande
+7. Esercizio 111: Il quarto dettato: «Che cosa si può fare in estate?»
+
+## Capitolo 19
+
+1. Ricapitolazione — Ascolto 19
+2. Lettura: A. «Il tempo e le quattro stagioni»  B. Domande sul tempo e sulle stagioni
+3. Esercizio 112: Domande sulle illustrazioni
+4. Esercizio 113: A. Domande sul termometro  B. Vocabolario sul tempo
+5. Esercizio 114: A. Trasformazioni (presente — passato — futuro)  B. Il gerundio: sto parlando, leggendo, ecc.
+6. Lettura: «Queste valige sono troppo pesanti!», con domande
+7. Esercizio 115: Il quinto dettato: «Di solito non piove in autunno.»
+
+## Capitolo 20
+
+1. Ricapitolazione — Ascolto 20
+2. Lettura: «… l'aspetta a Napoli» (personaggio da rinominare)
+3. Esercizio 116: Metta le frasi al negativo!
+4. Esercizio 117: Segnali stradali, con domande — figure da disegnare
+5. Esercizio 118: Lo — la — li — le — ne (complemento diretto)
+6. Lettura: «Qualche cosa per il turista» (espressioni)
+7. Esercizio 119: Il sesto dettato: «Vorrei andare in centro.»
+8. Lettura: «Due parole ai nostri allievi»
+
+## Appendici del libro
+
+Lista dei verbi, verbi ausiliari, verbi modello, altri verbi, participi passati
+irregolari, chiave per gli esercizi, pianta di Roma, moneta italiana (da
+aggiornare: euro, non lire), programma degli ascolti.
+
 ## Figure pronte
 
 bottiglia, tazza, computer
@@ -175,3 +268,4 @@ bottiglia, tazza, computer
 8. Personaggi delle letture (Carter, Bertini, Pietro, famiglia Rossi): che nomi nuovi usiamo?
 9. Manca la pagina dell'indice con gli esercizi 26 e 27.
 10. Dove iniziano i Capitoli 2, 3, 4 e 5 nell'indice?
+11. Le pagine 159–170 dell'indice (fine del Capitolo 17 e voci intermedie) sono complete? Nella foto c'è un salto tra «Non c'è luce in casa» e «Perché non ho mai tempo per me?».
