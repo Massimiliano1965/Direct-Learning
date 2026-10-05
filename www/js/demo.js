@@ -9,7 +9,7 @@ let DEMO = 0;
 let demoActive = false;
 let demoNext = null;
 const DEMO_STOP = { stop: true };
-const DEMO_STEPS = 7;
+const DEMO_STEPS = 8;
 
 function startDemo(next) {
   stopLesson();
@@ -217,6 +217,31 @@ async function demoScript(t, run) {
   await T('È un libro o una penna?');
   await studentTalks('È una penna.');
   await praise();
+
+  // 8. Le domande le fa l'allievo
+  step(8, null, '');
+  setCue('pick');
+  cap('At the end you ask the questions: tap a picture and ask.');
+  await T('Tocca a te.');
+  setStatus('Your turn: tap a picture, then ask', 'wait');
+  setPickable(true);
+  sweepFinger(() => run === DEMO);
+  await sleep(4000);
+  setPickable(false);
+  await tap(document.querySelector('.object-box[data-obj="chair"]'));
+  showIndicated('chair');
+  setCue('q');
+  await studentTalks('È un tavolo?');
+  setCue('ok');
+  await T('No, non è un tavolo. È una sedia.', t.modelRate);
+  setCue('pick');
+  await sleep(400);
+  await tap(document.querySelector('.object-box[data-obj="pen"]'));
+  showIndicated('pen');
+  setCue('q');
+  await studentTalks("Che cos'è?");
+  setCue('ok');
+  await T('È una penna.', t.modelRate);
 
   setProgress(DEMO_STEPS, DEMO_STEPS);
   cap('Now it\'s your turn!');

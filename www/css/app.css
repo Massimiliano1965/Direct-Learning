@@ -110,6 +110,9 @@ button .hint { display: block; font-size: 12px; font-weight: 600; opacity: .7; m
 #stage-mark { position: absolute; right: 10px; top: 10px; width: 62px; height: 62px; filter: drop-shadow(0 4px 10px rgba(0,0,0,.45)); }
 #stage-cue { position: absolute; right: 8px; top: 8px; width: 84px; height: 84px; filter: drop-shadow(0 4px 10px rgba(0,0,0,.45)); }
 /* «ripeti»: le frecce girano e lampeggiano, così si capisce che bisogna ripetere */
+#stage-cue[data-kind="pick"] svg { animation: blink .7s ease-in-out infinite alternate; }
+.object-box.pickable { border-color: var(--accent); animation: pickme 1s ease-in-out infinite alternate; }
+@keyframes pickme { from { box-shadow: 0 0 0 rgba(140,143,232,0); } to { box-shadow: 0 0 18px rgba(140,143,232,.8); } }
 #stage-cue[data-kind="r"] svg { animation: spin 1.8s linear infinite, blink .7s ease-in-out infinite alternate; }
 @keyframes spin { to { transform: rotate(360deg); } }
 @keyframes blink { from { opacity: .45; } to { opacity: 1; } }
@@ -143,6 +146,12 @@ button .hint { display: block; font-size: 12px; font-weight: 600; opacity: .7; m
 #demo-finger { position: fixed; left: 50%; top: 50%; width: 54px; height: 54px; margin: -27px 0 0 -27px; border-radius: 50%; background: rgba(255,255,255,.35); border: 3px solid #fff; box-shadow: 0 0 18px rgba(255,255,255,.6); pointer-events: none; z-index: 50; transition: left .7s ease, top .7s ease; }
 #demo-finger.tap { animation: fingertap .35s ease-in-out; }
 @keyframes fingertap { 50% { transform: scale(.7); background: rgba(255,255,255,.75); } }
+/* Dito che scorre sulle figure quando tocca all'allievo scegliere (non si tocca: pointer-events none) */
+#pick-finger { position: fixed; left: 50%; top: 50%; width: 64px; height: 64px; margin: -6px 0 0 -32px; pointer-events: none; z-index: 50;
+  transition: left .45s ease, top .45s ease; filter: drop-shadow(0 4px 8px rgba(0,0,0,.5)); }
+#pick-finger svg { width: 100%; height: 100%; display: block; transform: rotate(90deg); }
+#pick-finger.tap svg { animation: fingerpoke .3s ease-in-out; }
+@keyframes fingerpoke { 50% { transform: rotate(90deg) translateX(8px) scale(.92); } }
 .demo-press { outline: 4px solid #fff; outline-offset: 2px; filter: brightness(1.25); }
 
 /* Fine lezione */

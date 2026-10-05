@@ -189,6 +189,8 @@ function stopLesson() {
   $('screen-lesson').classList.remove('tunnel');
   hideMark();
   setCue('');
+  setPickable(false);
+  hideFinger();
 }
 
 function buildGrid(items) {
@@ -200,6 +202,7 @@ function buildGrid(items) {
     box.className = 'object-box';
     box.dataset.obj = obj;
     box.innerHTML = FIG[obj];
+    box.onclick = () => onPick(obj);
     grid.appendChild(box);
   });
 }
@@ -274,6 +277,7 @@ function askStep() {
   const run = L.run;
   L.busy = true;
   setStatus('Listen', '');
+  if (st.type === 'ask') { askTurn(st, run); return; }
   setCue(cueFor(st));
   // Durante le ripetizioni l'insegnante parla col ritmo del modello
   const rate = st.drill ? L.teacher.modelRate : L.teacher.rate * (st.speed || 1);
@@ -287,6 +291,118 @@ function askStep() {
   // Un attimo di silenzio prima dello sfogo
   if (st.pause && !st.drill) setTimeout(() => { if (alive(run)) speak(); }, st.pause);
   else speak();
+}
+
+/* ---------- Le domande le fa l'allievo ----------
+   Tocca un oggetto e chiede «È un tavolo?» o «Che cos'è?»; l'insegnante risponde
+   sempre con la frase giusta e intera. */
+function setPickable(on) {
+  document.querySelectorAll('.object-box').forEach(b => b.classList.toggle('pickable', !!on));
+}
+function askTurn(st, run) {
+  L.pick = null;
+  showIndicated(null);
+  setCue('pick');
+  setPickable(true);
+  const t = L.teacher;
+  const ready = () => {
+    if (!alive(run)) return;
+    L.busy = false;
+    setStatus('Your turn: tap a picture, then ask', 'wait');
+    sweepFinger(() => alive(run) && !L.pick && !L.paused);
+  };
+  if (st.intro) Mouth.speak('Tocca a te.', t.rate, t.pitch, ready); else ready();
+}
+// Il dito passa sopra ogni figura, la indica e poi sparisce (si ferma se l'allievo tocca prima)
+let sweepId = 0;
+function sweepFinger(stillWaiting) {
+  const id = ++sweepId;
+  const f = $('pick-finger');
+  f.innerHTML = HAND;
+  const boxes = Array.from(document.querySelectorAll('.object-box'));
+  const stop = () => id !== sweepId || !stillWaiting();
+  const place = (el) => {
+    const r = el.getBoundingClientRect();
+    f.style.left = (r.left + r.width / 2) + 'px';
+    f.style.top = (r.top + r.height * 0.35) + 'px';
+  };
+  let k = 0;
+  const next = () => {
+    if (stop() || k >= boxes.length) { hideFinger(); return; }
+    const el = boxes[k++];
+    if (f.classList.contains('hidden')) {
+      place(el);                 // primo punto: compare già sopra la prima figura
+      f.classList.remove('hidden');
+    } else place(el);
+    setTimeout(() => {
+      if (stop()) { hideFinger(); return; }
+      restartAnim(f, 'tap');
+      setTimeout(next, 380);
+    }, 470);
+  };
+  next();
+}
+function hideFinger() { sweepId++; $('pick-finger').classList.add('hidden'); }
+
+function onPick(obj) {
+  if (!L || L.paused || L.busy || L.pick) return;
+  const st = cur();
+  if (!st || st.type !== 'ask') return;
+  L.pick = obj;
+  hideFinger();
+  setPickable(false);
+  showIndicated(obj);
+  setCue('q');
+  listenSoon(L.run);
+}
+function handleAsk(alts) {
+  const X = L.pick;
+  const t = L.teacher;
+  const run = L.run;
+  const ts = DB.teachers[t.key];
+  let r = null;
+  for (const a of alts.slice(0, 5)) { const x = evalAsk(X, a); if (x.ok) { r = x; break; } if (!r) r = x; }
+  L.busy = true;
+  const scr = $('screen-lesson');
+  if (r.ok) {
+    ts.items++;
+    if (!L.attempts) { ts.first++; L.first++; ts.lat += (Date.now() - L.listenStart) / 1000; ts.latN++; }
+    saveDB();
+    setStatus('Correct', 'ok');
+    flashGood();
+    setCue('ok');
+    const answer = answerAsk(X, r);
+    if (DB.settings.showText) $('prompt-text').textContent = answer;
+    Mouth.speak(answer, t.modelRate, t.pitch, () => { if (alive(run)) nextStep(run, 500); });
+    return;
+  }
+  // domanda sbagliata: parola d'errore e la domanda giusta, l'allievo la ripete
+  if (!L.attempts) ts.items++;
+  L.attempts++;
+  ts.errors++;
+  L.streak = 0;
+  saveDB();
+  flashBad();
+  showMark(t.mark);
+  if (L.attempts >= 3) {
+    // dopo 3 tentativi l'insegnante fa la domanda e risponde da solo
+    setStatus('Moving on', 'err');
+    Mouth.speak(Q + ' È ' + np(X) + '.', t.modelRate, t.pitch, () => {
+      if (!alive(run)) return;
+      scr.classList.remove('tunnel');
+      nextStep(run, 600);
+    });
+    return;
+  }
+  setStatus('Try again', 'err');
+  if (DB.settings.showText) $('prompt-text').textContent = r.model;
+  Mouth.speakParts([{ text: t.wrong, rate: t.rate }, { text: r.model, rate: t.modelRate }], t.pitch, () => {
+    if (!alive(run)) return;
+    scr.classList.remove('tunnel');
+    setCue('r');
+    L.busy = false;
+    listenSoon(run);
+  });
 }
 
 // Il microfono parte un attimo dopo la fine della voce dell'insegnante, così non sente
@@ -333,6 +449,11 @@ function handleAnswer(alts) {
       setTimeout(() => { if (alive(run)) listen(); }, 200);
       return;
     }
+  }
+  if (st.type === 'ask') {
+    $('heard').textContent = alts[0] ? 'Heard: “' + alts[0] + '”' : '';
+    handleAsk(alts);
+    return;
   }
   const res = evaluateAll(st, alts);
   $('heard').textContent = alts[0] ? 'Heard: “' + alts[0] + '”' : '';
@@ -396,6 +517,7 @@ function nextStep(run, delay) {
   L.drill = null;
   L.di = 0;
   L.repFails = 0;
+  L.pick = null;
   setTimeout(() => { if (alive(run)) runStep(); }, delay);
 }
 
@@ -459,6 +581,7 @@ function showMark(mark) {
 // Segnale della frase: «?» per le domande, frecce per le frasi da ripetere
 function cueFor(st) {
   if (!st || st.type === 'reveal') return '';
+  if (st.type === 'ask') return 'pick';
   if (st.type === 'echo' || st.prompt === st.model) return 'r';
   return /\?\s*$/.test(st.prompt) ? 'q' : 'r';
 }
@@ -502,6 +625,7 @@ $('btn-replay').onclick = () => {
 };
 $('btn-talk').onclick = () => {
   if (!L || L.busy || L.paused) return;
+  if (cur().type === 'ask' && !L.pick) { setStatus('Tap a picture first', 'wait'); return; }
   L.noSpeech = 0;
   listen();
 };

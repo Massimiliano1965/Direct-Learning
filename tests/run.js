@@ -71,6 +71,30 @@ cases.forEach(([step, text, want]) => check(step.type + ' «' + text + '» → '
 check('no senza correzione: full=false', evaluate({ type: 'neg', show: 'table', ask: 'book' }, 'No, non è un libro.').full === false);
 check('no con correzione: full=true', evaluate({ type: 'neg', show: 'table', ask: 'book' }, 'No, non è un libro, è un tavolo.').full === true);
 
+// 1a. Domande fatte dall'allievo (tocca la sedia e chiede)
+const evalAsk = run('evalAsk');
+const answerAsk = run('answerAsk');
+const askCases = [
+  ["Che cos'è?", 'what', 'È una sedia.'],
+  ['che cosa è', 'what', 'È una sedia.'],
+  ['È una sedia?', 'yes', 'Sì, è una sedia.'],
+  ['È questo un tavolo?', 'no', 'No, non è un tavolo. È una sedia.'],
+  ['è un libro', 'no', 'No, non è un libro. È una sedia.']
+];
+askCases.forEach(([t, kind, ans]) => {
+  const r = evalAsk('chair', t);
+  check('domanda «' + t + '» → ' + kind, r.ok && r.kind === kind && answerAsk('chair', r) === ans);
+});
+check('domanda con articolo sbagliato → si corregge', (r => !r.ok && r.model === 'È un tavolo?')(evalAsk('chair', 'È una tavolo?')));
+check('risposta invece di domanda → «Che cos\'è?»', (r => !r.ok && r.model === "Che cos'è?")(evalAsk('chair', 'Sì, è una sedia.')));
+check('parola sconosciuta → «Che cos\'è?»', (r => !r.ok && r.model === "Che cos'è?")(evalAsk('chair', 'È un ombrello?')));
+check('domanda corretta suggerita è accettata', evalAsk('chair', 'È un tavolo?').ok);
+LESSONS.forEach(l => {
+  const steps = buildSteps(l);
+  const asks = steps.filter(s => s.type === 'ask');
+  check(l.id + ': in fondo 6 domande dell\'allievo', asks.length === 6 && steps.slice(-6).every(s => s.type === 'ask') && asks[0].intro);
+});
+
 // 1b. Eco della voce dell'insegnante
 const isEcho = run('isEcho');
 const altSt = { type: 'alt', show: 'table', prompt: 'È un tavolo o un libro?', model: 'È un tavolo.' };
@@ -105,7 +129,7 @@ for (let rep = 0; rep < 30; rep++) {
   check('il ritmo cresce', steps.filter(s => s.phase === 'mix').every((s, i, a) => !i || s.speed >= a[i - 1].speed));
   check('niente stesso oggetto due volte di fila nel mix', steps.filter(s => s.phase === 'mix').every((s, i, a) => !i || s.show !== a[i - 1].show));
   steps.forEach((s, i) => {
-    if (s.type === 'reveal') return;
+    if (s.type === 'reveal' || s.type === 'ask') return;
     if (!evaluate(s, s.model).ok) check('passo ' + (i + 1) + ' modello «' + s.model + '» (' + s.type + ')', false);
     if (s.type === 'neg' && s.show === s.ask) check('no: oggetto chiesto diverso da quello indicato', false);
   });
@@ -125,7 +149,7 @@ LESSONS.forEach(l => {
     const steps = buildSteps(l);
     const reveal = steps.findIndex(s => s.type === 'reveal');
     steps.forEach((st, i) => {
-      if (st.type === 'reveal') return;
+      if (st.type === 'reveal' || st.type === 'ask') return;
       for (let n = 1; n <= 5; n++) {
         const d = buildDrill(st, n, items);
         if (d.length !== n) check('drill lunghezza ' + n, false);

@@ -102,6 +102,28 @@ function isEcho(step, text) {
   return t === p || (t.split(' ').length >= 2 && p.endsWith(' ' + t));
 }
 
+// Domanda fatta dall'allievo sull'oggetto X che ha toccato.
+// «Che cos'è?» → kind 'what'; «È un tavolo?» / «È questo un tavolo?» → 'yes' se è il tavolo,
+// altrimenti 'no' (ask = la parola chiesta). Se non va bene, model = la domanda giusta da ripetere.
+function evalAsk(X, text) {
+  const s = norm(text);
+  const bad = (model) => ({ ok: false, model: model || Q });
+  if (has(s, 'si') || has(s, 'no') || negations(s).length) return bad();   // ha risposto, non chiesto
+  const c = claims(s.replace(/ e questo (un|una|uno) /g, ' e $1 '));
+  if (has(s, 'che cosa e') && !c.length) return { ok: true, kind: 'what' };
+  if (c.length === 1 && c[0].charAt(0) !== '?') return { ok: true, kind: c[0] === X ? 'yes' : 'no', ask: c[0] };
+  // parola conosciuta ma articolo sbagliato («È un sedia?»): si corregge quella domanda
+  const m = / e (?:questo )?(?:un|una|uno) ([a-z]+)(?= )/.exec(s);
+  if (m && WORD2KEY[m[1]]) return bad('È ' + np(WORD2KEY[m[1]]) + '?');
+  return bad();
+}
+// Risposta corretta dell'insegnante alla domanda dell'allievo
+function answerAsk(X, r) {
+  if (r.kind === 'what') return 'È ' + np(X) + '.';
+  if (r.kind === 'yes') return 'Sì, è ' + np(X) + '.';
+  return 'No, non è ' + np(r.ask) + '. È ' + np(X) + '.';
+}
+
 // La migliore tra le interpretazioni del microfono (al massimo 5)
 function evaluateAll(step, alts) {
   const list = (alts || []).slice(0, 5);
@@ -183,6 +205,7 @@ function mixStep(items, types, prevShow) {
 // 9. si ricomincia: tutto mescolato, sempre più veloce
 const MIX_BLOCKS = 3;
 const MIX_BLOCK_SIZE = 8;
+const ASK_TURNS = 6;
 function buildSteps(lesson) {
   const K = lesson.known.slice();
   const F = lesson.fresh;
@@ -215,6 +238,11 @@ function buildSteps(lesson) {
       s.speed = 1 + 0.06 * (b + 1);   // il ritmo cresce a ogni blocco
       prev = s.show;
     }
+  }
+  // 10. le domande le fa l'allievo: tocca un oggetto e chiede, l'insegnante risponde
+  for (let i = 0; i < ASK_TURNS; i++) {
+    const s = add({ type: 'ask', prompt: '', model: '' }, 'ask');
+    if (!i) s.intro = true;
   }
   return st;
 }

@@ -235,6 +235,10 @@ const MARKS = {
 // «!» verde = giusto.
 // In italiano la domanda si sente solo dall'intonazione: il segnale la rende chiara.
 const CUES = {
+  // «tocca una figura e fai tu la domanda»
+  pick: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="46" fill="url(#gLilla)" stroke="#fff" stroke-width="4"/>
+    <circle cx="44" cy="34" r="12" fill="none" stroke="#fff" stroke-width="3" opacity=".7"/>
+    <path d="M40 34 v28 l-7 -6 a5 5 0 0 0 -7 7 l14 16 h22 l5 -18 v-12 a4 4 0 0 0 -8 0 v-2 a4 4 0 0 0 -8 0 v-1 a4 4 0 0 0 -8 0 v-12 a3.5 3.5 0 0 0 -3 -0 z" fill="#fff" stroke="#2a2440" stroke-width="2.5" stroke-linejoin="round"/></svg>`,
   ok: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="46" fill="#34a847" stroke="#fff" stroke-width="4"/>
     <rect x="43" y="18" width="14" height="44" rx="7" fill="#fff"/><circle cx="50" cy="77" r="8" fill="#fff"/></svg>`,
   q: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="46" fill="url(#gLilla)" stroke="#fff" stroke-width="4"/>
