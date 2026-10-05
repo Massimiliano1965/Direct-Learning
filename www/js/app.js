@@ -72,7 +72,7 @@ function renderHome() {
     const b = document.createElement('button');
     b.className = 'choice' + (k === sel ? ' selected' : '');
     b.innerHTML = avatarHtml(t) +
-                  '<span><span class="t-name">' + t.name + '</span><span class="t-style">' + t.style + ' · ' + t.repeats + ' repeats after a mistake</span></span>' +
+                  '<span><span class="t-name">' + t.name + '</span><span class="t-style">' + t.style + ' · mistake: repeat ×' + t.repeats + '</span></span>' +
                   '<span class="t-mark">' + MARKS[t.mark] + '</span>' +
                   (ti.today === k ? '<span class="badge">today</span>' : '');
     b.onclick = () => {
