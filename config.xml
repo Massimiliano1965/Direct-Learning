@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="it.metododiretto.app" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android">
   <name>Metodo Diretto</name>
-  <description>Inglese con il metodo diretto: guarda, ascolta, rispondi.</description>
+  <description>Italian with the direct method: look, listen, answer.</description>
   <content src="index.html" />
   <allow-intent href="market:*" />
   <preference name="Orientation" value="portrait" />

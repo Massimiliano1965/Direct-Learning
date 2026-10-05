@@ -104,9 +104,6 @@ button .hint { display: block; font-size: 12px; font-weight: 600; opacity: .7; m
 #stage-figure.pop { animation: pop .45s cubic-bezier(.2,1.4,.4,1); }
 @keyframes pop { 0% { transform: scale(.7); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
 #stage svg { width: 100%; height: 100%; display: block; }
-#stage-badge { position: absolute; right: 12px; top: 12px; width: 46px; height: 46px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: var(--ok); box-shadow: 0 4px 12px rgba(52,168,71,.55); }
-#stage-badge svg { width: 28px; height: 28px; }
-#stage-badge.show { animation: pop .4s cubic-bezier(.2,1.6,.4,1); }
 .steam path { animation: steam 2.4s ease-in-out infinite; }
 .steam path + path { animation-delay: 1.2s; }
 @keyframes steam { 0% { transform: translateY(4px); opacity: 0; } 40% { opacity: .9; } 100% { transform: translateY(-6px); opacity: 0; } }
@@ -145,11 +142,6 @@ button .hint { display: block; font-size: 12px; font-weight: 600; opacity: .7; m
 .ring .val { fill: none; stroke: var(--ok); stroke-width: 14; stroke-linecap: round; animation: ringFill 1.2s ease-out both; }
 @keyframes ringFill { from { stroke-dashoffset: 427; } }
 .ring .num { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 40px; font-weight: 800; }
-.stars { display: flex; justify-content: center; gap: 8px; margin: 8px 0 12px; }
-.stars svg { width: 42px; height: 42px; }
-.stars .on { animation: pop .5s cubic-bezier(.2,1.6,.4,1) both; }
-.stars .on:nth-child(2) { animation-delay: .25s; }
-.stars .on:nth-child(3) { animation-delay: .5s; }
 
 /* Report */
 .t-card { margin-bottom: 12px; }

@@ -1,14 +1,8 @@
 'use strict';
 /* =====================================================================
-   LOGICA PURA: valutazione delle risposte, sequenza, punteggio, date.
-   Nessun accesso allo schermo: testabile da Node (tests/run.js).
+   LOGICA PURA: valutazione delle risposte in italiano, sequenza della
+   lezione, punteggio, date. Nessun accesso allo schermo: testabile da Node.
    ===================================================================== */
-
-function isButton(w) { return !!(ITEMS[w] && ITEMS[w].button); }
-// "a book", "an umbrella" — i pulsanti invece: "the talk button"
-function art(w) { return isButton(w) ? 'the ' + w + ' button' : (/^[aeiou]/.test(w) ? 'an ' : 'a ') + w; }
-// "the book", "the talk button" (per "Touch …")
-function the(w) { return 'the ' + w + (isButton(w) ? ' button' : ''); }
 
 function shuffle(arr) {
   const a = arr.slice();
@@ -18,24 +12,27 @@ function shuffle(arr) {
   }
   return a;
 }
+function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
 
-// Normalizza quello che ha capito il microfono: minuscole, senza punteggiatura,
-// contrazioni sciolte (it's → it is, isn't → is not), alias → parola giusta.
+// "un libro", "una sedia", "un'aula"
+function np(k) {
+  const it = ITEMS[k];
+  return it.art === "un'" ? "un'" + it.word : it.art + ' ' + it.word;
+}
+
+const WORD2KEY = {};
+Object.keys(ITEMS).forEach(k => { WORD2KEY[ITEMS[k].word] = k; });
+
+// Normalizza quello che ha capito il microfono: minuscole, senza accenti e punteggiatura,
+// «cos'è / cosa è / cose» → "cosa e", alias → parola giusta.
 function norm(text) {
-  let s = ' ' + String(text || '').toLowerCase().replace(/[’`´]/g, "'") + ' ';
-  s = s.replace(/\bisn't\b/g, 'is not')
-       .replace(/\bit's\b/g, 'it is')
-       .replace(/\bthat's\b/g, 'that is')
-       .replace(/\bwhat's\b/g, 'what is');
-  s = s.replace(/[^a-z\s]/g, ' ');
+  let s = String(text || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+  s = s.replace(/['’`´]/g, ' ').replace(/[^a-z\s]/g, ' ');
   s = ' ' + s.replace(/\s+/g, ' ').trim() + ' ';
-  s = s.replace(/ its(?= )/g, ' it is')
-       .replace(/ isnt(?= )/g, ' is not')
-       .replace(/ thats(?= )/g, ' that is')
-       .replace(/ it s(?= )/g, ' it is');
-  Object.keys(ITEMS).forEach(w => {
-    ITEMS[w].alias.forEach(a => {
-      s = s.replace(new RegExp(' ' + a + '(?= )', 'g'), ' ' + w);
+  s = s.replace(/ cos e(?= )/g, ' cosa e').replace(/ cose(?= )/g, ' cosa e');
+  Object.keys(ITEMS).forEach(k => {
+    ITEMS[k].alias.forEach(a => {
+      s = s.replace(new RegExp(' ' + a + '(?= )', 'g'), ' ' + ITEMS[k].word);
     });
   });
   return s;
@@ -43,45 +40,54 @@ function norm(text) {
 
 function has(s, phrase) { return s.indexOf(' ' + phrase + ' ') !== -1; }
 
-// Oggetti "affermati" nella frase: "it is a book", "this is a pen", "that is an ...",
-// e per i pulsanti "it is the talk button". L'articolo deve essere quello giusto:
-// "it is the book" o "it is a talk" non valgono.
-function claims(s) {
-  const re = / (?:it|this|that) is (?:(?:a|an) ([a-z]+)|the ([a-z]+) button)(?= )/g;
+// Articolo + parola → chiave dell'oggetto. L'articolo deve essere quello giusto:
+// "un sedia" non vale. Parole sconosciute contano come oggetto sbagliato.
+function nounKey(art, word) {
+  const k = WORD2KEY[word];
+  if (!k) return '?' + word;
+  const want = ITEMS[k].art === "un'" ? 'un' : ITEMS[k].art;
+  return art === want ? k : null;
+}
+function collect(s, re) {
   const out = [];
   let m;
   while ((m = re.exec(s)) !== null) {
-    if (m[1] && !isButton(m[1])) out.push(m[1]);
-    else if (m[2] && isButton(m[2])) out.push(m[2]);
+    const k = nounKey(m[1], m[2]);
+    if (k) out.push(k);
   }
   return out;
 }
+// Negazioni: "non è un tavolo"
+function negations(s) { return collect(s, / non e (un|una|uno) ([a-z]+)(?= )/g); }
+// Affermazioni: "è un libro", "questo è un libro" (tolte prima le negazioni)
+function claims(s) {
+  const t = s.replace(/ non e (?:un|una|uno) [a-z]+(?= )/g, ' # ');
+  return collect(t, / e (un|una|uno) ([a-z]+)(?= )/g);
+}
 
-// Valuta una risposta. ok = accettata. full = risposta completa (es. con la correzione).
+// Valuta una risposta. ok = accettata. full = l'allievo ha detto anche cos'è davvero.
 function evaluate(step, text) {
   const s = norm(text);
   const c = claims(s);
+  const n = negations(s);
   const X = step.show;
-  const yes = has(s, 'yes');
+  const yes = has(s, 'si');
   const no = has(s, 'no');
-  const not = has(s, 'not');
   const onlyX = c.every(w => w === X);
   switch (step.type) {
-    case 'present':
-      return { ok: c.indexOf(X) !== -1 && onlyX && !not, full: true };
+    case 'echo':
+      if (step.check === 'question') return { ok: has(s, 'che cosa e') && !c.length, full: true };
+      return { ok: c.indexOf(X) !== -1 && onlyX && !n.length, full: true };
     case 'yes':
-      return {
-        ok: yes && !no && !not && onlyX && (has(s, 'it is') || has(s, 'this is') || has(s, 'that is')),
-        full: c.indexOf(X) !== -1
-      };
+      return { ok: yes && !no && !n.length && c.indexOf(X) !== -1 && onlyX, full: true };
     case 'neg':
       return {
-        ok: no && not && !yes && onlyX && has(s, 'is not'),
+        ok: no && !yes && n.indexOf(step.ask) !== -1 && n.indexOf(X) === -1 && onlyX,
         full: c.indexOf(X) !== -1
       };
     case 'alt':
     case 'key':
-      return { ok: c.indexOf(X) !== -1 && onlyX && !not, full: true };
+      return { ok: c.indexOf(X) !== -1 && onlyX && !n.length, full: true };
   }
   return { ok: false, full: false };
 }
@@ -96,35 +102,84 @@ function evaluateAll(step, alts) {
   return { ok: false, full: false };
 }
 
-// Sequenza della lezione:
-// presentazione → (domanda-risposta ×2, negativa ×2, alternativa, domanda chiave) × giri → tocca
-function buildSteps(items, withPresentation) {
+/* ---------- Passi ---------- */
+
+const Q = "Che cos'è?";
+const S = {
+  present: (X) => ({ type: 'echo', check: 'claim', show: X, prompt: 'È ' + np(X) + '.', model: 'È ' + np(X) + '.' }),
+  yes:     (X) => ({ type: 'yes', show: X, prompt: 'È ' + np(X) + '?', model: 'Sì, è ' + np(X) + '.' }),
+  neg:  (X, Y) => ({ type: 'neg', show: X, ask: Y, prompt: 'È ' + np(Y) + '?', model: 'No, non è ' + np(Y) + '.' }),
+  alt:  (X, Y) => {
+    const o = Math.random() < 0.5 ? [X, Y] : [Y, X];
+    return { type: 'alt', show: X, options: o, prompt: 'È ' + np(o[0]) + ' o ' + np(o[1]) + '?', model: 'È ' + np(X) + '.' };
+  },
+  key:     (X) => ({ type: 'key', show: X, prompt: Q, model: 'È ' + np(X) + '.' }),
+  // L'insegnante si risponde da solo: nessuna risposta attesa
+  reveal:  (X) => ({ type: 'reveal', show: X, prompt: Q + ' È ' + np(X) + '.', model: '' }),
+  askQ:    (X) => ({ type: 'echo', check: 'question', show: X, prompt: Q, model: Q })
+};
+
+// Un passo a caso tra sì, no, «o» e domanda chiave, senza ripetere lo stesso oggetto di fila
+function mixStep(items, types, prevShow) {
+  const pool = items.filter(x => x !== prevShow);
+  const X = pick(pool.length ? pool : items);
+  const Y = pick(items.filter(x => x !== X));
+  const t = pick(types);
+  if (t === 'yes') return S.yes(X);
+  if (t === 'neg') return S.neg(X, Y);
+  if (t === 'alt') return S.alt(X, Y);
+  return S.key(X);
+}
+
+// Sequenza della lezione (come in classe):
+// 1. presentazione delle parole note        «È un libro.» → ripete
+// 2. domande con il sì                       «È un libro?» → «Sì, è un libro.»
+// 3. domande con il no                       «È un tavolo?» → «No, non è un tavolo.»
+// 4. sì e no mescolati
+// 5. oggetto nuovo: solo no, due giri, senza mai nominarlo
+// 6. pausa e sfogo: «Che cos'è? È una penna.» «Che cos'è? È un libro.»
+// 7. l'allievo ripete «Che cos'è?», poi «È una penna.»
+// 8. domanda chiave su tutto
+// 9. si ricomincia: tutto mescolato, sempre più veloce
+const MIX_BLOCKS = 3;
+const MIX_BLOCK_SIZE = 8;
+function buildSteps(lesson) {
+  const K = lesson.known.slice();
+  const F = lesson.fresh;
+  const all = F ? K.concat([F]) : K;
   const st = [];
-  const n = items.length;
-  if (withPresentation) {
-    items.forEach(x => st.push({
-      type: 'present', show: x,
-      prompt: 'This is ' + art(x) + '.',
-      model: 'This is ' + art(x) + '.'
-    }));
+  const add = (s, phase) => { s.phase = phase; st.push(s); return s; };
+
+  K.forEach(x => add(S.present(x), 'present'));
+  shuffle(K).forEach(x => add(S.present(x), 'present'));
+  for (let r = 0; r < 2; r++) shuffle(K).forEach(x => add(S.yes(x), 'yes'));
+  const pairs = [];
+  K.forEach(x => K.forEach(y => { if (x !== y) pairs.push([x, y]); }));
+  shuffle(pairs).forEach(p => add(S.neg(p[0], p[1]), 'neg'));
+  let prev = null;
+  for (let i = 0; i < 6; i++) prev = add(mixStep(K, ['yes', 'neg'], prev), 'yesno').show;
+
+  if (F) {
+    for (let r = 0; r < 2; r++) shuffle(K).forEach(y => { add(S.neg(F, y), 'fresh').fresh = true; });
+    add(S.reveal(F), 'reveal').pause = 1500;
+    add(S.reveal(K[0]), 'reveal');
+    for (let i = 0; i < 4; i++) add(S.askQ(F), 'askq');
+    for (let i = 0; i < 2; i++) add(S.present(F), 'present');
   }
-  for (let r = 0; r < n; r++) {
-    const A = items[r], B = items[(r + 1) % n], C = items[(r + 2) % n];
-    st.push({ type: 'yes', show: A, prompt: 'Is this ' + art(A) + '?', model: "Yes, it's " + art(A) + '.' });
-    st.push({ type: 'yes', show: B, prompt: 'Is this ' + art(B) + '?', model: "Yes, it's " + art(B) + '.' });
-    st.push({ type: 'neg', show: A, ask: B, prompt: 'Is this ' + art(B) + '?', model: "No, it isn't. It's " + art(A) + '.' });
-    st.push({ type: 'neg', show: B, ask: C, prompt: 'Is this ' + art(C) + '?', model: "No, it isn't. It's " + art(B) + '.' });
-    const opts = (r % 2 === 0) ? [B, C] : [C, B];
-    st.push({ type: 'alt', show: B, options: opts, prompt: 'Is this ' + art(opts[0]) + ' or ' + art(opts[1]) + '?', model: "It's " + art(B) + '.' });
-    st.push({ type: 'key', show: C, prompt: 'What is this?', model: "It's " + art(C) + '.' });
+  for (let r = 0; r < 2; r++) shuffle(all).forEach(x => add(S.key(x), 'key'));
+
+  prev = null;
+  for (let b = 0; b < MIX_BLOCKS; b++) {
+    for (let i = 0; i < MIX_BLOCK_SIZE; i++) {
+      const s = add(mixStep(all, ['yes', 'neg', 'alt', 'key'], prev), 'mix');
+      s.speed = 1 + 0.06 * (b + 1);   // il ritmo cresce a ogni blocco
+      prev = s.show;
+    }
   }
-  shuffle(items).forEach(x => st.push({
-    type: 'touch', show: x,
-    prompt: 'Touch ' + the(x) + '.',
-    model: 'This is ' + the(x) + '.'
-  }));
   return st;
 }
+// Passi a cui l'allievo risponde (le "rivelazioni" le dice solo l'insegnante)
+function answerSteps(steps) { return steps.filter(s => s.type !== 'reveal').length; }
 
 // Punteggio insegnante: risposte giuste al primo colpo, meno penalità per lentezza.
 function teacherScore(t) {
@@ -143,7 +198,7 @@ function dayDiff(a, b) {
   return Math.round((new Date(pb[0], pb[1] - 1, pb[2]) - new Date(pa[0], pa[1] - 1, pa[2])) / 86400000);
 }
 // Giorno della prova e insegnante di turno. Se l'orologio del telefono torna indietro
-// prima dell'inizio, si resta al giorno 1 (prima l'indice usciva negativo).
+// prima dell'inizio, si resta al giorno 1.
 function trialFor(start, today) {
   if (!start) return { day: 0, today: TRIAL_ROTATION[0] };
   const day = Math.max(1, dayDiff(start, today) + 1);
@@ -151,8 +206,8 @@ function trialFor(start, today) {
 }
 
 /* ---------- Lingua dei pulsanti ----------
-   0 = italiano, 1 = inglese con la parola italiana piccola sotto, 2 = solo inglese.
-   Si parte dal giorno in cui l'allievo ha finito la lezione dei pulsanti. */
+   0 = lingua dell'allievo, 1 = lingua del corso con quella dell'allievo piccola sotto,
+   2 = solo lingua del corso. Si parte dal giorno in cui è finita la lezione dei pulsanti. */
 function uiLevel(learnedDay, today) {
   if (!learnedDay) return 0;
   const d = dayDiff(learnedDay, today);

@@ -4,10 +4,6 @@
    ===================================================================== */
 
 const $ = (id) => document.getElementById(id);
-const CHECK = '<svg viewBox="0 0 24 24"><path d="M5 12.5 L10 17 L19 7" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-const STAR = (on) => '<svg viewBox="0 0 24 24" class="' + (on ? 'on' : '') + '"><path d="M12 2.5 L14.9 8.6 L21.5 9.4 L16.6 13.9 L17.9 20.5 L12 17.2 L6.1 20.5 L7.4 13.9 L2.5 9.4 L9.1 8.6 Z" fill="' +
-  (on ? '#f2c744' : '#2e2b4a') + '" stroke="' + (on ? '#b9861a' : '#36335a') + '" stroke-width="1.5" stroke-linejoin="round"/></svg>';
-
 /* ---------- Navigazione e tasto indietro ---------- */
 
 const IS_CORDOVA = !!window.cordova;
@@ -61,11 +57,11 @@ function renderHome() {
   const sel = selectedTeacherKey();
   let html;
   if (ti.day === 0) {
-    html = '<p><strong>Prova di 7 giorni</strong></p><p class="muted">Ogni giorno un insegnante diverso. Il settimo giorno l\'app ti dice quale funziona meglio per te.</p>';
+    html = '<p><strong>7-day trial</strong></p><p class="muted">A different teacher every day. On day 7 the app tells you which one works best for you.</p>';
   } else if (ti.day <= 6) {
-    html = '<p><strong>Prova: giorno ' + ti.day + ' di 7</strong></p><p class="muted">Oggi tocca a ' + TEACHERS[ti.today].name + '.</p>';
+    html = '<p><strong>Trial: day ' + ti.day + ' of 7</strong></p><p class="muted">Today\'s teacher: ' + TEACHERS[ti.today].name + '.</p>';
   } else {
-    html = '<p><strong>Prova finita</strong></p><p class="muted">Guarda i risultati per sapere quale insegnante è il migliore per te.</p>';
+    html = '<p><strong>Trial complete</strong></p><p class="muted">Open the results to see which teacher suits you best.</p>';
   }
   $('trial-card').innerHTML = html;
 
@@ -77,7 +73,7 @@ function renderHome() {
     b.className = 'choice' + (k === sel ? ' selected' : '');
     b.innerHTML = '<span class="avatar">' + t.name.charAt(0) + '</span>' +
                   '<span><span class="t-name">' + t.name + '</span><span class="t-style">' + t.style + '</span></span>' +
-                  (ti.today === k ? '<span class="badge">oggi</span>' : '');
+                  (ti.today === k ? '<span class="badge">today</span>' : '');
     b.onclick = () => {
       DB.settings.teacher = k;
       DB.settings.pickedDay = todayKey();
@@ -91,15 +87,15 @@ function renderHome() {
   ll.innerHTML = '';
   const db = document.createElement('button');
   db.className = 'lesson-btn demo';
-  db.innerHTML = '<span>Lezione dimostrativa</span><span class="score">' + (DB.settings.demoSeen ? 'vista' : 'da vedere') + '</span>';
+  db.innerHTML = '<span>Demo lesson</span><span class="score">' + (DB.settings.demoSeen ? 'seen' : 'watch first') + '</span>';
   db.onclick = once(() => startDemo(null));
   ll.appendChild(db);
   LESSONS.forEach(l => {
     const b = document.createElement('button');
     b.className = 'lesson-btn';
-    const icons = (l.items || ['book', 'key', 'cup', 'chair']).map(w => FIG[w]).join('');
+    const icons = lessonItems(l).map(w => FIG[w]).join('');
     const best = DB.lessons[l.id];
-    const name = l.id === 'rev' ? 'Ripasso' : 'Lezione ' + (LESSONS.indexOf(l) + 1);
+    const name = 'Lesson ' + (LESSONS.indexOf(l) + 1);
     b.innerHTML = '<span>' + name + '</span><span class="icons">' + icons + '</span>' +
                   '<span class="score' + (best >= 80 ? ' top' : '') + '">' + (best != null ? best + '%' : '') + '</span>';
     b.onclick = once(() => startLesson(l.id));
@@ -113,11 +109,11 @@ function renderHome() {
 /* ---------- Lingua dei pulsanti della lezione ---------- */
 
 function uiLevelNow() { return uiLevel(DB.settings.menuDay, todayKey()); }
-function uiWord(k) { return uiLevelNow() ? UI_WORDS[k].en : UI_WORDS[k].it; }
+function uiWord(k) { return uiLevelNow() ? UI_WORDS[k].lang : UI_WORDS[k].ui; }
 function setUiButton(id, k) {
   const lv = uiLevelNow();
   const w = UI_WORDS[k];
-  $(id).innerHTML = lv === 0 ? w.it : lv === 1 ? w.en + '<small class="hint">' + w.it + '</small>' : w.en;
+  $(id).innerHTML = lv === 0 ? w.ui : lv === 1 ? w.lang + '<small class="hint">' + w.ui + '</small>' : w.lang;
 }
 function applyUiWords() {
   setUiButton('btn-talk', 'talk');
@@ -133,6 +129,7 @@ let L = null;      // stato della lezione in corso
 let RUN = 0;       // cambia a ogni lezione o pausa: blocca le risposte "vecchie"
 let lastLessonId = null;
 
+function lessonItems(l) { return l.fresh ? l.known.concat([l.fresh]) : l.known.slice(); }
 function alive(run) { return !!L && L.run === run && RUN === run; }
 function cur() { return L.steps[L.i]; }
 
@@ -141,12 +138,12 @@ function startLesson(id) {
   const lesson = LESSONS.find(l => l.id === id);
   if (!lesson) return;
   stopLesson();
-  const items = lesson.items ? lesson.items.slice() : shuffle(Object.keys(ITEMS).filter(w => !isButton(w))).slice(0, 4);
+  const items = lessonItems(lesson);
   const teacher = TEACHERS[selectedTeacherKey()];
   RUN++;
   L = {
     run: RUN, lesson: lesson, items: items, teacher: teacher,
-    steps: buildSteps(items, lesson.presentation),
+    steps: buildSteps(lesson), streak: 0,
     i: 0, attempts: 0, noSpeech: 0, first: 0, busy: false, paused: false,
     start: Date.now(), listenStart: 0
   };
@@ -180,7 +177,6 @@ function stopLesson() {
   }
   L = null;
   $('screen-lesson').classList.remove('tunnel');
-  $('stage-badge').classList.add('hidden');
 }
 
 function buildGrid(items) {
@@ -192,7 +188,6 @@ function buildGrid(items) {
     box.className = 'object-box';
     box.dataset.obj = obj;
     box.innerHTML = FIG[obj];
-    box.onclick = () => onTouch(obj);
     grid.appendChild(box);
   });
 }
@@ -223,22 +218,16 @@ function showIndicated(obj, right) {
   });
 }
 
-// Effetti: bagliore verde e spunta quando è giusto, rosso e "tunnel" quando è sbagliato
+// Effetti: bagliore verde quando è giusto, rosso e "tunnel" quando è sbagliato
 function flashGood() {
   const st = $('stage');
   st.classList.remove('bad');
   restartAnim(st, 'good');
-  const b = $('stage-badge');
-  b.classList.remove('hidden');
-  restartAnim(b, 'show');
-  clearTimeout(flashGood.t);
-  flashGood.t = setTimeout(() => b.classList.add('hidden'), 1100);
 }
 function flashBad() {
   const st = $('stage');
   st.classList.remove('good');
   restartAnim(st, 'bad');
-  $('stage-badge').classList.add('hidden');
   restartAnim($('screen-lesson'), 'tunnel');
 }
 
@@ -255,7 +244,7 @@ function drawStep() {
   $('l-count').textContent = (L.i + 1) + ' / ' + L.steps.length;
   setProgress(L.i, L.steps.length);
   $('heard').textContent = '';
-  showIndicated(st.type === 'touch' ? null : st.show);
+  showIndicated(st.show);
   setPrompt(st.prompt);
 }
 
@@ -271,17 +260,17 @@ function askStep() {
   const st = cur();
   const run = L.run;
   L.busy = true;
-  setStatus('Ascolta', '');
-  Mouth.speak(st.prompt, L.teacher.rate, L.teacher.pitch, () => {
+  setStatus('Listen', '');
+  const speak = () => Mouth.speak(st.prompt, L.teacher.rate * (st.speed || 1), L.teacher.pitch, () => {
     if (!alive(run)) return;
     L.busy = false;
-    if (st.type === 'touch') {
-      L.listenStart = Date.now();
-      setStatus('Tocca la figura giusta', 'wait');
-    } else {
-      listen();
-    }
+    // L'insegnante si è risposto da solo («Che cos'è? È una penna.»): avanti
+    if (st.type === 'reveal') { L.busy = true; nextStep(run, 900); return; }
+    listen();
   });
+  // Un attimo di silenzio prima dello sfogo
+  if (st.pause) setTimeout(() => { if (alive(run)) speak(); }, st.pause);
+  else speak();
 }
 
 function listen() {
@@ -289,7 +278,7 @@ function listen() {
   const run = L.run;
   L.busy = true;
   L.listenStart = Date.now();
-  setStatus('Parla ora', 'rec');
+  setStatus('Speak now', 'rec');
   Ears.listen(
     (alts) => { if (!alive(run)) return; L.busy = false; handleAnswer(alts); },
     (code) => { if (!alive(run)) return; L.busy = false; handleListenError(code, run); }
@@ -297,35 +286,22 @@ function listen() {
 }
 
 function handleListenError(code, run) {
-  if (code === 'not-allowed') { setStatus('Microfono bloccato: dai il permesso e tocca ' + uiWord('talk'), 'err'); return; }
-  if (code === 'unsupported') { setStatus('Il telefono non ha il riconoscimento vocale. Puoi solo ascoltare', 'err'); return; }
-  if (code === 'network') { setStatus('Serve internet per capire la voce. Tocca ' + uiWord('talk'), 'err'); return; }
+  if (code === 'not-allowed') { setStatus('Microphone blocked: allow it, then tap ' + uiWord('talk'), 'err'); return; }
+  if (code === 'unsupported') { setStatus('This phone has no speech recognition. You can only listen', 'err'); return; }
+  if (code === 'network') { setStatus('Speech recognition needs internet. Tap ' + uiWord('talk'), 'err'); return; }
   L.noSpeech++;
   if (L.noSpeech <= 2) {
-    setStatus('Non ti ho sentito', 'wait');
+    setStatus('I didn\'t hear you', 'wait');
     setTimeout(() => { if (alive(run)) listen(); }, 700);
   } else {
-    setStatus('Tocca ' + uiWord('talk') + ' quando sei pronto', 'wait');
+    setStatus('Tap ' + uiWord('talk') + ' when you are ready', 'wait');
   }
 }
 
 function handleAnswer(alts) {
   const res = evaluateAll(cur(), alts);
-  $('heard').textContent = alts[0] ? 'Sentito: «' + alts[0] + '»' : '';
+  $('heard').textContent = alts[0] ? 'Heard: “' + alts[0] + '”' : '';
   if (res.ok) onCorrect(res); else onWrong();
-}
-
-function onTouch(obj) {
-  if (!L || L.busy || L.paused) return;
-  const st = cur();
-  if (!st || st.type !== 'touch') return;
-  L.busy = true;
-  if (obj === st.show) {
-    showIndicated(obj, true);
-    onCorrect({ ok: true, full: true });
-  } else {
-    onWrong();
-  }
 }
 
 function onCorrect(res) {
@@ -342,15 +318,20 @@ function onCorrect(res) {
   saveDB();
   L.busy = true;
   L.answered = true;
-  setStatus('Giusto', 'ok');
+  setStatus('Correct', 'ok');
   flashGood();
   const t = L.teacher;
-  const parts = [{ text: t.praise[Math.floor(Math.random() * t.praise.length)], rate: t.rate }];
-  // Risposta negativa senza correzione: l'insegnante la completa
-  if (st.type === 'neg' && !res.full) parts.push({ text: "It's " + art(st.show) + '.', rate: t.modelRate });
+  L.streak++;
+  const parts = [];
+  // Il ritmo conta più delle lodi: l'insegnante loda solo ogni tanto (o mai)
+  if (t.praiseEvery && L.streak % t.praiseEvery === 0) parts.push({ text: pick(t.praise), rate: t.rate });
+  // «No, non è un tavolo.» su un oggetto noto: l'insegnante completa con quello che è.
+  // Sull'oggetto nuovo no: il nome non si dice finché non arriva «Che cos'è?»
+  if (st.type === 'neg' && !res.full && !st.fresh) parts.push({ text: 'È ' + np(st.show) + '.', rate: t.modelRate });
+  const delay = st.phase === 'mix' ? 150 : 300;
   Mouth.speakParts(parts, t.pitch, () => {
     if (!alive(run)) return;
-    nextStep(run, 400);
+    nextStep(run, delay);
   });
 }
 
@@ -380,9 +361,9 @@ function onWrong() {
     ts.skipped++;
     saveDB();
     L.answered = true;
-    if (st.type === 'touch') showIndicated(st.show);
     if (DB.settings.showText) $('prompt-text').textContent = st.model;
-    setStatus('Si va avanti', 'err');
+    L.streak = 0;
+    setStatus('Moving on', 'err');
     Mouth.speakParts([{ text: t.giveUp, rate: t.rate }, { text: st.model, rate: t.modelRate }], t.pitch, () => {
       if (!alive(run)) return;
       scr.classList.remove('tunnel');
@@ -392,16 +373,8 @@ function onWrong() {
   }
 
   saveDB();
-  setStatus('Riprova', 'err');
-  if (st.type === 'touch') {
-    Mouth.speakParts([{ text: t.wrong, rate: t.rate }, { text: st.prompt, rate: t.modelRate }], t.pitch, () => {
-      if (!alive(run)) return;
-      scr.classList.remove('tunnel');
-      L.busy = false;
-      setStatus('Tocca la figura giusta', 'wait');
-    });
-    return;
-  }
+  L.streak = 0;
+  setStatus('Try again', 'err');
   // Correzione: l'insegnante dice la risposta giusta, lo studente la ripete
   if (DB.settings.showText) $('prompt-text').textContent = st.model;
   Mouth.speakParts([
@@ -417,7 +390,7 @@ function onWrong() {
 }
 
 function finishLesson() {
-  const total = L.steps.length;
+  const total = answerSteps(L.steps);
   const pct = Math.round(L.first / total * 100);
   const id = L.lesson.id;
   const t = L.teacher;
@@ -428,13 +401,11 @@ function finishLesson() {
   stopLesson();
   Mouth.speak(t.done, t.rate, t.pitch, null);
   const C = 427;   // circonferenza del cerchio (raggio 68)
-  const stars = pct >= 90 ? 3 : pct >= 70 ? 2 : pct >= 40 ? 1 : 0;
   $('end-body').innerHTML =
     '<div class="ring"><svg viewBox="0 0 160 160"><circle class="track" cx="80" cy="80" r="68"/>' +
     '<circle class="val" cx="80" cy="80" r="68" stroke-dasharray="' + C + '" stroke-dashoffset="' + Math.round(C * (1 - pct / 100)) + '"/></svg>' +
     '<div class="num">' + pct + '%</div></div>' +
-    '<div class="stars">' + STAR(stars >= 1) + STAR(stars >= 2) + STAR(stars >= 3) + '</div>' +
-    '<p>giuste al primo colpo</p><p class="muted">Insegnante: ' + t.name + '</p>';
+    '<p>right first time</p><p class="muted">Teacher: ' + t.name + '</p>';
   showScreen('end', true);
 }
 
@@ -446,7 +417,6 @@ $('btn-replay').onclick = () => {
 };
 $('btn-talk').onclick = () => {
   if (!L || L.busy || L.paused) return;
-  if (cur().type === 'touch') { setStatus('Qui devi toccare la figura', 'wait'); return; }
   L.noSpeech = 0;
   listen();
 };
@@ -472,7 +442,7 @@ function onPause() {
     L.paused = true;
     L.busy = false;
     $('screen-lesson').classList.remove('tunnel');
-    setStatus('In pausa', '');
+    setStatus('Paused', '');
   }
 }
 function onResume() {
@@ -505,35 +475,35 @@ document.addEventListener('visibilitychange', () => {
 function renderReport() {
   const ti = trialInfo();
   let html = '';
-  if (ti.day > 0 && ti.day < 7) html += '<div class="card t-card"><p>Giorno ' + ti.day + ' di 7 della prova.</p></div>';
+  if (ti.day > 0 && ti.day < 7) html += '<div class="card t-card"><p>Trial day ' + ti.day + ' of 7.</p></div>';
 
   const keys = Object.keys(TEACHERS);
   keys.forEach(k => {
     const s = DB.teachers[k];
     const firstPct = s.items ? Math.round(s.first / s.items * 100) : 0;
-    const lat = s.latN ? (s.lat / s.latN).toFixed(1).replace('.', ',') + ' s' : 'nessun dato';
+    const lat = s.latN ? (s.lat / s.latN).toFixed(1) + ' s' : 'no data yet';
     html += '<div class="card t-card"><h3>' + TEACHERS[k].name + '</h3>' +
-      '<p>Giuste al primo colpo: <strong>' + firstPct + '%</strong></p>' +
+      '<p>Right first time: <strong>' + firstPct + '%</strong></p>' +
       '<div class="bar"><div style="width:' + firstPct + '%"></div></div>' +
-      '<p class="muted">Tempo medio di risposta: ' + lat + '</p>' +
-      '<p class="muted">Risposte: ' + s.items + ', errori: ' + s.errors + ', lezioni: ' + s.sessions + ', giorni: ' + s.days.length + '</p></div>';
+      '<p class="muted">Average answer time: ' + lat + '</p>' +
+      '<p class="muted">Answers: ' + s.items + ', mistakes: ' + s.errors + ', lessons: ' + s.sessions + ', days: ' + s.days.length + '</p></div>';
   });
 
   const missing = keys.filter(k => DB.teachers[k].items < MIN_ANSWERS_FOR_VERDICT);
   if (missing.length) {
-    html += '<div class="card t-card verdict"><p><strong>Ancora nessun consiglio</strong></p><p class="muted">Servono almeno ' +
-      MIN_ANSWERS_FOR_VERDICT + ' risposte con ogni insegnante. Mancano: ' + missing.map(k => TEACHERS[k].name).join(', ') + '.</p></div>';
+    html += '<div class="card t-card verdict"><p><strong>No advice yet</strong></p><p class="muted">At least ' +
+      MIN_ANSWERS_FOR_VERDICT + ' answers with each teacher are needed. Still missing: ' + missing.map(k => TEACHERS[k].name).join(', ') + '.</p></div>';
   } else {
     let best = keys[0];
     keys.forEach(k => { if (teacherScore(DB.teachers[k]) > teacherScore(DB.teachers[best])) best = k; });
-    html += '<div class="card t-card verdict"><p><strong>Il più adatto a te: ' + TEACHERS[best].name + '</strong></p>' +
-      '<p class="muted">Con questo insegnante hai dato più risposte giuste al primo colpo e hai risposto più in fretta.</p></div>';
+    html += '<div class="card t-card verdict"><p><strong>Best for you: ' + TEACHERS[best].name + '</strong></p>' +
+      '<p class="muted">With this teacher you got more answers right first time, and answered faster.</p></div>';
   }
   $('report-body').innerHTML = html;
 }
 $('btn-report-home').onclick = () => goHome();
 $('btn-reset').onclick = () => {
-  if (!confirm('Cancellare tutti i dati della prova e delle lezioni?')) return;
+  if (!confirm('Delete all trial and lesson data?')) return;
   DB = emptyDB();
   saveDB();
   renderReport();
@@ -543,7 +513,6 @@ $('btn-reset').onclick = () => {
 
 document.body.insertAdjacentHTML('afterbegin', SVG_DEFS);
 $('logo').innerHTML = LOGO;
-$('stage-badge').innerHTML = CHECK;
 renderHome();
 ttsWarmUp();
 document.addEventListener('deviceready', () => {

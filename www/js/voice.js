@@ -9,16 +9,17 @@ let cachedVoice = null;
 function pickVoice() {
   if (cachedVoice || !window.speechSynthesis) return cachedVoice;
   const vs = window.speechSynthesis.getVoices() || [];
-  cachedVoice = vs.find(v => v.lang === 'en-US' && v.localService) ||
-                vs.find(v => v.lang === 'en-US') ||
-                vs.find(v => /^en/i.test(v.lang)) || null;
+  const L = COURSE.lang, base = L.slice(0, 2);
+  cachedVoice = vs.find(v => v.lang === L && v.localService) ||
+                vs.find(v => v.lang === L) ||
+                vs.find(v => v.lang && v.lang.slice(0, 2).toLowerCase() === base) || null;
   return cachedVoice;
 }
 if (window.speechSynthesis) {
   window.speechSynthesis.onvoiceschanged = () => { cachedVoice = null; pickVoice(); };
 }
 
-// Voce del telefono (plugin TTS): scelgo una voce inglese locale, perché quella
+// Voce del telefono (plugin TTS): scelgo una voce locale nella lingua del corso, perché quella
 // "network" offline dà errore. Al primo avvio il motore può essere "freddo": riprovo.
 let ttsVoicesP = null;
 let ttsVoiceId = undefined;
@@ -32,7 +33,7 @@ function ttsLoadVoices() {
 function ttsPickVoice() {
   if (ttsVoiceId !== undefined) return Promise.resolve(ttsVoiceId);
   return ttsLoadVoices().then(list => {
-    const names = list.map(v => String((v && (v.identifier || v.name)) || '')).filter(n => n.toLowerCase().indexOf('en-us') !== -1);
+    const names = list.map(v => String((v && (v.identifier || v.name)) || '')).filter(n => n.toLowerCase().indexOf(COURSE.lang.toLowerCase()) !== -1);
     const best = names.find(n => /local/i.test(n)) || names.find(n => !/network/i.test(n)) || '';
     if (list.length) ttsVoiceId = best;
     return best;
@@ -48,7 +49,7 @@ let voiceWarned = false;
 function warnNoVoice() {
   if (voiceWarned) return;
   voiceWarned = true;
-  if (typeof setStatus === 'function') setStatus('Per sentire la voce serve la sintesi vocale del telefono con l\'inglese', 'err');
+  if (typeof setStatus === 'function') setStatus('To hear the teacher, install the Italian text-to-speech voice on your phone', 'err');
 }
 
 const Mouth = {
@@ -71,7 +72,7 @@ const Mouth = {
       const wait = ms => new Promise(r => setTimeout(r, ms));
       (async () => {
         const vid = await ttsPickVoice();
-        const opts = { text: text, locale: 'en-US', rate: (rate || 1) * 1.15, pitch: pitch || 1 };
+        const opts = { text: text, locale: COURSE.lang, rate: (rate || 1) * 1.15, pitch: pitch || 1 };
         if (vid) opts.identifier = vid;
         for (let k = 0; k < 4; k++) {
           if (tok !== this.token) return;
@@ -91,7 +92,7 @@ const Mouth = {
     if (window.speechSynthesis && window.SpeechSynthesisUtterance) {
       try { window.speechSynthesis.cancel(); } catch (e) {}
       const u = new SpeechSynthesisUtterance(text);
-      u.lang = 'en-US';
+      u.lang = COURSE.lang;
       const v = pickVoice();
       if (v) u.voice = v;
       u.rate = rate || 1;
@@ -159,7 +160,7 @@ const Ears = {
         sr.startListening(
           (m) => { const arr = (Array.isArray(m) ? m : [m]).filter(x => x && String(x).trim()).map(String); if (arr.length) ok(arr); else err('no-speech'); },
           (e) => err(/permission|denied/i.test(String(e)) ? 'not-allowed' : 'no-speech'),
-          { language: 'en-US', matches: 5, showPopup: false, showPartial: false }
+          { language: COURSE.lang, matches: 5, showPopup: false, showPartial: false }
         );
       };
       const withPermission = () => {
@@ -182,7 +183,7 @@ const Ears = {
     if (!SR) { err('unsupported'); return; }
     const r = new SR();
     this.rec = r;
-    r.lang = 'en-US';
+    r.lang = COURSE.lang;
     r.interimResults = false;
     r.continuous = false;
     r.maxAlternatives = 5;

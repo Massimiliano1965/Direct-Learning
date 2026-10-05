@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -16,17 +16,17 @@
   <div class="brand"><div class="logo" id="logo"></div><h1>Metodo Diretto</h1></div>
   <div class="card" id="trial-card"></div>
 
-  <div class="label">Insegnante</div>
+  <div class="label">Teacher</div>
   <div id="teacher-list"></div>
 
-  <div class="label">Lezione</div>
+  <div class="label">Lessons</div>
   <div id="lesson-list"></div>
 
-  <div class="label">Opzioni</div>
-  <label class="switch"><input type="checkbox" id="opt-text"> Mostra le frasi scritte</label>
+  <div class="label">Options</div>
+  <label class="switch"><input type="checkbox" id="opt-text"> Show the sentences in writing</label>
 
   <div style="height:18px"></div>
-  <button id="btn-report" class="secondary">Risultati della prova</button>
+  <button id="btn-report" class="secondary">Trial results</button>
 </section>
 
 <!-- ============ LEZIONE ============ -->
@@ -37,38 +37,38 @@
   <div id="l-teacher"></div>
   <div id="stage">
     <div id="stage-hand"></div><div id="stage-figure"></div>
-    <div id="stage-badge" class="hidden"></div>
   </div>
   <div id="prompt-text"></div>
   <div id="heard"></div>
   <div id="objects-grid"></div>
   <div id="status"><span id="mic-dot"></span><span id="status-text"></span></div>
   <div class="row">
-    <button id="btn-replay" class="secondary">Riascolta</button>
-    <button id="btn-talk">Parla</button>
+    <button id="btn-replay" class="secondary">Repeat</button>
+    <button id="btn-talk">Talk</button>
   </div>
-  <button id="btn-exit" class="ghost">Esci</button>
+  <button id="btn-exit" class="ghost">Exit</button>
 </section>
 
 <!-- ============ FINE LEZIONE ============ -->
 <section id="screen-end" class="screen hidden">
-  <h2>Lezione finita</h2>
+  <h2>Lesson complete</h2>
   <div class="card result" id="end-body"></div>
   <div style="height:18px"></div>
-  <button id="btn-again">Ripeti la lezione</button>
+  <button id="btn-again">Repeat the lesson</button>
   <button id="btn-end-home" class="secondary">Menu</button>
 </section>
 
 <!-- ============ RISULTATI ============ -->
 <section id="screen-report" class="screen hidden">
-  <h2>Risultati della prova</h2>
+  <h2>Trial results</h2>
   <div id="report-body"></div>
   <button id="btn-report-home">Menu</button>
-  <button id="btn-reset" class="ghost">Cancella tutti i dati</button>
+  <button id="btn-reset" class="ghost">Delete all data</button>
 </section>
 
 <div id="demo-finger" class="hidden"></div>
 
+<script src="js/course.js"></script>
 <script src="js/data.js"></script>
 <script src="js/logic.js"></script>
 <script src="js/voice.js"></script>
