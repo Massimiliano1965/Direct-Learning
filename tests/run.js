@@ -76,7 +76,7 @@ check('alternative: oltre la quinta ignorata', !evaluateAll(st, ['a', 'b', 'c', 
 check('alternative: lista vuota', !evaluateAll(st, []).ok);
 
 // 3. Sequenza della lezione (più volte, perché è in parte casuale)
-const l1 = LESSONS[0];
+LESSONS.forEach(l1 => {
 for (let rep = 0; rep < 30; rep++) {
   const steps = buildSteps(l1);
   const phases = steps.map(s => s.phase);
@@ -100,6 +100,8 @@ for (let rep = 0; rep < 30; rep++) {
   });
   check('risposte = passi meno rivelazioni', answerSteps(steps) === steps.length - 2);
 }
+});
+check('lezione 2: sedia, porta, poi finestra nuova', LESSONS[1].known.join() === 'chair,door' && LESSONS[1].fresh === 'window');
 count++;
 
 // 4. Prova di 7 giorni

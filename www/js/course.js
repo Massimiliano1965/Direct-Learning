@@ -30,7 +30,8 @@ const ITEMS = {
 // Lezioni. known = parole presentate subito; fresh = oggetto nuovo che non si nomina
 // finché l'allievo non è "stufo" di dire di no (poi arriva «Che cos'è?»).
 const LESSONS = [
-  { id: 'l1', title: 'Lezione 1', known: ['book', 'table', 'chair'], fresh: 'pen' }
+  { id: 'l1', title: 'Lezione 1', known: ['book', 'table', 'chair'], fresh: 'pen' },
+  { id: 'l2', title: 'Lezione 2', known: ['chair', 'door'], fresh: 'window' }
 ];
 
 // Quattro insegnanti, dal più rigido al più indulgente.
