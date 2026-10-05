@@ -36,6 +36,16 @@ Dal libro si prende solo l'ordine: frasi, nomi e figure sono nostri e moderni
 23. Esercizio: Il, la, l', o lo?
 24. Esercizio: A, su, in, di (preposizioni articolate)
 25. Esercizio: Anche — nemmeno
+26. Lettura: «Al bar della stazione»
+27. Esercizio: Domande sulla lettura
+28. Esercizio: Che ora è?
+29. Esercizio: A che ora?
+30. Esercizio: Qual è l'articolo: il, la, o l'?
+31. Lettura: «Uno studente»
+32. Esercizio: Trasformazioni: Cosa fa Pietro?
+33. Esercizio: Trasformazioni: vari verbi
+34. Esercizio: Perché? Per…
+35. Esercizio: Sostituzioni: verbi e sostantivi
 
 ## Figure pronte per il Capitolo 1
 
