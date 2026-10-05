@@ -1,0 +1,57 @@
+name: Build APK
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Controllo sintassi e test
+        run: |
+          for f in www/js/*.js tests/*.js; do node --check "$f"; done
+          node tests/run.js
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: "8.7"
+
+      - name: Installa Cordova
+        run: npm install -g cordova@12
+
+      - name: Aggiungi piattaforma Android
+        run: cordova platform add android@13.0.0
+
+      - name: Aggiungi plugin voce, microfono e schermo acceso
+        run: cordova plugin add cordova-plugin-tts-advanced@0.5.3 cordova-plugin-insomnia@4.3.0 ./plugins-local/speechrecognition
+
+      - name: Numero di versione che cresce a ogni build
+        run: sed -i "s/<widget /<widget android-versionCode=\"$((100000 + ${{ github.run_number }}))\" /" config.xml
+
+      - name: Configura la firma fissa (stessa chiave a ogni build)
+        run: |
+          cat > build.json <<JSON
+          {"android": {"debug": {"keystore": "$GITHUB_WORKSPACE/signing/metododiretto.keystore", "storePassword": "metododiretto", "alias": "metododiretto", "password": "metododiretto", "keystoreType": "pkcs12"}}}
+          JSON
+
+      - name: Build APK
+        run: cordova build android --debug --buildConfig=build.json
+
+      - name: Carica APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: MetodoDiretto-apk
+          path: platforms/android/app/build/outputs/apk/debug/app-debug.apk

@@ -1,0 +1,13 @@
+{
+  "name": "it.metododiretto.app",
+  "displayName": "Metodo Diretto",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "test": "node tests/run.js"
+  },
+  "cordova": {
+    "platforms": [],
+    "plugins": {}
+  }
+}
