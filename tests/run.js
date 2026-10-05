@@ -71,6 +71,15 @@ cases.forEach(([step, text, want]) => check(step.type + ' «' + text + '» → '
 check('no senza correzione: full=false', evaluate({ type: 'neg', show: 'table', ask: 'book' }, 'No, non è un libro.').full === false);
 check('no con correzione: full=true', evaluate({ type: 'neg', show: 'table', ask: 'book' }, 'No, non è un libro, è un tavolo.').full === true);
 
+// 1b. Eco della voce dell'insegnante
+const isEcho = run('isEcho');
+const altSt = { type: 'alt', show: 'table', prompt: 'È un tavolo o un libro?', model: 'È un tavolo.' };
+check('eco: tutta la domanda', isEcho(altSt, 'è un tavolo o un libro'));
+check('eco: la coda della domanda', isEcho(altSt, 'o un libro'));
+check('eco: la risposta vera non è eco', !isEcho(altSt, 'È un tavolo.'));
+check('eco: frase da ripetere mai eco', !isEcho({ type: 'echo', prompt: 'È un libro.', model: 'È un libro.' }, 'è un libro'));
+check('eco: una parola sola non basta', !isEcho(altSt, 'libro'));
+
 // 2. Più interpretazioni: basta che una sia giusta, al massimo 5
 const st = { type: 'key', show: 'pen' };
 check('alternative: la seconda giusta', evaluateAll(st, ['è una pena di', 'è una penna']).ok);

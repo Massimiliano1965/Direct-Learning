@@ -282,11 +282,19 @@ function askStep() {
     L.busy = false;
     // L'insegnante si è risposto da solo («Che cos'è? È una penna.»): avanti
     if (st.type === 'reveal' && !st.drill) { L.busy = true; nextStep(run, 900); return; }
-    listen();
+    listenSoon(run);
   });
   // Un attimo di silenzio prima dello sfogo
   if (st.pause && !st.drill) setTimeout(() => { if (alive(run)) speak(); }, st.pause);
   else speak();
+}
+
+// Il microfono parte un attimo dopo la fine della voce dell'insegnante, così non sente
+// la coda della domanda. La prima risposta che è solo l'eco della domanda si ignora.
+function listenSoon(run) {
+  L.busy = true;
+  L.echoGuard = true;
+  setTimeout(() => { if (!alive(run)) return; L.busy = false; listen(); }, 400);
 }
 
 function listen() {
@@ -315,7 +323,18 @@ function handleListenError(code, run) {
 }
 
 function handleAnswer(alts) {
-  const res = evaluateAll(cur(), alts);
+  const st = cur();
+  if (L.echoGuard) {
+    L.echoGuard = false;
+    if (alts.length && alts.every(a => isEcho(st, a))) {
+      // era la voce dell'insegnante: si riascolta senza contare niente
+      const run = L.run;
+      setStatus('Speak now', 'rec');
+      setTimeout(() => { if (alive(run)) listen(); }, 200);
+      return;
+    }
+  }
+  const res = evaluateAll(st, alts);
   $('heard').textContent = alts[0] ? 'Heard: “' + alts[0] + '”' : '';
   if (res.ok) onCorrect(res); else onWrong();
 }
@@ -425,7 +444,7 @@ function onWrong() {
     if (!alive(run)) return;
     scr.classList.remove('tunnel');
     L.busy = false;
-    listen();
+    listenSoon(run);
   });
 }
 function repLabel() { return 'Practice ' + (L.di + 1) + ' / ' + L.drill.length; }

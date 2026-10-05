@@ -93,6 +93,15 @@ function evaluate(step, text) {
   return { ok: false, full: false };
 }
 
+// Il microfono ha sentito la voce dell'insegnante invece dell'allievo? (tutta la domanda,
+// o la sua coda: «… o un libro»). Vale solo per le domande, non per le frasi da ripetere.
+function isEcho(step, text) {
+  if (!step || step.prompt === step.model) return false;
+  const t = norm(text).trim(), p = norm(step.prompt).trim();
+  if (!t) return false;
+  return t === p || (t.split(' ').length >= 2 && p.endsWith(' ' + t));
+}
+
 // La migliore tra le interpretazioni del microfono (al massimo 5)
 function evaluateAll(step, alts) {
   const list = (alts || []).slice(0, 5);
