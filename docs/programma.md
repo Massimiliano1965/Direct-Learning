@@ -50,3 +50,14 @@ Dal libro si prende solo l'ordine: frasi, nomi e figure sono nostri e moderni
 ## Figure pronte per il Capitolo 1
 
 bottiglia, tazza, computer
+
+## Domande aperte per Papa (da fare più avanti)
+
+1. «Una bottiglia e una tazza»: quali oggetti ci sono oltre a bottiglia e tazza?
+2. «È questo un computer?»: si introduce la forma «È questo un…?»? L'allievo risponde «Sì, è un computer.» o «Sì, questo è un computer.»?
+3. «Il o la? Nero o nera?»: arrivano qui articoli determinativi e colori? Quali colori per primi?
+4. «Che numero è?»: numeri da 1 a 10 o di più?
+5. Gli esercizi 18–25 (bar, ore, «Uno studente») sono ancora Capitolo 1 o già Capitolo 2?
+6. Lezione 2: la finestra come oggetto da scoprire con «Che cos'è?» va bene, o tutte e tre presentate subito?
+7. Durata della lezione: ora circa 10 minuti; allungare verso i 40?
+8. Personaggi delle letture (Carter, Bertini, Pietro): che nomi nuovi usiamo?
