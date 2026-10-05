@@ -34,6 +34,6 @@ function todayKey() { return dayKey(new Date()); }
 function trialInfo() { return trialFor(DB.start, todayKey()); }
 function selectedTeacherKey() {
   const ti = trialInfo();
-  if (ti.today && DB.settings.pickedDay !== todayKey()) return ti.today;
+  if (!TEST_MODE && ti.today && DB.settings.pickedDay !== todayKey()) return ti.today;
   return DB.settings.teacher || DEFAULT_TEACHER;
 }

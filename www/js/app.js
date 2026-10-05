@@ -56,7 +56,9 @@ function renderHome() {
   const ti = trialInfo();
   const sel = selectedTeacherKey();
   let html;
-  if (ti.day === 0) {
+  if (TEST_MODE) {
+    html = '<p><strong>Test mode</strong></p><p class="muted">Tap a teacher to choose. Your choice stays until you change it.</p>';
+  } else if (ti.day === 0) {
     html = '<p><strong>' + TRIAL_DAYS + '-day trial</strong></p><p class="muted">Each teacher for ' + (TRIAL_DAYS / TRIAL_ROTATION.length) + ' days. Then the app tells you which one works best for you.</p>';
   } else if (ti.day <= TRIAL_DAYS) {
     html = '<p><strong>Trial: day ' + ti.day + ' of ' + TRIAL_DAYS + '</strong></p><p class="muted">Today\'s teacher: ' + TEACHERS[ti.today].name + '.</p>';
@@ -73,7 +75,7 @@ function renderHome() {
     b.className = 'choice' + (k === sel ? ' selected' : '');
     b.innerHTML = avatarHtml(t) +
                   '<span class="t-name">' + t.name + '</span>' +
-                  (ti.today === k ? '<span class="badge">today</span>' : '');
+                  (!TEST_MODE && ti.today === k ? '<span class="badge">today</span>' : '');
     b.onclick = () => {
       DB.settings.teacher = k;
       DB.settings.pickedDay = todayKey();

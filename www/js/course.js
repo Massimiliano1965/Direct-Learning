@@ -71,6 +71,9 @@ const TEACHERS = {
   }
 };
 const TRIAL_ROTATION = ['mass', 'giulia', 'luca', 'sara'];
+// Prova per Papa: tutti gli insegnanti liberi, la scelta resta finché non la cambia.
+// Per la prova di 8 giorni con rotazione: false.
+const TEST_MODE = true;
 const TRIAL_DAYS = 8;   // due giorni per insegnante, poi il consiglio
 const MIN_ANSWERS_FOR_VERDICT = 20;
 
