@@ -72,8 +72,7 @@ function renderHome() {
     const b = document.createElement('button');
     b.className = 'choice' + (k === sel ? ' selected' : '');
     b.innerHTML = avatarHtml(t) +
-                  '<span><span class="t-name">' + t.name + '</span><span class="t-style">' + t.style + ' · mistake: repeat ×' + t.repeats + '</span></span>' +
-                  '<span class="t-mark">' + MARKS[t.mark] + '</span>' +
+                  '<span class="t-name">' + t.name + '</span>' +
                   (ti.today === k ? '<span class="badge">today</span>' : '');
     b.onclick = () => {
       DB.settings.teacher = k;
@@ -137,7 +136,8 @@ let lastLessonId = null;
 
 function lessonItems(l) { return l.fresh ? l.known.concat([l.fresh]) : l.known.slice(); }
 function alive(run) { return !!L && L.run === run && RUN === run; }
-function cur() { return L.steps[L.i]; }
+// Passo corrente: durante le ripetizioni dopo un errore, quello delle ripetizioni
+function cur() { return L.drill ? L.drill[L.di] : L.steps[L.i]; }
 
 function startLesson(id) {
   if (id === 'l1' && !DB.settings.demoSeen) { startDemo('l1'); return; }
@@ -150,7 +150,8 @@ function startLesson(id) {
   L = {
     run: RUN, lesson: lesson, items: items, teacher: teacher,
     steps: buildSteps(lesson), streak: 0,
-    i: 0, attempts: 0, noSpeech: 0, first: 0, busy: false, paused: false, rep: 0, repFails: 0,
+    i: 0, attempts: 0, noSpeech: 0, first: 0, busy: false, paused: false,
+    drill: null, di: 0, repFails: 0, errCount: 0,
     start: Date.now(), listenStart: 0
   };
   lastLessonId = id;
@@ -269,18 +270,17 @@ function askStep() {
   const run = L.run;
   L.busy = true;
   setStatus('Listen', '');
-  // Durante le ripetizioni dopo un errore l'insegnante ridice la risposta giusta
-  const text = L.rep > 0 ? st.model : st.prompt;
-  const rate = L.rep > 0 ? L.teacher.modelRate : L.teacher.rate * (st.speed || 1);
-  const speak = () => Mouth.speak(text, rate, L.teacher.pitch, () => {
+  // Durante le ripetizioni l'insegnante parla col ritmo del modello
+  const rate = st.drill ? L.teacher.modelRate : L.teacher.rate * (st.speed || 1);
+  const speak = () => Mouth.speak(st.prompt, rate, L.teacher.pitch, () => {
     if (!alive(run)) return;
     L.busy = false;
     // L'insegnante si è risposto da solo («Che cos'è? È una penna.»): avanti
-    if (st.type === 'reveal' && !L.rep) { L.busy = true; nextStep(run, 900); return; }
+    if (st.type === 'reveal' && !st.drill) { L.busy = true; nextStep(run, 900); return; }
     listen();
   });
   // Un attimo di silenzio prima dello sfogo
-  if (st.pause && !L.rep) setTimeout(() => { if (alive(run)) speak(); }, st.pause);
+  if (st.pause && !st.drill) setTimeout(() => { if (alive(run)) speak(); }, st.pause);
   else speak();
 }
 
@@ -318,15 +318,18 @@ function handleAnswer(alts) {
 function onCorrect(res) {
   const st = cur();
   const run = L.run;
-  if (L.rep > 0) {
-    // Ripetizione dopo un errore: giusta, una in meno
-    L.rep--;
+  if (L.drill) {
+    // Ripetizione giusta: alla prossima, o fine delle ripetizioni
+    L.di++;
     L.repFails = 0;
     L.busy = true;
     flashGood();
-    if (!L.rep) { setStatus('Correct', 'ok'); hideMark(); nextStep(run, 300); return; }
-    setStatus(repLabel(), 'wait');
-    setTimeout(() => { if (alive(run)) askStep(); }, 150);
+    if (L.di >= L.drill.length) { setStatus('Correct', 'ok'); hideMark(); nextStep(run, 300); return; }
+    const d = cur();
+    $('heard').textContent = '';
+    showIndicated(d.show);
+    setPrompt(d.prompt);
+    setTimeout(() => { if (alive(run)) { askStep(); setStatus(repLabel(), 'wait'); } }, 200);
     return;
   }
   const ts = DB.teachers[L.teacher.key];
@@ -363,13 +366,14 @@ function nextStep(run, delay) {
   L.answered = false;
   L.attempts = 0;
   L.noSpeech = 0;
-  L.rep = 0;
+  L.drill = null;
+  L.di = 0;
   L.repFails = 0;
   setTimeout(() => { if (alive(run)) runStep(); }, delay);
 }
 
 // Errore: parola secca dell'insegnante con la sua icona, poi la risposta giusta.
-// L'allievo la ripete tante volte quante ne vuole l'insegnante (8, 6, 5 o 2).
+// Poi le ripetizioni intorno a quella parola: quante, lo decide l'insegnante (al massimo 5).
 function onWrong() {
   const st = cur();
   const run = L.run;
@@ -382,7 +386,7 @@ function onWrong() {
   flashBad();
   showMark(t.mark);
 
-  if (L.rep > 0) {
+  if (L.drill) {
     // Sbaglia anche la ripetizione: dopo 3 volte di fila si va avanti
     L.repFails++;
     if (L.repFails >= 3) {
@@ -398,15 +402,17 @@ function onWrong() {
   } else {
     L.attempts++;
     ts.items++;          // il passo conta come fatto, ma non giusto al primo colpo
-    L.rep = t.repeats;
+    L.drill = buildDrill(st, repeatsFor(t, L.errCount++), L.items);
+    L.di = 0;
     L.repFails = 0;
   }
   saveDB();
   setStatus(repLabel(), 'err');
-  if (DB.settings.showText) $('prompt-text').textContent = st.model;
+  const d = cur();
+  if (DB.settings.showText) $('prompt-text').textContent = d.model;
   Mouth.speakParts([
     { text: t.wrong, rate: t.rate },
-    { text: st.model, rate: t.modelRate }
+    { text: d.model, rate: t.modelRate }
   ], t.pitch, () => {
     if (!alive(run)) return;
     scr.classList.remove('tunnel');
@@ -414,7 +420,7 @@ function onWrong() {
     listen();
   });
 }
-function repLabel() { return 'Repeat it: ' + L.rep + (L.rep === 1 ? ' time' : ' times'); }
+function repLabel() { return 'Practice ' + (L.di + 1) + ' / ' + L.drill.length; }
 
 function showMark(mark) {
   const m = $('stage-mark');

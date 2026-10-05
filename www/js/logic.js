@@ -119,6 +119,36 @@ const S = {
   askQ:    (X) => ({ type: 'echo', check: 'question', show: X, prompt: Q, model: Q })
 };
 
+// Ripetizioni dopo un errore: quante, secondo l'insegnante e il numero dell'errore
+function repeatsFor(t, nErr) { return t.repeats[nErr % t.repeats.length]; }
+
+// Le ripetizioni girano intorno alla parola sbagliata, variando la frase:
+//   «È una sedia.» → «È una sedia? Sì, è una sedia.» → (indica un altro oggetto)
+//   «È una sedia? No, non è una sedia.» → …
+// La prima è sempre la risposta giusta che l'insegnante ha appena detto.
+function buildDrill(st, n, items) {
+  const first = Object.assign({}, st, { prompt: st.model, drill: true });
+  const out = [first];
+  if (st.type === 'echo' && st.check === 'question') {
+    while (out.length < n) out.push(Object.assign({}, first));
+    return out;
+  }
+  const F = st.type === 'neg' ? st.ask : st.show;   // la parola su cui si è sbagliato
+  const others = items.filter(x => x !== F);
+  const kinds = ['present', 'yes', 'neg'];
+  // dopo una frase da ripetere si passa subito a una domanda, per non dire due volte la stessa cosa
+  const k0 = st.model === 'È ' + np(F) + '.' ? 1 : 0;
+  for (let k = k0; out.length < n; k++) {
+    const kind = others.length ? kinds[k % 3] : kinds[k % 2];
+    const s = kind === 'present' ? S.present(F) : kind === 'yes' ? S.yes(F) : S.neg(pick(others), F);
+    if (kind === 'present') s.prompt = s.model;   // l'insegnante la dice, l'allievo la ripete
+    s.drill = true;
+    s.phase = st.phase;
+    out.push(s);
+  }
+  return out;
+}
+
 // Un passo a caso tra sì, no, «o» e domanda chiave, senza ripetere lo stesso oggetto di fila
 function mixStep(items, types, prevShow) {
   const pool = items.filter(x => x !== prevShow);

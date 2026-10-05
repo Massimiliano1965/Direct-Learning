@@ -67,10 +67,6 @@ button .hint { display: block; font-size: 12px; font-weight: 600; opacity: .7; m
 .avatar.small { width: 30px; height: 30px; font-size: 14px; }
 .choice .avatar.photo { width: 52px; height: 52px; }
 .choice .t-name { display: block; font-size: 19px; }
-.choice .t-style { display: block; font-size: 15px; font-weight: 400; color: var(--muted); }
-.choice .t-mark { width: 34px; height: 34px; flex: none; margin-left: auto; }
-.choice .t-mark svg { width: 100%; height: 100%; display: block; }
-.choice .t-mark + .badge { margin-left: 8px; }
 .choice .badge { margin-left: auto; font-size: 14px; background: var(--accent); color: var(--accent-ink); padding: 4px 10px; border-radius: 20px; white-space: nowrap; }
 
 /* Lezioni */

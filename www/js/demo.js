@@ -151,15 +151,19 @@ async function demoScript(t, run) {
   heard('sì, è un sedia');
   flashBad();
   showMark(t.mark);
-  setStatus('Repeat it: ' + t.repeats + ' times', 'err');
-  cap('…the teacher says «' + t.wrong.replace('.', '') + '» and then the right answer. You repeat it ' + t.repeats + (t.repeats === 1 ? ' time.' : ' times.'));
+  setStatus('Try again', 'err');
+  cap('…the teacher says the right answer. You repeat it, then you practise that word a little.');
   await T(t.wrong);
   if (DB.settings.showText) $('prompt-text').textContent = 'Sì, è una sedia.';
   await T('Sì, è una sedia.', t.modelRate);
   $('screen-lesson').classList.remove('tunnel');
   await studentTalks('Sì, è una sedia.');
-  await T('Sì, è una sedia.', t.modelRate);
-  await studentTalks('Sì, è una sedia.');
+  await T('È una sedia.', t.modelRate);
+  await studentTalks('È una sedia.');
+  showIndicated('book');
+  setPrompt('È una sedia?');
+  await T('È una sedia?', t.modelRate);
+  await studentTalks('No, non è una sedia.');
   hideMark();
   await praise();
 

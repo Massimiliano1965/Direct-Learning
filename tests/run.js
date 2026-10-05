@@ -104,6 +104,37 @@ for (let rep = 0; rep < 30; rep++) {
 check('lezione 2: sedia, porta, poi finestra nuova', LESSONS[1].known.join() === 'chair,door' && LESSONS[1].fresh === 'window');
 count++;
 
+// 3b. Ripetizioni dopo un errore
+const buildDrill = run('buildDrill');
+const repeatsFor = run('repeatsFor');
+check('ripetizioni a rotazione', [0, 1, 2, 3, 4, 5].map(e => repeatsFor(TEACHERS.mass, e)).join() === '3,5,4,5,4,3');
+LESSONS.forEach(l => {
+  const items = l.known.concat([l.fresh]);
+  for (let rep = 0; rep < 10; rep++) {
+    const steps = buildSteps(l);
+    const reveal = steps.findIndex(s => s.type === 'reveal');
+    steps.forEach((st, i) => {
+      if (st.type === 'reveal') return;
+      for (let n = 1; n <= 5; n++) {
+        const d = buildDrill(st, n, items);
+        if (d.length !== n) check('drill lunghezza ' + n, false);
+        if (d[0].prompt !== st.model) check('drill: la prima è la risposta giusta', false);
+        const F = st.type === 'neg' ? st.ask : st.show;
+        const word = ITEMS[F].word;
+        d.forEach(x => {
+          if (!evaluate(x, x.model).ok) check('drill modello accettato «' + x.model + '»', false);
+          if (!(st.type === 'echo' && st.check === 'question') && x.model.indexOf(word) === -1) check('drill gira intorno a «' + word + '»: ' + x.model, false);
+          // prima dello sfogo il nome dell'oggetto nuovo non si dice mai
+          if (i < reveal && (x.prompt + x.model).indexOf(ITEMS[l.fresh].word) !== -1) check('drill non svela l\'oggetto nuovo', false);
+        });
+        if (n >= 2 && !(st.type === 'echo' && st.check === 'question') && d[1].prompt === d[0].prompt) check('drill: la seconda è diversa dalla prima', false);
+        if (n >= 3 && !(st.type === 'echo' && st.check === 'question') && new Set(d.map(x => x.type)).size < 2) check('drill variato', false);
+      }
+    });
+  }
+});
+count++;
+
 // 4. Prova di 7 giorni
 check('prova non iniziata', trialFor(null, '2026-10-05').day === 0);
 check('giorno 1', trialFor('2026-10-05', '2026-10-05').day === 1 && trialFor('2026-10-05', '2026-10-05').today === 'mass');
@@ -129,8 +160,9 @@ Object.keys(ITEMS).forEach(k => {
   check('articolo per ' + k, ['un', 'una', 'uno', "un'"].indexOf(ITEMS[k].art) !== -1);
 });
 const MARKS = run('MARKS');
-Object.keys(TEACHERS).forEach(k => check('insegnante ' + k, TEACHERS[k].key === k && TEACHERS[k].praise.length > 0 && TEACHERS[k].repeats > 0 && MARKS[TEACHERS[k].mark]));
-check('quattro insegnanti: 8, 6, 5, 2 ripetizioni', ['mass', 'giulia', 'luca', 'sara'].map(k => TEACHERS[k].repeats).join() === '8,6,5,2');
+Object.keys(TEACHERS).forEach(k => check('insegnante ' + k, TEACHERS[k].key === k && TEACHERS[k].praise.length > 0 && TEACHERS[k].repeats.length > 0 && MARKS[TEACHERS[k].mark]));
+check('ripetizioni: massimo 5, mai tutte uguali', Object.keys(TEACHERS).every(k => TEACHERS[k].repeats.every(n => n >= 1 && n <= 5) && new Set(TEACHERS[k].repeats).size > 1));
+check('dal più rigido al più indulgente', ['mass', 'giulia', 'luca', 'sara'].map(k => TEACHERS[k].repeats.reduce((a, b) => a + b, 0)).every((v, i, a) => !i || v <= a[i - 1]));
 check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].map(k => TEACHERS[k].wrong).join('|') === 'Errato.|Non corretto.|Hai sbagliato.|Peccato.');
 
 console.log(count - fails + ' / ' + count + ' test passati');
