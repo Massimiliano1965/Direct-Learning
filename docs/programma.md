@@ -102,6 +102,28 @@ erano senza intestazione, quindi i confini tra i capitoli 2, 3, 4 e 5 vanno conf
 16. Esercizio 61: Come risponde Lei? (saluti)
 17. Esercizio 62: Lui e lei: maschile e femminile
 
+## Capitolo 8
+
+1. Ricapitolazione
+2. Ascolto 8
+3. Lettura: «Dove lavora ora?»
+4. Esercizio 63: Domande sulla lettura
+5. Esercizio 64: Essere o avere
+6. Esercizio 65: Domande sul calendario
+7. Esercizio 66: Sostituzioni: aggettivi possessivi
+8. Esercizio 67: Completi lo specchio dei verbi! (presente)
+
+## Capitolo 9
+
+1. Ricapitolazione
+2. Ascolto 9
+3. Lettura: «La signora Bianchi va a comprare del burro» (personaggio da rinominare)
+4. Esercizio 68: Domande sulla lettura (complemento indiretto)
+5. Lettura: «L'Italia non è l'America»
+6. Esercizio 69: Qualcuno / nessuno, qualche cosa / niente
+7. Esercizio 70: Domande sul biglietto da visita
+8. (la pagina continua: voci successive non ancora viste)
+
 ## Figure pronte
 
 bottiglia, tazza, computer
