@@ -268,4 +268,3 @@ bottiglia, tazza, computer
 8. Personaggi delle letture (Carter, Bertini, Pietro, famiglia Rossi): che nomi nuovi usiamo?
 9. Manca la pagina dell'indice con gli esercizi 26 e 27.
 10. Dove iniziano i Capitoli 2, 3, 4 e 5 nell'indice?
-11. Le pagine 159–170 dell'indice (fine del Capitolo 17 e voci intermedie) sono complete? Nella foto c'è un salto tra «Non c'è luce in casa» e «Perché non ho mai tempo per me?».
