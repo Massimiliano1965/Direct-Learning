@@ -82,6 +82,26 @@ erano senza intestazione, quindi i confini tra i capitoli 2, 3, 4 e 5 vanno conf
 10. Esercizio 48: Perché? Per
 11. Esercizio 49: Il signor Duval in albergo, con domande (personaggio e albergo da rinominare: niente nomi di marca)
 
+## Capitolo 7
+
+1. Ascolto 7
+2. Lettura: «Leggere non è un problema»
+3. Esercizio 50: Domande sulla lettura
+4. Esercizio 51: Qual è la domanda?
+5. Esercizio 52: Né… né…
+6. Lettura: «La segretaria e la lettera»
+7. Esercizio 53: Domande sulla lettura
+8. Esercizio 54: Trasformazioni (presente)
+9. Lettura: «Il calendario»
+10. Esercizio 55: Metta le frasi al passato!
+11. Esercizio 56: Trasformazioni (presente/passato): Cosa fa la segretaria?
+12. Esercizio 57: Trasformazioni (presente/passato): Cosa fa il direttore?
+13. Esercizio 58: Metta le frasi al passato!
+14. Esercizio 59: L'ho letto — l'ho letta
+15. Esercizio 60: Ci vado, ci sono
+16. Esercizio 61: Come risponde Lei? (saluti)
+17. Esercizio 62: Lui e lei: maschile e femminile
+
 ## Figure pronte
 
 bottiglia, tazza, computer
