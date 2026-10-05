@@ -109,6 +109,10 @@ button .hint { display: block; font-size: 12px; font-weight: 600; opacity: .7; m
 #stage svg { width: 100%; height: 100%; display: block; }
 #stage-mark { position: absolute; right: 10px; top: 10px; width: 62px; height: 62px; filter: drop-shadow(0 4px 10px rgba(0,0,0,.45)); }
 #stage-cue { position: absolute; right: 8px; top: 8px; width: 84px; height: 84px; filter: drop-shadow(0 4px 10px rgba(0,0,0,.45)); }
+/* «ripeti»: le frecce girano e lampeggiano, così si capisce che bisogna ripetere */
+#stage-cue[data-kind="r"] svg { animation: spin 1.8s linear infinite, blink .7s ease-in-out infinite alternate; }
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes blink { from { opacity: .45; } to { opacity: 1; } }
 #stage-cue.show { animation: pop .35s cubic-bezier(.2,1.6,.4,1); }
 #stage-mark.show { animation: pop .35s cubic-bezier(.2,1.6,.4,1); }
 .steam path { animation: steam 2.4s ease-in-out infinite; }

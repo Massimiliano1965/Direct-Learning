@@ -329,12 +329,13 @@ function onCorrect(res) {
     L.repFails = 0;
     L.busy = true;
     flashGood();
+    setCue('ok');
     if (L.di >= L.drill.length) { setStatus('Correct', 'ok'); hideMark(); nextStep(run, 300); return; }
     const d = cur();
     $('heard').textContent = '';
     showIndicated(d.show);
     setPrompt(d.prompt);
-    setTimeout(() => { if (alive(run)) { askStep(); setStatus(repLabel(), 'wait'); } }, 200);
+    setTimeout(() => { if (alive(run)) { askStep(); setStatus(repLabel(), 'wait'); } }, 500);
     return;
   }
   const ts = DB.teachers[L.teacher.key];
@@ -350,6 +351,7 @@ function onCorrect(res) {
   L.answered = true;
   setStatus('Correct', 'ok');
   flashGood();
+  setCue('ok');
   const t = L.teacher;
   L.streak++;
   const parts = [];
@@ -358,7 +360,8 @@ function onCorrect(res) {
   // «No, non è un tavolo.» su un oggetto noto: l'insegnante completa con quello che è.
   // Sull'oggetto nuovo no: il nome non si dice finché non arriva «Che cos'è?»
   if (st.type === 'neg' && !res.full && !st.fresh) parts.push({ text: 'È ' + np(st.show) + '.', rate: t.modelRate });
-  const delay = st.phase === 'mix' ? 150 : 300;
+  // pausa breve, giusto il tempo di vedere il «!» verde
+  const delay = st.phase === 'mix' ? 400 : 500;
   Mouth.speakParts(parts, t.pitch, () => {
     if (!alive(run)) return;
     nextStep(run, delay);

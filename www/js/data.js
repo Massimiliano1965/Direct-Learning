@@ -231,9 +231,12 @@ const MARKS = {
     <path d="M28 32 l10 -4 M72 32 l-10 -4" stroke="#2a2440" stroke-width="4" stroke-linecap="round"/></svg>`
 };
 
-// Segnali sul palco: «?» = è una domanda, rispondi; frecce = ripeti la frase.
+// Segnali sul palco: «?» = è una domanda, rispondi; frecce che girano = ripeti la frase;
+// «!» verde = giusto.
 // In italiano la domanda si sente solo dall'intonazione: il segnale la rende chiara.
 const CUES = {
+  ok: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="46" fill="#34a847" stroke="#fff" stroke-width="4"/>
+    <rect x="43" y="18" width="14" height="44" rx="7" fill="#fff"/><circle cx="50" cy="77" r="8" fill="#fff"/></svg>`,
   q: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="46" fill="url(#gLilla)" stroke="#fff" stroke-width="4"/>
     <text x="50" y="72" font-size="66" font-family="Arial, sans-serif" font-weight="900" fill="#fff" text-anchor="middle">?</text></svg>`,
   r: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="46" fill="#2e2b4a" stroke="#8c8fe8" stroke-width="4"/>
