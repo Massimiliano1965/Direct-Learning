@@ -170,13 +170,24 @@ LESSONS.forEach(l => {
 });
 count++;
 
+// 3b2. Presentazione: primo giro «Questo è un libro.», secondo «È un libro.»
+LESSONS.forEach(l => {
+  const p = buildSteps(l).filter(s => s.phase === 'present').slice(0, l.known.length * 2);
+  check(l.id + ': presentazione con questo/questa', p.slice(0, l.known.length).every(s => /^Quest[oa] è /.test(s.prompt) && s.prompt.startsWith(ITEMS[s.show].art === 'una' ? 'Questa' : 'Questo')) &&
+    p.slice(l.known.length).every(s => /^È /.test(s.prompt)));
+  check(l.id + ': domande senza «questo» nelle lezioni che non lo insegnano', l.questo || buildSteps(l).every(s => !/^È quest/.test(s.prompt)));
+});
+check('«Sì, questo è un libro.» accettato', evaluate({ type: 'yes', show: 'book' }, 'Sì, questo è un libro.').ok);
+check('«Questa è una sedia.» ripetuto', evaluate({ type: 'echo', check: 'claim', show: 'chair' }, 'Questa è una sedia.').ok);
+
 // 3c. Lezione 3: «È questo un…?» con l'accordo giusto, parole vecchie per introdurre il computer
 const l3 = LESSONS.find(l => l.id === 'l3');
 for (let rep = 0; rep < 20; rep++) {
   const st3 = buildSteps(l3);
   const qs = st3.filter(s => s.type === 'yes' || s.type === 'neg');
-  if (!qs.every(s => /^È quest[oa] /.test(s.prompt))) check('lezione 3: domande con «questo/questa»', false);
-  if (!qs.every(s => (ITEMS[s.ask || s.show].art === 'una') === s.prompt.startsWith('È questa '))) check('lezione 3: questo/questa d\'accordo', false);
+  const withQ = qs.filter(s => /^È quest[oa] /.test(s.prompt));
+  if (!withQ.length || withQ.length === qs.length) check('lezione 3: le due forme mescolate', false);
+  if (!withQ.every(s => (ITEMS[s.ask || s.show].art === 'una') === s.prompt.startsWith('È questa '))) check('lezione 3: questo/questa d\'accordo', false);
   const fresh = st3.filter(s => s.phase === 'fresh').map(s => s.ask).sort().join();
   if (fresh !== l3.known.concat(l3.review).sort().join()) check('lezione 3: no al computer con tutte le parole conosciute', false);
 }
