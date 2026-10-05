@@ -24,7 +24,9 @@ const ITEMS = {
   box:    { word: 'scatola',  art: 'una', alias: ['scatole'] },
   clock:  { word: 'orologio', art: 'un',  alias: ['orologi'] },
   cup:    { word: 'tazza',    art: 'una', alias: ['tazze'] },
-  bag:    { word: 'borsa',    art: 'una', alias: ['borse'] }
+  bag:    { word: 'borsa',    art: 'una', alias: ['borse'] },
+  bottle:   { word: 'bottiglia', art: 'una', alias: ['bottiglie'] },
+  computer: { word: 'computer',  art: 'un',  alias: ['computers', 'compiuter'] }
 };
 
 // Lezioni. known = parole presentate subito; fresh = oggetto nuovo che non si nomina

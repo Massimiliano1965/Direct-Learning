@@ -33,6 +33,9 @@ const SVG_DEFS = `<svg width="0" height="0" style="position:absolute" aria-hidde
     <linearGradient id="mHair" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#b9b9be"/><stop offset=".5" stop-color="#8d8d93"/><stop offset="1" stop-color="#5e5e64"/></linearGradient>
     <linearGradient id="mLens" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3a3a44"/><stop offset="1" stop-color="#0b0b10"/></linearGradient>
     <clipPath id="mClip"><circle cx="50" cy="50" r="50"/></clipPath>
+<linearGradient id="gGlass" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#7fc4e8"/><stop offset=".45" stop-color="#bfe6f7"/><stop offset="1" stop-color="#5aa6d1"/></linearGradient>
+<linearGradient id="gScreen" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4b5bd8"/><stop offset="1" stop-color="#1e2a7a"/></linearGradient>
+<linearGradient id="gAlu" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e9eaf0"/><stop offset="1" stop-color="#a9acbb"/></linearGradient>
 <filter id="fSoft" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="2"/></filter>
 </defs></svg>`;
 
@@ -159,6 +162,26 @@ const FIG = {
     <rect x="26" y="42" width="5" height="30" rx="2.5" ${SHINE}/>
     <g class="steam" fill="none" stroke="#d8d6e8" stroke-width="3" stroke-linecap="round" opacity=".85">
       <path d="M37 24 q5 -6 0 -12 q-5 -6 0 -10"/><path d="M55 24 q5 -6 0 -12 q-5 -6 0 -10"/></g>`),
+
+  bottle: svg(`
+    <rect x="42" y="6" width="16" height="9" rx="2.5" fill="#e5533c" ${O}/>
+    <path d="M44 15 h12 v14 c0 4 14 9 14 22 v32 a6 6 0 0 1 -6 6 h-28 a6 6 0 0 1 -6 -6 v-32 c0 -13 14 -18 14 -22 z" fill="url(#gGlass)" ${O}/>
+    <path d="M30 60 h40 v16 h-40 z" fill="#f4f1e6" ${O}/>
+    <path d="M30 70 q10 -5 20 0 t20 0 v13 a6 6 0 0 1 -6 6 h-28 a6 6 0 0 1 -6 -6 z" fill="#4f9fe0" opacity=".55"/>
+    <line x1="38" y1="66" x2="62" y2="66" stroke="#8c8fe8" stroke-width="3" stroke-linecap="round"/>
+    <rect x="36" y="36" width="4" height="22" rx="2" ${SHINE}/>`),
+
+  computer: svg(`
+    <rect x="16" y="14" width="68" height="48" rx="5" fill="url(#gAlu)" ${O}/>
+    <rect x="21" y="19" width="58" height="38" rx="2" fill="url(#gScreen)"/>
+    <rect x="27" y="26" width="26" height="4" rx="2" fill="#a9abf2" opacity=".9"/>
+    <rect x="27" y="34" width="40" height="3" rx="1.5" fill="#fff" opacity=".45"/>
+    <rect x="27" y="40" width="34" height="3" rx="1.5" fill="#fff" opacity=".45"/>
+    <rect x="27" y="46" width="22" height="3" rx="1.5" fill="#fff" opacity=".45"/>
+    <polygon points="21,19 44,19 21,44" fill="#fff" opacity=".12"/>
+    <path d="M8 64 h84 l-6 14 a4 4 0 0 1 -4 3 h-64 a4 4 0 0 1 -4 -3 z" fill="url(#gAlu)" ${O}/>
+    <rect x="40" y="66" width="20" height="4" rx="2" fill="#a9acbb"/>
+    <line x1="18" y1="74" x2="82" y2="74" stroke="#c9cbd6" stroke-width="2"/>`),
 
   bag: svg(`
     <path d="M36 32 V24 a14 14 0 0 1 28 0 V32" fill="none" stroke="#2a2440" stroke-width="9" stroke-linecap="round"/>
