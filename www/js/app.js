@@ -95,7 +95,8 @@ function renderHome() {
   LESSONS.forEach(l => {
     const b = document.createElement('button');
     b.className = 'lesson-btn';
-    const icons = lessonItems(l).map(w => FIG[w]).join('');
+    // nel menu solo le parole nuove della lezione
+    const icons = l.known.concat(l.fresh ? [l.fresh] : []).map(w => FIG[w]).join('');
     const best = DB.lessons[l.id];
     const name = 'Lesson ' + (LESSONS.indexOf(l) + 1);
     b.innerHTML = '<span>' + name + '</span><span class="icons">' + icons + '</span>' +
@@ -136,7 +137,7 @@ let L = null;      // stato della lezione in corso
 let RUN = 0;       // cambia a ogni lezione o pausa: blocca le risposte "vecchie"
 let lastLessonId = null;
 
-function lessonItems(l) { return l.fresh ? l.known.concat([l.fresh]) : l.known.slice(); }
+function lessonItems(l) { return lessonWords(l); }
 function alive(run) { return !!L && L.run === run && RUN === run; }
 // Passo corrente: durante le ripetizioni dopo un errore, quello delle ripetizioni
 function cur() { return L.drill ? L.drill[L.di] : L.steps[L.i]; }
@@ -196,7 +197,8 @@ function stopLesson() {
 function buildGrid(items) {
   const grid = $('objects-grid');
   grid.innerHTML = '';
-  grid.classList.toggle('cols4', items.length === 4);
+  grid.classList.toggle('cols4', items.length >= 4 && items.length <= 8);
+  grid.classList.toggle('cols5', items.length > 8);
   items.forEach(obj => {
     const box = document.createElement('div');
     box.className = 'object-box';

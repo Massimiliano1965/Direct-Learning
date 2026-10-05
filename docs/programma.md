@@ -8,6 +8,7 @@ Dal libro si prende solo l'ordine: frasi, nomi e figure sono nostri e moderni
 
 - Lezione 1: libro, tavolo, sedia; la penna con «Che cos'è?»
 - Lezione 2: sedia, porta; la finestra con «Che cos'è?»
+- Lezione 3: bottiglia, tazza; il computer con «Che cos'è?»; domande con «È questo/questa…?»
 
 ## Capitoli 1–5
 

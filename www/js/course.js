@@ -33,7 +33,10 @@ const ITEMS = {
 // finché l'allievo non è "stufo" di dire di no (poi arriva «Che cos'è?»).
 const LESSONS = [
   { id: 'l1', title: 'Lezione 1', known: ['book', 'table', 'chair'], fresh: 'pen' },
-  { id: 'l2', title: 'Lezione 2', known: ['chair', 'door'], fresh: 'window' }
+  { id: 'l2', title: 'Lezione 2', known: ['chair', 'door'], fresh: 'window' },
+  // dal capitolo 1 del libro: «Una bottiglia e una tazza», «È questo un computer?» (era il magnetofono)
+  { id: 'l3', title: 'Lezione 3', known: ['bottle', 'cup'], review: ['book', 'table', 'chair', 'pen', 'door', 'window'],
+    fresh: 'computer', questo: true }
 ];
 
 // Quattro insegnanti, dal più rigido al più indulgente. gender = voce maschile o femminile.

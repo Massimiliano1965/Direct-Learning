@@ -125,6 +125,8 @@ button .hint { display: block; font-size: 12px; font-weight: 600; opacity: .7; m
 #heard { font-size: 15px; color: var(--muted); text-align: center; min-height: 20px; }
 #objects-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 12px 0; }
 #objects-grid.cols4 { grid-template-columns: repeat(4, 1fr); gap: 8px; }
+#objects-grid.cols5 { grid-template-columns: repeat(5, 1fr); gap: 6px; }
+#objects-grid.cols5 .object-box { padding: 5px; border-radius: 12px; }
 .object-box { aspect-ratio: 1 / 1; padding: 10px; background: linear-gradient(180deg, var(--surface2), var(--surface)); border-radius: 16px; border: 3px solid var(--line); cursor: pointer; box-shadow: 0 3px 0 #15132a; }
 .object-box svg { width: 100%; height: 100%; display: block; pointer-events: none; }
 .object-box:active { background: var(--surface2); box-shadow: none; transform: translateY(2px); }
@@ -179,7 +181,7 @@ button .hint { display: block; font-size: 12px; font-weight: 600; opacity: .7; m
   #prompt-text { font-size: 21px; margin-top: 8px; min-height: 28px; }
   #objects-grid { gap: 8px; margin: 8px 0; }
   .object-box { padding: 7px; }
-  #objects-grid:not(.cols4) { padding: 0 6%; }
+  #objects-grid:not(.cols4):not(.cols5) { padding: 0 6%; }
   #status { margin-bottom: 8px; }
   #demo-caption { font-size: 16px; padding: 9px 12px; min-height: 0; }
   button { min-height: 54px; }

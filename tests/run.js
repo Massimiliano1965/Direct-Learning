@@ -125,7 +125,7 @@ for (let rep = 0; rep < 30; rep++) {
   check('«penna» nascosta fino a «Che cos\'è?»', steps.slice(0, reveal).every(s => s.prompt.indexOf(freshWord) === -1 && s.model.indexOf(freshWord) === -1));
   check('domande sull\'oggetto nuovo solo con il no', steps.filter(s => s.phase === 'fresh').every(s => s.type === 'neg' && s.show === l1.fresh && s.fresh));
   check('prima rivelazione con pausa', steps[reveal].pause > 0 && steps[reveal].show === l1.fresh);
-  check('«Che cos\'è?» ripetuto 4 volte', steps.filter(s => s.phase === 'askq').length === 4);
+  check('«Che cos\'è?» ripetuto 4 volte', steps.filter(s => s.phase === 'askq').length === (l1.review ? 2 : 4));
   check('il ritmo cresce', steps.filter(s => s.phase === 'mix').every((s, i, a) => !i || s.speed >= a[i - 1].speed));
   check('niente stesso oggetto due volte di fila nel mix', steps.filter(s => s.phase === 'mix').every((s, i, a) => !i || s.show !== a[i - 1].show));
   steps.forEach((s, i) => {
@@ -144,7 +144,7 @@ const buildDrill = run('buildDrill');
 const repeatsFor = run('repeatsFor');
 check('ripetizioni a rotazione', [0, 1, 2, 3, 4, 5].map(e => repeatsFor(TEACHERS.mass, e)).join() === '3,5,4,5,4,3');
 LESSONS.forEach(l => {
-  const items = l.known.concat([l.fresh]);
+  const items = run('lessonWords')(l);
   for (let rep = 0; rep < 10; rep++) {
     const steps = buildSteps(l);
     const reveal = steps.findIndex(s => s.type === 'reveal');
@@ -169,6 +169,18 @@ LESSONS.forEach(l => {
   }
 });
 count++;
+
+// 3c. Lezione 3: «È questo un…?» con l'accordo giusto, parole vecchie per introdurre il computer
+const l3 = LESSONS.find(l => l.id === 'l3');
+for (let rep = 0; rep < 20; rep++) {
+  const st3 = buildSteps(l3);
+  const qs = st3.filter(s => s.type === 'yes' || s.type === 'neg');
+  if (!qs.every(s => /^È quest[oa] /.test(s.prompt))) check('lezione 3: domande con «questo/questa»', false);
+  if (!qs.every(s => (ITEMS[s.ask || s.show].art === 'una') === s.prompt.startsWith('È questa '))) check('lezione 3: questo/questa d\'accordo', false);
+  const fresh = st3.filter(s => s.phase === 'fresh').map(s => s.ask).sort().join();
+  if (fresh !== l3.known.concat(l3.review).sort().join()) check('lezione 3: no al computer con tutte le parole conosciute', false);
+}
+check('lezione 3: «È questa una sedia?» come domanda dell\'allievo', evalAsk('chair', 'È questa una sedia?').ok);
 
 // 4. Prova di 7 giorni
 check('prova non iniziata', trialFor(null, '2026-10-05').day === 0);

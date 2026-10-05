@@ -109,11 +109,11 @@ function evalAsk(X, text) {
   const s = norm(text);
   const bad = (model) => ({ ok: false, model: model || Q });
   if (has(s, 'si') || has(s, 'no') || negations(s).length) return bad();   // ha risposto, non chiesto
-  const c = claims(s.replace(/ e questo (un|una|uno) /g, ' e $1 '));
+  const c = claims(s.replace(/ e quest[oa] (un|una|uno) /g, ' e $1 '));
   if (has(s, 'che cosa e') && !c.length) return { ok: true, kind: 'what' };
   if (c.length === 1 && c[0].charAt(0) !== '?') return { ok: true, kind: c[0] === X ? 'yes' : 'no', ask: c[0] };
   // parola conosciuta ma articolo sbagliato («È un sedia?»): si corregge quella domanda
-  const m = / e (?:questo )?(?:un|una|uno) ([a-z]+)(?= )/.exec(s);
+  const m = / e (?:quest[oa] )?(?:un|una|uno) ([a-z]+)(?= )/.exec(s);
   if (m && WORD2KEY[m[1]]) return bad('È ' + np(WORD2KEY[m[1]]) + '?');
   return bad();
 }
@@ -137,13 +137,17 @@ function evaluateAll(step, alts) {
 /* ---------- Passi ---------- */
 
 const Q = "Che cos'è?";
+// Domanda con «questo»: «È questo un libro?» «È questa una sedia?» (accordo con la parola chiesta).
+// q = true solo nelle lezioni che la insegnano; le risposte restano «Sì, è un libro.»
+function dem(k) { return ITEMS[k].art === 'un' || ITEMS[k].art === 'uno' ? 'questo' : 'questa'; }
+function qnp(k, q) { return q ? dem(k) + ' ' + np(k) : np(k); }
 const S = {
   present: (X) => ({ type: 'echo', check: 'claim', show: X, prompt: 'È ' + np(X) + '.', model: 'È ' + np(X) + '.' }),
-  yes:     (X) => ({ type: 'yes', show: X, prompt: 'È ' + np(X) + '?', model: 'Sì, è ' + np(X) + '.' }),
-  neg:  (X, Y) => ({ type: 'neg', show: X, ask: Y, prompt: 'È ' + np(Y) + '?', model: 'No, non è ' + np(Y) + '.' }),
-  alt:  (X, Y) => {
+  yes:     (X, q) => ({ type: 'yes', show: X, questo: !!q, prompt: 'È ' + qnp(X, q) + '?', model: 'Sì, è ' + np(X) + '.' }),
+  neg:  (X, Y, q) => ({ type: 'neg', show: X, ask: Y, questo: !!q, prompt: 'È ' + qnp(Y, q) + '?', model: 'No, non è ' + np(Y) + '.' }),
+  alt:  (X, Y, q) => {
     const o = Math.random() < 0.5 ? [X, Y] : [Y, X];
-    return { type: 'alt', show: X, options: o, prompt: 'È ' + np(o[0]) + ' o ' + np(o[1]) + '?', model: 'È ' + np(X) + '.' };
+    return { type: 'alt', show: X, options: o, questo: !!q, prompt: 'È ' + qnp(o[0], q) + ' o ' + np(o[1]) + '?', model: 'È ' + np(X) + '.' };
   },
   key:     (X) => ({ type: 'key', show: X, prompt: Q, model: 'È ' + np(X) + '.' }),
   // L'insegnante si risponde da solo: nessuna risposta attesa
@@ -172,7 +176,7 @@ function buildDrill(st, n, items) {
   const k0 = st.model === 'È ' + np(F) + '.' ? 1 : 0;
   for (let k = k0; out.length < n; k++) {
     const kind = others.length ? kinds[k % 3] : kinds[k % 2];
-    const s = kind === 'present' ? S.present(F) : kind === 'yes' ? S.yes(F) : S.neg(pick(others), F);
+    const s = kind === 'present' ? S.present(F) : kind === 'yes' ? S.yes(F, st.questo) : S.neg(pick(others), F, st.questo);
     if (kind === 'present') s.prompt = s.model;   // l'insegnante la dice, l'allievo la ripete
     s.drill = true;
     s.phase = st.phase;
@@ -182,14 +186,14 @@ function buildDrill(st, n, items) {
 }
 
 // Un passo a caso tra sì, no, «o» e domanda chiave, senza ripetere lo stesso oggetto di fila
-function mixStep(items, types, prevShow) {
+function mixStep(items, types, prevShow, q) {
   const pool = items.filter(x => x !== prevShow);
   const X = pick(pool.length ? pool : items);
   const Y = pick(items.filter(x => x !== X));
   const t = pick(types);
-  if (t === 'yes') return S.yes(X);
-  if (t === 'neg') return S.neg(X, Y);
-  if (t === 'alt') return S.alt(X, Y);
+  if (t === 'yes') return S.yes(X, q);
+  if (t === 'neg') return S.neg(X, Y, q);
+  if (t === 'alt') return S.alt(X, Y, q);
   return S.key(X);
 }
 
@@ -206,35 +210,49 @@ function mixStep(items, types, prevShow) {
 const MIX_BLOCKS = 3;
 const MIX_BLOCK_SIZE = 8;
 const ASK_TURNS = 6;
+// Parole della lezione: known = presentate ora; review = già imparate, usate nelle domande
+// per introdurre le nuove; fresh = oggetto da scoprire con «Che cos'è?».
+function lessonWords(l) { return l.known.concat(l.review || []).concat(l.fresh ? [l.fresh] : []); }
 function buildSteps(lesson) {
   const K = lesson.known.slice();
+  const R = (lesson.review || []).slice();
+  const KQ = K.concat(R);                  // tutte le parole che l'allievo conosce
   const F = lesson.fresh;
-  const all = F ? K.concat([F]) : K;
+  const all = F ? KQ.concat([F]) : KQ;
+  const q = !!lesson.questo;
   const st = [];
   const add = (s, phase) => { s.phase = phase; st.push(s); return s; };
 
   K.forEach(x => add(S.present(x), 'present'));
   shuffle(K).forEach(x => add(S.present(x), 'present'));
-  for (let r = 0; r < 2; r++) shuffle(K).forEach(x => add(S.yes(x), 'yes'));
-  const pairs = [];
-  K.forEach(x => K.forEach(y => { if (x !== y) pairs.push([x, y]); }));
-  shuffle(pairs).forEach(p => add(S.neg(p[0], p[1]), 'neg'));
+  for (let r = 0; r < 2; r++) shuffle(K).forEach(x => add(S.yes(x, q), 'yes'));
+  if (!R.length) {
+    const pairs = [];
+    K.forEach(x => K.forEach(y => { if (x !== y) pairs.push([x, y]); }));
+    shuffle(pairs).forEach(p => add(S.neg(p[0], p[1], q), 'neg'));
+  } else {
+    // parola nuova indicata, domanda con le parole vecchie (e viceversa)
+    K.forEach(x => shuffle(KQ.filter(y => y !== x)).slice(0, 3).forEach(y => add(S.neg(x, y, q), 'neg')));
+  }
   let prev = null;
-  for (let i = 0; i < 6; i++) prev = add(mixStep(K, ['yes', 'neg'], prev), 'yesno').show;
+  for (let i = 0; i < 6; i++) prev = add(mixStep(KQ, ['yes', 'neg'], prev, q), 'yesno').show;
 
   if (F) {
-    for (let r = 0; r < 2; r++) shuffle(K).forEach(y => { add(S.neg(F, y), 'fresh').fresh = true; });
+    // l'oggetto nuovo: no a TUTTE le parole conosciute (due giri se sono poche)
+    const rounds = KQ.length > 3 ? 1 : 2;
+    for (let r = 0; r < rounds; r++) shuffle(KQ).forEach(y => { add(S.neg(F, y, q), 'fresh').fresh = true; });
     add(S.reveal(F), 'reveal').pause = 1500;
     add(S.reveal(K[0]), 'reveal');
-    for (let i = 0; i < 4; i++) add(S.askQ(F), 'askq');
+    for (let i = 0; i < (R.length ? 2 : 4); i++) add(S.askQ(F), 'askq');
     for (let i = 0; i < 2; i++) add(S.present(F), 'present');
   }
-  for (let r = 0; r < 2; r++) shuffle(all).forEach(x => add(S.key(x), 'key'));
+  const keyItems = F ? K.concat([F]) : K;
+  for (let r = 0; r < 2; r++) shuffle(keyItems).forEach(x => add(S.key(x), 'key'));
 
   prev = null;
   for (let b = 0; b < MIX_BLOCKS; b++) {
     for (let i = 0; i < MIX_BLOCK_SIZE; i++) {
-      const s = add(mixStep(all, ['yes', 'neg', 'alt', 'key'], prev), 'mix');
+      const s = add(mixStep(all, ['yes', 'neg', 'alt', 'key'], prev, q), 'mix');
       s.speed = 1 + 0.06 * (b + 1);   // il ritmo cresce a ogni blocco
       prev = s.show;
     }
