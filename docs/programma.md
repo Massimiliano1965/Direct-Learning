@@ -30,6 +30,12 @@ Dal libro si prende solo l'ordine: frasi, nomi e figure sono nostri e moderni
 17. Lettura: «Nell'ufficio del Sig. Bertini» (personaggio da rinominare)
 18. Esercizio: Domande sulla lettura
 19. Esercizio: Un altro, un'altra
+20. Lettura: «Buongiorno! Io sono il professore»
+21. Esercizio: Domande sulla lettura
+22. Esercizio: Un, una, un', o uno?
+23. Esercizio: Il, la, l', o lo?
+24. Esercizio: A, su, in, di (preposizioni articolate)
+25. Esercizio: Anche — nemmeno
 
 ## Figure pronte per il Capitolo 1
 
