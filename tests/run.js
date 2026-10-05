@@ -18,6 +18,7 @@ const ITEMS = run('ITEMS');
 const TEACHERS = run('TEACHERS');
 const trialFor = run('trialFor');
 const FIG = run('FIG');
+const uiLevel = run('uiLevel');
 
 let fails = 0, count = 0;
 function check(name, cond) {
@@ -44,7 +45,18 @@ const cases = [
   [{ type: 'key', show: 'pencil' }, 'pencil', false],
   [{ type: 'key', show: 'umbrella' }, "It's an umbrella", true],
   [{ type: 'key', show: 'key' }, 'It is a keys', true],
-  [{ type: 'touch', show: 'key' }, 'It is a key', false]
+  [{ type: 'touch', show: 'key' }, 'It is a key', false],
+  // Pulsanti (Lezione 3)
+  [{ type: 'present', show: 'talk' }, 'This is the Talk button.', true],
+  [{ type: 'present', show: 'talk' }, 'This is a talk.', false],
+  [{ type: 'present', show: 'talk' }, 'talk button', false],
+  [{ type: 'yes', show: 'exit' }, 'Yes, it is.', true],
+  [{ type: 'neg', show: 'exit' }, "No, it isn't. It's the exit button.", true],
+  [{ type: 'neg', show: 'exit' }, "No, it isn't. It's the repeat button.", false],
+  [{ type: 'key', show: 'repeat' }, "It's the Repeat button.", true],
+  [{ type: 'key', show: 'repeat' }, "It's the repeat.", false],
+  [{ type: 'key', show: 'book' }, "It's the book button.", false],
+  [{ type: 'key', show: 'book' }, "It's the book.", false]
 ];
 cases.forEach(([step, text, want]) => check(step.type + ' «' + text + '» → ' + want, evaluate(step, text).ok === want));
 check('neg senza correzione: full=false', evaluate({ type: 'neg', show: 'book' }, "No, it isn't.").full === false);
@@ -69,6 +81,10 @@ LESSONS.forEach(l => {
   const touches = steps.filter(s => s.type === 'touch').map(s => s.show).sort();
   check(l.id + ': tocca ogni oggetto una volta', JSON.stringify(touches) === JSON.stringify(items.slice().sort()));
 });
+const m1 = buildSteps(['talk', 'repeat', 'exit'], true);
+check('lezione pulsanti: presentazione', m1[0].prompt === 'This is the talk button.');
+check('lezione pulsanti: tocca', m1[m1.length - 1].prompt.indexOf(' button.') !== -1);
+check('lezione 3 = pulsanti', LESSONS[2].items.join() === 'talk,repeat,exit' && LESSONS[2].title === 'Lesson 3');
 check('lezione da 3 oggetti = 24 passi', buildSteps(['book', 'pen', 'pencil'], true).length === 24);
 
 // 4. Prova di 7 giorni
@@ -82,7 +98,14 @@ check('a cavallo di mese', trialFor('2026-10-31', '2026-11-01').day === 2);
 check('ora legale (25 ottobre)', trialFor('2026-10-24', '2026-10-26').day === 3);
 check('orologio indietro: resta giorno 1', trialFor('2026-10-05', '2026-10-01').today === 'miller');
 
-// 5. Dati coerenti
+// 5. Lingua dei pulsanti
+check('pulsanti: lezione non fatta → italiano', uiLevel(null, '2026-10-05') === 0);
+check('pulsanti: giorno 0-2 → italiano', uiLevel('2026-10-05', '2026-10-07') === 0);
+check('pulsanti: giorno 3 → inglese con aiuto', uiLevel('2026-10-05', '2026-10-08') === 1);
+check('pulsanti: giorno 6 → inglese con aiuto', uiLevel('2026-10-05', '2026-10-11') === 1);
+check('pulsanti: giorno 7 → solo inglese', uiLevel('2026-10-05', '2026-10-12') === 2);
+
+// 6. Dati coerenti
 Object.keys(ITEMS).forEach(k => check('figura per ' + k, typeof FIG[k] === 'string' && FIG[k].indexOf('<svg') === 0));
 Object.keys(TEACHERS).forEach(k => check('insegnante ' + k, TEACHERS[k].key === k && TEACHERS[k].praise.length > 0));
 

@@ -55,6 +55,7 @@ button.secondary:active { box-shadow: 0 1px 0 #1a1830; }
 button.ghost { background: transparent; color: var(--muted); border: 2px solid var(--surface2); box-shadow: none; }
 button.ghost:active { transform: none; background: var(--surface); }
 button + button { margin-top: 12px; }
+button .hint { display: block; font-size: 12px; font-weight: 600; opacity: .7; margin-top: 1px; }
 
 /* Scelta insegnante */
 .choice { display: flex; align-items: center; gap: 12px; text-align: left; background: var(--surface); color: var(--text); border: 2px solid var(--line); box-shadow: 0 3px 0 #15132a; }

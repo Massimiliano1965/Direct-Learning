@@ -99,7 +99,7 @@ function renderHome() {
     b.className = 'lesson-btn';
     const icons = (l.items || ['book', 'key', 'cup', 'chair']).map(w => FIG[w]).join('');
     const best = DB.lessons[l.id];
-    const name = l.id === 'rev' ? 'Ripasso' : 'Lezione ' + l.id.slice(1);
+    const name = l.id === 'rev' ? 'Ripasso' : 'Lezione ' + (LESSONS.indexOf(l) + 1);
     b.innerHTML = '<span>' + name + '</span><span class="icons">' + icons + '</span>' +
                   '<span class="score' + (best >= 80 ? ' top' : '') + '">' + (best != null ? best + '%' : '') + '</span>';
     b.onclick = once(() => startLesson(l.id));
@@ -107,6 +107,22 @@ function renderHome() {
   });
 
   $('opt-text').checked = !!DB.settings.showText;
+  applyUiWords();
+}
+
+/* ---------- Lingua dei pulsanti della lezione ---------- */
+
+function uiLevelNow() { return uiLevel(DB.settings.menuDay, todayKey()); }
+function uiWord(k) { return uiLevelNow() ? UI_WORDS[k].en : UI_WORDS[k].it; }
+function setUiButton(id, k) {
+  const lv = uiLevelNow();
+  const w = UI_WORDS[k];
+  $(id).innerHTML = lv === 0 ? w.it : lv === 1 ? w.en + '<small class="hint">' + w.it + '</small>' : w.en;
+}
+function applyUiWords() {
+  setUiButton('btn-talk', 'talk');
+  setUiButton('btn-replay', 'repeat');
+  if (!demoActive) setUiButton('btn-exit', 'exit');
 }
 $('opt-text').onchange = (e) => { DB.settings.showText = e.target.checked; saveDB(); };
 $('btn-report').onclick = () => { renderReport(); showScreen('report'); };
@@ -125,7 +141,7 @@ function startLesson(id) {
   const lesson = LESSONS.find(l => l.id === id);
   if (!lesson) return;
   stopLesson();
-  const items = lesson.items ? lesson.items.slice() : shuffle(Object.keys(ITEMS)).slice(0, 4);
+  const items = lesson.items ? lesson.items.slice() : shuffle(Object.keys(ITEMS).filter(w => !isButton(w))).slice(0, 4);
   const teacher = TEACHERS[selectedTeacherKey()];
   RUN++;
   L = {
@@ -145,6 +161,7 @@ function startLesson(id) {
   $('l-title').textContent = lesson.title;
   $('l-teacher').textContent = teacher.name;
   buildGrid(items);
+  applyUiWords();
   showScreen('lesson', currentScreen !== 'home');
   Awake.keep();
   runStep();
@@ -280,15 +297,15 @@ function listen() {
 }
 
 function handleListenError(code, run) {
-  if (code === 'not-allowed') { setStatus('Microfono bloccato: dai il permesso e tocca Parla', 'err'); return; }
+  if (code === 'not-allowed') { setStatus('Microfono bloccato: dai il permesso e tocca ' + uiWord('talk'), 'err'); return; }
   if (code === 'unsupported') { setStatus('Il telefono non ha il riconoscimento vocale. Puoi solo ascoltare', 'err'); return; }
-  if (code === 'network') { setStatus('Serve internet per capire la voce. Tocca Parla', 'err'); return; }
+  if (code === 'network') { setStatus('Serve internet per capire la voce. Tocca ' + uiWord('talk'), 'err'); return; }
   L.noSpeech++;
   if (L.noSpeech <= 2) {
     setStatus('Non ti ho sentito', 'wait');
     setTimeout(() => { if (alive(run)) listen(); }, 700);
   } else {
-    setStatus('Tocca Parla quando sei pronto', 'wait');
+    setStatus('Tocca ' + uiWord('talk') + ' quando sei pronto', 'wait');
   }
 }
 
@@ -405,6 +422,8 @@ function finishLesson() {
   const id = L.lesson.id;
   const t = L.teacher;
   if (DB.lessons[id] == null || pct > DB.lessons[id]) DB.lessons[id] = pct;
+  // Lezione dei pulsanti finita: da qui partono i giorni per passare all'inglese
+  if (id === MENU_LESSON && !DB.settings.menuDay) DB.settings.menuDay = todayKey();
   saveDB();
   stopLesson();
   Mouth.speak(t.done, t.rate, t.pitch, null);

@@ -4,7 +4,11 @@
    Nessun accesso allo schermo: testabile da Node (tests/run.js).
    ===================================================================== */
 
-function art(w) { return (/^[aeiou]/.test(w) ? 'an ' : 'a ') + w; }
+function isButton(w) { return !!(ITEMS[w] && ITEMS[w].button); }
+// "a book", "an umbrella" — i pulsanti invece: "the talk button"
+function art(w) { return isButton(w) ? 'the ' + w + ' button' : (/^[aeiou]/.test(w) ? 'an ' : 'a ') + w; }
+// "the book", "the talk button" (per "Touch …")
+function the(w) { return 'the ' + w + (isButton(w) ? ' button' : ''); }
 
 function shuffle(arr) {
   const a = arr.slice();
@@ -39,12 +43,17 @@ function norm(text) {
 
 function has(s, phrase) { return s.indexOf(' ' + phrase + ' ') !== -1; }
 
-// Oggetti "affermati" nella frase: "it is a book", "this is a pen", "that is an ..."
+// Oggetti "affermati" nella frase: "it is a book", "this is a pen", "that is an ...",
+// e per i pulsanti "it is the talk button". L'articolo deve essere quello giusto:
+// "it is the book" o "it is a talk" non valgono.
 function claims(s) {
-  const re = / (?:it|this|that) is (?:a|an) ([a-z]+)(?= )/g;
+  const re = / (?:it|this|that) is (?:(?:a|an) ([a-z]+)|the ([a-z]+) button)(?= )/g;
   const out = [];
   let m;
-  while ((m = re.exec(s)) !== null) out.push(m[1]);
+  while ((m = re.exec(s)) !== null) {
+    if (m[1] && !isButton(m[1])) out.push(m[1]);
+    else if (m[2] && isButton(m[2])) out.push(m[2]);
+  }
   return out;
 }
 
@@ -111,8 +120,8 @@ function buildSteps(items, withPresentation) {
   }
   shuffle(items).forEach(x => st.push({
     type: 'touch', show: x,
-    prompt: 'Touch the ' + x + '.',
-    model: 'This is the ' + x + '.'
+    prompt: 'Touch ' + the(x) + '.',
+    model: 'This is ' + the(x) + '.'
   }));
   return st;
 }
@@ -139,4 +148,15 @@ function trialFor(start, today) {
   if (!start) return { day: 0, today: TRIAL_ROTATION[0] };
   const day = Math.max(1, dayDiff(start, today) + 1);
   return { day: day, today: day <= 6 ? TRIAL_ROTATION[(day - 1) % TRIAL_ROTATION.length] : null };
+}
+
+/* ---------- Lingua dei pulsanti ----------
+   0 = italiano, 1 = inglese con la parola italiana piccola sotto, 2 = solo inglese.
+   Si parte dal giorno in cui l'allievo ha finito la lezione dei pulsanti. */
+function uiLevel(learnedDay, today) {
+  if (!learnedDay) return 0;
+  const d = dayDiff(learnedDay, today);
+  if (d < UI_SWITCH_DAYS) return 0;
+  if (d < UI_SWITCH_DAYS + UI_HINT_DAYS) return 1;
+  return 2;
 }

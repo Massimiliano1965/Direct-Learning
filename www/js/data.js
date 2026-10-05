@@ -17,15 +17,30 @@ const ITEMS = {
   box:    { alias: ['boxes'] },
   clock:  { alias: ['clocks'] },
   cup:    { alias: ['cups'] },
-  bag:    { alias: ['bags'] }
+  bag:    { alias: ['bags'] },
+  // Pulsanti dell'app: si insegnano nella Lezione 3 ("This is the Talk button.")
+  talk:   { alias: ['talks', 'torque'], button: true },
+  repeat: { alias: ['repeats'], button: true },
+  exit:   { alias: ['exits'], button: true }
 };
+
+// Parole dei pulsanti: italiano all'inizio, inglese dopo la Lezione 3
+const UI_WORDS = {
+  talk:   { it: 'Parla', en: 'Talk' },
+  repeat: { it: 'Riascolta', en: 'Repeat' },
+  exit:   { it: 'Esci', en: 'Exit' }
+};
+const MENU_LESSON = 'm1';
+const UI_SWITCH_DAYS = 3;   // giorni dopo la Lezione 3 prima che i pulsanti passino all'inglese
+const UI_HINT_DAYS = 4;     // poi, per questi giorni, resta piccola la parola italiana sotto
 
 const LESSONS = [
   { id: 'l1', title: 'Lesson 1', items: ['book', 'pen', 'pencil'], presentation: true },
   { id: 'l2', title: 'Lesson 2', items: ['table', 'chair', 'door'], presentation: true },
-  { id: 'l3', title: 'Lesson 3', items: ['window', 'key', 'box'], presentation: true },
-  { id: 'l4', title: 'Lesson 4', items: ['clock', 'cup', 'bag'], presentation: true },
-  { id: 'rev', title: 'Review', items: null, presentation: false } // 4 oggetti a caso
+  { id: MENU_LESSON, title: 'Lesson 3', items: ['talk', 'repeat', 'exit'], presentation: true },
+  { id: 'l3', title: 'Lesson 4', items: ['window', 'key', 'box'], presentation: true },
+  { id: 'l4', title: 'Lesson 5', items: ['clock', 'cup', 'bag'], presentation: true },
+  { id: 'rev', title: 'Review', items: null, presentation: false } // 4 oggetti a caso (non i pulsanti)
 ];
 
 const TEACHERS = {
@@ -84,9 +99,17 @@ const SVG_DEFS = `<svg width="0" height="0" style="position:absolute" aria-hidde
 const O = 'stroke="#2a2440" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"';
 const SHADOW = '<ellipse cx="50" cy="92" rx="32" ry="4.5" fill="#000" opacity=".28" filter="url(#fSoft)"/>';
 const SHINE = 'fill="#fff" opacity=".35"';
+// Pulsante disegnato come quello vero dell'app, con la parola inglese
+const btnFig = (word, fill, ink) => svg(`
+    <rect x="3" y="26" width="94" height="50" rx="14" fill="${fill}" ${O}/>
+    <rect x="12" y="30" width="76" height="5" rx="2.5" fill="#fff" opacity=".22"/>
+    <text x="50" y="59" font-size="23" font-family="system-ui, Roboto, Arial, sans-serif" font-weight="800" fill="${ink}" text-anchor="middle">${word}</text>`);
 const svg = (inner) => '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">' + SHADOW + inner + '</svg>';
 
 const FIG = {
+  talk:   btnFig('Talk', 'url(#gLilla)', '#12111c'),
+  repeat: btnFig('Repeat', '#3a3760', '#f1f0f7'),
+  exit:   btnFig('Exit', '#1b1a2b', '#a3a1bd'),
   book: svg(`
     <rect x="28" y="12" width="50" height="74" rx="4" fill="#f5ecd8" ${O}/>
     <line x1="74" y1="18" x2="74" y2="80" stroke="#d8ccb0" stroke-width="1.5"/>
@@ -236,4 +259,4 @@ const LOGO = `<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
   <g fill="#6a6dd6"><rect x="62" y="80" width="14" height="32" rx="7"/><rect x="85" y="66" width="14" height="60" rx="7"/>
   <rect x="108" y="74" width="14" height="44" rx="7"/><rect x="131" y="84" width="14" height="24" rx="7"/></g></svg>`;
 
-if (typeof module !== 'undefined') module.exports = { ITEMS, LESSONS, TEACHERS, TRIAL_ROTATION, MIN_ANSWERS_FOR_VERDICT, FIG, HAND, UNKNOWN, LOGO, SVG_DEFS };
+if (typeof module !== 'undefined') module.exports = { ITEMS, UI_WORDS, MENU_LESSON, LESSONS, TEACHERS, TRIAL_ROTATION, MIN_ANSWERS_FOR_VERDICT, FIG, HAND, UNKNOWN, LOGO, SVG_DEFS };

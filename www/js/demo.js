@@ -21,6 +21,7 @@ function startDemo(next) {
   $('l-title').textContent = 'Demonstration';
   $('l-teacher').textContent = t.name;
   $('heard').textContent = '';
+  applyUiWords();
   $('btn-exit').textContent = 'Salta la dimostrazione';
   $('demo-caption').classList.remove('hidden');
   $('demo-finger').classList.add('hidden');
@@ -39,7 +40,7 @@ function stopDemo() {
   Awake.allow();
   $('demo-caption').classList.add('hidden');
   $('demo-finger').classList.add('hidden');
-  $('btn-exit').textContent = 'Esci';
+  applyUiWords();
   $('screen-lesson').classList.remove('tunnel');
   document.querySelectorAll('.demo-press').forEach(e => e.classList.remove('demo-press'));
 }
@@ -165,8 +166,8 @@ async function demoScript(t, run) {
   await T('What is this?');
   setStatus('Parla ora', 'rec');
   await sleep(2200);
-  setStatus('Tocca Parla quando sei pronto', 'wait');
-  cap('…tocca Parla e rispondi.');
+  setStatus('Tocca ' + uiWord('talk') + ' quando sei pronto', 'wait');
+  cap('…tocca ' + uiWord('talk') + ' e rispondi.');
   await sleep(600);
   await tap($('btn-talk'));
   await studentTalks("It's a pencil.");
@@ -176,7 +177,7 @@ async function demoScript(t, run) {
   step(6, 'pen', 'Is this a pen or a pencil?');
   cap('Non hai capito la domanda?');
   await T('Is this a pen or a pencil?');
-  cap('Tocca Riascolta e la senti di nuovo.');
+  cap('Tocca ' + uiWord('repeat') + ' e la senti di nuovo.');
   await tap($('btn-replay'));
   setStatus('Ascolta', '');
   await T('Is this a pen or a pencil?');
