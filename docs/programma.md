@@ -122,7 +122,30 @@ erano senza intestazione, quindi i confini tra i capitoli 2, 3, 4 e 5 vanno conf
 5. Lettura: «L'Italia non è l'America»
 6. Esercizio 69: Qualcuno / nessuno, qualche cosa / niente
 7. Esercizio 70: Domande sul biglietto da visita
-8. (la pagina continua: voci successive non ancora viste)
+
+## Capitolo 10
+
+1. Ricapitolazione
+2. Ascolto 10
+3. Esercizio 71: Metta le frasi al passato!
+4. Esercizio 72: Metta le parole al plurale!
+5. Esercizio 73: Completi lo specchio dei verbi! (presente e passato)
+6. Esercizio 74: Metta le frasi al passato!
+7. Esercizio 75: Il verbo «chiamarsi»
+8. Esercizio 76: Lo — la — li — le (complemento diretto)
+9. Esercizio 77: Metta le frasi al plurale!
+10. Lettura: «In ufficio» in una fabbrica di auto, con domande (nel libro c'è un marchio: usare un'azienda inventata)
+11. Esercizio 78: Legga e scriva! («Il signor … lavora a Torino», personaggio da rinominare)
+
+## Capitolo 11
+
+1. Ricapitolazione
+2. Ascolto 11
+3. Lettura: «Il signor … va a Milano», con domande (personaggio da rinominare)
+4. Esercizio 79: L'ho — li ho — le ho (complemento diretto)
+5. Esercizio 80: Qual è il contrario?
+6. Esercizio 81: Completi le frasi! (preposizioni)
+7. Esercizio 82: Il signor … in albergo, con domande (personaggio e albergo da rinominare)
 
 ## Figure pronte
 
