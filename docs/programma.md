@@ -9,7 +9,11 @@ Dal libro si prende solo l'ordine: frasi, nomi e figure sono nostri e moderni
 - Lezione 1: libro, tavolo, sedia; la penna con «Che cos'è?»
 - Lezione 2: sedia, porta; la finestra con «Che cos'è?»
 
-## Capitolo 1
+## Capitoli 1–5
+
+L'indice arriva a pezzi: il Capitolo 1 inizia dalla voce 1. Le pagine seguenti
+erano senza intestazione, quindi i confini tra i capitoli 2, 3, 4 e 5 vanno confermati.
+
 
 1. Ricapitolazione
 2. Ascolto 1
@@ -64,7 +68,21 @@ Dal libro si prende solo l'ordine: frasi, nomi e figure sono nostri e moderni
 51. Esercizio: Metta le frasi al plurale!
 52. Esercizio: Plurali irregolari
 
-## Figure pronte per il Capitolo 1
+## Capitolo 6
+
+1. Ricapitolazione
+2. Ascolto 6
+3. Lettura: «Alla stazione Termini di Roma»
+4. Esercizio 42: Domande sulla lettura
+5. Esercizio 43: Qual è il contrario?
+6. Esercizio 44: Trasformazioni (presente)
+7. Esercizio 45: Trasformazioni (essere / stare)
+8. Esercizio 46: Ce l'ho — ce l'ha
+9. Esercizio 47: Qual è l'imperativo?
+10. Esercizio 48: Perché? Per
+11. Esercizio 49: Il signor Duval in albergo, con domande (personaggio e albergo da rinominare: niente nomi di marca)
+
+## Figure pronte
 
 bottiglia, tazza, computer
 
@@ -79,3 +97,4 @@ bottiglia, tazza, computer
 7. Durata della lezione: ora circa 10 minuti; allungare verso i 40?
 8. Personaggi delle letture (Carter, Bertini, Pietro, famiglia Rossi): che nomi nuovi usiamo?
 9. Manca la pagina dell'indice con gli esercizi 26 e 27.
+10. Dove iniziano i Capitoli 2, 3, 4 e 5 nell'indice?
