@@ -33,30 +33,41 @@ const LESSONS = [
   { id: 'l1', title: 'Lezione 1', known: ['book', 'table', 'chair'], fresh: 'pen' }
 ];
 
+// Quattro insegnanti, dal più rigido al più indulgente.
+// wrong = parola secca quando l'allievo sbaglia (con la sua icona, mark in data.js);
+// repeats = quante volte l'allievo ripete poi la risposta giusta.
 const TEACHERS = {
-  marco: {
-    key: 'marco', name: 'Marco', style: 'Strict and fast',
-    rate: 1.1, pitch: 0.85, modelRate: 1.0, maxTries: 2, praiseEvery: 0,
-    praise: ['Bene.', 'Giusto.'],
-    wrong: 'No.', cue: 'Ancora.', giveUp: 'Ascolta.',
+  mass: {
+    key: 'mass', name: 'Mass', style: 'Very strict', mark: 'wrong',
+    rate: 1.1, pitch: 0.85, modelRate: 1.0, praiseEvery: 0, repeats: 8,
+    praise: ['Corretto.'],
+    wrong: 'Errato.',
     done: 'La lezione è finita.'
   },
   giulia: {
-    key: 'giulia', name: 'Giulia', style: 'Calm and precise',
-    rate: 0.9, pitch: 1.1, modelRate: 0.75, maxTries: 3, praiseEvery: 3,
-    praise: ['Giusto.', 'Esatto.', 'Bene.'],
-    wrong: 'Non proprio. Ascolta.', cue: 'Ora tu.', giveUp: 'La risposta è:',
-    done: 'La lezione è finita. Molto bene.'
+    key: 'giulia', name: 'Giulia', style: 'Strict', mark: 'notcorrect',
+    rate: 1.05, pitch: 1.1, modelRate: 0.95, praiseEvery: 5, repeats: 6,
+    praise: ['Corretto.', 'Giusto.'],
+    wrong: 'Non corretto.',
+    done: 'La lezione è finita.'
   },
   luca: {
-    key: 'luca', name: 'Luca', style: 'Cheerful and encouraging',
-    rate: 1.0, pitch: 1.15, modelRate: 0.9, maxTries: 3, praiseEvery: 2,
-    praise: ['Ottimo!', 'Perfetto!', 'Benissimo!', 'Sì!'],
-    wrong: 'Quasi! Ascolta.', cue: 'Tocca a te!', giveUp: 'Nessun problema. Ascolta:',
+    key: 'luca', name: 'Luca', style: 'Normal', mark: 'mistake',
+    rate: 1.0, pitch: 1.0, modelRate: 0.9, praiseEvery: 3, repeats: 5,
+    praise: ['Bene.', 'Giusto.', 'Esatto.'],
+    wrong: 'Hai sbagliato.',
+    done: 'La lezione è finita. Bene.'
+  },
+  sara: {
+    key: 'sara', name: 'Sara', style: 'Easygoing', mark: 'pity',
+    rate: 0.95, pitch: 1.2, modelRate: 0.85, praiseEvery: 2, repeats: 2,
+    praise: ['Ottimo!', 'Perfetto!', 'Benissimo!'],
+    wrong: 'Peccato.',
     done: 'Finito! Ottimo lavoro!'
   }
 };
-const TRIAL_ROTATION = ['marco', 'giulia', 'luca'];
+const TRIAL_ROTATION = ['mass', 'giulia', 'luca', 'sara'];
+const TRIAL_DAYS = 8;   // due giorni per insegnante, poi il consiglio
 const MIN_ANSWERS_FOR_VERDICT = 20;
 
 // Pulsanti della lezione: prima nella lingua dell'allievo, poi nella lingua del corso

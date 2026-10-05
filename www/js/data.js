@@ -28,6 +28,11 @@ const SVG_DEFS = `<svg width="0" height="0" style="position:absolute" aria-hidde
 <linearGradient id="gSkin" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe0c2"/><stop offset="1" stop-color="#e9a979"/></linearGradient>
 <linearGradient id="gLilla" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#b3b5f5"/><stop offset="1" stop-color="#6a6dd6"/></linearGradient>
 <radialGradient id="gUnknown" cx=".4" cy=".35" r=".8"><stop offset="0" stop-color="#3b3960"/><stop offset="1" stop-color="#232138"/></radialGradient>
+<linearGradient id="mSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#dfe5ea"/><stop offset=".62" stop-color="#c3ccd4"/><stop offset=".63" stop-color="#7d9bb3"/><stop offset="1" stop-color="#5d7f99"/></linearGradient>
+    <linearGradient id="mSkin" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e2ad80"/><stop offset="1" stop-color="#c88a5c"/></linearGradient>
+    <linearGradient id="mHair" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#b9b9be"/><stop offset=".5" stop-color="#8d8d93"/><stop offset="1" stop-color="#5e5e64"/></linearGradient>
+    <linearGradient id="mLens" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3a3a44"/><stop offset="1" stop-color="#0b0b10"/></linearGradient>
+    <clipPath id="mClip"><circle cx="50" cy="50" r="50"/></clipPath>
 <filter id="fSoft" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="2"/></filter>
 </defs></svg>`;
 
@@ -178,6 +183,30 @@ const HAND = `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
 const UNKNOWN = `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
   <circle cx="50" cy="50" r="40" fill="url(#gUnknown)" stroke="#8c8fe8" stroke-width="3"/>
   <text x="50" y="67" font-size="48" font-family="Arial, sans-serif" font-weight="bold" fill="#8c8fe8" text-anchor="middle">?</text></svg>`;
+
+// Ritratti degli insegnanti (gli altri hanno l'iniziale). Mass: cartoon dalla foto di Papa.
+const AVATARS = {
+  mass: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">   <g clip-path="url(#mClip)">   <rect width="100" height="100" fill="url(#mSky)"/>   <path d="M70 63 q10 -3 30 -2 v2 h-30z" fill="#9aa9b4"/>   <!-- giacca e camicia -->   <path d="M6 100 C10 86 22 80 36 77 L50 92 L64 77 C78 80 90 86 94 100 Z" fill="#1c1c22" stroke="#0d0d12" stroke-width="1.5"/>   <path d="M38 77 L50 97 L62 77 L56 74 L50 84 L44 74 Z" fill="#f4f4f6" stroke="#2a2440" stroke-width="1.2" stroke-linejoin="round"/>   <path d="M36 77 L45 90 L41 78 Z M64 77 L55 90 L59 78 Z" fill="#2b2b33"/>   <!-- collo -->   <path d="M42 66 h16 v10 l-8 8 l-8 -8 z" fill="#c4865a"/>   <!-- orecchie -->   <ellipse cx="28.5" cy="50" rx="4" ry="6.5" fill="#d29a6d" stroke="#2a2440" stroke-width="1.5"/>   <ellipse cx="71.5" cy="50" rx="4" ry="6.5" fill="#d29a6d" stroke="#2a2440" stroke-width="1.5"/>   <!-- viso -->   <path d="M29 43 C29 25 71 25 71 43 C72 62 64 76 50 77 C36 76 28 62 29 43 Z" fill="url(#mSkin)" stroke="#2a2440" stroke-width="1.8"/>   <!-- capelli sale e pepe, all'indietro con ciuffo -->   <path d="M28 46 C25 31 31 19 44 15 C50 11 60 12 65 17 C73 21 76 33 72 46 C71 40 70 35 67 31 C62 27 55 26 48 27 C40 27 35 29 32 33 C30 37 29 41 28 46 Z" fill="url(#mHair)" stroke="#2a2440" stroke-width="1.8" stroke-linejoin="round"/>   <path d="M34 26 q7 -7 16 -7 M45 17 q9 -3 16 2 M57 21 q7 1 10 7" stroke="#e8e8ec" stroke-width="1.7" fill="none" stroke-linecap="round"/>   <path d="M40 24 q6 -3 12 -2 M52 15 q-3 3 -2 7" stroke="#606067" stroke-width="1.3" fill="none" stroke-linecap="round"/>   <path d="M28.5 44 q1 -6 2.5 -9 M71.5 44 q-1 -6 -2.5 -9" stroke="#e8e8ec" stroke-width="1.4" fill="none" stroke-linecap="round"/>   <!-- occhiali da sole -->   <path d="M30 41 L70 41" stroke="#0b0b10" stroke-width="2.4" stroke-linecap="round"/>   <path d="M32 41 h15 a1.5 1.5 0 0 1 1.5 1.5 c0 6 -3 9 -8.5 9 c-6 0 -8.5 -4 -8.5 -9 a1.5 1.5 0 0 1 0.5 -1.5z" fill="url(#mLens)" stroke="#0b0b10" stroke-width="1.6"/>   <path d="M53 41 h15 a1.5 1.5 0 0 1 1 1.5 c0 5 -2.5 9 -8.5 9 c-5.5 0 -8.5 -3 -8.5 -9 a1.5 1.5 0 0 1 1 -1.5z" fill="url(#mLens)" stroke="#0b0b10" stroke-width="1.6"/>   <path d="M35 44 l4 -1.5 M56 44 l4 -1.5" stroke="#fff" stroke-width="1.6" opacity=".6" stroke-linecap="round"/>   <path d="M30 42 L28 47 M70 42 L72 47" stroke="#0b0b10" stroke-width="1.8" stroke-linecap="round"/>   <!-- naso -->   <path d="M50 49 q-1 6 -4 9 q3 1.5 7 0" fill="none" stroke="#9b6440" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>   <!-- barba corta grigia (pizzetto e baffi) -->   <path d="M37 62 C39 71 44 76.5 50 77 C56 76.5 61 71 63 62 C61 70 57 73.5 50 73.5 C43 73.5 39 70 37 62 Z" fill="#b8b8be"/>   <path d="M41 60.5 C45 57.5 55 57.5 59 60.5 C55 59.5 45 59.5 41 60.5 Z" fill="#8f8f96" stroke="#6c6c73" stroke-width="1"/>   <!-- sorriso largo con denti -->   <path d="M38.5 60.5 Q50 62.5 61.5 60.5 Q60 71 50 71.5 Q40 71 38.5 60.5 Z" fill="#5a2a2a" stroke="#2a2440" stroke-width="1.6" stroke-linejoin="round"/>   <path d="M39.5 61 Q50 63 60.5 61 Q60 65.5 50 66 Q40 65.5 39.5 61 Z" fill="#fff"/>   <path d="M44.5 61.8 v3.6 M48.3 62.3 v3.7 M51.9 62.3 v3.7 M55.6 61.8 v3.6" stroke="#d4d4da" stroke-width="0.8"/>   <!-- pieghe del sorriso -->   <path d="M36 57 q-1.5 4 1 7.5 M64 57 q1.5 4 -1 7.5" fill="none" stroke="#9b6440" stroke-width="1.4" stroke-linecap="round"/>  </g>  <circle cx="50" cy="50" r="48.5" fill="none" stroke="#8c8fe8" stroke-width="3"/> </svg>`
+};
+
+// Icone che accompagnano la parola dell'errore di ogni insegnante
+const MARKS = {
+  // «Errato.» — X rossa secca
+  wrong: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><rect x="8" y="8" width="84" height="84" rx="18" fill="#e5484d" ${O}/>
+    <path d="M32 32 L68 68 M68 32 L32 68" stroke="#fff" stroke-width="13" stroke-linecap="round"/></svg>`,
+  // «Non corretto.» — divieto
+  notcorrect: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="42" fill="#fff" ${O}/>
+    <circle cx="50" cy="50" r="34" fill="none" stroke="#e5484d" stroke-width="11"/><path d="M26 26 L74 74" stroke="#e5484d" stroke-width="11"/></svg>`,
+  // «Hai sbagliato.» — pollice verso
+  mistake: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="44" fill="#f0b429" ${O}/>
+    <g transform="rotate(180 50 50)"><path d="M30 46 h10 v30 h-10 z" fill="#fff" ${O}/>
+    <path d="M40 48 l12 -20 a6 6 0 0 1 10 4 l-3 12 h13 a6 6 0 0 1 6 7 l-4 20 a7 7 0 0 1 -7 5 H40 z" fill="#fff" ${O}/></g></svg>`,
+  // «Peccato.» — faccina dispiaciuta
+  pity: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="42" fill="#ffd45c" ${O}/>
+    <circle cx="36" cy="42" r="5" fill="#2a2440"/><circle cx="64" cy="42" r="5" fill="#2a2440"/>
+    <path d="M34 70 q16 -12 32 0" fill="none" stroke="#2a2440" stroke-width="5" stroke-linecap="round"/>
+    <path d="M28 32 l10 -4 M72 32 l-10 -4" stroke="#2a2440" stroke-width="4" stroke-linecap="round"/></svg>`
+};
 
 // Logo nel menu: fumetto con le onde della voce
 const LOGO = `<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">

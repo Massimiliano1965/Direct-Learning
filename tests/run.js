@@ -104,14 +104,16 @@ count++;
 
 // 4. Prova di 7 giorni
 check('prova non iniziata', trialFor(null, '2026-10-05').day === 0);
-check('giorno 1', trialFor('2026-10-05', '2026-10-05').day === 1 && trialFor('2026-10-05', '2026-10-05').today === 'marco');
+check('giorno 1', trialFor('2026-10-05', '2026-10-05').day === 1 && trialFor('2026-10-05', '2026-10-05').today === 'mass');
 check('giorno 2', trialFor('2026-10-05', '2026-10-06').today === 'giulia');
 check('giorno 3', trialFor('2026-10-05', '2026-10-07').today === 'luca');
-check('giorno 4', trialFor('2026-10-05', '2026-10-08').today === 'marco');
-check('giorno 7: nessuna rotazione', trialFor('2026-10-05', '2026-10-11').today === null);
+check('giorno 4', trialFor('2026-10-05', '2026-10-08').today === 'sara');
+check('giorno 5', trialFor('2026-10-05', '2026-10-09').today === 'mass');
+check('giorno 8', trialFor('2026-10-05', '2026-10-12').today === 'sara');
+check('giorno 9: prova finita', trialFor('2026-10-05', '2026-10-13').today === null);
 check('a cavallo di mese', trialFor('2026-10-31', '2026-11-01').day === 2);
 check('ora legale (25 ottobre)', trialFor('2026-10-24', '2026-10-26').day === 3);
-check('orologio indietro: resta giorno 1', trialFor('2026-10-05', '2026-10-01').today === 'marco');
+check('orologio indietro: resta giorno 1', trialFor('2026-10-05', '2026-10-01').today === 'mass');
 
 // 5. Lingua dei pulsanti
 check('pulsanti: lezione non fatta → lingua dell\'allievo', uiLevel(null, '2026-10-05') === 0);
@@ -124,7 +126,10 @@ Object.keys(ITEMS).forEach(k => {
   check('figura per ' + k, typeof FIG[k] === 'string' && FIG[k].indexOf('<svg') === 0);
   check('articolo per ' + k, ['un', 'una', 'uno', "un'"].indexOf(ITEMS[k].art) !== -1);
 });
-Object.keys(TEACHERS).forEach(k => check('insegnante ' + k, TEACHERS[k].key === k && TEACHERS[k].praise.length > 0));
+const MARKS = run('MARKS');
+Object.keys(TEACHERS).forEach(k => check('insegnante ' + k, TEACHERS[k].key === k && TEACHERS[k].praise.length > 0 && TEACHERS[k].repeats > 0 && MARKS[TEACHERS[k].mark]));
+check('quattro insegnanti: 8, 6, 5, 2 ripetizioni', ['mass', 'giulia', 'luca', 'sara'].map(k => TEACHERS[k].repeats).join() === '8,6,5,2');
+check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].map(k => TEACHERS[k].wrong).join('|') === 'Errato.|Non corretto.|Hai sbagliato.|Peccato.');
 
 console.log(count - fails + ' / ' + count + ' test passati');
 process.exit(fails ? 1 : 0);

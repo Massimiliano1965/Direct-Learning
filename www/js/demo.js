@@ -19,7 +19,7 @@ function startDemo(next) {
   demoNext = next;
   const t = TEACHERS[selectedTeacherKey()];
   $('l-title').textContent = 'Demo';
-  $('l-teacher').textContent = t.name;
+  $('l-teacher').innerHTML = avatarHtml(t, 'small') + '<span>' + t.name + '</span>';
   $('heard').textContent = '';
   applyUiWords();
   $('btn-exit').textContent = 'Skip the demo';
@@ -150,14 +150,17 @@ async function demoScript(t, run) {
   await P('Sì, è un sedia.');
   heard('sì, è un sedia');
   flashBad();
-  setStatus('Try again', 'err');
-  cap('…the screen turns red and the teacher says it right. You repeat it.');
+  showMark(t.mark);
+  setStatus('Repeat it: ' + t.repeats + ' times', 'err');
+  cap('…the teacher says «' + t.wrong.replace('.', '') + '» and then the right answer. You repeat it ' + t.repeats + (t.repeats === 1 ? ' time.' : ' times.'));
   await T(t.wrong);
   if (DB.settings.showText) $('prompt-text').textContent = 'Sì, è una sedia.';
   await T('Sì, è una sedia.', t.modelRate);
-  await T(t.cue);
   $('screen-lesson').classList.remove('tunnel');
   await studentTalks('Sì, è una sedia.');
+  await T('Sì, è una sedia.', t.modelRate);
+  await studentTalks('Sì, è una sedia.');
+  hideMark();
   await praise();
 
   // 5. Oggetto nuovo: solo no, poi «Che cos'è?»

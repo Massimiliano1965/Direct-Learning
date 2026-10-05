@@ -57,9 +57,9 @@ function renderHome() {
   const sel = selectedTeacherKey();
   let html;
   if (ti.day === 0) {
-    html = '<p><strong>7-day trial</strong></p><p class="muted">A different teacher every day. On day 7 the app tells you which one works best for you.</p>';
-  } else if (ti.day <= 6) {
-    html = '<p><strong>Trial: day ' + ti.day + ' of 7</strong></p><p class="muted">Today\'s teacher: ' + TEACHERS[ti.today].name + '.</p>';
+    html = '<p><strong>' + TRIAL_DAYS + '-day trial</strong></p><p class="muted">Each teacher for ' + (TRIAL_DAYS / TRIAL_ROTATION.length) + ' days. Then the app tells you which one works best for you.</p>';
+  } else if (ti.day <= TRIAL_DAYS) {
+    html = '<p><strong>Trial: day ' + ti.day + ' of ' + TRIAL_DAYS + '</strong></p><p class="muted">Today\'s teacher: ' + TEACHERS[ti.today].name + '.</p>';
   } else {
     html = '<p><strong>Trial complete</strong></p><p class="muted">Open the results to see which teacher suits you best.</p>';
   }
@@ -71,8 +71,9 @@ function renderHome() {
     const t = TEACHERS[k];
     const b = document.createElement('button');
     b.className = 'choice' + (k === sel ? ' selected' : '');
-    b.innerHTML = '<span class="avatar">' + t.name.charAt(0) + '</span>' +
-                  '<span><span class="t-name">' + t.name + '</span><span class="t-style">' + t.style + '</span></span>' +
+    b.innerHTML = avatarHtml(t) +
+                  '<span><span class="t-name">' + t.name + '</span><span class="t-style">' + t.style + ' · ' + t.repeats + ' repeats after a mistake</span></span>' +
+                  '<span class="t-mark">' + MARKS[t.mark] + '</span>' +
                   (ti.today === k ? '<span class="badge">today</span>' : '');
     b.onclick = () => {
       DB.settings.teacher = k;
@@ -104,6 +105,11 @@ function renderHome() {
 
   $('opt-text').checked = !!DB.settings.showText;
   applyUiWords();
+}
+
+function avatarHtml(t, size) {
+  const cls = 'avatar' + (size ? ' ' + size : '') + (AVATARS[t.key] ? ' photo' : '');
+  return '<span class="' + cls + '">' + (AVATARS[t.key] || t.name.charAt(0)) + '</span>';
 }
 
 /* ---------- Lingua dei pulsanti della lezione ---------- */
@@ -144,7 +150,7 @@ function startLesson(id) {
   L = {
     run: RUN, lesson: lesson, items: items, teacher: teacher,
     steps: buildSteps(lesson), streak: 0,
-    i: 0, attempts: 0, noSpeech: 0, first: 0, busy: false, paused: false,
+    i: 0, attempts: 0, noSpeech: 0, first: 0, busy: false, paused: false, rep: 0, repFails: 0,
     start: Date.now(), listenStart: 0
   };
   lastLessonId = id;
@@ -156,7 +162,7 @@ function startLesson(id) {
   saveDB();
 
   $('l-title').textContent = lesson.title;
-  $('l-teacher').textContent = teacher.name;
+  $('l-teacher').innerHTML = avatarHtml(teacher, 'small') + '<span>' + teacher.name + '</span>';
   buildGrid(items);
   applyUiWords();
   showScreen('lesson', currentScreen !== 'home');
@@ -177,6 +183,7 @@ function stopLesson() {
   }
   L = null;
   $('screen-lesson').classList.remove('tunnel');
+  hideMark();
 }
 
 function buildGrid(items) {
@@ -241,6 +248,7 @@ function setProgress(done, total) { $('progress-fill').style.width = Math.round(
 // Disegna il passo corrente senza azzerare i tentativi
 function drawStep() {
   const st = cur();
+  hideMark();
   $('l-count').textContent = (L.i + 1) + ' / ' + L.steps.length;
   setProgress(L.i, L.steps.length);
   $('heard').textContent = '';
@@ -261,15 +269,18 @@ function askStep() {
   const run = L.run;
   L.busy = true;
   setStatus('Listen', '');
-  const speak = () => Mouth.speak(st.prompt, L.teacher.rate * (st.speed || 1), L.teacher.pitch, () => {
+  // Durante le ripetizioni dopo un errore l'insegnante ridice la risposta giusta
+  const text = L.rep > 0 ? st.model : st.prompt;
+  const rate = L.rep > 0 ? L.teacher.modelRate : L.teacher.rate * (st.speed || 1);
+  const speak = () => Mouth.speak(text, rate, L.teacher.pitch, () => {
     if (!alive(run)) return;
     L.busy = false;
     // L'insegnante si è risposto da solo («Che cos'è? È una penna.»): avanti
-    if (st.type === 'reveal') { L.busy = true; nextStep(run, 900); return; }
+    if (st.type === 'reveal' && !L.rep) { L.busy = true; nextStep(run, 900); return; }
     listen();
   });
   // Un attimo di silenzio prima dello sfogo
-  if (st.pause) setTimeout(() => { if (alive(run)) speak(); }, st.pause);
+  if (st.pause && !L.rep) setTimeout(() => { if (alive(run)) speak(); }, st.pause);
   else speak();
 }
 
@@ -307,6 +318,17 @@ function handleAnswer(alts) {
 function onCorrect(res) {
   const st = cur();
   const run = L.run;
+  if (L.rep > 0) {
+    // Ripetizione dopo un errore: giusta, una in meno
+    L.rep--;
+    L.repFails = 0;
+    L.busy = true;
+    flashGood();
+    if (!L.rep) { setStatus('Correct', 'ok'); hideMark(); nextStep(run, 300); return; }
+    setStatus(repLabel(), 'wait');
+    setTimeout(() => { if (alive(run)) askStep(); }, 150);
+    return;
+  }
   const ts = DB.teachers[L.teacher.key];
   ts.items++;
   if (L.attempts === 0) {
@@ -341,46 +363,50 @@ function nextStep(run, delay) {
   L.answered = false;
   L.attempts = 0;
   L.noSpeech = 0;
+  L.rep = 0;
+  L.repFails = 0;
   setTimeout(() => { if (alive(run)) runStep(); }, delay);
 }
 
+// Errore: parola secca dell'insegnante con la sua icona, poi la risposta giusta.
+// L'allievo la ripete tante volte quante ne vuole l'insegnante (8, 6, 5 o 2).
 function onWrong() {
   const st = cur();
   const run = L.run;
   const t = L.teacher;
   const ts = DB.teachers[t.key];
-  L.attempts++;
   ts.errors++;
   L.busy = true;
+  L.streak = 0;
   const scr = $('screen-lesson');
   flashBad();
+  showMark(t.mark);
 
-  if (L.attempts >= t.maxTries) {
-    // Troppi errori: l'insegnante dà la risposta e si va avanti
-    ts.items++;
-    ts.skipped++;
-    saveDB();
-    L.answered = true;
-    if (DB.settings.showText) $('prompt-text').textContent = st.model;
-    L.streak = 0;
-    setStatus('Moving on', 'err');
-    Mouth.speakParts([{ text: t.giveUp, rate: t.rate }, { text: st.model, rate: t.modelRate }], t.pitch, () => {
-      if (!alive(run)) return;
-      scr.classList.remove('tunnel');
-      nextStep(run, 600);
-    });
-    return;
+  if (L.rep > 0) {
+    // Sbaglia anche la ripetizione: dopo 3 volte di fila si va avanti
+    L.repFails++;
+    if (L.repFails >= 3) {
+      saveDB();
+      setStatus('Moving on', 'err');
+      Mouth.speak(st.model, t.modelRate, t.pitch, () => {
+        if (!alive(run)) return;
+        scr.classList.remove('tunnel');
+        nextStep(run, 600);
+      });
+      return;
+    }
+  } else {
+    L.attempts++;
+    ts.items++;          // il passo conta come fatto, ma non giusto al primo colpo
+    L.rep = t.repeats;
+    L.repFails = 0;
   }
-
   saveDB();
-  L.streak = 0;
-  setStatus('Try again', 'err');
-  // Correzione: l'insegnante dice la risposta giusta, lo studente la ripete
+  setStatus(repLabel(), 'err');
   if (DB.settings.showText) $('prompt-text').textContent = st.model;
   Mouth.speakParts([
     { text: t.wrong, rate: t.rate },
-    { text: st.model, rate: t.modelRate },
-    { text: t.cue, rate: t.rate }
+    { text: st.model, rate: t.modelRate }
   ], t.pitch, () => {
     if (!alive(run)) return;
     scr.classList.remove('tunnel');
@@ -388,6 +414,15 @@ function onWrong() {
     listen();
   });
 }
+function repLabel() { return 'Repeat it: ' + L.rep + (L.rep === 1 ? ' time' : ' times'); }
+
+function showMark(mark) {
+  const m = $('stage-mark');
+  m.innerHTML = MARKS[mark] || '';
+  m.classList.remove('hidden');
+  restartAnim(m, 'show');
+}
+function hideMark() { $('stage-mark').classList.add('hidden'); }
 
 function finishLesson() {
   const total = answerSteps(L.steps);
@@ -475,7 +510,7 @@ document.addEventListener('visibilitychange', () => {
 function renderReport() {
   const ti = trialInfo();
   let html = '';
-  if (ti.day > 0 && ti.day < 7) html += '<div class="card t-card"><p>Trial day ' + ti.day + ' of 7.</p></div>';
+  if (ti.day > 0 && ti.day <= TRIAL_DAYS) html += '<div class="card t-card"><p>Trial day ' + ti.day + ' of ' + TRIAL_DAYS + '.</p></div>';
 
   const keys = Object.keys(TEACHERS);
   keys.forEach(k => {

@@ -202,7 +202,7 @@ function dayDiff(a, b) {
 function trialFor(start, today) {
   if (!start) return { day: 0, today: TRIAL_ROTATION[0] };
   const day = Math.max(1, dayDiff(start, today) + 1);
-  return { day: day, today: day <= 6 ? TRIAL_ROTATION[(day - 1) % TRIAL_ROTATION.length] : null };
+  return { day: day, today: day <= TRIAL_DAYS ? TRIAL_ROTATION[(day - 1) % TRIAL_ROTATION.length] : null };
 }
 
 /* ---------- Lingua dei pulsanti ----------
