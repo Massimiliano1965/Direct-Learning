@@ -82,7 +82,8 @@ function evaluate(step, text) {
       return { ok: yes && !no && !n.length && c.indexOf(X) !== -1 && onlyX, full: true };
     case 'neg':
       return {
-        ok: no && !yes && n.indexOf(step.ask) !== -1 && n.indexOf(X) === -1 && onlyX,
+        // «No, non è un libro.» oppure solo «Non è un libro.»
+        ok: !yes && n.indexOf(step.ask) !== -1 && n.indexOf(X) === -1 && onlyX,
         full: c.indexOf(X) !== -1
       };
     case 'alt':

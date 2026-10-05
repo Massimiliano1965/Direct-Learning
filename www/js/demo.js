@@ -29,6 +29,7 @@ function startDemo(next) {
   buildGrid(['book', 'table', 'chair', 'pen']);
   showScreen('lesson', currentScreen !== 'home');
   Awake.keep();
+  Mouth.gender = t.gender;
   demoScript(t, run).then(() => endDemo(run), () => {});
 }
 
@@ -69,13 +70,14 @@ function skipDemo() {
 async function demoScript(t, run) {
   const chk = () => { if (run !== DEMO) throw DEMO_STOP; };
   const sleep = async (ms) => { await new Promise(r => setTimeout(r, ms)); chk(); };
-  const say = (text, rate, pitch) => new Promise((res, rej) => {
+  const say = (text, rate, pitch, gender) => new Promise((res, rej) => {
     if (run !== DEMO) { rej(DEMO_STOP); return; }
-    Mouth.speak(text, rate, pitch, () => { if (run === DEMO) res(); else rej(DEMO_STOP); });
+    Mouth.speak(text, rate, pitch, () => { if (run === DEMO) res(); else rej(DEMO_STOP); }, gender);
   });
   const studentPitch = t.pitch > 1.05 ? 0.85 : 1.35;
   const T = (text, rate) => say(text, rate || t.rate, t.pitch);
-  const P = (text) => say(text, 1.0, studentPitch);
+  // lo studente finto ha l'altra voce: se l'insegnante è un uomo, una donna e viceversa
+  const P = (text) => say(text, 1.0, studentPitch, t.gender === 'm' ? 'f' : 'm');
   const praise = async () => { flashGood(); if (t.praiseEvery) await T(pick(t.praise)); else await sleep(300); };
   const cap = (text) => { $('demo-caption').textContent = text; };
   const heard = (text) => { $('heard').textContent = text ? 'Heard: “' + text + '”' : ''; };
@@ -85,6 +87,7 @@ async function demoScript(t, run) {
     heard('');
     showIndicated(obj);
     setPrompt(prompt);
+    setCue(/\?$/.test(prompt) ? 'q' : 'r');
     setStatus('Listen', '');
   };
   const finger = $('demo-finger');
@@ -123,13 +126,13 @@ async function demoScript(t, run) {
   step(1, 'book', 'È un libro.');
   cap('The teacher points at a picture and says what it is.');
   await T('È un libro.');
-  cap('Red dot: your turn. Repeat the sentence.');
+  cap('Arrows: repeat the sentence. Red dot: your turn to speak.');
   await studentTalks('È un libro.');
   await praise();
 
   // 2. Domanda con il sì
   step(2, 'book', 'È un libro?');
-  cap('Then a question. Always answer with a full sentence.');
+  cap('Big «?»: it\'s a question, so answer it. Always with a full sentence.');
   await T('È un libro?');
   await studentTalks('Sì, è un libro.');
   await praise();
@@ -155,6 +158,7 @@ async function demoScript(t, run) {
   cap('…the teacher says the right answer. You repeat it, then you practise that word a little.');
   await T(t.wrong);
   if (DB.settings.showText) $('prompt-text').textContent = 'Sì, è una sedia.';
+  setCue('r');
   await T('Sì, è una sedia.', t.modelRate);
   $('screen-lesson').classList.remove('tunnel');
   await studentTalks('Sì, è una sedia.');
@@ -162,6 +166,7 @@ async function demoScript(t, run) {
   await studentTalks('È una sedia.');
   showIndicated('book');
   setPrompt('È una sedia?');
+  setCue('q');
   await T('È una sedia?', t.modelRate);
   await studentTalks('No, non è una sedia.');
   hideMark();
@@ -173,13 +178,19 @@ async function demoScript(t, run) {
   await T('È un libro?');
   await studentTalks('No, non è un libro.');
   setPrompt('È un tavolo?');
+  setCue('q');
   await T('È un tavolo?');
   await studentTalks('No, non è un tavolo.');
+  setPrompt('È una sedia?');
+  await T('È una sedia?');
+  await studentTalks('No, non è una sedia.');
   cap('…until you learn the question to ask.');
   setStatus('Listen', '');
   setPrompt("Che cos'è? È una penna.");
+  setCue('');
   await sleep(1200);
   await T("Che cos'è? È una penna.");
+  setCue('r');
   await studentTalks("Che cos'è?");
   await praise();
 
@@ -210,6 +221,7 @@ async function demoScript(t, run) {
   setProgress(DEMO_STEPS, DEMO_STEPS);
   cap('Now it\'s your turn!');
   setStatus('', '');
+  setCue('');
   await T('Adesso tocca a te.');
   await sleep(800);
 }

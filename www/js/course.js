@@ -36,34 +36,34 @@ const LESSONS = [
   { id: 'l2', title: 'Lezione 2', known: ['chair', 'door'], fresh: 'window' }
 ];
 
-// Quattro insegnanti, dal più rigido al più indulgente.
+// Quattro insegnanti, dal più rigido al più indulgente. gender = voce maschile o femminile.
 // wrong = parola secca quando l'allievo sbaglia (con la sua icona, mark in data.js);
 // repeats = quante ripetizioni dopo ogni errore, una voce per errore e poi da capo
 // (massimo 5, mai sempre uguali). style serve solo a noi: l'allievo non lo vede.
 const TEACHERS = {
   mass: {
-    key: 'mass', name: 'Mass', style: 'Very strict', mark: 'wrong',
+    key: 'mass', name: 'Mass', gender: 'm', style: 'Very strict', mark: 'wrong',
     rate: 1.1, pitch: 0.85, modelRate: 1.0, praiseEvery: 0, repeats: [3, 5, 4, 5, 4],
     praise: ['Corretto.'],
     wrong: 'Errato.',
     done: 'La lezione è finita.'
   },
   giulia: {
-    key: 'giulia', name: 'Giulia', style: 'Strict', mark: 'notcorrect',
-    rate: 1.05, pitch: 1.1, modelRate: 0.95, praiseEvery: 5, repeats: [3, 4, 3, 5, 3],
+    key: 'giulia', name: 'Giulia', gender: 'f', style: 'Strict', mark: 'notcorrect',
+    rate: 1.05, pitch: 1.15, modelRate: 0.95, praiseEvery: 5, repeats: [3, 4, 3, 5, 3],
     praise: ['Corretto.', 'Giusto.'],
     wrong: 'Non corretto.',
     done: 'La lezione è finita.'
   },
   luca: {
-    key: 'luca', name: 'Luca', style: 'Normal', mark: 'mistake',
-    rate: 1.0, pitch: 1.0, modelRate: 0.9, praiseEvery: 3, repeats: [2, 3, 4, 2, 3],
+    key: 'luca', name: 'Luca', gender: 'm', style: 'Normal', mark: 'mistake',
+    rate: 1.0, pitch: 0.92, modelRate: 0.9, praiseEvery: 3, repeats: [2, 3, 4, 2, 3],
     praise: ['Bene.', 'Giusto.', 'Esatto.'],
     wrong: 'Hai sbagliato.',
     done: 'La lezione è finita. Bene.'
   },
   sara: {
-    key: 'sara', name: 'Sara', style: 'Easygoing', mark: 'pity',
+    key: 'sara', name: 'Sara', gender: 'f', style: 'Easygoing', mark: 'pity',
     rate: 0.95, pitch: 1.2, modelRate: 0.85, praiseEvery: 2, repeats: [1, 2, 1, 3, 2],
     praise: ['Ottimo!', 'Perfetto!', 'Benissimo!'],
     wrong: 'Peccato.',

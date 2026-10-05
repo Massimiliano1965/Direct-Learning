@@ -231,6 +231,16 @@ const MARKS = {
     <path d="M28 32 l10 -4 M72 32 l-10 -4" stroke="#2a2440" stroke-width="4" stroke-linecap="round"/></svg>`
 };
 
+// Segnali sul palco: «?» = è una domanda, rispondi; frecce = ripeti la frase.
+// In italiano la domanda si sente solo dall'intonazione: il segnale la rende chiara.
+const CUES = {
+  q: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="46" fill="url(#gLilla)" stroke="#fff" stroke-width="4"/>
+    <text x="50" y="72" font-size="66" font-family="Arial, sans-serif" font-weight="900" fill="#fff" text-anchor="middle">?</text></svg>`,
+  r: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="46" fill="#2e2b4a" stroke="#8c8fe8" stroke-width="4"/>
+    <path d="M30 44 a21 21 0 0 1 38 -8" fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round"/><path d="M72 22 l-2 18 l-17 -5 z" fill="#fff"/>
+    <path d="M70 56 a21 21 0 0 1 -38 8" fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round"/><path d="M28 78 l2 -18 l17 5 z" fill="#fff"/></svg>`
+};
+
 // Logo nel menu: fumetto con le onde della voce
 const LOGO = `<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
   <rect width="200" height="200" rx="46" fill="url(#gLilla)"/>

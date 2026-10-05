@@ -55,6 +55,8 @@ const cases = [
   [{ type: 'neg', show: 'table', ask: 'book' }, 'No, non è un libro, è una sedia.', false],
   [{ type: 'neg', show: 'table', ask: 'book' }, 'No, non è una libro.', false],
   [{ type: 'neg', show: 'table', ask: 'book' }, 'No.', false],
+  [{ type: 'neg', show: 'table', ask: 'book' }, 'Non è un libro.', true],
+  [{ type: 'neg', show: 'table', ask: 'book' }, 'Non è un tavolo.', false],
   [{ type: 'neg', show: 'table', ask: 'book' }, 'Sì, è un libro.', false],
   [{ type: 'neg', show: 'pen', ask: 'chair', fresh: true }, 'No, non è una sedia.', true],
   [{ type: 'alt', show: 'pen' }, 'È una penna.', true],

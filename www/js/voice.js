@@ -5,24 +5,35 @@
    nel browser ripiega su speechSynthesis e webkitSpeechRecognition.
    ===================================================================== */
 
-let cachedVoice = null;
-function pickVoice() {
-  if (cachedVoice || !window.speechSynthesis) return cachedVoice;
+// Voce maschile o femminile: i nomi delle voci non lo dicono in modo standard, quindi
+// si riconoscono i nomi più comuni (voci di sistema: it-it-x-itc/itd = uomo, ita/itb/kda = donna;
+// altri motori: "…SMTm…" = uomo, "…SMTf…" = donna; nel browser i nomi propri).
+function voiceGender(name) {
+  const s = String(name || '').toLowerCase();
+  if (/female|donna|smtf|-x-it[ab]-|-x-kda-|elsa|alice|federica|paola|carla|bianca|isabella|giulia|google italiano/.test(s)) return 'f';
+  if (/\bmale|uomo|smtm|-x-it[cd]-|diego|cosimo|luca|giorgio|roberto|lorenzo|giuseppe|fabio/.test(s)) return 'm';
+  return '';
+}
+
+const cachedVoice = {};
+function pickVoice(gender) {
+  const key = gender || '-';
+  if (cachedVoice[key] || !window.speechSynthesis) return cachedVoice[key] || null;
   const vs = window.speechSynthesis.getVoices() || [];
   const L = COURSE.lang, base = L.slice(0, 2);
-  cachedVoice = vs.find(v => v.lang === L && v.localService) ||
-                vs.find(v => v.lang === L) ||
-                vs.find(v => v.lang && v.lang.slice(0, 2).toLowerCase() === base) || null;
-  return cachedVoice;
+  const pool = vs.filter(v => v.lang === L).concat(vs.filter(v => v.lang !== L && v.lang && v.lang.slice(0, 2).toLowerCase() === base));
+  cachedVoice[key] = (gender && pool.find(v => voiceGender(v.name) === gender)) ||
+                     pool.find(v => v.localService) || pool[0] || null;
+  return cachedVoice[key];
 }
 if (window.speechSynthesis) {
-  window.speechSynthesis.onvoiceschanged = () => { cachedVoice = null; pickVoice(); };
+  window.speechSynthesis.onvoiceschanged = () => { Object.keys(cachedVoice).forEach(k => delete cachedVoice[k]); };
 }
 
 // Voce del telefono (plugin TTS): scelgo una voce locale nella lingua del corso, perché quella
 // "network" offline dà errore. Al primo avvio il motore può essere "freddo": riprovo.
 let ttsVoicesP = null;
-let ttsVoiceId = undefined;
+const ttsVoiceIds = {};
 function ttsLoadVoices() {
   if (!ttsVoicesP) {
     ttsVoicesP = (window.TTS && window.TTS.getVoices ? window.TTS.getVoices().catch(() => []) : Promise.resolve([]))
@@ -30,12 +41,15 @@ function ttsLoadVoices() {
   }
   return ttsVoicesP;
 }
-function ttsPickVoice() {
-  if (ttsVoiceId !== undefined) return Promise.resolve(ttsVoiceId);
+function ttsPickVoice(gender) {
+  const key = gender || '-';
+  if (key in ttsVoiceIds) return Promise.resolve(ttsVoiceIds[key]);
   return ttsLoadVoices().then(list => {
     const names = list.map(v => String((v && (v.identifier || v.name)) || '')).filter(n => n.toLowerCase().indexOf(COURSE.lang.toLowerCase()) !== -1);
-    const best = names.find(n => /local/i.test(n)) || names.find(n => !/network/i.test(n)) || '';
-    if (list.length) ttsVoiceId = best;
+    const local = names.filter(n => /local/i.test(n));
+    const pool = local.length ? local : names.filter(n => !/network/i.test(n));
+    const best = (gender && pool.find(n => voiceGender(n) === gender)) || pool[0] || '';
+    if (list.length) ttsVoiceIds[key] = best;
     return best;
   });
 }
@@ -54,7 +68,9 @@ function warnNoVoice() {
 
 const Mouth = {
   token: 0,
-  speak(text, rate, pitch, cb) {
+  gender: '',   // 'm' o 'f': voce dell'insegnante di turno
+  speak(text, rate, pitch, cb, gender) {
+    const g = gender || this.gender;
     const tok = ++this.token;
     let done = false;
     let timer = null;
@@ -71,7 +87,7 @@ const Mouth = {
       timer = setTimeout(finish, estimate + 8000);
       const wait = ms => new Promise(r => setTimeout(r, ms));
       (async () => {
-        const vid = await ttsPickVoice();
+        const vid = await ttsPickVoice(g);
         const opts = { text: text, locale: COURSE.lang, rate: (rate || 1) * 1.15, pitch: pitch || 1 };
         if (vid) opts.identifier = vid;
         for (let k = 0; k < 4; k++) {
@@ -93,7 +109,7 @@ const Mouth = {
       try { window.speechSynthesis.cancel(); } catch (e) {}
       const u = new SpeechSynthesisUtterance(text);
       u.lang = COURSE.lang;
-      const v = pickVoice();
+      const v = pickVoice(g);
       if (v) u.voice = v;
       u.rate = rate || 1;
       u.pitch = pitch || 1;

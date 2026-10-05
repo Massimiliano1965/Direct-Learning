@@ -170,6 +170,7 @@ function startLesson(id) {
   applyUiWords();
   showScreen('lesson', currentScreen !== 'home');
   Awake.keep();
+  Mouth.gender = teacher.gender;
   runStep();
 }
 
@@ -187,6 +188,7 @@ function stopLesson() {
   L = null;
   $('screen-lesson').classList.remove('tunnel');
   hideMark();
+  setCue('');
 }
 
 function buildGrid(items) {
@@ -272,6 +274,7 @@ function askStep() {
   const run = L.run;
   L.busy = true;
   setStatus('Listen', '');
+  setCue(cueFor(st));
   // Durante le ripetizioni l'insegnante parla col ritmo del modello
   const rate = st.drill ? L.teacher.modelRate : L.teacher.rate * (st.speed || 1);
   const speak = () => Mouth.speak(st.prompt, rate, L.teacher.pitch, () => {
@@ -425,10 +428,27 @@ function onWrong() {
 function repLabel() { return 'Practice ' + (L.di + 1) + ' / ' + L.drill.length; }
 
 function showMark(mark) {
+  setCue('');   // stesso angolo: l'icona dell'errore prende il posto del segnale
   const m = $('stage-mark');
   m.innerHTML = MARKS[mark] || '';
   m.classList.remove('hidden');
   restartAnim(m, 'show');
+}
+// Segnale della frase: «?» per le domande, frecce per le frasi da ripetere
+function cueFor(st) {
+  if (!st || st.type === 'reveal') return '';
+  if (st.type === 'echo' || st.prompt === st.model) return 'r';
+  return /\?\s*$/.test(st.prompt) ? 'q' : 'r';
+}
+function setCue(kind) {
+  const c = $('stage-cue');
+  if (!kind) { c.classList.add('hidden'); c.dataset.kind = ''; return; }
+  if (c.dataset.kind !== kind || c.classList.contains('hidden')) {
+    c.innerHTML = CUES[kind];
+    c.dataset.kind = kind;
+    c.classList.remove('hidden');
+    restartAnim(c, 'show');
+  }
 }
 function hideMark() { $('stage-mark').classList.add('hidden'); }
 
