@@ -210,3 +210,11 @@ button .hint { display: block; font-size: 12px; font-weight: 600; opacity: .7; m
 .lang-choice .lc-name { font-family: var(--serif); font-size: 22px; font-weight: 400; }
 .lang-choice .lc-ask { font-size: 14px; color: var(--muted); font-weight: 500; }
 #lang-box { margin-top: 12px; }
+
+/* Insegnanti a riquadri: due sopra, due sotto (occupano meno spazio) */
+#teacher-list { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+#teacher-list .choice { flex-direction: column; justify-content: center; gap: 6px; text-align: center; min-height: 0; padding: 12px 8px; position: relative; }
+#teacher-list .choice + .choice { margin-top: 0; }
+#teacher-list .choice .avatar.photo { width: 58px; height: 58px; }
+#teacher-list .choice .t-name { font-size: 17px; }
+#teacher-list .choice .badge { position: absolute; top: 6px; right: 6px; margin: 0; font-size: 11px; padding: 2px 7px; }
