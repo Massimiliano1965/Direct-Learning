@@ -205,12 +205,26 @@ LESSONS.forEach(l => {
     p.slice(l.known.length).every(s => /^È /.test(s.prompt)));
   check(l.id + ': domande senza «questo» nelle lezioni che non lo insegnano', l.questo || buildSteps(l).every(s => !/^È quest/.test(s.prompt)));
 });
-// 3b3. Tre giri di presentazione di tutti gli oggetti prima della prima domanda
+// 3b3. Presentazione di tutti gli oggetti prima della prima domanda: ognuno 2 o 3 volte
+const presCount = (st) => { const first = st.findIndex(s => s.phase !== 'present'), c = {}; st.slice(0, first).forEach(s => { c[s.show] = (c[s.show] || 0) + 1; }); return c; };
 LESSONS.forEach(l => {
-  const st = buildSteps(l), firstQ = st.findIndex(s => s.phase !== 'present');
-  const pres = st.slice(0, firstQ);
-  check(l.id + ': 3 giri di presentazione prima della prima domanda', pres.length === l.known.length * 3 &&
-    [0, 1, 2].every(r => pres.slice(r * l.known.length, (r + 1) * l.known.length).map(s => s.show).sort().join() === l.known.slice().sort().join()));
+  const st = buildSteps(l), c = presCount(st);
+  check(l.id + ': ogni oggetto presentato 2 o 3 volte prima delle domande', l.known.every(k => c[k] === 2 || c[k] === 3) && Object.keys(c).length === l.known.length);
+  check(l.id + ': primo giro in ordine con «Questo/Questa»', st.slice(0, l.known.length).map(s => s.show).join() === l.known.join() && st.slice(0, l.known.length).every(s => /^Quest/.test(s.prompt)));
+});
+// mai lo stesso oggetto due volte di fila nella presentazione
+check('presentazione: mai due volte di fila lo stesso oggetto', LESSONS.concat(COLOR_LESSONS).every(l => {
+  for (let n = 0; n < 300; n++) {
+    const st = buildSteps(l), first = st.findIndex(s => s.phase !== 'present');
+    if (st.slice(1, first).some((s, i) => s.show === st[i].show)) return false;
+  }
+  return true;
+}));
+// percentuali: 60% due volte con pochi oggetti (3 o meno), 70% con tanti
+[[LESSONS[0], 0.6], [LESSONS.find(l => l.known.length >= 4), 0.7]].forEach(([l, p]) => {
+  let two = 0, all = 0;
+  for (let n = 0; n < 2000; n++) { const c = presCount(buildSteps(l)); Object.keys(c).forEach(k => { all++; if (c[k] === 2) two++; }); }
+  check(l.id + ': due volte nel ' + Math.round(p * 100) + '% circa (' + Math.round(two / all * 100) + '%)', Math.abs(two / all - p) < 0.04);
 });
 check('«Sì, questo è un libro.» accettato', evaluate({ type: 'yes', show: 'book' }, 'Sì, questo è un libro.').ok);
 check('«Questa è una sedia.» ripetuto', evaluate({ type: 'echo', check: 'claim', show: 'chair' }, 'Questa è una sedia.').ok);
@@ -306,7 +320,7 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].map(k => TEACHER
     const st = buildSteps(l5);
     const first = st.findIndex(s => s.phase !== 'present');
     if (n === 0) {
-      check('lezione 5: 3 giri di presentazione', first === l5.known.length * 3);
+      check('lezione 5: ogni oggetto presentato 2 o 3 volte', first >= l5.known.length * 2 && first <= l5.known.length * 3 && l5.known.every(k => [2, 3].indexOf(st.slice(0, first).filter(s => s.show === k).length) !== -1));
       check('lezione 5: «rosso» non si dice prima dello sfogo', st.slice(0, st.findIndex(s => s.type === 'reveal')).every(s => !/ross/.test(s.prompt + s.model)));
       check('lezione 5: tutte le risposte modello sono giuste', st.filter(s => s.model && s.type !== 'reveal').every(s => evaluate(s, s.model).ok));
       check('lezione 5: ripetizioni giuste', st.filter(s => s.col && s.model && s.type !== 'reveal').every(s => buildDrill(s, 5, []).every(d => evaluate(d, d.model).ok)));

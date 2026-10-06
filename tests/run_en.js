@@ -91,7 +91,7 @@ check('domanda attaccata davanti', evaluateAll(alt, ['is it a book or a pen it i
 // 8. Lezioni: stessa sequenza del corso di italiano
 LESSONS.forEach(l => {
   const st = buildSteps(l), first = st.findIndex(s => s.phase !== 'present');
-  check(l.id + ': 3 giri di presentazione', first === l.known.length * 3);
+  check(l.id + ': ogni oggetto presentato 2 o 3 volte', l.known.every(k => [2, 3].indexOf(st.slice(0, first).filter(s => s.show === k).length) !== -1) && first <= l.known.length * 3);
   check(l.id + ': l\'oggetto nuovo non si nomina prima di «What is it?»',
     st.slice(0, st.findIndex(s => s.type === 'reveal')).every(s => s.prompt.indexOf(ITEMS[l.fresh].word) === -1));
   check(l.id + ': tutte le frasi in inglese', st.every(s => !/[èàù]| è |Sì|Che cos/.test(s.prompt + s.model)));

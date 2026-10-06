@@ -163,7 +163,7 @@ function buildColorSteps(lesson) {
   const st = [];
   const add = (s, phase) => { s.phase = phase; st.push(s); return s; };
 
-  for (let r = 0; r < 3; r++) (r ? shuffle(K) : K).forEach(x => add(SC.present(x), 'present'));
+  presentRounds(K).forEach(round => round.forEach(x => add(SC.present(x), 'present')));   // ogni oggetto 2 o 3 volte
   shuffle(K).forEach(x => add(SC.yes(x), 'yes'));
   shuffle(K).forEach(x => add(SC.neg(x, other(x, known)), 'neg'));
   let prev = null;

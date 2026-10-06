@@ -254,7 +254,7 @@ function mixStep(items, types, prevShow, q) {
 }
 
 // Sequenza della lezione (come in classe):
-// 1. presentazione delle parole note, 3 giri «È un libro.» → ripete
+// 1. presentazione delle parole note, 2 o 3 volte «È un libro.» → ripete
 // 2. domande con il sì                       «È un libro?» → «Sì, è un libro.»
 // 3. domande con il no                       «È un tavolo?» → «No, non è un tavolo.»
 // 4. sì e no mescolati
@@ -269,6 +269,22 @@ const ASK_EARLY = 3;   // domande dell'allievo subito dopo la key question
 const ASK_TURNS = 4;   // e in fondo, come verifica
 // Parole della lezione: known = presentate ora; review = già imparate, usate nelle domande
 // per introdurre le nuove; fresh = oggetto da scoprire con «Che cos'è?».
+// Giri di presentazione: ogni oggetto 2 o 3 volte, a caso. Con pochi oggetti (3 o meno) 2 volte nel 60%
+// dei casi, con tanti oggetti nel 70% (lì la presentazione è già lunga). Primo giro in ordine, gli altri mescolati.
+function presentRounds(K) {
+  const p2 = K.length <= 3 ? 0.6 : 0.7;
+  let three = K.filter(() => Math.random() >= p2);
+  // mai lo stesso oggetto due volte di fila tra un giro e l'altro: si provano altri ordini
+  const ok = (rs) => rs.every((r, i) => !i || r[0] !== rs[i - 1][rs[i - 1].length - 1]);
+  for (let tries = 0; tries < 40; tries++) {
+    const rounds = [K.slice(), shuffle(K)];
+    if (three.length) rounds.push(shuffle(three));
+    if (ok(rounds)) return rounds;
+    // con due soli oggetti a volte non c'è ordine possibile: il terzo giro va all'altro oggetto
+    if (tries === 20 && three.length === 1) three = K.filter(x => x !== three[0]).slice(0, 1);
+  }
+  return [K.slice(), shuffle(K)];
+}
 function lessonWords(l) { return l.known.concat(l.review || []).concat(l.fresh ? [l.fresh] : []); }
 function buildSteps(lesson) {
   const K = lesson.known.slice();
@@ -281,9 +297,8 @@ function buildSteps(lesson) {
   const st = [];
   const add = (s, phase) => { s.phase = phase; st.push(s); return s; };
 
-  // Tre giri di presentazione di TUTTI gli oggetti prima della prima domanda
-  K.forEach(x => add(S.present(x, true), 'present'));      // «Questo è un libro.»
-  for (let r = 0; r < 2; r++) shuffle(K).forEach(x => add(S.present(x), 'present'));     // «È un libro.»
+  // Presentazione di TUTTI gli oggetti prima della prima domanda: ognuno 2 o 3 volte (presentRounds)
+  presentRounds(K).forEach((round, r) => round.forEach(x => add(S.present(x, !r), 'present')));   // «Questo è…», poi «È un libro.»
   for (let r = 0; r < 2; r++) shuffle(K).forEach(x => add(S.yes(x, q()), 'yes'));
   if (!R.length) {
     const pairs = [];
