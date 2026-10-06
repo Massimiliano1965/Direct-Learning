@@ -11,8 +11,9 @@ Il programma completo con l'indice del libro è in `programma.md`.
 
 Circa 120 sessioni brevi (10–15 minuti), divise in 4 livelli di circa 30, secondo i capitoli del libro.
 Il capitolo 1 è gratis per provare; poi si paga un livello alla volta.
-Alla fine di ogni livello c'è un **test**: lo studente descrive a voce un'immagine (o un video con azioni);
-contano solo gli errori, alla fine.
+Alla fine di ogni livello c'è un **test** che riassume tutti i capitoli fatti fin lì: lo studente descrive a voce
+un'immagine (dal livello 2 anche una breve animazione con azioni), una frase alla volta, con un minimo di frasi.
+Durante il test l'insegnante non corregge; contano solo gli errori, mostrati alla fine con la frase giusta accanto.
 
 | Livello | Capitoli | Cosa sa fare alla fine |
 |---|---|---|
