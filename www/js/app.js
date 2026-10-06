@@ -107,7 +107,7 @@ function renderHome() {
     const b = document.createElement('button');
     b.className = 'lesson-btn';
     // nel menu solo le parole nuove della lezione
-    const icons = l.known.concat(l.fresh ? [l.fresh] : []).map(w => FIG[w]).join('');
+    const icons = (l.colors ? l.known.concat(l.reds || []) : l.known.concat(l.fresh ? [l.fresh] : [])).map(w => FIG[w]).join('');
     const best = DB.lessons[l.id];
     const name = tx('lesson', { n: LESSONS.indexOf(l) + 1 });
     b.innerHTML = '<span>' + name + '</span><span class="icons">' + icons + '</span>' +
@@ -607,7 +607,7 @@ function onCorrect(res) {
   if (t.praiseEvery && L.streak % t.praiseEvery === 0) { parts.push({ text: pick(t.praise), rate: t.rate }); setPose('great'); }
   // «No, non è un tavolo.» su un oggetto noto: l'insegnante completa con quello che è.
   // Sull'oggetto nuovo no: il nome non si dice finché non arriva «Che cos'è?»
-  if (st.type === 'neg' && !res.full && !st.fresh) parts.push({ text: S.present(st.show).model, rate: t.modelRate });
+  if (st.type === 'neg' && !res.full && !st.fresh) parts.push({ text: st.complete || S.present(st.show).model, rate: t.modelRate });
   // pausa breve, giusto il tempo di vedere il «!» verde
   const delay = st.phase === 'mix' ? 400 : 500;
   Mouth.speakParts(parts, t.pitch, () => {

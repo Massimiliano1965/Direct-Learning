@@ -34,7 +34,19 @@ const ITEMS = {
   computer: { word: 'computer',  art: 'un',  alias: ['computers', 'compiuter'] },
   phone:    { word: 'telefono',  art: 'un',  alias: ['telefoni'] },
   notebook: { word: 'quaderno',  art: 'un',  alias: ['quaderni'] },
-  lamp:     { word: 'lampada',   art: 'una', alias: ['lampade'] }
+  lamp:     { word: 'lampada',   art: 'una', alias: ['lampade'] },
+  // lezione 5 (2026: chi viaggia e lavora): telefono, portatile, cappotto; valigia, borraccia, tazza
+  laptop:   { word: 'portatile', art: 'un',  alias: ['portatili', 'portabile'] },
+  coat:     { word: 'cappotto',  art: 'un',  alias: ['cappotti', 'capotto'] },
+  suitcase: { word: 'valigia',   art: 'una', alias: ['valige', 'valigie', 'valiggia'] },
+  flask:    { word: 'borraccia', art: 'una', alias: ['borracce', 'boraccia'] }
+};
+
+// Colori (lezione 5): forma maschile e femminile. Il rosso è il colore nuovo, da scoprire.
+const COLORS = {
+  nero:   { m: 'nero',   f: 'nera' },
+  bianco: { m: 'bianco', f: 'bianca' },
+  rosso:  { m: 'rosso',  f: 'rossa' }
 };
 
 // Lezioni. known = parole presentate subito; fresh = oggetto nuovo che non si nomina
@@ -47,7 +59,11 @@ const LESSONS = [
     fresh: 'computer', questo: true },
   // oggetti nuovi (con «il» e «la» nella lezione 5 arrivano i colori)
   { id: 'l4', title: 'Lezione 4', known: ['phone', 'key', 'notebook', 'bag'], review: ['book', 'pen', 'cup', 'chair'],
-    fresh: 'lamp', questo: true }
+    fresh: 'lamp', questo: true },
+  // «Il o la? Nero o nera?»: ogni oggetto ha il suo colore. known = presentati subito (nero e bianco);
+  // fresh = oggetti rossi, il colore nuovo da scoprire con «Di che colore è…?»
+  { id: 'l5', title: 'Lezione 5', colors: true,
+    known: ['phone_nero', 'laptop_bianco', 'suitcase_nero', 'flask_bianco'], reds: ['coat_rosso', 'cup_rosso'] }
 ];
 
 // Quattro insegnanti, dal più rigido al più indulgente. gender = voce maschile o femminile.

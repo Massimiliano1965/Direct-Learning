@@ -6,7 +6,7 @@ const vm = require('vm');
 
 const ctx = { console: console };
 vm.createContext(ctx);
-['course.js', 'data.js', 'logic.js', 'ui_lang.js'].forEach(f => {
+['course.js', 'data.js', 'logic.js', 'colors_it.js', 'ui_lang.js'].forEach(f => {
   vm.runInContext(fs.readFileSync(path.join(__dirname, '..', 'www', 'js', f), 'utf8'), ctx, { filename: f });
 });
 const run = (code) => vm.runInContext(code, ctx);
@@ -14,7 +14,8 @@ const evaluate = run('evaluate');
 const evaluateAll = run('evaluateAll');
 const buildSteps = run('buildSteps');
 const answerSteps = run('answerSteps');
-const LESSONS = run('LESSONS');
+const LESSONS = run('LESSONS').filter(l => !l.colors);   // lezioni con gli oggetti (i colori hanno i loro test)
+const COLOR_LESSONS = run('LESSONS').filter(l => l.colors);
 const ITEMS = run('ITEMS');
 const TEACHERS = run('TEACHERS');
 const trialFor = run('trialFor');
@@ -256,6 +257,64 @@ Object.keys(TEACHERS).forEach(k => check('insegnante ' + k, TEACHERS[k].key === 
 check('ripetizioni: massimo 5, mai tutte uguali', Object.keys(TEACHERS).every(k => TEACHERS[k].repeats.every(n => n >= 1 && n <= 5) && new Set(TEACHERS[k].repeats).size > 1));
 check('dal più rigido al più indulgente', ['mass', 'giulia', 'luca', 'sara'].map(k => TEACHERS[k].repeats.reduce((a, b) => a + b, 0)).every((v, i, a) => !i || v <= a[i - 1]));
 check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].map(k => TEACHERS[k].wrong).join('|') === 'Errato.|Non corretto.|Hai sbagliato.|Peccato.');
+
+// Lezione dei colori: «Il o la? Nero o nera?»
+{
+  const SC = run('SC'), evalAsk = run('evalAsk'), answerAsk = run('answerAsk'), buildDrill = run('buildDrill');
+  const ok = (st, t) => evaluate(st, t).ok;
+  const l5 = COLOR_LESSONS[0];
+  check('lezione 5 c\'è', l5 && l5.id === 'l5');
+  check('lezione 5: tre oggetti con «il» e tre con «la»', l5.known.concat(l5.reds).map(x => ITEMS[x.split('_')[0]].art).sort().join() === 'un,un,un,una,una,una');
+  check('lezione 5: ogni oggetto colorato ha la figura', l5.known.concat(l5.reds).every(x => FIG[x]));
+  const ph = 'phone_nero', su = 'suitcase_nero', cup = 'cup_rosso';
+  check('frasi: il telefono è nero', SC.present(ph).prompt === 'Il telefono è nero.' && SC.present(su).prompt === 'La valigia è nera.');
+  check('frasi: domanda col sì', SC.yes(su).prompt === 'La valigia è nera?' && SC.yes(su).model === 'Sì, la valigia è nera.');
+  check('frasi: domanda col no', SC.neg(su, 'bianco').prompt === 'La valigia è bianca?' && SC.neg(su, 'bianco').model === 'No, la valigia non è bianca.');
+  check('frasi: domanda chiave', SC.key(cup).prompt === 'Di che colore è la tazza?' && SC.key(cup).model === 'La tazza è rossa.');
+  check('frasi: sfogo', SC.reveal('coat_rosso').prompt === 'Di che colore è il cappotto? Il cappotto è rosso.');
+  check('giusto: ripete', ok(SC.present(su), 'La valigia è nera.'));
+  check('giusto: sì', ok(SC.yes(su), 'Sì, la valigia è nera.'));
+  check('giusto: no', ok(SC.neg(su, 'bianco'), 'No, la valigia non è bianca.') && ok(SC.neg(su, 'bianco'), 'La valigia non è bianca.'));
+  check('giusto: no + com\'è', evaluate(SC.neg(su, 'bianco'), 'No, la valigia non è bianca. La valigia è nera.').full);
+  check('giusto: domanda chiave', ok(SC.key(cup), 'La tazza è rossa.'));
+  check('giusto: ripete «Di che colore è?»', ok(SC.askQ(cup), 'Di che colore è?'));
+  check('sbagliato: articolo «il tazza»', !ok(SC.key(cup), 'Il tazza è rossa.'));
+  check('sbagliato: accordo «la valigia è nero»', !ok(SC.present(su), 'La valigia è nero.'));
+  check('sbagliato: accordo «il telefono è nera»', !ok(SC.yes(ph), 'Sì, il telefono è nera.'));
+  check('sbagliato: colore sbagliato', !ok(SC.key(ph), 'Il telefono è bianco.'));
+  check('sbagliato: manca il sì', !ok(SC.yes(ph), 'Il telefono è nero.'));
+  check('sbagliato: nega il colore giusto', !ok(SC.neg(ph, 'bianco'), 'No, il telefono non è nero.'));
+  check('sbagliato: oggetto sbagliato', !ok(SC.key(ph), 'La valigia è nera.'));
+  check('sbagliato: solo il colore', !ok(SC.key(ph), 'Nero.'));
+  const A = (X, t) => evalAsk(X, t);
+  check('allievo: Di che colore è il telefono?', A(ph, 'Di che colore è il telefono?').kind === 'what');
+  check('allievo: Il telefono è bianco? (no)', A(ph, 'Il telefono è bianco?').kind === 'no');
+  check('allievo: La valigia è nera o bianca?', A(su, 'La valigia è nera o bianca?').kind === 'alt');
+  check('allievo: Che cos\'è?', A(ph, 'Che cos\'è?').kind === 'thing');
+  check('allievo: accordo sbagliato corretto', A(su, 'La valigia è bianco?').model === 'La valigia è bianca?');
+  check('allievo: ha risposto invece di chiedere', !A(ph, 'Sì, il telefono è nero').ok);
+  check('insegnante risponde', answerAsk(ph, { kind: 'no', ask: 'bianco' }) === 'No, il telefono non è bianco. Il telefono è nero.' &&
+    answerAsk(su, { kind: 'alt', ask: 'bianco', ask2: 'rosso' }) === 'La valigia non è né bianca né rossa. La valigia è nera.' &&
+    answerAsk(ph, { kind: 'thing' }) === 'È un telefono.');
+  const keyStep = SC.key(ph), altStep = SC.alt(ph, 'bianco');
+  check('domanda chiave: la risposta comincia come la coda della domanda', evaluateAll(keyStep, ['Il telefono è nero.']).ok);
+  check('domanda chiave: domanda + risposta attaccate', evaluateAll(keyStep, ['di che colore è il telefono il telefono è nero']).ok);
+  check('alternativa: la domanda ripetuta non è una risposta', !evaluateAll(altStep, [altStep.prompt]).ok);
+  check('domanda chiave: la domanda ripetuta non è una risposta', !evaluateAll(keyStep, [keyStep.prompt]).ok);
+  check('lezione a oggetti: non cambia', evaluate({ type: 'key', show: 'book' }, 'È un libro.').ok && !evaluate({ type: 'key', show: 'book' }, 'Il libro è nero.').ok);
+  for (let n = 0; n < 20; n++) {
+    const st = buildSteps(l5);
+    const first = st.findIndex(s => s.phase !== 'present');
+    if (n === 0) {
+      check('lezione 5: 3 giri di presentazione', first === l5.known.length * 3);
+      check('lezione 5: «rosso» non si dice prima dello sfogo', st.slice(0, st.findIndex(s => s.type === 'reveal')).every(s => !/ross/.test(s.prompt + s.model)));
+      check('lezione 5: tutte le risposte modello sono giuste', st.filter(s => s.model && s.type !== 'reveal').every(s => evaluate(s, s.model).ok));
+      check('lezione 5: ripetizioni giuste', st.filter(s => s.col && s.model && s.type !== 'reveal').every(s => buildDrill(s, 5, []).every(d => evaluate(d, d.model).ok)));
+      check('lezione 5: domande dell\'allievo', st.filter(s => s.type === 'ask').length === 7);
+    }
+    check('lezione 5 (giro ' + n + '): niente domanda impossibile', st.every(s => s.type !== 'neg' || s.ask !== s.show.split('_')[1]));
+  }
+}
 
 // Lingua dello studente: ogni scritta c'è in tutte le lingue, con gli stessi segnaposto {…}
 {

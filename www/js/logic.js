@@ -161,14 +161,15 @@ function trimEcho(step, text) {
 }
 // Le interpretazioni del microfono ripulite: senza vuoti né doppioni, con la domanda dell'insegnante
 // tolta davanti; quelle che sono solo eco si scartano (se ne resta almeno una che non lo è).
+// Si tiene anche la frase intera: a volte la risposta comincia come la coda della domanda
+// («Di che colore è il telefono?» → «Il telefono è nero.») e tagliarla la rovinerebbe.
 function cleanAlts(step, alts) {
   const seen = {}, out = [];
+  const keep = (x) => { const k = norm(x).trim(); if (!k || seen[k]) return; seen[k] = true; out.push(x); };
   (alts || []).slice(0, 5).forEach(a => {
     const x = trimEcho(step, String(a || ''));
-    const k = norm(x).trim();
-    if (!k || seen[k]) return;
-    seen[k] = true;
-    out.push(x);
+    keep(x);
+    if (x !== String(a || '')) keep(String(a || ''));
   });
   const real = out.filter(a => !isEcho(step, a));
   return real.length ? real : out;

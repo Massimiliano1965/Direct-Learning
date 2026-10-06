@@ -10,7 +10,7 @@ Dal libro si prende solo l'ordine: frasi, nomi e figure sono nostri e moderni
 - Lezione 2: sedia, porta; la finestra con «Che cos'è?»
 - Lezione 3: bottiglia, tazza; il computer con «Che cos'è?»; domande con «È questo/questa…?»
 - Lezione 4: telefono, chiave, quaderno, borsa (ripasso: libro, penna, tazza, sedia); la lampada con «Che cos'è?»
-- Lezione 5 (da fare): i colori nero, bianco, rosso dati agli oggetti
+- Lezione 5: «Il o la? Nero o nera?» — il telefono nero, il portatile bianco, la valigia nera, la borraccia bianca; il rosso (cappotto, tazza) con «Di che colore è…?». Oggetti scelti per chi viaggia e lavora nel 2026.
 
 ## Capitoli 1–5
 

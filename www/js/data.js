@@ -46,6 +46,27 @@ const svg = (inner) => '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000
 
 // Oggetti in stile piatto e sobrio (adulti, business): niente contorni, colori smorzati
 const FLAT = (inner, w) => '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><ellipse cx="50" cy="91" rx="' + (w || 30) + '" ry="3" fill="#000" opacity=".25"/>' + inner + '</svg>';
+// Oggetti colorabili (lezione 5 e seguenti): [colore, ombra]
+const COL_SHADE = { nero: ['#2b2e36', '#17181d'], bianco: ['#eceef2', '#c4cad4'], rosso: ['#b3262f', '#861b22'] };
+const CFIG = {
+  phone: ([c, d]) => FLAT(`<rect x="30" y="8" width="40" height="80" rx="7" fill="${c}" stroke="${d}" stroke-width="1.5"/><rect x="33.5" y="15" width="33" height="64" rx="2" fill="#2c3e66"/>
+    <path d="M33.5 15 h20 l-20 26z" fill="#3a4f7e"/><rect x="44" y="10.5" width="12" height="2" rx="1" fill="${d}"/><circle cx="50" cy="83.5" r="2.2" fill="${d}"/>`, 22),
+  laptop: ([c, d]) => FLAT(`<rect x="18" y="16" width="64" height="44" rx="3" fill="${c}" stroke="${d}" stroke-width="1.5"/><rect x="22" y="20" width="56" height="36" fill="#2c3e66"/>
+    <path d="M22 20 h30 l-30 22z" fill="#3a4f7e"/><path d="M8 62 h84 l-6 12 h-72z" fill="${c}" stroke="${d}" stroke-width="1.5"/><rect x="42" y="64" width="16" height="3" rx="1.5" fill="${d}"/>`, 40),
+  coat: ([c, d]) => FLAT(`<path d="M38 10 h24 l16 8 l8 30 l-8 3 l-4 -16 v51 h-48 v-51 l-4 16 l-8 -3 l8 -30z" fill="${c}" stroke="${d}" stroke-width="1.5"/>
+    <path d="M38 10 l12 16 l12 -16" fill="none" stroke="${d}" stroke-width="2"/><path d="M50 26 v60" stroke="${d}" stroke-width="1.5"/>
+    <circle cx="54" cy="40" r="1.8" fill="${d}"/><circle cx="54" cy="54" r="1.8" fill="${d}"/><circle cx="54" cy="68" r="1.8" fill="${d}"/>
+    <path d="M30 60 h12 M58 60 h12" stroke="${d}" stroke-width="1.5"/>`, 30),
+  suitcase: ([c, d]) => FLAT(`<path d="M44 6 h12 v16 h-3 v-13 h-6 v13 h-3z" fill="#8d93a3"/><rect x="26" y="22" width="48" height="62" rx="6" fill="${c}" stroke="${d}" stroke-width="1.5"/>
+    <path d="M38 26 v54 M50 26 v54 M62 26 v54" stroke="${d}" stroke-width="2" opacity=".7"/>
+    <circle cx="34" cy="88" r="3.5" fill="#2a3040"/><circle cx="66" cy="88" r="3.5" fill="#2a3040"/>`, 26),
+  flask: ([c, d]) => FLAT(`<rect x="41" y="6" width="18" height="10" rx="3" fill="#8d93a3"/><rect x="43" y="15" width="14" height="5" fill="#b9bdc8"/>
+    <path d="M38 20 h24 q6 0 6 8 v54 a6 6 0 0 1 -6 6 h-24 a6 6 0 0 1 -6 -6 v-54 q0 -8 6 -8z" fill="${c}" stroke="${d}" stroke-width="1.5"/>
+    <rect x="35" y="30" width="5" height="44" rx="2.5" fill="#fff" opacity=".18"/>`, 20),
+  cup: ([c, d]) => FLAT(`<ellipse cx="48" cy="84" rx="34" ry="6" fill="${d}"/><path d="M22 40 h52 l-5 38 a6 6 0 0 1 -6 5 h-30 a6 6 0 0 1 -6 -5z" fill="${c}" stroke="${d}" stroke-width="1.2"/>
+    <path d="M73 48 h6 a9 9 0 0 1 0 18 h-8" fill="none" stroke="${c}" stroke-width="5"/><ellipse cx="48" cy="40" rx="26" ry="5" fill="#5a3826"/>`, 34)
+};
+
 const FIG = {
   book: FLAT(`<path d="M30 14 h44 a3 3 0 0 1 3 3 v68 a3 3 0 0 1 -3 3 h-44z" fill="#ece4d2"/>
     <path d="M74 18 v66 M71 18 v66" stroke="#d4c9b0" stroke-width="1"/>
@@ -95,6 +116,7 @@ const FIG = {
   notebook: FLAT(`<rect x="24" y="14" width="52" height="74" rx="3" fill="#ece4d2"/><rect x="22" y="12" width="52" height="74" rx="3" fill="#8a3a3a"/>
     <path d="M30 8 v10 M38 8 v10 M46 8 v10 M54 8 v10 M62 8 v10 M70 8 v10" stroke="#b9bdc8" stroke-width="2.5" stroke-linecap="round"/>
     <rect x="32" y="30" width="32" height="14" rx="1.5" fill="#ece4d2"/><path d="M36 35 h24 M36 39 h16" stroke="#8a3a3a" stroke-width="1.6"/>`, 28),
+  laptop: '', coat: '', suitcase: '', flask: '',
   umbrella: FLAT(`<path d="M50 14 a38 30 0 0 1 38 30 q-6.3 -5 -12.7 0 q-6.3 -5 -12.6 0 q-6.4 -5 -12.7 0 q-6.3 -5 -12.7 0 q-6.3 -5 -12.6 0 q-6.4 -5 -12.7 0 a38 30 0 0 1 38 -30z" fill="#2c3e66"/>
     <path d="M50 14 q-12 12 -12.7 30 q6.3 -5 12.7 0 q6.3 -5 12.7 0 q-.7 -18 -12.7 -30z" fill="#3a4f7e"/>
     <rect x="48.6" y="8" width="2.8" height="7" rx="1.4" fill="#c9a45c"/>
@@ -165,3 +187,10 @@ const LOGO = `<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
   <g fill="#c9a45c"><rect x="62" y="80" width="14" height="32" rx="7"/><rect x="85" y="66" width="14" height="60" rx="7"/>
   <rect x="108" y="74" width="14" height="44" rx="7"/><rect x="131" y="84" width="14" height="24" rx="7"/></g></svg>`;
 
+
+// Figure base degli oggetti nuovi e figure colorate «oggetto_colore» (es. phone_nero)
+FIG.laptop = CFIG.laptop(['#b9bdc8', '#8d93a3']);
+FIG.coat = CFIG.coat(['#3a4258', '#2a3040']);
+FIG.suitcase = CFIG.suitcase(['#3a4258', '#2a3040']);
+FIG.flask = CFIG.flask(['#8fb0c4', '#6f8fa8']);
+Object.keys(CFIG).forEach(k => Object.keys(COL_SHADE).forEach(c => { FIG[k + '_' + c] = CFIG[k](COL_SHADE[c]); }));
