@@ -79,7 +79,11 @@ const askCases = [
   ['che cosa è', 'what', 'È una sedia.'],
   ['È una sedia?', 'yes', 'Sì, è una sedia.'],
   ['È questo un tavolo?', 'no', 'No, non è un tavolo. È una sedia.'],
-  ['è un libro', 'no', 'No, non è un libro. È una sedia.']
+  ['è un libro', 'no', 'No, non è un libro. È una sedia.'],
+  ['È un tavolo o una sedia?', 'alt', 'È una sedia.'],
+  ['è una sedia o un tavolo', 'alt', 'È una sedia.'],
+  ['È questa una sedia oppure un libro?', 'alt', 'È una sedia.'],
+  ['È un tavolo o un libro?', 'alt', 'Non è né un tavolo né un libro. È una sedia.']
 ];
 askCases.forEach(([t, kind, ans]) => {
   const r = evalAsk('chair', t);
@@ -89,6 +93,9 @@ check('domanda con articolo sbagliato → si corregge', (r => !r.ok && r.model =
 check('risposta invece di domanda → «Che cos\'è?»', (r => !r.ok && r.model === "Che cos'è?")(evalAsk('chair', 'Sì, è una sedia.')));
 check('parola sconosciuta → «Che cos\'è?»', (r => !r.ok && r.model === "Che cos'è?")(evalAsk('chair', 'È un ombrello?')));
 check('domanda corretta suggerita è accettata', evalAsk('chair', 'È un tavolo?').ok);
+check('alternativa con articolo sbagliato → si corregge', (r => !r.ok && r.model === 'È un tavolo o una sedia?')(evalAsk('chair', 'È una tavolo o una sedia?')));
+check('alternativa con la stessa parola due volte → no', !evalAsk('chair', 'È un tavolo o un tavolo?').ok);
+check('alternativa con parola sconosciuta → no', !evalAsk('chair', 'È un tavolo o un ombrello?').ok);
 LESSONS.forEach(l => {
   const steps = buildSteps(l);
   const asks = steps.filter(s => s.type === 'ask');

@@ -109,6 +109,16 @@ function evalAsk(X, text) {
   const s = norm(text);
   const bad = (model) => ({ ok: false, model: model || Q });
   if (has(s, 'si') || has(s, 'no') || negations(s).length) return bad();   // ha risposto, non chiesto
+  // domanda alternativa: «È un tavolo o una sedia?» (anche «oppure», anche «È questo un…»)
+  const alt = / e (?:quest[oa] )?(un|una|uno) ([a-z]+) (?:o|oppure) (un|una|uno) ([a-z]+)(?= )/.exec(s);
+  if (alt) {
+    const A = nounKey(alt[1], alt[2]), B = nounKey(alt[3], alt[4]);
+    if (A && B && A.charAt(0) !== '?' && B.charAt(0) !== '?' && A !== B) return { ok: true, kind: 'alt', ask: A, ask2: B };
+    // articolo sbagliato su parole conosciute: si corregge la domanda
+    if (WORD2KEY[alt[2]] && WORD2KEY[alt[4]] && WORD2KEY[alt[2]] !== WORD2KEY[alt[4]])
+      return bad('È ' + np(WORD2KEY[alt[2]]) + ' o ' + np(WORD2KEY[alt[4]]) + '?');
+    return bad();
+  }
   const c = claims(s.replace(/ e quest[oa] (un|una|uno) /g, ' e $1 '));
   if (has(s, 'che cosa e') && !c.length) return { ok: true, kind: 'what' };
   if (c.length === 1 && c[0].charAt(0) !== '?') return { ok: true, kind: c[0] === X ? 'yes' : 'no', ask: c[0] };
@@ -121,6 +131,7 @@ function evalAsk(X, text) {
 function answerAsk(X, r) {
   if (r.kind === 'what') return 'È ' + np(X) + '.';
   if (r.kind === 'yes') return 'Sì, è ' + np(X) + '.';
+  if (r.kind === 'alt') return (r.ask === X || r.ask2 === X) ? 'È ' + np(X) + '.' : 'Non è né ' + np(r.ask) + ' né ' + np(r.ask2) + '. È ' + np(X) + '.';
   return 'No, non è ' + np(r.ask) + '. È ' + np(X) + '.';
 }
 
