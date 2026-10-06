@@ -152,6 +152,16 @@ $('btn-report').onclick = () => { renderReport(); showScreen('report'); };
 /* ---------- Lezione ---------- */
 
 let L = null;      // stato della lezione in corso
+// Timer della lezione: tutti registrati, così cambiando passo o schermata non resta niente appeso
+let lessonTimers = [];
+function later(fn, ms) {
+  const id = setTimeout(() => { lessonTimers = lessonTimers.filter(x => x !== id); fn(); }, ms);
+  lessonTimers.push(id);
+  return id;
+}
+function clearLessonTimers() { lessonTimers.forEach(clearTimeout); lessonTimers = []; }
+// Ferma tutto ciò che è in corso: timer, microfono, voce (prima di un passo nuovo o di uscire)
+function quiet() { clearLessonTimers(); Ears.abort(); Mouth.cancel(); }
 let RUN = 0;       // cambia a ogni lezione o pausa: blocca le risposte "vecchie"
 let lastLessonId = null;
 
@@ -196,8 +206,7 @@ function startLesson(id) {
 function stopLesson() {
   stopDemo();
   RUN++;
-  Ears.abort();
-  Mouth.cancel();
+  quiet();
   Awake.allow();
   if (L) {
     const ts = DB.teachers[L.teacher.key];
@@ -285,6 +294,8 @@ function drawStep() {
 }
 
 function runStep() {
+  clearLessonTimers();
+  Ears.abort();
   if (L.i >= L.steps.length) { finishLesson(); return; }
   L.attempts = 0;
   L.noSpeech = 0;
@@ -309,7 +320,7 @@ function askStep() {
     listenSoon(run);
   });
   // Un attimo di silenzio prima dello sfogo
-  if (st.pause && !st.drill) setTimeout(() => { if (alive(run)) speak(); }, st.pause);
+  if (st.pause && !st.drill) later(() => { if (alive(run)) speak(); }, st.pause);
   else speak();
 }
 
@@ -430,7 +441,7 @@ function handleAsk(alts) {
 function listenSoon(run) {
   L.busy = true;
   L.echoGuard = true;
-  setTimeout(() => { if (!alive(run)) return; L.busy = false; listen(); }, 400);
+  later(() => { if (!alive(run)) return; L.busy = false; listen(); }, 400);
 }
 
 function listen() {
@@ -452,7 +463,7 @@ function handleListenError(code, run) {
   L.noSpeech++;
   if (L.noSpeech <= 2) {
     setStatus('I didn\'t hear you', 'wait');
-    setTimeout(() => { if (alive(run)) listen(); }, 700);
+    later(() => { if (alive(run)) listen(); }, 700);
   } else {
     setStatus('Tap ' + uiWord('talk') + ' when you are ready', 'wait');
   }
@@ -466,7 +477,7 @@ function handleAnswer(alts) {
       // era la voce dell'insegnante: si riascolta senza contare niente
       const run = L.run;
       setStatus('Speak now', 'rec');
-      setTimeout(() => { if (alive(run)) listen(); }, 200);
+      later(() => { if (alive(run)) listen(); }, 200);
       return;
     }
   }
@@ -495,7 +506,7 @@ function onCorrect(res) {
     $('heard').textContent = '';
     showIndicated(d.show);
     setPrompt(d.prompt);
-    setTimeout(() => { if (alive(run)) { askStep(); setStatus(repLabel(), 'wait'); } }, 500);
+    later(() => { if (alive(run)) { askStep(); setStatus(repLabel(), 'wait'); } }, 500);
     return;
   }
   const ts = DB.teachers[L.teacher.key];
@@ -538,7 +549,7 @@ function nextStep(run, delay) {
   L.di = 0;
   L.repFails = 0;
   L.pick = null;
-  setTimeout(() => { if (alive(run)) runStep(); }, delay);
+  later(() => { if (alive(run)) runStep(); }, delay);
 }
 
 // Errore: parola secca dell'insegnante con la sua icona, poi la risposta giusta.
@@ -559,13 +570,23 @@ function onWrong() {
     // Sbaglia anche la ripetizione: dopo 3 volte di fila si va avanti
     L.repFails++;
     if (L.repFails >= 3) {
+      // Uscita forzata: niente deve restare acceso (microfono, voce, timer), poi la frase
+      // giusta detta una volta, con calma, e si passa al passo successivo.
       saveDB();
+      quiet();
+      L.drill = null;
+      L.di = 0;
       setStatus('Moving on', 'err');
-      Mouth.speak(st.model, t.modelRate, t.pitch, () => {
+      if (DB.settings.showText) $('prompt-text').textContent = shown(st.model);
+      later(() => {
         if (!alive(run)) return;
-        scr.classList.remove('tunnel');
-        nextStep(run, 600);
-      });
+        Mouth.speak(st.model, t.modelRate, t.pitch, () => {
+          scr.classList.remove('tunnel');
+          if (!alive(run)) return;
+          hideMark();
+          nextStep(run, 600);
+        });
+      }, 250);
       return;
     }
   } else {
@@ -657,8 +678,7 @@ $('btn-end-home').onclick = () => goHome();
 
 let demoToResume;   // undefined = nessuna demo da riprendere
 function onPause() {
-  Ears.abort();
-  Mouth.cancel();
+  quiet();
   Awake.allow();
   if (demoActive) {
     demoToResume = demoNext;

@@ -142,9 +142,41 @@ function answerAsk(X, r) {
   return 'No, non è ' + np(r.ask) + '. È ' + np(X) + '.';
 }
 
+// Il microfono ha attaccato la domanda dell'insegnante davanti alla risposta
+// («è un libro o una penna è una penna»): si toglie la parte dell'insegnante.
+// Vale per la domanda intera e per la sua coda (almeno 2 parole), solo se resta qualcosa.
+function trimEcho(step, text) {
+  if (!step || !step.prompt || step.prompt === step.model) return text;
+  const t = norm(text).trim(), p = norm(step.prompt).trim();
+  if (!t || !p) return text;
+  if (t.length > p.length && t.startsWith(p)) return t.slice(p.length).trim();
+  const pw = p.split(' ');
+  if (pw.length > 1) {
+    for (let n = pw.length - 1; n >= 2; n--) {
+      const tail = pw.slice(-n).join(' ');
+      if (t.startsWith(tail + ' ') && t.length > tail.length + 1) return t.slice(tail.length).trim();
+    }
+  }
+  return text;
+}
+// Le interpretazioni del microfono ripulite: senza vuoti né doppioni, con la domanda dell'insegnante
+// tolta davanti; quelle che sono solo eco si scartano (se ne resta almeno una che non lo è).
+function cleanAlts(step, alts) {
+  const seen = {}, out = [];
+  (alts || []).slice(0, 5).forEach(a => {
+    const x = trimEcho(step, String(a || ''));
+    const k = norm(x).trim();
+    if (!k || seen[k]) return;
+    seen[k] = true;
+    out.push(x);
+  });
+  const real = out.filter(a => !isEcho(step, a));
+  return real.length ? real : out;
+}
+
 // La migliore tra le interpretazioni del microfono (al massimo 5)
 function evaluateAll(step, alts) {
-  const list = (alts || []).slice(0, 5);
+  const list = cleanAlts(step, alts);
   for (let i = 0; i < list.length; i++) {
     const r = evaluate(step, list[i]);
     if (r.ok) return r;

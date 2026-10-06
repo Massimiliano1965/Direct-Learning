@@ -34,9 +34,19 @@ if (window.speechSynthesis) {
 // "network" offline dà errore. Al primo avvio il motore può essere "freddo": riprovo.
 let ttsVoicesP = null;
 const ttsVoiceIds = {};
+// Promessa con tempo massimo: i plugin nativi a volte non rispondono mai (motore «freddo»)
+function withTimeout(p, ms, fallback) {
+  return new Promise(res => {
+    let over = false;
+    const t = setTimeout(() => { over = true; res(fallback); }, ms);
+    Promise.resolve(p).then(v => { if (!over) { clearTimeout(t); res(v); } }, () => { if (!over) { clearTimeout(t); res(fallback); } });
+  });
+}
+const TTS_VOICES_WAIT = 2500;   // oltre, si parla con la sola lingua (senza scegliere la voce)
 function ttsLoadVoices() {
   if (!ttsVoicesP) {
-    ttsVoicesP = (window.TTS && window.TTS.getVoices ? window.TTS.getVoices().catch(() => []) : Promise.resolve([]))
+    const ask = window.TTS && window.TTS.getVoices ? (() => { try { return window.TTS.getVoices(); } catch (e) { return []; } })() : [];
+    ttsVoicesP = withTimeout(ask, TTS_VOICES_WAIT, [])
       .then(list => { list = Array.isArray(list) ? list : []; if (!list.length) ttsVoicesP = null; return list; });
   }
   return ttsVoicesP;
@@ -54,10 +64,17 @@ function ttsPickVoice(gender) {
     return best;
   });
 }
+// All'avvio: si «sveglia» il motore chiedendo le voci (fino a 6 volte, ogni 2 s) e si scelgono
+// subito le voci maschile e femminile, così la prima frase dell'insegnante non aspetta.
+let ttsWarmTimer = null;
 function ttsWarmUp() {
   if (!window.TTS || !window.TTS.getVoices) return;
   let n = 0;
-  const tick = () => ttsLoadVoices().then(list => { if (!list.length && ++n < 6) setTimeout(tick, 2000); });
+  clearTimeout(ttsWarmTimer);
+  const tick = () => ttsLoadVoices().then(list => {
+    if (list.length) { ttsPickVoice('m'); ttsPickVoice('f'); return; }
+    if (++n < 6) ttsWarmTimer = setTimeout(tick, 2000);
+  });
   tick();
 }
 let voiceWarned = false;
@@ -67,11 +84,23 @@ function warnNoVoice() {
   if (typeof setStatus === 'function') setStatus('To hear the teacher, install the Italian text-to-speech voice on your phone', 'err');
 }
 
+// Ferma l'audio nativo senza mai far fallire nulla
+function ttsHardStop() {
+  try {
+    if (window.TTS && window.TTS.stop) { const r = window.TTS.stop(); if (r && r.catch) r.catch(() => {}); }
+  } catch (e) {}
+  try { if (window.speechSynthesis) window.speechSynthesis.cancel(); } catch (e) {}
+}
+
 const Mouth = {
   token: 0,
   gender: '',   // 'm' o 'f': voce dell'insegnante di turno
+  timers: [],   // timer della frase in corso: si cancellano tutti con cancel()
+  later(fn, ms) { const id = setTimeout(() => { this.timers = this.timers.filter(x => x !== id); fn(); }, ms); this.timers.push(id); return id; },
+  clearTimers() { this.timers.forEach(clearTimeout); this.timers = []; },
   speak(text, rate, pitch, cb, gender) {
     const g = gender || this.gender;
+    this.clearTimers();
     const tok = ++this.token;
     let done = false;
     let timer = null;
@@ -81,19 +110,28 @@ const Mouth = {
       clearTimeout(timer);
       if (tok === this.token && cb) cb();
     };
+    // Rete di sicurezza scattata (fine frase persa): si spegne l'audio prima di andare avanti,
+    // così il microfono non sente la coda della voce.
+    const giveUp = () => { if (done) return; if (tok === this.token) ttsHardStop(); finish(); };
     const estimate = 1200 + text.length * 90 / (rate || 1);
 
     if (window.TTS && typeof window.TTS.speak === 'function') {
       // Rete di sicurezza larga: comprende i tentativi
-      timer = setTimeout(finish, estimate + 8000);
-      const wait = ms => new Promise(r => setTimeout(r, ms));
+      timer = this.later(giveUp, estimate + 8000);
+      const wait = ms => new Promise(r => this.later(r, ms));
+      const PER_TRY = estimate + 3000;   // un tentativo che non finisce mai = fine frase persa
       (async () => {
-        const vid = await ttsPickVoice(g);
+        const vid = await withTimeout(ttsPickVoice(g), TTS_VOICES_WAIT + 500, '');
+        if (tok !== this.token) return;
         const opts = { text: text, locale: COURSE.lang, rate: (rate || 1) * 1.15, pitch: pitch || 1 };
         if (vid) opts.identifier = vid;
         for (let k = 0; k < 4; k++) {
           if (tok !== this.token) return;
-          try { await window.TTS.speak(opts); finish(); return; }
+          try {
+            const r = await withTimeout(window.TTS.speak(opts).then(() => 'ok'), PER_TRY, 'timeout');
+            if (r === 'timeout') { giveUp(); return; }   // ha parlato ma l'evento di fine non è arrivato
+            finish(); return;
+          }
           catch (e) {
             if (k === 1) delete opts.identifier;
             if (k === 2 && COURSE.ttsAlt) opts.locale = COURSE.ttsAlt;   // es. arabo: «ar» se «ar-SA» non c'è
@@ -106,7 +144,7 @@ const Mouth = {
       return;
     }
     // Rete di sicurezza: su Android a volte "fine frase" non arriva mai
-    timer = setTimeout(finish, estimate + 2500);
+    timer = this.later(giveUp, estimate + 2500);
     if (window.speechSynthesis && window.SpeechSynthesisUtterance) {
       try { window.speechSynthesis.cancel(); } catch (e) {}
       const u = new SpeechSynthesisUtterance(text);
@@ -117,7 +155,7 @@ const Mouth = {
       u.pitch = pitch || 1;
       u.onend = finish;
       u.onerror = finish;
-      setTimeout(() => {
+      this.later(() => {
         if (tok === this.token) {
           try { window.speechSynthesis.speak(u); } catch (e) { finish(); }
         }
@@ -127,7 +165,7 @@ const Mouth = {
     // Nessuna voce disponibile: aspetta il tempo di lettura
     warnNoVoice();
     clearTimeout(timer);
-    timer = setTimeout(finish, estimate);
+    timer = this.later(finish, estimate);
   },
   // parts: [{ text, rate }] dette una dopo l'altra
   speakParts(parts, pitch, cb) {
@@ -140,13 +178,8 @@ const Mouth = {
   },
   cancel() {
     this.token++;
-    try {
-      if (window.TTS && window.TTS.stop) {
-        const r = window.TTS.stop();
-        if (r && r.catch) r.catch(() => {});
-      }
-    } catch (e) {}
-    try { if (window.speechSynthesis) window.speechSynthesis.cancel(); } catch (e) {}
+    this.clearTimers();
+    ttsHardStop();
   }
 };
 
@@ -158,18 +191,26 @@ const Ears = {
   available: false,   // il telefono ha detto una volta che il riconoscimento c'è
   listen(onOk, onErr) {
     this.abort();
-    const h = { done: false };
+    const h = { done: false, timer: null };
     this.handle = h;
+    const close = () => { h.done = true; clearTimeout(h.timer); this.handle = null; this.rec = null; };
     const ok = (arr) => {
       if (h.done || this.handle !== h) return;
-      h.done = true; this.handle = null; this.rec = null;
+      close();
       onOk(arr);
     };
     const err = (code) => {
       if (h.done || this.handle !== h) return;
-      h.done = true; this.handle = null; this.rec = null;
+      close();
       onErr(code);
     };
+    // Cane da guardia: alcuni telefoni non richiamano mai (né risultato né errore).
+    // Dopo LISTEN_MAX si spegne il microfono e si tratta come «non ho sentito».
+    h.timer = setTimeout(() => {
+      if (h.done || this.handle !== h) return;
+      this.stopNative();
+      err('no-speech');
+    }, Ears.LISTEN_MAX);
 
     const sr = pluginSR();
     if (sr) {
@@ -221,16 +262,21 @@ const Ears = {
     try { r.start(); } catch (x) { err('no-speech'); }
   },
   isListening() { return !!this.handle; },
+  stopNative() {
+    const sr = pluginSR();
+    if (sr) { try { sr.stopListening(() => {}, () => {}); } catch (e) {} }
+    if (this.rec) { try { this.rec.onend = null; this.rec.onresult = null; this.rec.onerror = null; this.rec.abort(); } catch (e) {} this.rec = null; }
+  },
   abort() {
     const h = this.handle;
     this.handle = null;
     if (!h) return;
     h.done = true;
-    const sr = pluginSR();
-    if (sr) { try { sr.stopListening(() => {}, () => {}); } catch (e) {} }
-    if (this.rec) { try { this.rec.abort(); } catch (e) {} this.rec = null; }
+    clearTimeout(h.timer);
+    this.stopNative();
   }
 };
+Ears.LISTEN_MAX = 15000;
 
 /* ---------- Schermo acceso durante lezione e dimostrazione ----------
    Sul telefono: piccolo plugin insomnia. Nel browser: Wake Lock, se c'è. */

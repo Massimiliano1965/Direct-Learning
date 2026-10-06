@@ -120,6 +120,16 @@ check('eco: «…o una tazza» sentito come «è una tazza»', isEcho(altKey, '�
 check('eco: la risposta giusta non è eco', !isEcho(altKey, 'è una chiave'));
 check('eco: risposta giusta anche se è la seconda parola', !isEcho({ type: 'alt', show: 'cup', options: ['key', 'cup'], prompt: 'È una chiave o una tazza?', model: 'È una tazza.' }, 'è una tazza'));
 check('lezione 4: «È una chiave.» alla domanda chiave o tazza', evaluate(altKey, 'È una chiave.').ok);
+// Eco attaccata davanti alla risposta: si toglie la parte dell'insegnante
+const cleanAlts = run('cleanAlts'), trimEcho = run('trimEcho');
+const altPen2 = { type: 'alt', show: 'pen', options: ['book', 'pen'], prompt: 'È un libro o una penna?', model: 'È una penna.' };
+check('eco davanti: domanda intera + risposta', evaluateAll(altPen2, ['è un libro o una penna è una penna']).ok);
+check('eco davanti: coda + risposta', evaluateAll(altPen2, ['o una penna è una penna']).ok);
+check('eco davanti: coda + risposta sbagliata resta sbagliata', !evaluateAll(altPen2, ['o una penna è un libro']).ok);
+check('eco: le interpretazioni solo-eco si scartano', evaluateAll(altPen2, ['è un libro o una penna', 'è una penna']).ok);
+check('eco: senza doppioni né vuoti', cleanAlts(altPen2, ['è una penna', 'È una penna.', '', '  ']).length === 1);
+check('eco: frase da ripetere non si tocca', trimEcho({ type: 'echo', prompt: 'È un libro.', model: 'È un libro.' }, 'è un libro è un libro') === 'è un libro è un libro');
+check('eco: no con la domanda davanti', evaluateAll({ type: 'neg', show: 'table', ask: 'book', prompt: 'È un libro?', model: 'No, non è un libro.' }, ['è un libro no non è un libro']).ok);
 
 // 2. Più interpretazioni: basta che una sia giusta, al massimo 5
 const st = { type: 'key', show: 'pen' };
