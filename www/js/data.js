@@ -232,7 +232,7 @@ const MARKS = {
 };
 
 // Segnali sul palco: «?» = è una domanda, rispondi; frecce che girano = ripeti la frase;
-// «!» verde = giusto.
+// pollice in su verde = giusto.
 // In italiano la domanda si sente solo dall'intonazione: il segnale la rende chiara.
 const CUES = {
   // «tocca una figura e fai tu la domanda»
@@ -240,7 +240,8 @@ const CUES = {
     <circle cx="44" cy="34" r="12" fill="none" stroke="#fff" stroke-width="3" opacity=".7"/>
     <path d="M40 34 v28 l-7 -6 a5 5 0 0 0 -7 7 l14 16 h22 l5 -18 v-12 a4 4 0 0 0 -8 0 v-2 a4 4 0 0 0 -8 0 v-1 a4 4 0 0 0 -8 0 v-12 a3.5 3.5 0 0 0 -3 -0 z" fill="#fff" stroke="#2a2440" stroke-width="2.5" stroke-linejoin="round"/></svg>`,
   ok: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="46" fill="#34a847" stroke="#fff" stroke-width="4"/>
-    <rect x="43" y="18" width="14" height="44" rx="7" fill="#fff"/><circle cx="50" cy="77" r="8" fill="#fff"/></svg>`,
+    <rect x="22" y="44" width="15" height="34" rx="3" fill="#fff"/>
+    <path d="M41 46 L52 24 C54 19 61 20 61 26 L59 40 L74 40 C80 40 83 45 82 50 L78 71 C77 76 73 79 68 79 L41 79 Z" fill="#fff"/></svg>`,
   q: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="46" fill="url(#gLilla)" stroke="#fff" stroke-width="4"/>
     <text x="50" y="72" font-size="66" font-family="Arial, sans-serif" font-weight="900" fill="#fff" text-anchor="middle">?</text></svg>`,
   r: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="46" fill="#2e2b4a" stroke="#8c8fe8" stroke-width="4"/>
