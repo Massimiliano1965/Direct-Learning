@@ -219,6 +219,7 @@ function stopLesson() {
   $('screen-lesson').classList.remove('tunnel');
   hideMark();
   hideYourTurn();
+  $('btn-talk').classList.remove('flash');
   setCue('');
   setPickable(false);
   hideFinger();
@@ -290,6 +291,8 @@ function flashBad() {
 function setStatus(text, mode) {
   $('status-text').textContent = text;
   $('mic-dot').className = mode || '';
+  // Il tasto Talk lampeggia quando deve parlare lo studente (microfono acceso o «tocca Talk»)
+  $('btn-talk').classList.toggle('flash', mode === 'rec' || text.indexOf(uiWord('talk')) !== -1);
 }
 function setPrompt(text) { $('prompt-text').textContent = DB.settings.showText ? shown(text) : ''; }
 function setProgress(done, total) { $('progress-fill').style.width = Math.round(done / total * 100) + '%'; }
