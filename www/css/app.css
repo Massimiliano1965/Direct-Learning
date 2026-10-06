@@ -86,6 +86,8 @@ button .hint { display: block; font-size: 12px; font-weight: 600; opacity: .7; m
 
 /* Lezione */
 #screen-lesson { position: relative; padding-bottom: 12px; }
+html.fisso, html.fisso body { overflow: hidden; overscroll-behavior: none; }
+html.fisso body { min-height: 0; height: 100%; }
 #screen-lesson.tunnel { }   /* niente tremore: basta il gesto dell'insegnante e il bordo rosso */
 .topbar { display: flex; justify-content: space-between; align-items: baseline; font-size: 15px; color: var(--muted); padding: 0 2px; }
 #l-title { color: var(--text); font-family: var(--serif); font-size: 20px; font-weight: 400; letter-spacing: .3px; }

@@ -12,6 +12,7 @@ function showScreen(name, replace) {
   ['lang', 'home', 'lesson', 'end', 'report'].forEach(n => $('screen-' + n).classList.toggle('hidden', n !== name));
   const wasHome = currentScreen === 'home';
   currentScreen = name;
+  document.documentElement.classList.toggle('fisso', name === 'lesson');   // la lezione non scorre mai
   window.scrollTo(0, 0);
   if (!IS_CORDOVA && name !== 'home') {
     try {
@@ -284,16 +285,16 @@ function buildGrid(items) {
    Se è ancora più alta dello schermo, un po' alla volta: frase più piccola, luoghi più piccoli, palco più basso,
    e solo alla fine figure in basso più piccole. */
 function fitLesson() {
-  if (!L || currentScreen !== 'lesson') return;
+  if (currentScreen !== 'lesson' || (!L && !demoActive)) return;   // anche la dimostrazione
   const grid = $('objects-grid'), stage = $('stage'), hand = $('stage-hand'), fig = $('stage-figure'), pl = $('stage-places'), pr = $('prompt-text');
   [grid, stage, hand, fig, pl, pr].forEach(el => el.removeAttribute('style'));
   delete pr.dataset.room;
   pl.querySelectorAll('.place').forEach(el => el.removeAttribute('style'));
   const over = () => Math.ceil($('screen-lesson').getBoundingClientRect().bottom + window.scrollY - window.innerHeight);
-  const placeSize = (px) => { if (L.lesson.placeHints) { pl.style.display = 'flex'; pl.style.minHeight = px + 'px'; pl.style.setProperty('--place', px + 'px'); } };
+  const placeSize = (px) => { if (L && L.lesson.placeHints) { pl.style.display = 'flex'; pl.style.minHeight = px + 'px'; pl.style.setProperty('--place', px + 'px'); } };
   // posto per la frase: quanto la più lunga, ma al massimo due righe (le più lunghe si scrivono più piccole)
   const promptRoom = () => {
-    if (!DB.settings.showText) return;
+    if (!L || !DB.settings.showText) return;
     const keep = pr.textContent;
     let tall = 0;
     pr.style.minHeight = '0';
@@ -320,6 +321,11 @@ function fitLesson() {
     const gh = grid.offsetHeight;
     grid.style.maxWidth = Math.max(full * 0.5, grid.clientWidth * (gh - over()) / gh) + 'px';
     grid.style.marginLeft = grid.style.marginRight = 'auto';
+  }
+  if (over() > 0) {   // ultima sicurezza (telefoni molto piccoli): palco ancora più basso
+    const h0 = stage.offsetHeight, h = Math.max(100, h0 - over()), r = h / h0;
+    stage.style.height = h + 'px';
+    [hand, fig].forEach(el => { el.style.width = el.style.height = Math.round(el.offsetWidth * r) + 'px'; });
   }
 }
 window.addEventListener('resize', fitLesson);

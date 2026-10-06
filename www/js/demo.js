@@ -81,7 +81,7 @@ async function demoScript(t, run) {
   // lo studente finto ha l'altra voce: se l'insegnante è un uomo, una donna e viceversa
   const P = (text) => say(text, 1.0, studentPitch, t.gender === 'm' ? 'f' : 'm');
   const praise = async () => { flashGood(!!t.praiseEvery); setCue('ok'); if (t.praiseEvery) await T(pick(t.praise)); else await sleep(300); };
-  const cap = (text) => { $('demo-caption').textContent = text; };
+  const cap = (text) => { $('demo-caption').textContent = text; fitLesson(); };
   const heard = (text) => { $('heard').textContent = text ? tx('heard') + ': “' + text + '”' : ''; };
   const step = (n, obj, prompt) => {
     hideYourTurn();
