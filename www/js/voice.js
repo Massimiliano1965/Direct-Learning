@@ -96,6 +96,7 @@ const Mouth = {
           try { await window.TTS.speak(opts); finish(); return; }
           catch (e) {
             if (k === 1) delete opts.identifier;
+            if (k === 2 && COURSE.ttsAlt) opts.locale = COURSE.ttsAlt;   // es. arabo: «ar» se «ar-SA» non c'è
             await wait(300 + k * 400);
           }
         }

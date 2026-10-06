@@ -92,7 +92,7 @@ function renderHome() {
     lb.innerHTML = '<div class="label">Course language</div>';
     const row = document.createElement('div');
     row.className = 'lang-row';
-    [['it', 'Italiano'], ['zh', '中文 Chinese']].forEach(([code, name]) => {
+    [['it', 'Italiano'], ['zh', '中文'], ['ar', 'العربية']].forEach(([code, name]) => {
       const b = document.createElement('button');
       const on = (COURSE.lang.slice(0, 2) === code);
       b.className = 'lang-btn' + (on ? ' on' : '');

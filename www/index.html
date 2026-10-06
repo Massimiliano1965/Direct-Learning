@@ -78,7 +78,8 @@
 (function () {
   var L = 'it';
   try { L = localStorage.getItem('dl_lang') || 'it'; } catch (e) {}
-  var f = L === 'zh' ? ['course_zh', 'data', 'logic', 'pinyin_zh', 'grammar_zh'] : ['course', 'data', 'logic'];
+  var f = L === 'zh' ? ['course_zh', 'data', 'logic', 'pinyin_zh', 'grammar_zh'] :
+          L === 'ar' ? ['course_ar', 'data', 'logic', 'grammar_ar'] : ['course', 'data', 'logic'];
   for (var i = 0; i < f.length; i++) document.write('<script src="js/' + f[i] + '.js"><\/script>');
 })();
 </script>
