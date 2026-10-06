@@ -99,7 +99,14 @@ function isEcho(step, text) {
   if (!step || step.prompt === step.model) return false;
   const t = norm(text).trim(), p = norm(step.prompt).trim();
   if (!t) return false;
-  return t === p || (t.split(' ').length >= 2 && p.endsWith(' ' + t));
+  if (t === p || (t.split(' ').length >= 2 && p.endsWith(' ' + t))) return true;
+  // «È una chiave o una tazza?»: la coda «o una tazza» il microfono la scrive spesso «è una tazza».
+  // Se è proprio l'ultima parola della domanda (e non è la risposta giusta), è l'eco dell'insegnante.
+  if (step.type === 'alt' && step.options && step.options[1] !== step.show && t.split(' ').length <= 4) {
+    const c = claims(' ' + t + ' ');
+    if (c.length === 1 && c[0] === step.options[1] && !negations(' ' + t + ' ').length) return true;
+  }
+  return false;
 }
 
 // Domanda fatta dall'allievo sull'oggetto X che ha toccato.

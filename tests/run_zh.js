@@ -63,6 +63,9 @@ check('sì per suono: «是这是数» va bene', evaluate({ type: 'yes', show: '
 check('sì/no non si confondono: «不是这不是书» a domanda sì', !withTeacher('sara', () => evaluate({ type: 'yes', show: 'book' }, '不是这不是书').ok));
 check('no per suono: «不是这不是数» va bene', evaluate(negTable, '不是这不是数').ok);
 check('pinyin di quello che si è sentito', COURSE.heard('日系说的') === '日系说的 (ri xi shuo de)');
+const altZh = { type: 'alt', show: 'book', options: ['book', 'table'], prompt: '这是书还是桌子？', model: '这是书。' };
+check('eco cinese: «…还是桌子» sentito come «是桌子»', isEcho(altZh, '是桌子') && isEcho(altZh, '这是桌子'));
+check('eco cinese: la risposta giusta non è eco', !isEcho(altZh, '这是书'));
 check('eco della domanda', isEcho({ prompt: '这是书吗？', model: '是，这是书。' }, '这是书吗'));
 
 // 3. Domande dell'allievo (ha toccato la sedia)

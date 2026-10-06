@@ -115,6 +115,11 @@ check('eco: la coda della domanda', isEcho(altSt, 'o un libro'));
 check('eco: la risposta vera non è eco', !isEcho(altSt, 'È un tavolo.'));
 check('eco: frase da ripetere mai eco', !isEcho({ type: 'echo', prompt: 'È un libro.', model: 'È un libro.' }, 'è un libro'));
 check('eco: una parola sola non basta', !isEcho(altSt, 'libro'));
+const altKey = { type: 'alt', show: 'key', options: ['key', 'cup'], prompt: 'È questa una chiave o una tazza?', model: 'È una chiave.' };
+check('eco: «…o una tazza» sentito come «è una tazza»', isEcho(altKey, 'è una tazza'));
+check('eco: la risposta giusta non è eco', !isEcho(altKey, 'è una chiave'));
+check('eco: risposta giusta anche se è la seconda parola', !isEcho({ type: 'alt', show: 'cup', options: ['key', 'cup'], prompt: 'È una chiave o una tazza?', model: 'È una tazza.' }, 'è una tazza'));
+check('lezione 4: «È una chiave.» alla domanda chiave o tazza', evaluate(altKey, 'È una chiave.').ok);
 
 // 2. Più interpretazioni: basta che una sia giusta, al massimo 5
 const st = { type: 'key', show: 'pen' };

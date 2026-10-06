@@ -235,3 +235,14 @@ evaluate = function (step, text) {
 };
 // Sotto «Heard» anche la pronuncia di quello che ha capito il microfono
 COURSE.heard = (text) => { const p = zhSyl(text).join(' '); return p ? text + ' (' + p + ')' : text; };
+
+// Eco della domanda «o»: «…还是桌子» il microfono la scrive «是桌子 / 这是桌子»
+const zhIsEchoBase = isEcho;
+isEcho = function (step, text) {
+  if (zhIsEchoBase(step, text)) return true;
+  if (step && step.type === 'alt' && step.options && step.options[1] !== step.show) {
+    const s = norm(text), c = zhClaims(s);
+    if (c.length === 1 && c[0] === step.options[1] && !zhNegs(s).length && s.length <= np(c[0]).length + 3) return true;
+  }
+  return false;
+};
