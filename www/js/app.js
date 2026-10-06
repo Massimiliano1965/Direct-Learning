@@ -103,9 +103,19 @@ function renderHome() {
   db.innerHTML = '<span>' + tx('demoLesson') + '</span><span class="score">' + tx(DB.settings.demoSeen ? 'seen' : 'watchFirst') + '</span>';
   db.onclick = once(() => startDemo(null));
   ll.appendChild(db);
+  let lastLevel = 0;
   LESSONS.forEach(l => {
+    // lezioni divise per livello, ognuno con il suo colore
+    const lv = l.level || 1;
+    if (lv !== lastLevel) {
+      const h = document.createElement('div');
+      h.className = 'level-head lv' + lv;
+      h.textContent = tx('level', { n: lv });
+      ll.appendChild(h);
+      lastLevel = lv;
+    }
     const b = document.createElement('button');
-    b.className = 'lesson-btn';
+    b.className = 'lesson-btn lv' + lv;
     // nel menu solo le parole nuove della lezione
     const icons = (l.colors ? l.known.concat(l.reds || []) : l.known.concat(l.fresh ? [l.fresh] : [])).map(w => FIG[w]).join('');
     const best = DB.lessons[l.id];
@@ -220,13 +230,18 @@ function startLesson(id) {
   showScreen('lesson', currentScreen !== 'home');
   Awake.keep();
   Mouth.gender = teacher.gender;
+  setLevel(lesson.level || 1);
   setStageTeacher(teacher.look || teacher.key);
   setPose('show');
   runStep();
 }
 
+// Colore di fondo del livello (i colori sono in app.css, «Colori dei livelli»)
+function setLevel(n) { if (n > 1) document.documentElement.dataset.level = n; else delete document.documentElement.dataset.level; }
+
 function stopLesson() {
   stopDemo();
+  setLevel(1);
   RUN++;
   quiet();
   Awake.allow();

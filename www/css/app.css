@@ -244,3 +244,17 @@ button .hint { display: block; font-size: 12px; font-weight: 600; opacity: .7; m
 @keyframes ppulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(201,164,92,.8); } 50% { box-shadow: 0 0 0 9px rgba(201,164,92,0); } }
 #stage-places .place.ok { border-color: #3fae5a; box-shadow: 0 0 14px rgba(63,174,90,.8); }
 #stage-places .place.no { border-color: #d9534f; box-shadow: 0 0 14px rgba(217,83,79,.8); }
+
+/* ===== Colori dei livelli: fondo sobrio, oro uguale per tutti (per cambiarli basta questa parte) ===== */
+html[data-level="2"] { --bg: #0d141c; --bg2: #0d141c; --surface: #152030; --surface2: #1c2a3d; --line: #2a3c54; }   /* blu acciaio: ufficio e città */
+html[data-level="3"] { --bg: #130f1c; --bg2: #130f1c; --surface: #1d172b; --surface2: #261f38; --line: #3a3052; }   /* viola: albergo e ristorante */
+html[data-level="4"] { --bg: #1a1118; --bg2: #1a1118; --surface: #271a25; --surface2: #332230; --line: #4e3549; }   /* rosa antico: viaggio e stagioni */
+html[data-level] body { background: var(--bg); }
+html[data-level] #stage { background: linear-gradient(180deg, var(--surface2), var(--surface)); }
+/* nel menu: titolo del livello e una striscia del suo colore a sinistra di ogni lezione */
+.level-head { font-size: 13px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; color: var(--accent); margin: 18px 0 8px 2px; }
+.level-head.lv1 { margin-top: 12px; }
+.lesson-btn.lv1 { border-left: 4px solid #3a5280; }
+.lesson-btn.lv2 { border-left: 4px solid #3f6a96; }
+.lesson-btn.lv3 { border-left: 4px solid #7b62b0; }
+.lesson-btn.lv4 { border-left: 4px solid #b07a9e; }
