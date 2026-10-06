@@ -88,11 +88,13 @@ function renderHome() {
 
   // La lingua dello studente: si cambia da qui
   $('lang-box').innerHTML = '';
-  const lbtn = document.createElement('button');
-  lbtn.className = 'lesson-btn';
-  lbtn.innerHTML = '<span>' + tx('yourLang') + '</span><span class="score">' + UI_LANGS[UI_LANG].name + '</span>';
-  lbtn.onclick = () => showLangChoice();
-  $('lang-box').appendChild(lbtn);
+  if ((COURSE.students || []).length > 1) {
+    const lbtn = document.createElement('button');
+    lbtn.className = 'lesson-btn';
+    lbtn.innerHTML = '<span>' + tx('yourLang') + '</span><span class="score">' + UI_LANGS[UI_LANG].name + '</span>';
+    lbtn.onclick = () => showLangChoice();
+    $('lang-box').appendChild(lbtn);
+  }
 
   const ll = $('lesson-list');
   ll.innerHTML = '';
@@ -146,7 +148,7 @@ function applyStaticText() {
 }
 
 function avatarHtml(t, size) {
-  return '<span class="avatar photo' + (size ? ' ' + size : '') + '">' + teacherHead(t.key) + '</span>';
+  return '<span class="avatar photo' + (size ? ' ' + size : '') + '">' + teacherHead(t.look || t.key) + '</span>';
 }
 
 /* ---------- Lingua dei pulsanti della lezione ---------- */
@@ -218,7 +220,7 @@ function startLesson(id) {
   showScreen('lesson', currentScreen !== 'home');
   Awake.keep();
   Mouth.gender = teacher.gender;
-  setStageTeacher(teacher.key);
+  setStageTeacher(teacher.look || teacher.key);
   setPose('show');
   runStep();
 }
@@ -841,6 +843,9 @@ $('btn-reset').onclick = () => {
 document.body.insertAdjacentHTML('afterbegin', SVG_DEFS);
 $('logo').innerHTML = LOGO;
 $('logo2').innerHTML = LOGO;
+if (COURSE.brand) document.querySelectorAll('.brand-name').forEach(h => { h.textContent = COURSE.brand; });
+// Una sola lingua dello studente (es. CIAO English: italiano): niente domanda
+if (!DB.settings.uiLang && (COURSE.students || []).length === 1) { DB.settings.uiLang = COURSE.students[0]; saveDB(); }
 if (DB.settings.uiLang && (COURSE.students || []).indexOf(DB.settings.uiLang) !== -1) setUiLang(DB.settings.uiLang);
 renderHome();
 if (!DB.settings.uiLang || (COURSE.students || []).indexOf(DB.settings.uiLang) === -1) showLangChoice();

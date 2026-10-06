@@ -30,7 +30,7 @@ function startDemo(next) {
   showScreen('lesson', currentScreen !== 'home');
   Awake.keep();
   Mouth.gender = t.gender;
-  setStageTeacher(t.key);
+  setStageTeacher(t.look || t.key);
   setPose('show');
   demoScript(t, run).then(() => endDemo(run), () => {});
 }

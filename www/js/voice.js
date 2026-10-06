@@ -10,8 +10,8 @@
 // altri motori: "…SMTm…" = uomo, "…SMTf…" = donna; nel browser i nomi propri).
 function voiceGender(name) {
   const s = String(name || '').toLowerCase();
-  if (/female|donna|smtf|-x-it[ab]-|-x-kda-|elsa|alice|federica|paola|carla|bianca|isabella|giulia|google italiano/.test(s)) return 'f';
-  if (/\bmale|uomo|smtm|-x-it[cd]-|diego|cosimo|luca|giorgio|roberto|lorenzo|giuseppe|fabio/.test(s)) return 'm';
+  if (/female|donna|smtf|-x-it[ab]-|-x-kda-|-x-gb[acg]-|elsa|alice|federica|paola|carla|bianca|isabella|giulia|google italiano/.test(s)) return 'f';
+  if (/\bmale|uomo|smtm|-x-it[cd]-|-x-gb[bd]-|diego|cosimo|luca|giorgio|roberto|lorenzo|giuseppe|fabio/.test(s)) return 'm';
   return '';
 }
 

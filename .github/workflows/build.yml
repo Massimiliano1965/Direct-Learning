@@ -8,6 +8,11 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    # Un APK per ogni lingua da imparare: «CIAO» (italiano) e «CIAO English»
+    strategy:
+      fail-fast: false
+      matrix:
+        course: [it, en]
     steps:
       - uses: actions/checkout@v4
 
@@ -19,7 +24,11 @@ jobs:
         run: |
           for f in www/js/*.js tests/*.js; do node --check "$f"; done
           node tests/run.js
+          node tests/run_en.js
           node tests/run_voice.js
+
+      - name: Prepara il corso (${{ matrix.course }})
+        run: node tools/set_course.js ${{ matrix.course }}
 
       - uses: actions/setup-java@v4
         with:
@@ -54,5 +63,5 @@ jobs:
       - name: Carica APK
         uses: actions/upload-artifact@v4
         with:
-          name: MetodoDiretto-apk
+          name: CIAO-${{ matrix.course == 'en' && 'English' || 'Italiano' }}-apk
           path: platforms/android/app/build/outputs/apk/debug/app-debug.apk

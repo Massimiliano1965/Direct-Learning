@@ -4,7 +4,7 @@
    ===================================================================== */
 
 const STORE_KEY = 'metodo_diretto_v1';
-const DEFAULT_TEACHER = 'luca';
+const DEFAULT_TEACHER = TRIAL_ROTATION[2];   // il «normale»: Luca (italiano), Kate (inglese)
 
 function emptyTeacherStat() { return { sessions: 0, days: [], items: 0, first: 0, errors: 0, skipped: 0, lat: 0, latN: 0, time: 0 }; }
 function emptyDB() {

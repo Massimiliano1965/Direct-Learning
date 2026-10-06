@@ -13,13 +13,13 @@
 
 <!-- ============ CHE LINGUA PARLI? (prima volta) ============ -->
 <section id="screen-lang" class="screen hidden">
-  <div class="brand"><div class="logo" id="logo2"></div><div><h1>CIAO</h1><div class="tagline">Communicator for Immersive Audio-Oral learning</div></div></div>
+  <div class="brand"><div class="logo" id="logo2"></div><div><h1 class="brand-name">CIAO</h1><div class="tagline">Communicator for Immersive Audio-Oral learning</div></div></div>
   <div id="lang-list"></div>
 </section>
 
 <!-- ============ MENU ============ -->
 <section id="screen-home" class="screen">
-  <div class="brand"><div class="logo" id="logo"></div><div><h1>CIAO</h1><div class="tagline">Communicator for Immersive Audio-Oral learning</div></div></div>
+  <div class="brand"><div class="logo" id="logo"></div><div><h1 class="brand-name">CIAO</h1><div class="tagline">Communicator for Immersive Audio-Oral learning</div></div></div>
   <div class="card" id="trial-card"></div>
 
   <div class="label" data-t="labelTeacher">Teacher</div>
@@ -79,11 +79,14 @@
 <div id="demo-finger" class="hidden"></div>
 <div id="pick-finger" class="hidden"></div>
 
-<!-- Corso (in vendita: un'app per lingua da imparare) -->
-<script src="js/course.js"></script>
-<script src="js/data.js"></script>
-<script src="js/logic.js"></script>
-<script src="js/ui_lang.js"></script>
+<!-- Corso: un'app per ogni lingua da imparare (BUILD_COURSE in js/build.js) -->
+<script src="js/build.js"></script>
+<script>
+(function () {
+  var f = BUILD_COURSE === 'en' ? ['course_en', 'data', 'logic', 'grammar_en', 'ui_lang'] : ['course', 'data', 'logic', 'ui_lang'];
+  for (var i = 0; i < f.length; i++) document.write('<script src="js/' + f[i] + '.js"><\/script>');
+})();
+</script>
 <script src="js/teacher.js"></script>
 <script src="js/voice.js"></script>
 <script src="js/storage.js"></script>

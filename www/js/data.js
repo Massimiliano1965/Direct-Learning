@@ -95,6 +95,10 @@ const FIG = {
   notebook: FLAT(`<rect x="24" y="14" width="52" height="74" rx="3" fill="#ece4d2"/><rect x="22" y="12" width="52" height="74" rx="3" fill="#8a3a3a"/>
     <path d="M30 8 v10 M38 8 v10 M46 8 v10 M54 8 v10 M62 8 v10 M70 8 v10" stroke="#b9bdc8" stroke-width="2.5" stroke-linecap="round"/>
     <rect x="32" y="30" width="32" height="14" rx="1.5" fill="#ece4d2"/><path d="M36 35 h24 M36 39 h16" stroke="#8a3a3a" stroke-width="1.6"/>`, 28),
+  umbrella: FLAT(`<path d="M50 14 a38 30 0 0 1 38 30 q-6.3 -5 -12.7 0 q-6.3 -5 -12.6 0 q-6.4 -5 -12.7 0 q-6.3 -5 -12.7 0 q-6.3 -5 -12.6 0 q-6.4 -5 -12.7 0 a38 30 0 0 1 38 -30z" fill="#2c3e66"/>
+    <path d="M50 14 q-12 12 -12.7 30 q6.3 -5 12.7 0 q6.3 -5 12.7 0 q-.7 -18 -12.7 -30z" fill="#3a4f7e"/>
+    <rect x="48.6" y="8" width="2.8" height="7" rx="1.4" fill="#c9a45c"/>
+    <path d="M50 44 V80 q0 7 -7 7 q-6 0 -6 -6" fill="none" stroke="#5a3826" stroke-width="3.4" stroke-linecap="round"/>`, 30),
   lamp: FLAT(`<ellipse cx="50" cy="86" rx="20" ry="4" fill="#2a3040"/><rect x="47" y="56" width="5" height="30" fill="#3a4258"/>
     <path d="M49 58 L36 34" stroke="#3a4258" stroke-width="5" stroke-linecap="round"/>
     <path d="M24 34 l14 -22 l22 14 l-10 14z" fill="#c9a45c"/><path d="M40 40 l10 -14 l10 6 z" fill="#e0c287" opacity=".35"/>
