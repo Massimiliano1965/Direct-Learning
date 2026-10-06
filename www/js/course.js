@@ -7,7 +7,7 @@
 
 const COURSE = {
   lang: 'it-IT',        // lingua che si impara: voce e microfono
-  students: ['en', 'de', 'ja'],   // lingue dello studente offerte («Che lingua parli?»): menu e messaggi
+  students: ['en', 'de', 'ja', 'it'],   // lingue dello studente offerte («Che lingua parli?»): menu e messaggi
   name: 'Italiano',
   voiceTags: ['it-it'],                 // come si riconoscono le voci italiane del telefono
   yourTurn: 'Tocca a te.',
@@ -68,7 +68,11 @@ const LESSONS = [
   // «Che numero è?» (capitolo 1, esercizio 4): da uno a cinque, poi il sei da scoprire
   { id: 'l6', title: 'Lezione 6', numbers: true, known: ['n1', 'n2', 'n3', 'n4', 'n5'], fresh: 'n6' },
   // sette, otto, nove (ripasso 1–6), poi il dieci da scoprire
-  { id: 'l7', title: 'Lezione 7', numbers: true, known: ['n7', 'n8', 'n9'], review: ['n1', 'n2', 'n3', 'n4', 'n5', 'n6'], fresh: 'n10' }
+  { id: 'l7', title: 'Lezione 7', numbers: true, known: ['n7', 'n8', 'n9'], review: ['n1', 'n2', 'n3', 'n4', 'n5', 'n6'], fresh: 'n10' },
+  // capitolo 2, esercizio 5 B: «Che cosa è Roma?» — città (il loro monumento) e paesi (mappa con la bandiera)
+  { id: 'l8', title: 'Lezione 8', geo: 'cat', known: ['g_roma', 'g_italia', 'g_parigi', 'g_francia', 'g_newyork', 'g_america', 'g_londra', 'g_cina'] },
+  // capitolo 2, esercizio 5 A: «In o a?» — il Colosseo è a Roma, in Italia; la Grande Muraglia da scoprire con «Dov'è…?»
+  { id: 'l9', title: 'Lezione 9', geo: 'dove', known: ['g_colosseo', 'g_eiffel', 'g_bigben', 'g_liberta'], fresh: 'g_muraglia' }
 ];
 
 // Quattro insegnanti, dal più rigido al più indulgente. gender = voce maschile o femminile.

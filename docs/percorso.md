@@ -34,7 +34,7 @@ Durante il test l'insegnante non corregge; contano solo gli errori, mostrati all
 
 ## Capitolo 2
 
-8. **Città e paesi**: in o a? «Che cosa è Napoli?» — «È una città.»
+8. **Città e paesi**: in o a? «Che cosa è Roma?» — «È una città.» — *fatto: Lezioni 8 e 9 (monumenti famosi e mappe)*
 9. **Possessivi**: il mio, la Sua…
 10. **Questo o questa? Piccolo o piccola?**
 11. **Possessivi**: il suo, la sua…

@@ -13,6 +13,8 @@ Dal libro si prende solo l'ordine: frasi, nomi e figure sono nostri e moderni
 - Lezione 5: «Il o la? Nero o nera?» — il telefono nero, il portatile bianco, la valigia nera, la borraccia bianca; il rosso (cappotto, tazza) con «Di che colore è…?». Oggetti scelti per chi viaggia e lavora nel 2026.
 - Lezione 6: «Che numero è?» — da uno a cinque, poi il sei da scoprire (accetta anche le cifre scritte dal microfono e «È il tre.»)
 - Lezione 7: sette, otto, nove (ripasso 1–6), poi il dieci da scoprire
+- Lezione 8: «Che cosa è Roma?» — città (Roma, Parigi, Londra, New York, con il loro monumento) e paesi (Italia, Francia, America, Cina: mappa vera con la bandiera)
+- Lezione 9: «In o a?» — il Colosseo è a Roma / in Italia; Torre Eiffel, Big Ben, Statua della Libertà; la Grande Muraglia da scoprire con «Dov'è…?»
 
 ## Capitoli 1–5
 

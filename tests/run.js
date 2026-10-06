@@ -6,7 +6,7 @@ const vm = require('vm');
 
 const ctx = { console: console };
 vm.createContext(ctx);
-['course.js', 'data.js', 'logic.js', 'colors_it.js', 'numbers_it.js', 'ui_lang.js'].forEach(f => {
+['course.js', 'data.js', 'logic.js', 'colors_it.js', 'numbers_it.js', 'geo_fig.js', 'geo_it.js', 'ui_lang.js'].forEach(f => {
   vm.runInContext(fs.readFileSync(path.join(__dirname, '..', 'www', 'js', f), 'utf8'), ctx, { filename: f });
 });
 const run = (code) => vm.runInContext(code, ctx);
@@ -14,7 +14,7 @@ const evaluate = run('evaluate');
 const evaluateAll = run('evaluateAll');
 const buildSteps = run('buildSteps');
 const answerSteps = run('answerSteps');
-const LESSONS = run('LESSONS').filter(l => !l.colors && !l.numbers);   // lezioni con gli oggetti (colori e numeri hanno i loro test)
+const LESSONS = run('LESSONS').filter(l => !l.colors && !l.numbers && !l.geo);   // lezioni con gli oggetti (colori e numeri hanno i loro test)
 const NUM_LESSONS = run('LESSONS').filter(l => l.numbers);
 const COLOR_LESSONS = run('LESSONS').filter(l => l.colors);
 const ITEMS = run('ITEMS');
@@ -391,6 +391,47 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].map(k => TEACHER
         check(l.id + ': lunghezza ragionevole', st.length < 110);
       }
       if (st.some(s => s.type === 'neg' && s.ask === s.show)) { check(l.id + ': niente domanda impossibile', false); break; }
+    }
+  });
+}
+
+// Capitolo 2: città e paesi (lezione 8), «in o a?» (lezione 9)
+{
+  const SG = run('SG'), evalAsk = run('evalAsk'), answerAsk = run('answerAsk'), buildDrill = run('buildDrill');
+  const ok = (st, t) => evaluate(st, t).ok;
+  const GEO_L = run('LESSONS').filter(l => l.geo);
+  check('lezioni 8 e 9 ci sono', GEO_L.map(l => l.id).join() === 'l8,l9');
+  check('figure di città, paesi e monumenti', GEO_L.every(l => l.known.concat(l.fresh ? [l.fresh] : []).every(k => FIG[k] && FIG[k].indexOf('<svg') === 0)));
+  check('frasi lezione 8', SG.present('g_roma').prompt === 'Roma è una città.' && SG.present('g_italia').prompt === 'L\'Italia è un paese.' &&
+    SG.neg('g_londra').model === 'No, Londra non è un paese.' && SG.key('g_newyork').prompt === 'Che cosa è New York?');
+  check('frasi lezione 9', SG.dPresent('g_colosseo', 'roma').prompt === 'Il Colosseo è a Roma.' && SG.dPresent('g_eiffel', 'francia').prompt === 'La Torre Eiffel è in Francia.' &&
+    SG.dKey('g_muraglia').model === 'La Grande Muraglia è in Cina.' && SG.dReveal('g_muraglia').prompt === 'Dov\'è la Grande Muraglia? La Grande Muraglia è in Cina.');
+  check('8 giusto', ok(SG.present('g_roma'), 'Roma è una città.') && ok(SG.yes('g_america'), 'Sì, l\'America è un paese.') && ok(SG.neg('g_londra'), 'No, Londra non è un paese.') && ok(SG.key('g_newyork'), 'Nuova York è una città'));
+  check('8 sbagliato: «un città»', !ok(SG.present('g_roma'), 'Roma è un città.'));
+  check('8 sbagliato: manca l\'articolo del paese', !ok(SG.present('g_italia'), 'Italia è un paese.'));
+  check('8 sbagliato: categoria sbagliata', !ok(SG.key('g_parigi'), 'Parigi è un paese.'));
+  check('9 giusto: «a» città, «in» paese', ok(SG.dKey('g_colosseo'), 'Il Colosseo è a Roma.') && ok(SG.dKey('g_colosseo'), 'Il Colosseo è in Italia.') && ok(SG.dKey('g_eiffel'), 'La Tour Eiffel è a Parigi.'));
+  check('9 sbagliato: «in Roma»', !ok(SG.dKey('g_colosseo'), 'Il Colosseo è in Roma.'));
+  check('9 sbagliato: «a Italia»', !ok(SG.dKey('g_colosseo'), 'Il Colosseo è a Italia.'));
+  check('9 sbagliato: posto sbagliato', !ok(SG.dKey('g_bigben'), 'Il Big Ben è a Parigi.'));
+  check('9 sbagliato: domanda ripetuta', !ok(SG.dAlt('g_bigben', 'roma'), SG.dAlt('g_bigben', 'roma').prompt));
+  check('9 ripete «Dov\'è?»', ok(SG.dAskQ('g_muraglia'), 'Dov\'è?'));
+  check('allievo 9: «Che cos\'è?»', evalAsk('g_colosseo', 'Che cos\'è?').kind === 'thing' && answerAsk('g_colosseo', { kind: 'thing' }) === 'È il Colosseo.');
+  check('allievo 9', evalAsk('g_colosseo', 'Dov\'è il Colosseo?').kind === 'what' && evalAsk('g_colosseo', 'Il Colosseo è a Parigi?').kind === 'no' &&
+    evalAsk('g_colosseo', 'Il Colosseo è in Roma?').model === 'Il Colosseo è a Roma?' && answerAsk('g_colosseo', { kind: 'no', ask: 'parigi' }) === 'No, il Colosseo non è a Parigi. Il Colosseo è a Roma.');
+  check('allievo 8', evalAsk('g_roma', 'Che cosa è Roma?').kind === 'what' && evalAsk('g_roma', 'Roma è un paese?').kind === 'no' && answerAsk('g_roma', { kind: 'no' }) === 'No, Roma non è un paese. Roma è una città.');
+  GEO_L.forEach(l => {
+    for (let n = 0; n < 20; n++) {
+      const st = buildSteps(l);
+      const models = st.filter(s => s.model && s.type !== 'reveal');
+      if (n === 0) {
+        check(l.id + ': tutte le risposte modello giuste', models.every(s => evaluate(s, s.model).ok));
+        check(l.id + ': ripetizioni giuste', models.every(s => buildDrill(s, 5, []).every(d => evaluate(d, d.model).ok)));
+        check(l.id + ': lunghezza ragionevole', st.length < 100);
+      }
+      if (l.fresh && st.slice(0, st.findIndex(s => s.type === 'reveal')).some(s => s.show === l.fresh && /Cina/.test(s.prompt + s.model))) { check(l.id + ': il paese della Muraglia non si dice prima', false); break; }
+      const first = st.findIndex(s => s.phase !== 'present');
+      if (st.slice(1, first).some((s, i) => s.show === st[i].show)) { check(l.id + ': presentazione mai due di fila', false); break; }
     }
   });
 }

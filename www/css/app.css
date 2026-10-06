@@ -225,3 +225,7 @@ button .hint { display: block; font-size: 12px; font-weight: 600; opacity: .7; m
 #stage.talking .tlips { opacity: 1; transform-box: fill-box; transform-origin: center; animation: lips .9s linear infinite; }
 @keyframes lips { 0% { transform: scale(1, .25); } 12% { transform: scale(1, 1); } 24% { transform: scale(.9, .45); } 36% { transform: scale(1.05, .95); }
   50% { transform: scale(1, .3); } 62% { transform: scale(.95, .8); } 76% { transform: scale(1, .35); } 88% { transform: scale(1.05, 1.05); } 100% { transform: scale(1, .25); } }
+/* Menu: nome della lezione su una riga; le figure non escono dal riquadro */
+.lesson-btn > span:first-child { white-space: nowrap; }
+.lesson-btn .icons { min-width: 0; overflow: hidden; }
+.lesson-btn .icons svg { flex: none; }
