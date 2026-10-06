@@ -182,7 +182,19 @@ function showSpeed() {
   const cur = SPEEDS[DB.settings.speed] ? DB.settings.speed : 'normal';
   document.querySelectorAll('#opt-speed button').forEach(b => b.classList.toggle('on', b.dataset.speed === cur));
 }
-document.querySelectorAll('#opt-speed button').forEach(b => { b.onclick = () => { DB.settings.speed = b.dataset.speed; saveDB(); showSpeed(); }; });
+// Toccando una velocità, l'insegnante scelto fa sentire subito una domanda e la risposta, con la pausa in mezzo
+let speedDemo = null;
+function saySpeedSample() {
+  const t = TEACHERS[selectedTeacherKey()], ex = COURSE.speedSample;
+  if (!t || !ex) return;
+  clearTimeout(speedDemo);
+  Mouth.cancel();
+  Mouth.gender = t.gender;
+  Mouth.speak(ex[0], t.rate, t.pitch, () => {
+    speedDemo = setTimeout(() => { if (currentScreen === 'home') Mouth.speak(ex[1], t.modelRate, t.pitch, null); }, 700 * speed().pace);
+  });
+}
+document.querySelectorAll('#opt-speed button').forEach(b => { b.onclick = () => { DB.settings.speed = b.dataset.speed; saveDB(); showSpeed(); saySpeedSample(); }; });
 $('btn-report').onclick = () => { renderReport(); showScreen('report'); };
 
 /* ---------- Lezione ---------- */
