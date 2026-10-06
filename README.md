@@ -1,4 +1,6 @@
-# Metodo Diretto
+# CIAO
+
+*Communicator for Immersive Audio-Oral learning* (ex «Metodo Diretto»).
 
 App Android (Cordova) per imparare l'italiano con il metodo diretto, per chi parla inglese: l'insegnante indica una figura e parla solo in italiano, l'allievo risponde a voce. Menu e messaggi in inglese.
 

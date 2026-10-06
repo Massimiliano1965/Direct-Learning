@@ -40,6 +40,8 @@ h2 { font-family: var(--serif); font-weight: 400; font-size: 25px; margin: 6px 0
 .brand { display: flex; align-items: center; gap: 12px; margin: 4px 0 16px; }
 .brand .logo { width: 52px; height: 52px; flex: none; }
 .brand .logo svg { width: 100%; height: 100%; display: block; }
+.brand h1 { letter-spacing: 3px; }
+.brand .tagline { font-size: 12.5px; color: var(--accent); letter-spacing: .4px; margin-top: 2px; }
 
 /* Pulsanti: niente transition, solo cambio immediato al tocco */
 button {

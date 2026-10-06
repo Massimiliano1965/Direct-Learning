@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="it.metododiretto.app" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android">
-  <name>Metodo Diretto</name>
-  <description>Italian with the direct method: look, listen, answer.</description>
+  <name>CIAO</name>
+  <description>CIAO – Communicator for Immersive Audio-Oral learning. Languages with the direct method: look, listen, answer.</description>
   <content src="index.html" />
   <allow-intent href="market:*" />
   <preference name="Orientation" value="portrait" />
