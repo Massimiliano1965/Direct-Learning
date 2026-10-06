@@ -173,8 +173,9 @@ const CUES = {
   ok: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="46" fill="#34a847" stroke="#fff" stroke-width="4"/>
     <rect x="22" y="44" width="15" height="34" rx="3" fill="#fff"/>
     <path d="M41 46 L52 24 C54 19 61 20 61 26 L59 40 L74 40 C80 40 83 45 82 50 L78 71 C77 76 73 79 68 79 L41 79 Z" fill="#fff"/></svg>`,
-  q: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="48" fill="#c9a45c"/>
-    <text x="50" y="73" font-size="68" font-family="Georgia, 'Times New Roman', serif" font-weight="700" fill="#1a1408" text-anchor="middle">?</text></svg>`,
+  // «?» d'oro senza cerchio: sta tra l'insegnante e l'oggetto, così non copre niente
+  q: `<svg viewBox="0 0 80 100" xmlns="http://www.w3.org/2000/svg">
+    <text x="40" y="86" font-size="104" font-family="Georgia, 'Times New Roman', serif" font-weight="700" fill="#c9a45c" text-anchor="middle">?</text></svg>`,
   r: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="46" fill="#2e2b4a" stroke="#8c8fe8" stroke-width="4"/>
     <path d="M30 44 a21 21 0 0 1 38 -8" fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round"/><path d="M72 22 l-2 18 l-17 -5 z" fill="#fff"/>
     <path d="M70 56 a21 21 0 0 1 -38 8" fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round"/><path d="M28 78 l2 -18 l17 5 z" fill="#fff"/></svg>`

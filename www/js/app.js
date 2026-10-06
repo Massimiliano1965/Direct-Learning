@@ -810,6 +810,11 @@ function setCue(kind) {
     c.classList.remove('hidden');
     restartAnim(c, 'show');
   }
+  // il «?» in mezzo tra la mano dell'insegnante e l'oggetto
+  if (kind === 'q') {
+    const st = $('stage').getBoundingClientRect(), h = $('stage-hand').getBoundingClientRect(), f = $('stage-figure').getBoundingClientRect();
+    c.style.left = Math.round((h.left + h.width * 0.78 + f.left) / 2 - st.left - c.offsetWidth / 2) + 'px';
+  } else c.style.left = '';
 }
 function hideMark() { $('stage-mark').classList.add('hidden'); }
 
