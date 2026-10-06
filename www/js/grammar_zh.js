@@ -134,3 +134,104 @@ function pinyin(text) {
   return out.replace(/ ([.,?!])/g, '$1');
 }
 COURSE.show = (text) => text + '\n' + pinyin(text);
+
+/* ---------- Confronto sul SUONO (per chi non pronuncia ancora bene) ----------
+   Il microfono scrive caratteri con un suono simile ma diversi («日系说的» per «这是桌子»).
+   Quindi: caratteri → sillabe senza toni → somiglianza con le frasi possibili del passo.
+   Vince la frase che somiglia di più; se è quella giusta e somiglia abbastanza, va bene.
+   Quanto basta dipende dall'insegnante: Mass vuole quasi la pronuncia giusta, Sara molto meno. */
+const ZH_TOL = { mass: 0.82, giulia: 0.72, luca: 0.58, sara: 0.45 };
+function zhTol() {
+  const t = (typeof L !== 'undefined' && L && L.teacher) ? L.teacher.key : null;
+  return ZH_TOL[t] || 0.6;
+}
+function zhSyl(text) {
+  const out = [];
+  for (const ch of String(text || '')) if (ZH_SOUND[ch]) out.push(ZH_SOUND[ch]);
+  return out;
+}
+const ZH_INI = ['zh', 'ch', 'sh', 'b', 'p', 'm', 'f', 'd', 't', 'n', 'l', 'g', 'k', 'h', 'j', 'q', 'x', 'r', 'z', 'c', 's', 'y', 'w'];
+// suoni che chi impara confonde: stesso gruppo = quasi uguale
+const ZH_GRP = { zh: 'Z', z: 'Z', j: 'Z', ch: 'C', c: 'C', q: 'C', sh: 'S', s: 'S', x: 'S', r: 'R',
+  b: 'B', p: 'B', d: 'D', t: 'D', g: 'G', k: 'G', h: 'H', f: 'H', l: 'L', n: 'L', m: 'M', y: '', w: '', '': '' };
+const ZH_NEAR = { 'Z|C': 0.5, 'Z|S': 0.45, 'C|S': 0.45, 'Z|R': 0.45, 'S|R': 0.4, 'L|R': 0.45, 'B|M': 0.3, 'D|L': 0.3 };
+function zhSplit(s) {
+  const i = ZH_INI.find(x => s.startsWith(x)) || '';
+  let f = s.slice(i.length);
+  if (i === 'y') f = f === 'u' || f.startsWith('u') ? 'v' + f.slice(1) : (f.startsWith('i') ? f : 'i' + f);
+  if (i === 'w') f = f.startsWith('u') ? f : 'u' + f;
+  if (/^(zh|ch|sh|r|z|c|s)$/.test(i) && f === 'i') f = 'I';           // la «i» di shi/zhi/ri/si
+  if (/^[jqx]$/.test(i) && f.startsWith('u')) f = 'v' + f.slice(1);   // ju = jü
+  return [i, f];
+}
+function zhEdit(a, b) {
+  const d = [];
+  for (let i = 0; i <= a.length; i++) { d[i] = [i]; for (let j = 1; j <= b.length; j++) d[i][j] = i ? 0 : j; }
+  for (let i = 1; i <= a.length; i++) for (let j = 1; j <= b.length; j++)
+    d[i][j] = Math.min(d[i - 1][j] + 1, d[i][j - 1] + 1, d[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1));
+  return d[a.length][b.length];
+}
+function zhSylSim(a, b) {
+  if (a === b) return 1;
+  const [ia, fa] = zhSplit(a), [ib, fb] = zhSplit(b);
+  const ga = ZH_GRP[ia], gb = ZH_GRP[ib];
+  const iniS = ia === ib ? 1 : ga === gb ? 0.8 : (ZH_NEAR[ga + '|' + gb] || ZH_NEAR[gb + '|' + ga] || 0);
+  const fA = fa === 'I' ? 'i' : fa, fB = fb === 'I' ? 'i' : fb;
+  const finS = fa === fb ? 1 : Math.max(0, 1 - zhEdit(fA, fB) / Math.max(fA.length, fB.length, 1));
+  return 0.45 * iniS + 0.55 * finS;
+}
+// somiglianza tra due frasi (sillabe allineate, quelle in più o in meno costano)
+function zhSim(a, b) {
+  if (!a.length || !b.length) return 0;
+  const GAP = -0.25;
+  const d = [];
+  for (let i = 0; i <= a.length; i++) { d[i] = []; for (let j = 0; j <= b.length; j++) d[i][j] = 0; }
+  for (let i = 1; i <= a.length; i++) d[i][0] = i * GAP;
+  for (let j = 1; j <= b.length; j++) d[0][j] = j * GAP;
+  for (let i = 1; i <= a.length; i++) for (let j = 1; j <= b.length; j++)
+    d[i][j] = Math.max(d[i - 1][j - 1] + zhSylSim(a[i - 1], b[j - 1]), d[i - 1][j] + GAP, d[i][j - 1] + GAP);
+  return Math.max(0, d[a.length][b.length] / Math.max(a.length, b.length));
+}
+// Frasi possibili per un passo: quelle giuste (ok) e quelle sbagliate più probabili
+function zhCandidates(step) {
+  const all = Object.keys(ITEMS), X = step.show, out = [];
+  const add = (t, ok, full) => out.push({ syl: zhSyl(t), ok: ok, full: !!full });
+  const pres = (k) => '这是' + np(k);
+  if (step.type === 'echo' && step.check === 'question') { add('这是什么', true); all.forEach(k => add(pres(k), false)); return out; }
+  if (step.type === 'echo') { all.forEach(k => { add(pres(k), k === X); add('这不是' + np(k), false); }); return out; }
+  if (step.type === 'yes') {
+    all.forEach(k => { add('是这是' + np(k), k === X); add('不是这不是' + np(k), false); add(pres(k), false); });
+    return out;
+  }
+  if (step.type === 'neg') {
+    all.forEach(k => { add('不是这不是' + np(k), k === step.ask); add('是这是' + np(k), false); add(pres(k), false); });
+    if (!step.fresh) all.forEach(k => { if (k !== step.ask) add('不是这不是' + np(step.ask) + '这是' + np(k), k === X, true); });
+    return out;
+  }
+  // alt, key
+  all.forEach(k => add(pres(k), k === X));
+  add('这是什么', false);
+  return out;
+}
+function zhBySound(step, text) {
+  const heard = zhSyl(text);
+  if (!heard.length) return null;
+  const cands = zhCandidates(step);
+  let best = null, bestWrong = 0;
+  cands.forEach(c => {
+    const s = zhSim(heard, c.syl);
+    if (c.ok) { if (!best || s > best.s) best = { s: s, full: c.full }; }
+    else bestWrong = Math.max(bestWrong, s);
+  });
+  const tol = zhTol();
+  if (!best || best.s < tol || best.s <= bestWrong) return null;
+  return { ok: true, full: best.full || step.type !== 'neg', bySound: true };
+}
+const zhEvaluateExact = evaluate;
+evaluate = function (step, text) {
+  const r = zhEvaluateExact(step, text);
+  if (r.ok) return r;
+  return zhBySound(step, text) || r;
+};
+// Sotto «Heard» anche la pronuncia di quello che ha capito il microfono
+COURSE.heard = (text) => { const p = zhSyl(text).join(' '); return p ? text + ' (' + p + ')' : text; };

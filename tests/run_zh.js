@@ -6,7 +6,7 @@ const vm = require('vm');
 
 const ctx = { console: console };
 vm.createContext(ctx);
-['course_zh.js', 'data.js', 'logic.js', 'grammar_zh.js'].forEach(f => {
+['course_zh.js', 'data.js', 'logic.js', 'pinyin_zh.js', 'grammar_zh.js'].forEach(f => {
   vm.runInContext(fs.readFileSync(path.join(__dirname, '..', 'www', 'js', f), 'utf8'), ctx, { filename: f });
 });
 const run = (code) => vm.runInContext(code, ctx);
@@ -37,7 +37,8 @@ const echoBook = { type: 'echo', check: 'claim', show: 'book' };
 const askQ = { type: 'echo', check: 'question', show: 'pen' };
 [
   [echoBook, '这是书。', true], [echoBook, '这是书', true], [echoBook, '这是一本书', true], [echoBook, '这是输', true],
-  [echoBook, '这是树', false], [echoBook, '这不是书', false], [echoBook, '这是桌子', false],
+  [echoBook, '这是树', true],   // i toni non si giudicano: il microfono sceglie i caratteri a caso tra quelli con lo stesso suono
+   [echoBook, '这不是书', false], [echoBook, '这是桌子', false],
   [yesBook, '是，这是书。', true], [yesBook, '是这是书', true], [yesBook, '是的，这是书', true], [yesBook, '对，这是书', true],
   [yesBook, '这是书', false], [yesBook, '是', false], [yesBook, '不是，这不是书', false], [yesBook, '是，这是桌子', false],
   [negTable, '不是，这不是书。', true], [negTable, '不是这不是书', true], [negTable, '这不是书', true],
@@ -49,6 +50,19 @@ const askQ = { type: 'echo', check: 'question', show: 'pen' };
 ].forEach(([st, t, ok]) => check('risposta «' + t + '» a ' + st.type + ' → ' + ok, evaluate(st, t).ok === ok));
 check('no completo: full', evaluate(negTable, '不是，这不是书。这是桌子。').full === true);
 check('no senza correzione: full=false', evaluate(negTable, '不是，这不是书。').full === false);
+// 2b. Confronto sul suono (lo screenshot di Massi: «日系说的» per «这是桌子»)
+const echoTable = { type: 'echo', check: 'claim', show: 'table' };
+const withTeacher = (k, f) => { run('L = ' + (k ? '{ teacher: { key: "' + k + '" } }' : 'undefined')); try { return f(); } finally { run('L = undefined'); } };
+run('var L;');
+check('Sara accetta «日系说的» per «这是桌子»', withTeacher('sara', () => evaluate(echoTable, '日系说的').ok));
+check('Mass non accetta «日系说的»', !withTeacher('mass', () => evaluate(echoTable, '日系说的').ok));
+check('suono vicino: «这事桌子» va bene', evaluate(echoTable, '这事桌子').ok);
+check('suono vicino: «这是捉紫» va bene', evaluate(echoTable, '这是捉紫').ok);
+check('parola sbagliata per suono: «这是书» no', !withTeacher('sara', () => evaluate(echoTable, '这是书').ok));
+check('sì per suono: «是这是数» va bene', evaluate({ type: 'yes', show: 'book' }, '是这是数').ok);
+check('sì/no non si confondono: «不是这不是书» a domanda sì', !withTeacher('sara', () => evaluate({ type: 'yes', show: 'book' }, '不是这不是书').ok));
+check('no per suono: «不是这不是数» va bene', evaluate(negTable, '不是这不是数').ok);
+check('pinyin di quello che si è sentito', COURSE.heard('日系说的') === '日系说的 (ri xi shuo de)');
 check('eco della domanda', isEcho({ prompt: '这是书吗？', model: '是，这是书。' }, '这是书吗'));
 
 // 3. Domande dell'allievo (ha toccato la sedia)

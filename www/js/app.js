@@ -471,12 +471,12 @@ function handleAnswer(alts) {
     }
   }
   if (st.type === 'ask') {
-    $('heard').textContent = alts[0] ? 'Heard: “' + alts[0] + '”' : '';
+    $('heard').textContent = alts[0] ? 'Heard: “' + (COURSE.heard ? COURSE.heard(alts[0]) : alts[0]) + '”' : '';
     handleAsk(alts);
     return;
   }
   const res = evaluateAll(st, alts);
-  $('heard').textContent = alts[0] ? 'Heard: “' + alts[0] + '”' : '';
+  $('heard').textContent = alts[0] ? 'Heard: “' + (COURSE.heard ? COURSE.heard(alts[0]) : alts[0]) + '”' : '';
   if (res.ok) onCorrect(res); else onWrong();
 }
 
