@@ -82,6 +82,7 @@ async function demoScript(t, run) {
   const cap = (text) => { $('demo-caption').textContent = text; };
   const heard = (text) => { $('heard').textContent = text ? 'Heard: “' + text + '”' : ''; };
   const step = (n, obj, prompt) => {
+    hideYourTurn();
     $('l-count').textContent = n + ' / ' + DEMO_STEPS;
     setProgress(n - 1, DEMO_STEPS);
     heard('');
@@ -128,19 +129,30 @@ async function demoScript(t, run) {
   const noChairOnBook = S.neg('book', 'chair');
   const altQ = altPrompt('book', 'pen');
 
-  // 1. Presentazione
-  step(1, 'book', pres('book'));
-  cap('The teacher points at a picture and says what it is.');
-  await T(pres('book'));
-  cap('Arrows: repeat the sentence. Red dot: your turn to speak.');
-  await studentTalks(pres('book'));
+  // 1. Presentazione: tutti gli oggetti, tre giri, prima di qualsiasi domanda
+  cap('The teacher points at each picture and says what it is. You repeat.');
+  for (let r = 0; r < 3; r++) {
+    for (const x of ['book', 'table', 'chair']) {
+      step(1, x, pres(x));
+      await T(pres(x));
+      if (r === 0 && x === 'book') cap('Arrows: repeat the sentence. Red dot: your turn to speak.');
+      await studentTalks(pres(x));
+    }
+    if (r === 0) cap('Three times, all the objects.');
+  }
   await praise();
 
-  // 2. Domanda con il sì
+  // 2. Domanda con il sì: l'insegnante chiede, risponde lui e poi indica l'allievo
   step(2, 'book', yesQ.prompt);
-  cap('Big «?»: it\'s a question, so answer it. Always with a full sentence.');
+  cap('Big «?»: it\'s a question.');
   await T(yesQ.prompt);
+  cap('The teacher gives the answer, then points at you: repeat it.');
+  await sleep(350);
+  if (DB.settings.showText) $('prompt-text').textContent = shown(yesQ.model);
+  await T(yesQ.model, t.modelRate);
+  showYourTurn(t);
   await studentTalks(yesQ.model);
+  hideYourTurn();
   await praise();
 
   // 3. Domanda con il no

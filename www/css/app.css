@@ -117,6 +117,20 @@ button .hint { display: block; font-size: 12px; font-weight: 600; opacity: .7; m
 @keyframes spin { to { transform: rotate(360deg); } }
 @keyframes blink { from { opacity: .45; } to { opacity: 1; } }
 #stage-cue.show { animation: pop .35s cubic-bezier(.2,1.6,.4,1); }
+/* «?» della domanda: grande, entra dal centro del palco e poi pulsa nell'angolo */
+#stage-cue[data-kind="q"] { width: 112px; height: 112px; right: 4px; top: 4px; }
+#stage-cue[data-kind="q"].show { animation: qbig .8s cubic-bezier(.2,1.3,.4,1); }
+#stage-cue[data-kind="q"] svg { animation: qpulse 1.1s ease-in-out .8s infinite; }
+@keyframes qbig { 0% { transform: translate(-90px, 40px) scale(1.9); opacity: 0; } 35% { transform: translate(-90px, 40px) scale(1.6); opacity: 1; } 100% { transform: none; } }
+@keyframes qpulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.08); } }
+/* «Tocca a te»: l'insegnante punta il dito verso l'allievo */
+#stage-you { position: absolute; left: 10px; bottom: 8px; display: flex; align-items: flex-end; pointer-events: none; }
+#stage-you .avatar.big { width: 64px; height: 64px; font-size: 28px; box-shadow: 0 4px 12px rgba(0,0,0,.45); border: 3px solid #fff; }
+#stage-you .you-hand { width: 84px; height: 84px; margin: 0 0 -6px -8px; display: block; transform: rotate(38deg); }
+#stage-you .you-hand svg { animation: poke .9s ease-in-out infinite; transform-origin: 20% 55%; }
+@keyframes poke { 0%,100% { transform: scale(1); } 45% { transform: scale(1.3) translate(6px, 2px); } 60% { transform: scale(1.2) translate(4px, 1px); } }
+#stage-you.show { animation: pop .45s cubic-bezier(.2,1.5,.4,1); }
+#stage.yourturn #stage-hand { visibility: hidden !important; }
 #stage-mark.show { animation: pop .35s cubic-bezier(.2,1.6,.4,1); }
 .steam path { animation: steam 2.4s ease-in-out infinite; }
 .steam path + path { animation-delay: 1.2s; }

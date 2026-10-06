@@ -253,7 +253,7 @@ function mixStep(items, types, prevShow, q) {
 }
 
 // Sequenza della lezione (come in classe):
-// 1. presentazione delle parole note        «È un libro.» → ripete
+// 1. presentazione delle parole note, 3 giri «È un libro.» → ripete
 // 2. domande con il sì                       «È un libro?» → «Sì, è un libro.»
 // 3. domande con il no                       «È un tavolo?» → «No, non è un tavolo.»
 // 4. sì e no mescolati
@@ -280,8 +280,9 @@ function buildSteps(lesson) {
   const st = [];
   const add = (s, phase) => { s.phase = phase; st.push(s); return s; };
 
+  // Tre giri di presentazione di TUTTI gli oggetti prima della prima domanda
   K.forEach(x => add(S.present(x, true), 'present'));      // «Questo è un libro.»
-  shuffle(K).forEach(x => add(S.present(x), 'present'));     // «È un libro.»
+  for (let r = 0; r < 2; r++) shuffle(K).forEach(x => add(S.present(x), 'present'));     // «È un libro.»
   for (let r = 0; r < 2; r++) shuffle(K).forEach(x => add(S.yes(x, q()), 'yes'));
   if (!R.length) {
     const pairs = [];

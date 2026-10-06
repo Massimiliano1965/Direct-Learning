@@ -204,6 +204,13 @@ LESSONS.forEach(l => {
     p.slice(l.known.length).every(s => /^È /.test(s.prompt)));
   check(l.id + ': domande senza «questo» nelle lezioni che non lo insegnano', l.questo || buildSteps(l).every(s => !/^È quest/.test(s.prompt)));
 });
+// 3b3. Tre giri di presentazione di tutti gli oggetti prima della prima domanda
+LESSONS.forEach(l => {
+  const st = buildSteps(l), firstQ = st.findIndex(s => s.phase !== 'present');
+  const pres = st.slice(0, firstQ);
+  check(l.id + ': 3 giri di presentazione prima della prima domanda', pres.length === l.known.length * 3 &&
+    [0, 1, 2].every(r => pres.slice(r * l.known.length, (r + 1) * l.known.length).map(s => s.show).sort().join() === l.known.slice().sort().join()));
+});
 check('«Sì, questo è un libro.» accettato', evaluate({ type: 'yes', show: 'book' }, 'Sì, questo è un libro.').ok);
 check('«Questa è una sedia.» ripetuto', evaluate({ type: 'echo', check: 'claim', show: 'chair' }, 'Questa è una sedia.').ok);
 

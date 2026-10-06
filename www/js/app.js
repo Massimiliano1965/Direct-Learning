@@ -183,6 +183,7 @@ function startLesson(id) {
     steps: buildSteps(lesson), streak: 0,
     i: 0, attempts: 0, noSpeech: 0, first: 0, busy: false, paused: false,
     drill: null, di: 0, repFails: 0, errCount: 0,
+    coach: true, coached: false,
     start: Date.now(), listenStart: 0
   };
   lastLessonId = id;
@@ -216,6 +217,7 @@ function stopLesson() {
   L = null;
   $('screen-lesson').classList.remove('tunnel');
   hideMark();
+  hideYourTurn();
   setCue('');
   setPickable(false);
   hideFinger();
@@ -286,6 +288,7 @@ function setProgress(done, total) { $('progress-fill').style.width = Math.round(
 function drawStep() {
   const st = cur();
   hideMark();
+  hideYourTurn();
   $('l-count').textContent = (L.i + 1) + ' / ' + L.steps.length;
   setProgress(L.i, L.steps.length);
   $('heard').textContent = '';
@@ -317,6 +320,7 @@ function askStep() {
     L.busy = false;
     // L'insegnante si è risposto da solo («Che cos'è? È una penna.»): avanti
     if (st.type === 'reveal' && !st.drill) { L.busy = true; nextStep(run, 900); return; }
+    if (coachable(st) && L.coach) { coachAnswer(st, run); return; }   // anche con Repeat
     listenSoon(run);
   });
   // Un attimo di silenzio prima dello sfogo
@@ -436,6 +440,46 @@ function handleAsk(alts) {
   });
 }
 
+/* ---------- Prime domande con il sì: l'insegnante dà l'esempio ----------
+   «È un libro?» → l'insegnante risponde lui «Sì, è un libro.» e indica l'allievo col dito:
+   tocca a lui ripeterla. Dipende dal tempo di risposta: dopo una risposta con l'esempio,
+   la domanda dopo l'allievo risponde da solo; se tace, sbaglia o ci mette troppo
+   (più di COACH_SLOW), l'esempio torna. */
+const COACH_SLOW = 5000;
+function coachable(st) { return !!st && st.type === 'yes' && st.phase === 'yes' && !st.drill; }
+function coachAnswer(st, run) {
+  const t = L.teacher;
+  L.busy = true;
+  L.coached = true;
+  later(() => {
+    if (!alive(run)) return;
+    if (DB.settings.showText) $('prompt-text').textContent = shown(st.model);
+    Mouth.speak(st.model, t.modelRate, t.pitch, () => {
+      if (!alive(run)) return;
+      showYourTurn(t);
+      listenSoon(run);
+    });
+  }, 350);
+}
+// L'insegnante punta il dito verso l'allievo: «tocca a te»
+function showYourTurn(t) {
+  setCue('r');
+  $('stage-you').innerHTML = avatarHtml(t, 'big') + '<span class="you-hand">' + HAND + '</span>';
+  $('stage-you').classList.remove('hidden');
+  $('stage').classList.add('yourturn');
+  restartAnim($('stage-you'), 'show');
+}
+function hideYourTurn() {
+  $('stage-you').classList.add('hidden');
+  $('stage').classList.remove('yourturn');
+}
+// Dopo una risposta a una domanda col sì: serve ancora l'esempio alla prossima?
+function coachAfter(st, ok) {
+  if (!coachable(st)) return;
+  if (L.coached) L.coach = !ok;
+  else L.coach = !ok || (Date.now() - L.listenStart) > COACH_SLOW;
+}
+
 // Il microfono parte un attimo dopo la fine della voce dell'insegnante, così non sente
 // la coda della domanda. La prima risposta che è solo l'eco della domanda si ignora.
 function listenSoon(run) {
@@ -461,6 +505,8 @@ function handleListenError(code, run) {
   if (code === 'unsupported') { setStatus('This phone has no speech recognition. You can only listen', 'err'); return; }
   if (code === 'network') { setStatus('Speech recognition needs internet. Tap ' + uiWord('talk'), 'err'); return; }
   L.noSpeech++;
+  const st = cur();
+  if (coachable(st) && !L.coached) { L.coach = true; coachAnswer(st, run); return; }
   if (L.noSpeech <= 2) {
     setStatus('I didn\'t hear you', 'wait');
     later(() => { if (alive(run)) listen(); }, 700);
@@ -471,6 +517,7 @@ function handleListenError(code, run) {
 
 function handleAnswer(alts) {
   const st = cur();
+  hideYourTurn();
   if (L.echoGuard) {
     L.echoGuard = false;
     if (alts.length && alts.every(a => isEcho(st, a))) {
@@ -509,6 +556,7 @@ function onCorrect(res) {
     later(() => { if (alive(run)) { askStep(); setStatus(repLabel(), 'wait'); } }, 500);
     return;
   }
+  coachAfter(st, true);
   const ts = DB.teachers[L.teacher.key];
   ts.items++;
   if (L.attempts === 0) {
@@ -549,6 +597,7 @@ function nextStep(run, delay) {
   L.di = 0;
   L.repFails = 0;
   L.pick = null;
+  L.coached = false;
   later(() => { if (alive(run)) runStep(); }, delay);
 }
 
@@ -590,6 +639,7 @@ function onWrong() {
       return;
     }
   } else {
+    coachAfter(st, false);
     L.attempts++;
     ts.items++;          // il passo conta come fatto, ma non giusto al primo colpo
     L.drill = buildDrill(st, repeatsFor(t, L.errCount++), L.items);
@@ -706,6 +756,7 @@ function onResume() {
     Awake.keep();
     // Passo già concluso prima della pausa (giusto o risposta data): si va al successivo
     if (L.answered) { L.i++; L.answered = false; L.attempts = 0; L.noSpeech = 0; }
+    L.coached = false;
     if (L.i >= L.steps.length) { finishLesson(); return; }
     drawStep();
     askStep();
