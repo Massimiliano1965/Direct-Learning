@@ -62,7 +62,7 @@ const SG = {
   dAlt: (X, wrong) => {
     const m = gk(X), right = GEO[wrong].type === 'citta' ? GEO[m].city : GEO[m].country;
     const o = Math.random() < 0.5 ? [right, wrong] : [wrong, right];
-    return { type: 'alt', geo: 'dove', show: X, prompt: gSubj(m) + ' è ' + gAt(o[0]) + ' o ' + gAt(o[1]) + '?', model: gSubj(m) + ' è ' + gAt(right) + '.' };
+    return { type: 'alt', geo: 'dove', show: X, places: o, prompt: gSubj(m) + ' è ' + gAt(o[0]) + ' o ' + gAt(o[1]) + '?', model: gSubj(m) + ' è ' + gAt(right) + '.' };
   },
   dKey: (X) => ({ type: 'key', geo: 'dove', show: X, prompt: 'Dov\'è ' + gWith(gk(X)) + '?', model: gSubj(gk(X)) + ' è ' + gWhere(gk(X)) + '.' }),
   dReveal: (X) => ({ type: 'reveal', geo: 'dove', show: X, prompt: 'Dov\'è ' + gWith(gk(X)) + '? ' + gSubj(gk(X)) + ' è ' + gWhere(gk(X)) + '.', model: '' }),
@@ -257,3 +257,17 @@ function buildGeoSteps(lesson) {
   S.reveal = function (X) { return isGeo(X) ? (GEO[gk(X)].type === 'mon' ? SG.dReveal(X) : { type: 'reveal', geo: 'cat', show: X, prompt: 'Che cosa è ' + gWith(gk(X)) + '? ' + gSubj(gk(X)) + ' è ' + gCat(gk(X)) + '.', model: '' }) : bReveal.apply(null, arguments); };
   S.present = function (X) { return isGeo(X) ? (GEO[gk(X)].type === 'mon' ? SG.dPresent(X, GEO[gk(X)].city || GEO[gk(X)].country) : SG.present(X)) : bPresent.apply(null, arguments); };
 })();
+
+/* ---------- Luoghi colorati (aiuto nelle prime lezioni: lesson.placeHints) ----------
+   Mentre l'insegnante fa la domanda i luoghi di cui parla pulsano in oro; dopo la risposta
+   (o quando l'insegnante dà la frase giusta) il luogo vero diventa verde, quello sbagliato rosso. */
+function stepPlaces(st) {
+  if (!st || st.geo !== 'dove' || !st.show) return null;
+  const m = gk(st.show);
+  if (st.type === 'yes' || (st.type === 'echo' && st.check === 'claim')) return [st.place];
+  if (st.type === 'neg') return [st.ask];
+  if (st.type === 'alt') return st.places || null;
+  if (st.type === 'key' || st.type === 'reveal') return [GEO[m].city || GEO[m].country];
+  return null;
+}
+function placeIsTrue(st, p) { return isTrue(gk(st.show), p); }

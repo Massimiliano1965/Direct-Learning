@@ -420,6 +420,11 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].map(k => TEACHER
   check('allievo 9', evalAsk('g_colosseo', 'Dov\'è il Colosseo?').kind === 'what' && evalAsk('g_colosseo', 'Il Colosseo è a Parigi?').kind === 'no' &&
     evalAsk('g_colosseo', 'Il Colosseo è in Roma?').model === 'Il Colosseo è a Roma?' && answerAsk('g_colosseo', { kind: 'no', ask: 'parigi' }) === 'No, il Colosseo non è a Parigi. Il Colosseo è a Roma.');
   check('allievo 8', evalAsk('g_roma', 'Che cosa è Roma?').kind === 'what' && evalAsk('g_roma', 'Roma è un paese?').kind === 'no' && answerAsk('g_roma', { kind: 'no' }) === 'No, Roma non è un paese. Roma è una città.');
+  const stepPlaces = run('stepPlaces'), placeIsTrue = run('placeIsTrue');
+  check('luoghi: domanda «o» mostra i due luoghi', stepPlaces(SG.dAlt('g_bigben', 'parigi')).slice().sort().join() === 'londra,parigi');
+  check('luoghi: vero verde, falso rosso', placeIsTrue(SG.dKey('g_bigben'), 'londra') && placeIsTrue(SG.dKey('g_bigben'), 'inghilterra') && !placeIsTrue(SG.dKey('g_bigben'), 'parigi'));
+  check('luoghi: solo nella lezione 9 (aiuto)', GEO_L.find(l => l.id === 'l9').placeHints && !GEO_L.find(l => l.id === 'l8').placeHints);
+  check('luoghi: ogni città ha il suo puntino', ['roma', 'parigi', 'londra', 'newyork'].every(c => run('CITY_DOTS')[c]));
   GEO_L.forEach(l => {
     for (let n = 0; n < 20; n++) {
       const st = buildSteps(l);

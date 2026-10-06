@@ -61,6 +61,14 @@ const FLAG = {
   egitto: `<rect width="100" height="34" fill="#cd2a34"/><rect y="33" width="100" height="34" fill="#f4f4f4"/><rect y="66" width="100" height="34" fill="#1d1d1d"/><circle cx="50" cy="50" r="5" fill="#c9a45c"/>`
 };
 const MAP2 = (k) => `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><g filter="url(#geoShadow)"><g clip-path="url(#geoMap_${k})">${FLAG[k]}</g></g><path d="${MAPS[k]}" fill="none" stroke="#f3eee2" stroke-width=".6" opacity=".8"/></svg>`;
+// Città sulla mappa del loro paese: [x, y, paese] (stessa proiezione delle mappe)
+const CITY_DOTS = {"roma": [49.7, 48.6, "italia"], "parigi": [49.7, 26.2, "francia"], "londra": [60.7, 75.9, "inghilterra"], "newyork": [85.9, 38.5, "america"]};
+// Figura di un luogo: paese = la sua mappa; città = mappa del paese con il puntino d'oro
+const PLACE_FIG = (p) => {
+  const d = CITY_DOTS[p];
+  if (!d) return MAP2(p);
+  return MAP2(d[2]).replace('</svg>', `<circle cx="${d[0]}" cy="${d[1]}" r="8" fill="none" stroke="#1a1408" stroke-width="2"/><circle cx="${d[0]}" cy="${d[1]}" r="6" fill="#e0c287" stroke="#1a1408" stroke-width="1.6"/><circle cx="${d[0]}" cy="${d[1]}" r="2" fill="#1a1408"/></svg>`);
+};
 const GEO_DEFS = `<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
   <linearGradient id="geoSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2b3d63"/><stop offset=".65" stop-color="#6d7fa6"/><stop offset="1" stop-color="#d9b88a"/></linearGradient>
   <clipPath id="geoRound"><circle cx="50" cy="50" r="46"/></clipPath>

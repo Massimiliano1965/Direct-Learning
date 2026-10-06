@@ -72,7 +72,7 @@ const LESSONS = [
   // capitolo 2, esercizio 5 B: «Che cosa è Roma?» — città (il loro monumento) e paesi (mappa con la bandiera)
   { id: 'l8', title: 'Lezione 8', geo: 'cat', known: ['g_roma', 'g_italia', 'g_parigi', 'g_francia', 'g_newyork', 'g_america', 'g_londra', 'g_cina'] },
   // capitolo 2, esercizio 5 A: «In o a?» — il Colosseo è a Roma, in Italia; la Grande Muraglia da scoprire con «Dov'è…?»
-  { id: 'l9', title: 'Lezione 9', geo: 'dove', known: ['g_colosseo', 'g_eiffel', 'g_bigben', 'g_liberta'], fresh: 'g_muraglia' }
+  { id: 'l9', title: 'Lezione 9', geo: 'dove', placeHints: true, known: ['g_colosseo', 'g_eiffel', 'g_bigben', 'g_liberta'], fresh: 'g_muraglia' }
 ];
 
 // Quattro insegnanti, dal più rigido al più indulgente. gender = voce maschile o femminile.

@@ -239,6 +239,7 @@ function stopLesson() {
   $('screen-lesson').classList.remove('tunnel');
   hideMark();
   hideYourTurn();
+  $('stage-places').innerHTML = '';
   $('btn-talk').classList.remove('flash');
   setCue('');
   setPickable(false);
@@ -248,7 +249,8 @@ function stopLesson() {
 function buildGrid(items) {
   const grid = $('objects-grid');
   grid.innerHTML = '';
-  grid.classList.toggle('cols4', items.length >= 4 && items.length <= 8);
+  grid.classList.toggle('five', items.length === 5);   // 3 sopra e 2 sotto, centrate
+  grid.classList.toggle('cols4', items.length >= 4 && items.length <= 8 && items.length !== 5);
   grid.classList.toggle('cols5', items.length > 8);
   items.forEach(obj => {
     const box = document.createElement('div');
@@ -320,8 +322,18 @@ function setPrompt(text) { $('prompt-text').textContent = DB.settings.showText ?
 function setProgress(done, total) { $('progress-fill').style.width = Math.round(done / total * 100) + '%'; }
 
 // Disegna il passo corrente senza azzerare i tentativi
+/* ---------- Luoghi colorati (lezione 9: «a Londra», «in Francia») ----------
+   mode 'ask' = pulsano in oro (guarda qui); 'result' = il luogo vero verde, lo sbagliato rosso. */
+function showPlaces(st, mode) {
+  const el = $('stage-places');
+  const ps = (L && L.lesson.placeHints && typeof stepPlaces === 'function') ? stepPlaces(st) : null;
+  if (!ps || !ps.length || (mode === 'ask' && (st.type === 'key' || st.type === 'reveal'))) { el.innerHTML = ''; return; }
+  el.innerHTML = ps.map(p => '<div class="place ' + (mode === 'ask' ? 'pulse' : (placeIsTrue(st, p) ? 'ok' : 'no')) + '">' + PLACE_FIG(p) + '</div>').join('');
+}
+
 function drawStep() {
   const st = cur();
+  $('stage-places').innerHTML = '';
   hideMark();
   hideYourTurn();
   $('l-count').textContent = (L.i + 1) + ' / ' + L.steps.length;
@@ -348,6 +360,8 @@ function askStep() {
   setStatus(tx('listen'), '');
   if (st.type === 'ask') { askTurn(st, run); return; }
   setCue(cueFor(st));
+  // frase che dice dov'è (o l'insegnante che risponde da solo): il luogo è già verde; domanda: pulsa in oro
+  showPlaces(st, (st.type === 'echo' && st.check === 'claim') || st.type === 'reveal' ? 'result' : 'ask');
   setPose(cueFor(st) === 'q' ? 'ask' : 'show');
   // Durante le ripetizioni l'insegnante parla col ritmo del modello
   const rate = st.drill ? L.teacher.modelRate : L.teacher.rate * (st.speed || 1);
@@ -580,6 +594,7 @@ function onCorrect(res) {
     L.busy = true;
     flashGood();
     setCue('ok');
+    showPlaces(st, 'result');
     if (L.di >= L.drill.length) { setStatus(tx('correct'), 'ok'); hideMark(); nextStep(run, 300); return; }
     const d = cur();
     $('heard').textContent = '';
@@ -603,6 +618,7 @@ function onCorrect(res) {
   setStatus(tx('correct'), 'ok');
   flashGood();
   setCue('ok');
+  showPlaces(st, 'result');
   const t = L.teacher;
   L.streak++;
   const parts = [];
@@ -681,6 +697,7 @@ function onWrong() {
   saveDB();
   setStatus(repLabel(), 'err');
   const d = cur();
+  showPlaces(d, 'result');   // mentre l'insegnante dice la frase giusta: verde il luogo vero, rosso lo sbagliato
   if (DB.settings.showText) $('prompt-text').textContent = shown(d.model);
   Mouth.speakParts([
     { text: t.wrong, rate: t.rate },
