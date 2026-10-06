@@ -45,7 +45,8 @@ function ttsPickVoice(gender) {
   const key = gender || '-';
   if (key in ttsVoiceIds) return Promise.resolve(ttsVoiceIds[key]);
   return ttsLoadVoices().then(list => {
-    const names = list.map(v => String((v && (v.identifier || v.name)) || '')).filter(n => n.toLowerCase().indexOf(COURSE.lang.toLowerCase()) !== -1);
+    const tags = (COURSE.voiceTags || [COURSE.lang]).map(x => x.toLowerCase());
+    const names = list.map(v => String((v && (v.identifier || v.name)) || '')).filter(n => tags.some(x => n.toLowerCase().indexOf(x) !== -1));
     const local = names.filter(n => /local/i.test(n));
     const pool = local.length ? local : names.filter(n => !/network/i.test(n));
     const best = (gender && pool.find(n => voiceGender(n) === gender)) || pool[0] || '';

@@ -147,9 +147,10 @@ function evaluateAll(step, alts) {
 
 /* ---------- Passi ---------- */
 
-const Q = "Che cos'è?";
+var Q = "Che cos'è?";   // var: un altro pacchetto di lingua può cambiarla
 // Domanda con «questo»: «È questo un libro?» «È questa una sedia?» (accordo con la parola chiesta).
 // q = true solo nelle lezioni che la insegnano; le risposte restano «Sì, è un libro.»
+function altPrompt(a, b, q) { return 'È ' + qnp(a, q) + ' o ' + np(b) + '?'; }
 function dem(k) { return ITEMS[k].art === 'un' || ITEMS[k].art === 'uno' ? 'questo' : 'questa'; }
 function qnp(k, q) { return q ? dem(k) + ' ' + np(k) : np(k); }
 const S = {
@@ -162,7 +163,7 @@ const S = {
   neg:  (X, Y, q) => ({ type: 'neg', show: X, ask: Y, questo: !!q, prompt: 'È ' + qnp(Y, q) + '?', model: 'No, non è ' + np(Y) + '.' }),
   alt:  (X, Y, q) => {
     const o = Math.random() < 0.5 ? [X, Y] : [Y, X];
-    return { type: 'alt', show: X, options: o, questo: !!q, prompt: 'È ' + qnp(o[0], q) + ' o ' + np(o[1]) + '?', model: 'È ' + np(X) + '.' };
+    return { type: 'alt', show: X, options: o, questo: !!q, prompt: altPrompt(o[0], o[1], q), model: 'È ' + np(X) + '.' };
   },
   key:     (X) => ({ type: 'key', show: X, prompt: Q, model: 'È ' + np(X) + '.' }),
   // L'insegnante si risponde da solo: nessuna risposta attesa
@@ -188,7 +189,7 @@ function buildDrill(st, n, items) {
   const others = items.filter(x => x !== F);
   const kinds = ['present', 'yes', 'neg'];
   // dopo una frase da ripetere si passa subito a una domanda, per non dire due volte la stessa cosa
-  const k0 = st.model === 'È ' + np(F) + '.' ? 1 : 0;
+  const k0 = st.model === S.present(F).model ? 1 : 0;
   for (let k = k0; out.length < n; k++) {
     const kind = others.length ? kinds[k % 3] : kinds[k % 2];
     const s = kind === 'present' ? S.present(F) : kind === 'yes' ? S.yes(F, st.questo) : S.neg(pick(others), F, st.questo);
@@ -287,6 +288,9 @@ function buildSteps(lesson) {
   }
   return st;
 }
+// Testo da mostrare sullo schermo (il cinese aggiunge la pronuncia sotto i caratteri)
+function shown(text) { return typeof COURSE.show === 'function' && text ? COURSE.show(text) : text; }
+
 // Passi a cui l'allievo risponde (le "rivelazioni" le dice solo l'insegnante)
 function answerSteps(steps) { return steps.filter(s => s.type !== 'reveal').length; }
 

@@ -121,7 +121,7 @@ button .hint { display: block; font-size: 12px; font-weight: 600; opacity: .7; m
 .steam path { animation: steam 2.4s ease-in-out infinite; }
 .steam path + path { animation-delay: 1.2s; }
 @keyframes steam { 0% { transform: translateY(4px); opacity: 0; } 40% { opacity: .9; } 100% { transform: translateY(-6px); opacity: 0; } }
-#prompt-text { font-size: 24px; font-weight: 700; text-align: center; min-height: 34px; margin: 12px 0 2px; }
+#prompt-text { white-space: pre-line; font-size: 24px; font-weight: 700; text-align: center; min-height: 34px; margin: 12px 0 2px; }
 #heard { font-size: 15px; color: var(--muted); text-align: center; min-height: 20px; }
 #objects-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 12px 0; }
 #objects-grid.cols4 { grid-template-columns: repeat(4, 1fr); gap: 8px; }
@@ -189,3 +189,8 @@ button .hint { display: block; font-size: 12px; font-weight: 600; opacity: .7; m
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; }
 }
+
+/* scelta della lingua del corso (solo in prova) */
+.lang-row { display: flex; gap: 10px; margin-bottom: 6px; }
+.lang-btn { flex: 1; padding: 12px; border-radius: 14px; background: var(--surface); color: var(--text); border: 2px solid var(--line); font-size: 16px; font-weight: 700; }
+.lang-btn.on { border-color: #8f91f0; background: #3b3d8f; }

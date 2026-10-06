@@ -85,6 +85,24 @@ function renderHome() {
     tl.appendChild(b);
   });
 
+  // Solo in prova: scelta della lingua del corso (ricarica l'app con l'altro pacchetto)
+  const lb = $('lang-box');
+  lb.innerHTML = '';
+  if (TEST_MODE) {
+    lb.innerHTML = '<div class="label">Course language</div>';
+    const row = document.createElement('div');
+    row.className = 'lang-row';
+    [['it', 'Italiano'], ['zh', '中文 Chinese']].forEach(([code, name]) => {
+      const b = document.createElement('button');
+      const on = (COURSE.lang.slice(0, 2) === code);
+      b.className = 'lang-btn' + (on ? ' on' : '');
+      b.textContent = name;
+      b.onclick = () => { if (on) return; try { localStorage.setItem('dl_lang', code); } catch (e) {} location.reload(); };
+      row.appendChild(b);
+    });
+    lb.appendChild(row);
+  }
+
   const ll = $('lesson-list');
   ll.innerHTML = '';
   const db = document.createElement('button');
@@ -252,7 +270,7 @@ function setStatus(text, mode) {
   $('status-text').textContent = text;
   $('mic-dot').className = mode || '';
 }
-function setPrompt(text) { $('prompt-text').textContent = DB.settings.showText ? text : ''; }
+function setPrompt(text) { $('prompt-text').textContent = DB.settings.showText ? shown(text) : ''; }
 function setProgress(done, total) { $('progress-fill').style.width = Math.round(done / total * 100) + '%'; }
 
 // Disegna il passo corrente senza azzerare i tentativi
@@ -313,7 +331,7 @@ function askTurn(st, run) {
     setStatus('Your turn: tap a picture, then ask', 'wait');
     sweepFinger(() => alive(run) && !L.pick && !L.paused);
   };
-  if (st.intro) Mouth.speak('Tocca a te.', t.rate, t.pitch, ready); else ready();
+  if (st.intro) Mouth.speak(COURSE.yourTurn, t.rate, t.pitch, ready); else ready();
 }
 // Il dito passa sopra ogni figura, la indica e poi sparisce (si ferma se l'allievo tocca prima)
 let sweepId = 0;
@@ -374,7 +392,7 @@ function handleAsk(alts) {
     flashGood();
     setCue('ok');
     const answer = answerAsk(X, r);
-    if (DB.settings.showText) $('prompt-text').textContent = answer;
+    if (DB.settings.showText) $('prompt-text').textContent = shown(answer);
     Mouth.speak(answer, t.modelRate, t.pitch, () => { if (alive(run)) nextStep(run, 500); });
     return;
   }
@@ -389,7 +407,7 @@ function handleAsk(alts) {
   if (L.attempts >= 3) {
     // dopo 3 tentativi l'insegnante fa la domanda e risponde da solo
     setStatus('Moving on', 'err');
-    Mouth.speak(Q + ' È ' + np(X) + '.', t.modelRate, t.pitch, () => {
+    Mouth.speak(S.reveal(X).prompt, t.modelRate, t.pitch, () => {
       if (!alive(run)) return;
       scr.classList.remove('tunnel');
       nextStep(run, 600);
@@ -397,7 +415,7 @@ function handleAsk(alts) {
     return;
   }
   setStatus('Try again', 'err');
-  if (DB.settings.showText) $('prompt-text').textContent = r.model;
+  if (DB.settings.showText) $('prompt-text').textContent = shown(r.model);
   Mouth.speakParts([{ text: t.wrong, rate: t.rate }, { text: r.model, rate: t.modelRate }], t.pitch, () => {
     if (!alive(run)) return;
     scr.classList.remove('tunnel');
@@ -501,7 +519,7 @@ function onCorrect(res) {
   if (t.praiseEvery && L.streak % t.praiseEvery === 0) parts.push({ text: pick(t.praise), rate: t.rate });
   // «No, non è un tavolo.» su un oggetto noto: l'insegnante completa con quello che è.
   // Sull'oggetto nuovo no: il nome non si dice finché non arriva «Che cos'è?»
-  if (st.type === 'neg' && !res.full && !st.fresh) parts.push({ text: 'È ' + np(st.show) + '.', rate: t.modelRate });
+  if (st.type === 'neg' && !res.full && !st.fresh) parts.push({ text: S.present(st.show).model, rate: t.modelRate });
   // pausa breve, giusto il tempo di vedere il «!» verde
   const delay = st.phase === 'mix' ? 400 : 500;
   Mouth.speakParts(parts, t.pitch, () => {
@@ -560,7 +578,7 @@ function onWrong() {
   saveDB();
   setStatus(repLabel(), 'err');
   const d = cur();
-  if (DB.settings.showText) $('prompt-text').textContent = d.model;
+  if (DB.settings.showText) $('prompt-text').textContent = shown(d.model);
   Mouth.speakParts([
     { text: t.wrong, rate: t.rate },
     { text: d.model, rate: t.modelRate }
@@ -585,7 +603,7 @@ function cueFor(st) {
   if (!st || st.type === 'reveal') return '';
   if (st.type === 'ask') return 'pick';
   if (st.type === 'echo' || st.prompt === st.model) return 'r';
-  return /\?\s*$/.test(st.prompt) ? 'q' : 'r';
+  return /[?？]\s*$/.test(st.prompt) ? 'q' : 'r';
 }
 function setCue(kind) {
   const c = $('stage-cue');

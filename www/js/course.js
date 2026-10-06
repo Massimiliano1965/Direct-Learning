@@ -7,7 +7,12 @@
 
 const COURSE = {
   lang: 'it-IT',        // lingua che si impara: voce e microfono
-  ui: 'en'              // lingua dell'allievo: menu e messaggi
+  ui: 'en',             // lingua dell'allievo: menu e messaggi
+  name: 'Italiano',
+  voiceTags: ['it-it'],                 // come si riconoscono le voci italiane del telefono
+  yourTurn: 'Tocca a te.',
+  nowYou: 'Adesso tocca a te.',
+  demoWrong: 'Sì, è un sedia.'          // l'errore della lezione di prova
 };
 
 // Oggetti: chiave = figura in data.js. art = articolo indeterminativo.

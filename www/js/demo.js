@@ -87,7 +87,7 @@ async function demoScript(t, run) {
     heard('');
     showIndicated(obj);
     setPrompt(prompt);
-    setCue(/\?$/.test(prompt) ? 'q' : 'r');
+    setCue(/[?？]$/.test(prompt) ? 'q' : 'r');
     setStatus('Listen', '');
   };
   const finger = $('demo-finger');
@@ -112,7 +112,7 @@ async function demoScript(t, run) {
     setStatus('Speak now', 'rec');
     await sleep(500);
     await P(text);
-    heard(text.toLowerCase().replace(/[.!?]/g, ''));
+    heard(text.toLowerCase().replace(/[.!?。！？]/g, ''));
     setStatus('Correct', 'ok');
     await sleep(300);
   };
@@ -122,107 +122,114 @@ async function demoScript(t, run) {
   showIndicated(null);
   await sleep(3000);
 
+  // Le frasi vengono dal pacchetto della lingua (stesso flusso in ogni lingua)
+  const pres = (x) => S.present(x).model;
+  const yesQ = S.yes('book'), noBook = S.neg('table', 'book'), chairQ = S.yes('chair');
+  const noChairOnBook = S.neg('book', 'chair');
+  const altQ = altPrompt('book', 'pen');
+
   // 1. Presentazione
-  step(1, 'book', 'È un libro.');
+  step(1, 'book', pres('book'));
   cap('The teacher points at a picture and says what it is.');
-  await T('È un libro.');
+  await T(pres('book'));
   cap('Arrows: repeat the sentence. Red dot: your turn to speak.');
-  await studentTalks('È un libro.');
+  await studentTalks(pres('book'));
   await praise();
 
   // 2. Domanda con il sì
-  step(2, 'book', 'È un libro?');
+  step(2, 'book', yesQ.prompt);
   cap('Big «?»: it\'s a question, so answer it. Always with a full sentence.');
-  await T('È un libro?');
-  await studentTalks('Sì, è un libro.');
+  await T(yesQ.prompt);
+  await studentTalks(yesQ.model);
   await praise();
 
   // 3. Domanda con il no
-  step(3, 'table', 'È un libro?');
+  step(3, 'table', noBook.prompt);
   cap('If the question is wrong, say no.');
-  await T('È un libro?');
-  await studentTalks('No, non è un libro.');
+  await T(noBook.prompt);
+  await studentTalks(noBook.model);
   await praise();
 
   // 4. Errore e correzione
-  step(4, 'chair', 'È una sedia?');
+  step(4, 'chair', chairQ.prompt);
   cap('If you make a mistake…');
-  await T('È una sedia?');
+  await T(chairQ.prompt);
   setStatus('Speak now', 'rec');
   await sleep(500);
-  await P('Sì, è un sedia.');
-  heard('sì, è un sedia');
+  await P(COURSE.demoWrong);
+  heard(COURSE.demoWrong.toLowerCase().replace(/[.!?。！？]/g, ''));
   flashBad();
   showMark(t.mark);
   setStatus('Try again', 'err');
   cap('…the teacher says the right answer. You repeat it, then you practise that word a little.');
   await T(t.wrong);
-  if (DB.settings.showText) $('prompt-text').textContent = 'Sì, è una sedia.';
+  if (DB.settings.showText) $('prompt-text').textContent = shown(chairQ.model);
   setCue('r');
-  await T('Sì, è una sedia.', t.modelRate);
+  await T(chairQ.model, t.modelRate);
   $('screen-lesson').classList.remove('tunnel');
-  await studentTalks('Sì, è una sedia.');
-  await T('È una sedia.', t.modelRate);
-  await studentTalks('È una sedia.');
+  await studentTalks(chairQ.model);
+  await T(pres('chair'), t.modelRate);
+  await studentTalks(pres('chair'));
   showIndicated('book');
-  setPrompt('È una sedia?');
+  setPrompt(noChairOnBook.prompt);
   setCue('q');
-  await T('È una sedia?', t.modelRate);
-  await studentTalks('No, non è una sedia.');
+  await T(noChairOnBook.prompt, t.modelRate);
+  await studentTalks(noChairOnBook.model);
   hideMark();
   await praise();
 
   // 5. Oggetto nuovo: solo no, poi «Che cos'è?»
-  step(5, 'pen', 'È un libro?');
+  const penNo = ['book', 'table', 'chair'].map(y => S.neg('pen', y));
+  step(5, 'pen', penNo[0].prompt);
   cap('A new object. The teacher won\'t tell you its name. Keep saying no.');
-  await T('È un libro?');
-  await studentTalks('No, non è un libro.');
-  setPrompt('È un tavolo?');
+  await T(penNo[0].prompt);
+  await studentTalks(penNo[0].model);
+  setPrompt(penNo[1].prompt);
   setCue('q');
-  await T('È un tavolo?');
-  await studentTalks('No, non è un tavolo.');
-  setPrompt('È una sedia?');
-  await T('È una sedia?');
-  await studentTalks('No, non è una sedia.');
+  await T(penNo[1].prompt);
+  await studentTalks(penNo[1].model);
+  setPrompt(penNo[2].prompt);
+  await T(penNo[2].prompt);
+  await studentTalks(penNo[2].model);
   cap('…until you learn the question to ask.');
   setStatus('Listen', '');
-  setPrompt("Che cos'è? È una penna.");
+  setPrompt(S.reveal('pen').prompt);
   setCue('');
   await sleep(1200);
-  await T("Che cos'è? È una penna.");
+  await T(S.reveal('pen').prompt);
   setCue('r');
-  await studentTalks("Che cos'è?");
+  await studentTalks(Q);
   await praise();
 
   // 6. Silenzio: tasto Talk
-  step(6, 'chair', "Che cos'è?");
+  step(6, 'chair', Q);
   cap('If the app doesn\'t hear you…');
-  await T("Che cos'è?");
+  await T(Q);
   setStatus('Speak now', 'rec');
   await sleep(2200);
   setStatus('Tap ' + uiWord('talk') + ' when you are ready', 'wait');
   cap('…tap ' + uiWord('talk') + ' and answer.');
   await sleep(600);
   await tap($('btn-talk'));
-  await studentTalks('È una sedia.');
+  await studentTalks(S.key('chair').model);
   await praise();
 
   // 7. Non ho capito: tasto Repeat
-  step(7, 'pen', 'È un libro o una penna?');
+  step(7, 'pen', altQ);
   cap('Didn\'t catch the question?');
-  await T('È un libro o una penna?');
+  await T(altQ);
   cap('Tap ' + uiWord('repeat') + ' to hear it again.');
   await tap($('btn-replay'));
   setStatus('Listen', '');
-  await T('È un libro o una penna?');
-  await studentTalks('È una penna.');
+  await T(altQ);
+  await studentTalks(S.key('pen').model);
   await praise();
 
   // 8. Le domande le fa l'allievo
   step(8, null, '');
   setCue('pick');
   cap('Once you know the question, you ask too: tap a picture and ask.');
-  await T('Tocca a te.');
+  await T(COURSE.yourTurn);
   setStatus('Your turn: tap a picture, then ask', 'wait');
   setPickable(true);
   sweepFinger(() => run === DEMO);
@@ -231,22 +238,22 @@ async function demoScript(t, run) {
   await tap(document.querySelector('.object-box[data-obj="chair"]'));
   showIndicated('chair');
   setCue('q');
-  await studentTalks('È un tavolo?');
+  await studentTalks(S.yes('table').prompt);
   setCue('ok');
-  await T('No, non è un tavolo. È una sedia.', t.modelRate);
+  await T(answerAsk('chair', { ok: true, kind: 'no', ask: 'table' }), t.modelRate);
   setCue('pick');
   await sleep(400);
   await tap(document.querySelector('.object-box[data-obj="pen"]'));
   showIndicated('pen');
   setCue('q');
-  await studentTalks("Che cos'è?");
+  await studentTalks(Q);
   setCue('ok');
-  await T('È una penna.', t.modelRate);
+  await T(answerAsk('pen', { ok: true, kind: 'what' }), t.modelRate);
 
   setProgress(DEMO_STEPS, DEMO_STEPS);
   cap('Now it\'s your turn!');
   setStatus('', '');
   setCue('');
-  await T('Adesso tocca a te.');
+  await T(COURSE.nowYou);
   await sleep(800);
 }

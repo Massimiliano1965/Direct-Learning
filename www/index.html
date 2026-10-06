@@ -19,6 +19,8 @@
   <div class="label">Teacher</div>
   <div id="teacher-list"></div>
 
+  <div id="lang-box"></div>
+
   <div class="label">Lessons</div>
   <div id="lesson-list"></div>
 
@@ -71,9 +73,15 @@
 <div id="demo-finger" class="hidden"></div>
 <div id="pick-finger" class="hidden"></div>
 
-<script src="js/course.js"></script>
-<script src="js/data.js"></script>
-<script src="js/logic.js"></script>
+<script>
+// Pacchetto della lingua del corso (prova: italiano o cinese). In vendita: un'app per lingua.
+(function () {
+  var L = 'it';
+  try { L = localStorage.getItem('dl_lang') || 'it'; } catch (e) {}
+  var f = L === 'zh' ? ['course_zh', 'data', 'logic', 'grammar_zh'] : ['course', 'data', 'logic'];
+  for (var i = 0; i < f.length; i++) document.write('<script src="js/' + f[i] + '.js"><\/script>');
+})();
+</script>
 <script src="js/voice.js"></script>
 <script src="js/storage.js"></script>
 <script src="js/demo.js"></script>
