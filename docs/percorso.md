@@ -7,6 +7,20 @@ nell'app, con lo stesso metodo: domanda sì, domanda no, domanda «o», domanda 
 
 Il programma completo con l'indice del libro è in `programma.md`.
 
+## Livelli (decisione di Massi, 6/10/2026)
+
+Circa 120 sessioni brevi (10–15 minuti), divise in 4 livelli di circa 30, secondo i capitoli del libro.
+Il capitolo 1 è gratis per provare; poi si paga un livello alla volta.
+Alla fine di ogni livello c'è un **test**: lo studente descrive a voce un'immagine (o un video con azioni);
+contano solo gli errori, alla fine.
+
+| Livello | Capitoli | Cosa sa fare alla fine |
+|---|---|---|
+| 1 | 1–5 | oggetti, colori, numeri, ore, famiglia, plurali |
+| 2 | 6–10 | presente, passato, imperativo, «lo/la/li/le» |
+| 3 | 11–15 | albergo, ristorante, telefono, volere/potere/dovere |
+| 4 | 16–20 | congiuntivo, futuro, imperfetto, viaggio |
+
 ## Capitolo 1
 
 1. **Oggetti**: «È un libro.» «È una penna.» — *fatto: Lezioni 1–4*
