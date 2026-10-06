@@ -10,8 +10,10 @@ const COURSE = {
   students: ['en', 'de', 'ja', 'it'],   // lingue dello studente offerte («Che lingua parli?»): menu e messaggi
   name: 'Italiano',
   voiceTags: ['it-it'],                 // come si riconoscono le voci italiane del telefono
-  yourTurn: 'Tocca a te.',
-  nowYou: 'Adesso tocca a te.',
+  // L'insegnante non usa parole che l'allievo non conosce (confondono): «tocca a te» lo dice il gesto,
+  // l'entusiasmo lo mostra il corpo, l'errore è solo «No.»
+  yourTurn: '',
+  nowYou: '',
   demoWrong: 'Sì, è un sedia.',         // l'errore della lezione di prova
   speedSample: ['Ciao, sono {name}.', 'Parliamo italiano insieme.']   // la frase d'esempio quando si sceglie la velocità
 };
@@ -79,37 +81,38 @@ const LESSONS = [
 ];
 
 // Quattro insegnanti, dal più rigido al più indulgente. gender = voce maschile o femminile.
-// wrong = parola secca quando l'allievo sbaglia (con la sua icona, mark in data.js);
+// wrong = solo «No.» quando l'allievo sbaglia (con la sua icona, mark in data.js); praise vuoto: quando è giusto
+// l'insegnante esulta col corpo, senza parole nuove; praiseEvery = ogni quante risposte giuste esulta;
 // repeats = quante ripetizioni dopo ogni errore, una voce per errore e poi da capo
 // (massimo 5, mai sempre uguali). style serve solo a noi: l'allievo non lo vede.
 const TEACHERS = {
   mass: {
     key: 'mass', name: 'Mass', gender: 'm', style: 'Very strict', mark: 'wrong',
     rate: 1.1, pitch: 0.85, modelRate: 1.0, praiseEvery: 0, repeats: [3, 5, 4, 5, 4],
-    praise: ['Corretto.'],
-    wrong: 'Errato.',
-    done: 'La lezione è finita.'
+    praise: [],
+    wrong: 'No.',
+    done: ''
   },
   giulia: {
     key: 'giulia', name: 'Giulia', gender: 'f', style: 'Strict', mark: 'notcorrect',
     rate: 1.05, pitch: 1.15, modelRate: 0.95, praiseEvery: 5, repeats: [3, 4, 3, 5, 3],
-    praise: ['Corretto.', 'Giusto.'],
-    wrong: 'Non corretto.',
-    done: 'La lezione è finita.'
+    praise: [],
+    wrong: 'No.',
+    done: ''
   },
   luca: {
     key: 'luca', name: 'Luca', gender: 'm', style: 'Normal', mark: 'mistake',
     rate: 1.0, pitch: 0.92, modelRate: 0.9, praiseEvery: 3, repeats: [2, 3, 4, 2, 3],
-    praise: ['Bene.', 'Giusto.', 'Esatto.'],
-    wrong: 'Hai sbagliato.',
-    done: 'La lezione è finita. Bene.'
+    praise: [],
+    wrong: 'No.',
+    done: ''
   },
   sara: {
     key: 'sara', name: 'Sara', gender: 'f', style: 'Easygoing', mark: 'pity',
     rate: 0.95, pitch: 1.2, modelRate: 0.85, praiseEvery: 2, repeats: [1, 2, 1, 3, 2],
-    praise: ['Ottimo!', 'Perfetto!', 'Benissimo!'],
-    wrong: 'Peccato.',
-    done: 'Finito! Ottimo lavoro!'
+    praise: [],
+    wrong: 'No.',
+    done: ''
   }
 };
 const TRIAL_ROTATION = ['mass', 'giulia', 'luca', 'sara'];

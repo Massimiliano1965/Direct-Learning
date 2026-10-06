@@ -218,7 +218,10 @@ const SPEEDS = {
 const speed = () => SPEEDS[DB.settings.speed] || SPEEDS.normal;
 (function () {
   const base = Mouth.speak;
-  Mouth.speak = function (text, rate, pitch, cb, gender) { return base.call(this, text, (rate || 1) * speed().voice, pitch, cb, gender); };
+  Mouth.speak = function (text, rate, pitch, cb, gender) {
+    if (!text) { if (cb) cb(); return; }   // frase vuota (es. niente «Tocca a te.»): si va avanti senza parlare
+    return base.call(this, text, (rate || 1) * speed().voice, pitch, cb, gender);
+  };
 })();
 function clearLessonTimers() { lessonTimers.forEach(clearTimeout); lessonTimers = []; }
 // Ferma tutto ciò che è in corso: timer, microfono, voce (prima di un passo nuovo o di uscire)

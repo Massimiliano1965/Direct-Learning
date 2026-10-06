@@ -293,10 +293,11 @@ Object.keys(ITEMS).forEach(k => {
   check('articolo per ' + k, ['un', 'una', 'uno', "un'"].indexOf(ITEMS[k].art) !== -1);
 });
 const MARKS = run('MARKS');
-Object.keys(TEACHERS).forEach(k => check('insegnante ' + k, TEACHERS[k].key === k && TEACHERS[k].praise.length > 0 && TEACHERS[k].repeats.length > 0 && MARKS[TEACHERS[k].mark]));
+Object.keys(TEACHERS).forEach(k => check('insegnante ' + k, TEACHERS[k].key === k && Array.isArray(TEACHERS[k].praise) && TEACHERS[k].repeats.length > 0 && MARKS[TEACHERS[k].mark]));
 check('ripetizioni: massimo 5, mai tutte uguali', Object.keys(TEACHERS).every(k => TEACHERS[k].repeats.every(n => n >= 1 && n <= 5) && new Set(TEACHERS[k].repeats).size > 1));
 check('dal più rigido al più indulgente', ['mass', 'giulia', 'luca', 'sara'].map(k => TEACHERS[k].repeats.reduce((a, b) => a + b, 0)).every((v, i, a) => !i || v <= a[i - 1]));
-check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].map(k => TEACHERS[k].wrong).join('|') === 'Errato.|Non corretto.|Hai sbagliato.|Peccato.');
+// l'insegnante non usa parole che l'allievo non conosce: errore = «No.», niente lodi a parole, niente «Tocca a te.»
+check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACHERS[k].wrong === 'No.' && TEACHERS[k].praise.length === 0 && !TEACHERS[k].done));
 
 // Lezione dei colori: «Il o la? Nero o nera?»
 {
