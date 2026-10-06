@@ -14,62 +14,85 @@ Dal libro si prende solo l'ordine: frasi, nomi e figure sono nostri e moderni
 
 ## Capitoli 1–5
 
-L'indice arriva a pezzi: il Capitolo 1 inizia dalla voce 1. Le pagine seguenti
-erano senza intestazione, quindi i confini tra i capitoli 2, 3, 4 e 5 vanno confermati.
+Indice completo (foto di Papa, pagine viii–48). Nel libro gli ascolti si chiamano «Nastro numero …».
 
+### Capitolo 1 (pag. x–4)
 
 1. Ricapitolazione
 2. Ascolto 1
 3. Lettura: «Una bottiglia e una tazza»
-4. Esercizio: Un o una?
+4. Esercizio 1: Un o una?
 5. Lettura: «È questo un computer?» (nel libro: magnetofono)
-6. Esercizio: Sì o no!
-7. Esercizio: Il o la? Nero o nera?
-8. Esercizio: Che numero è?
-9. Lettura: «La carta geografica d'Italia»
-10. Esercizio: Città e paesi. A) In o a? B) Che cosa è Napoli?
-11. Esercizio: Il mio, la Sua, ecc.
-12. Esercizio: Questo o questa? Piccolo o piccola?
-13. Lettura: «Il signor Carter» (personaggio da rinominare)
-14. Esercizio: Il suo, la sua, ecc.
-15. Esercizio: Paese e nazionalità
-16. Esercizio: Il verbo «essere»
-17. Lettura: «Nell'ufficio del Sig. Bertini» (personaggio da rinominare)
-18. Esercizio: Domande sulla lettura
-19. Esercizio: Un altro, un'altra
-20. Lettura: «Buongiorno! Io sono il professore»
-21. Esercizio: Domande sulla lettura
-22. Esercizio: Un, una, un', o uno?
-23. Esercizio: Il, la, l', o lo?
-24. Esercizio: A, su, in, di (preposizioni articolate)
-25. Esercizio: Anche — nemmeno
-26. Lettura: «Al bar della stazione»
-27. Esercizio: Domande sulla lettura
-28. Esercizio: Che ora è?
-29. Esercizio: A che ora?
-30. Esercizio: Qual è l'articolo: il, la, o l'?
-31. Lettura: «Uno studente»
-32. Esercizio: Trasformazioni: Cosa fa Pietro?
-33. Esercizio: Trasformazioni: vari verbi
-34. Esercizio: Perché? Per…
-35. Esercizio: Sostituzioni: verbi e sostantivi
-36. (mancano: esercizi 26 e 27, pagina non ancora vista)
-37. Specchio: I numeri 1 — 1000
-38. Esercizio: Quanto fa…?
-39. Esercizio: Quanti chilometri ci sono…?
-40. Lettura: «La famiglia Rossi» (famiglia da rinominare)
-41. Esercizio: Domande sulla lettura
-42. Esercizio: La famiglia (vocabolario)
-43. Esercizio: Essere o avere
-44. Esercizio: Plurale dei sostantivi: o/i, a/e
-45. Esercizio: C'è un, ci sono due
-46. Esercizio: Plurale (sostantivi e aggettivi): A. Ecco due  B. Quanto costano?
-47. Esercizio: Questo/a/i/e (aggettivi dimostrativi)
-48. Esercizio: Plurale dei sostantivi: e-i
-49. Esercizio: Plurale degli articoli: l'/gli, l'/le
-50. Esercizio: Plurale degli aggettivi dimostrativi: quei/quelle/quegli
-51. Esercizio: Metta le frasi al plurale!
-52. Esercizio: Plurali irregolari
+6. Esercizio 2: Sì o no!
+7. Esercizio 3: Il o la? Nero o nera?
+8. Esercizio 4: Che numero è?
+
+### Capitolo 2 (pag. 5–14)
+
+1. Ricapitolazione
+2. Ascolto 2
+3. Lettura: «La carta geografica d'Italia»
+4. Esercizio 5: Città e paesi. A) In o a? B) Che cosa è Napoli?
+5. Esercizio 6: Il mio, la Sua, ecc.
+6. Esercizio 7: Questo o questa? Piccolo o piccola?
+7. Lettura: «Il signor Carter» (personaggio da rinominare)
+8. Esercizio 8: Il suo, la sua, ecc.
+9. Esercizio 9: Paese e nazionalità
+10. Esercizio 10: Il verbo «essere»
+11. Lettura: «Nell'ufficio del Sig. Bertini» (personaggio da rinominare)
+12. Esercizio 11: Domande sulla lettura
+13. Esercizio 12: Un altro, un'altra
+
+### Capitolo 3 (pag. 15–20)
+
+1. Ricapitolazione
+2. Ascolto 3
+3. Lettura: «Buongiorno! Io sono il professore»
+4. Esercizio 13: Domande sulla lettura
+5. Esercizio 14: Un, una, un', o uno?
+6. Esercizio 15: Il, la, l', o lo?
+7. Esercizio 16: A, su, in, di (preposizioni articolate)
+8. Esercizio 17: Anche — nemmeno
+
+### Capitolo 4 (pag. 21–33)
+
+1. Ricapitolazione
+2. Ascolto 4
+3. Lettura: «Al bar della stazione»
+4. Esercizio 18: Domande sulla lettura
+5. Esercizio 19: Che ora è?
+6. Esercizio 20: A che ora?
+7. Esercizio 21: Qual è l'articolo: il, la, o l'?
+8. Lettura: «Uno studente»
+9. Esercizio 22: Trasformazioni: Cosa fa Pietro?
+10. Esercizio 23: Trasformazioni: vari verbi
+11. Esercizio 24: Perché? Per…
+12. Esercizio 25: Sostituzioni: verbi e sostantivi
+13. Lettura: «Che cosa prende, signora?»
+14. Esercizio 26: Domande sulla lettura
+15. Esercizio 27: Complemento diretto: A. Lo prendo — la prendo  B. Non la chiude!
+
+### Capitolo 5 (pag. 34–48)
+
+1. Ricapitolazione
+2. Ascolto 5
+3. Lettura: «Dal giornalaio»
+4. Specchio: I numeri 1 — 1000
+5. Esercizio 28: Quanto fa…?
+6. Esercizio 29: Quanti chilometri ci sono…?
+7. Lettura: «La famiglia Rossi» (famiglia da rinominare)
+8. Esercizio 30: Domande sulla lettura
+9. Esercizio 31: La famiglia (vocabolario)
+10. Esercizio 32: Essere o avere
+11. Esercizio 33: Plurale dei sostantivi: o/i, a/e
+12. Esercizio 34: C'è un, ci sono due
+13. Esercizio 35: Plurale (sostantivi e aggettivi): A. Ecco due  B. Quanto costano?
+14. Esercizio 36: Questo/a/i/e (aggettivo dimostrativo)
+15. Esercizio 37: Plurale dei sostantivi: e/i
+16. Esercizio 38: Plurale degli articoli: l'/gli, l'/le
+17. Esercizio 39: Plurale degli aggettivi dimostrativi: quei/quelle/quegli
+18. Esercizio 40: Metta le frasi al plurale!
+19. Esercizio 41: Plurali irregolari
 
 ## Capitolo 6
 
@@ -265,9 +288,6 @@ bottiglia, tazza, computer
 2. «È questo un computer?»: si introduce la forma «È questo un…?»? L'allievo risponde «Sì, è un computer.» o «Sì, questo è un computer.»?
 3. «Il o la? Nero o nera?»: arrivano qui articoli determinativi e colori? Quali colori per primi?
 4. «Che numero è?»: numeri da 1 a 10 o di più?
-5. Gli esercizi 18–25 (bar, ore, «Uno studente») sono ancora Capitolo 1 o già Capitolo 2?
-6. Lezione 2: la finestra come oggetto da scoprire con «Che cos'è?» va bene, o tutte e tre presentate subito?
-7. Durata della lezione: ora circa 10 minuti; allungare verso i 40?
-8. Personaggi delle letture (Carter, Bertini, Pietro, famiglia Rossi): che nomi nuovi usiamo?
-9. Manca la pagina dell'indice con gli esercizi 26 e 27.
-10. Dove iniziano i Capitoli 2, 3, 4 e 5 nell'indice?
+5. Lezione 2: la finestra come oggetto da scoprire con «Che cos'è?» va bene, o tutte e tre presentate subito?
+6. Durata della lezione: ora circa 10 minuti; allungare verso i 40?
+7. Personaggi delle letture (Carter, Bertini, Pietro, famiglia Rossi): che nomi nuovi usiamo?

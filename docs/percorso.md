@@ -7,15 +7,18 @@ nell'app, con lo stesso metodo: domanda sì, domanda no, domanda «o», domanda 
 
 Il programma completo con l'indice del libro è in `programma.md`.
 
-## Capitoli 1–5
+## Capitolo 1
 
-1. **Oggetti**: «È un libro.» «È una penna.» — *fatto: Lezioni 1 e 2*
-2. **Un o una?**
-3. **Domanda con «questo»**: «È questo un computer?»
-4. **Sì o no**
-5. **Il o la?** (articolo determinativo)
-6. **Colori e accordo**: nero o nera?
+1. **Oggetti**: «È un libro.» «È una penna.» — *fatto: Lezioni 1–4*
+2. **Un o una?** — *fatto*
+3. **Domanda con «questo»**: «È questo un computer?» — *fatto: Lezioni 2–4*
+4. **Sì o no** — *fatto*
+5. **Il o la?** (articolo determinativo) — *fatto: Lezione 5*
+6. **Colori e accordo**: nero o nera? — *fatto: Lezione 5*
 7. **Numeri**: «Che numero è?»
+
+## Capitolo 2
+
 8. **Città e paesi**: in o a? «Che cosa è Napoli?» — «È una città.»
 9. **Possessivi**: il mio, la Sua…
 10. **Questo o questa? Piccolo o piccola?**
@@ -23,124 +26,135 @@ Il programma completo con l'indice del libro è in `programma.md`.
 12. **Paese e nazionalità**
 13. **Il verbo «essere»**
 14. **Un altro, un'altra**
+
+## Capitolo 3
+
 15. **Un, una, un', uno**
 16. **Il, la, l', lo**
 17. **Preposizioni articolate**: a, su, in, di
 18. **Anche — nemmeno**
+
+## Capitolo 4
+
 19. **Che ora è? A che ora?**
-20. **Verbi al presente**: «Cosa fa…?» (vari verbi)
-21. **Perché? Per…**
-22. **Numeri da 1 a 1000**: «Quanto fa…?» «Quanti chilometri ci sono…?»
-23. **La famiglia** (parole)
-24. **Essere o avere**
-25. **Plurale**: o → i, a → e
-26. **C'è un, ci sono due**
-27. **Plurale di nomi e aggettivi**: «Ecco due…» «Quanto costano?»
-28. **Questo, questa, questi, queste**
-29. **Plurale**: e → i
-30. **Plurale degli articoli**: l' → gli, l' → le
-31. **Quei, quelle, quegli**
-32. **Plurali irregolari**
+20. **Il, la, o l'?**
+21. **Verbi al presente**: «Cosa fa…?» (vari verbi)
+22. **Perché? Per…**
+23. **Complemento diretto**: «Lo prendo — la prendo», «Non la chiude!»
+
+## Capitolo 5
+
+24. **Numeri da 1 a 1000**: «Quanto fa…?» «Quanti chilometri ci sono…?»
+25. **La famiglia** (parole)
+26. **Essere o avere**
+27. **Plurale**: o → i, a → e
+28. **C'è un, ci sono due**
+29. **Plurale di nomi e aggettivi**: «Ecco due…» «Quanto costano?»
+30. **Questo, questa, questi, queste**
+31. **Plurale**: e → i
+32. **Plurale degli articoli**: l' → gli, l' → le
+33. **Quei, quelle, quegli**
+34. **Plurali irregolari**
 
 ## Capitolo 6
 
-33. **Il contrario** (grande/piccolo…)
-34. **Essere o stare**
-35. **Ce l'ho — ce l'ha**
-36. **Imperativo**
+35. **Il contrario** (grande/piccolo…)
+36. **Essere o stare**
+37. **Ce l'ho — ce l'ha**
+38. **Imperativo**
 
 ## Capitolo 7
 
-37. **Qual è la domanda?**
-38. **Né… né…**
-39. **Passato prossimo**
-40. **L'ho letto — l'ho letta** (accordo del participio)
-41. **Ci vado, ci sono**
-42. **Saluti**: come si risponde
-43. **Lui e lei**: maschile e femminile
+39. **Qual è la domanda?**
+40. **Né… né…**
+41. **Passato prossimo**
+42. **L'ho letto — l'ho letta** (accordo del participio)
+43. **Ci vado, ci sono**
+44. **Saluti**: come si risponde
+45. **Lui e lei**: maschile e femminile
 
 ## Capitolo 8
 
-44. **Calendario**: giorni, mesi
-45. **Possessivi** (sostituzioni)
-46. **Verbi al presente** (tabella completa)
+46. **Calendario**: giorni, mesi
+47. **Possessivi** (sostituzioni)
+48. **Verbi al presente** (tabella completa)
 
 ## Capitolo 9
 
-47. **Complemento indiretto**
-48. **Qualcuno / nessuno, qualche cosa / niente**
-49. **Biglietto da visita**: nome, indirizzo, lavoro
+49. **Complemento indiretto**
+50. **Qualcuno / nessuno, qualche cosa / niente**
+51. **Biglietto da visita**: nome, indirizzo, lavoro
 
 ## Capitolo 10
 
-50. **Verbi al presente e al passato** (tabella completa)
-51. **Il verbo «chiamarsi»**
-52. **Lo, la, li, le** (complemento diretto)
+52. **Verbi al presente e al passato** (tabella completa)
+53. **Il verbo «chiamarsi»**
+54. **Lo, la, li, le** (complemento diretto)
 
 ## Capitolo 11
 
-53. **L'ho, li ho, le ho**
-54. **Il contrario**
-55. **Preposizioni**
+55. **L'ho, li ho, le ho**
+56. **Il contrario**
+57. **Preposizioni**
 
 ## Capitolo 12
 
-56. **Cibi della colazione**: pane, frutta, contorni
-57. **Questo/quel, questa/quella; quale?**
-58. **Quello studente, ecc.**
-59. **Gli, le, loro; le, mi, ci** (complemento indiretto)
-60. **I fiori**
+58. **Cibi della colazione**: pane, frutta, contorni
+59. **Questo/quel, questa/quella; quale?**
+60. **Quello studente, ecc.**
+61. **Gli, le, loro; le, mi, ci** (complemento indiretto)
+62. **I fiori**
 
 ## Capitolo 13
 
-61. **Cibi del pranzo e della cena**: pasta, pesce, carne…; il menù
-62. **«Ne»**
-63. **Verbi riflessivi**: alzarsi, sedersi, fermarsi, chiamarsi
-64. **Già — non ancora**
+63. **Cibi del pranzo e della cena**: pasta, pesce, carne…; il menù
+64. **«Ne»**
+65. **Verbi riflessivi**: alzarsi, sedersi, fermarsi, chiamarsi
+66. **Già — non ancora**
 
 ## Capitolo 14
 
-65. **Volere, potere, dovere**
-66. **Ancora — non più**
-67. **Al telefono**
+67. **Volere, potere, dovere**
+68. **Ancora — non più**
+69. **Al telefono**
 
 ## Capitolo 15
 
-68. **Passato con «essere»**, anche con i verbi riflessivi
-69. **L'ho visto**
-70. **Lo, la, li, le, ne; mi, Le, gli, le, ci, loro**
+70. **Passato con «essere»**, anche con i verbi riflessivi
+71. **L'ho visto**
+72. **Lo, la, li, le, ne; mi, Le, gli, le, ci, loro**
 
 ## Capitolo 16
 
-71. **Congiuntivo**: «Io voglio che Lei…»
-72. **Di che cosa è fatto…?**
-73. **Ci vuole — ci vogliono**
+73. **Congiuntivo**: «Io voglio che Lei…»
+74. **Di che cosa è fatto…?**
+75. **Ci vuole — ci vogliono**
 
 ## Capitolo 17
 
-74. **La casa**: luce, lampada…
-75. **Futuro**
-76. **Verbi riflessivi** (ripasso)
+76. **La casa**: luce, lampada…
+77. **Futuro**
+78. **Verbi riflessivi** (ripasso)
 
 ## Capitolo 18
 
-77. **«Piace»**: a lui piace…
-78. **Le quattro stagioni**
-79. **Imperfetto**: ora e prima
-80. **«Si può…»**
+79. **«Piace»**: a lui piace…
+80. **Le quattro stagioni**
+81. **Imperfetto**: ora e prima
+82. **«Si può…»**
 
 ## Capitolo 19
 
-81. **Il tempo che fa**: termometro, parole del tempo
-82. **Presente, passato, futuro**
-83. **Gerundio**: sto parlando, sto leggendo…
+83. **Il tempo che fa**: termometro, parole del tempo
+84. **Presente, passato, futuro**
+85. **Gerundio**: sto parlando, sto leggendo…
 
 ## Capitolo 20
 
-84. **Frasi al negativo**
-85. **Segnali stradali**
-86. **Espressioni per il turista**
-87. **«Vorrei…»**
+86. **Frasi al negativo**
+87. **Segnali stradali**
+88. **Espressioni per il turista**
+89. **«Vorrei…»**
 
 ## Da modernizzare
 
