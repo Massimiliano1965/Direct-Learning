@@ -128,6 +128,7 @@ function renderHome() {
   });
 
   $('opt-text').checked = !!DB.settings.showText;
+  showSpeed();
   applyStaticText();
   applyUiWords();
 }
@@ -177,6 +178,11 @@ function applyUiWords() {
   if (!demoActive) setUiButton('btn-exit', 'exit');
 }
 $('opt-text').onchange = (e) => { DB.settings.showText = e.target.checked; saveDB(); };
+function showSpeed() {
+  const cur = SPEEDS[DB.settings.speed] ? DB.settings.speed : 'normal';
+  document.querySelectorAll('#opt-speed button').forEach(b => b.classList.toggle('on', b.dataset.speed === cur));
+}
+document.querySelectorAll('#opt-speed button').forEach(b => { b.onclick = () => { DB.settings.speed = b.dataset.speed; saveDB(); showSpeed(); }; });
 $('btn-report').onclick = () => { renderReport(); showScreen('report'); };
 
 /* ---------- Lezione ---------- */
@@ -189,6 +195,19 @@ function later(fn, ms) {
   lessonTimers.push(id);
   return id;
 }
+/* ---------- Velocità della lezione (Opzioni): lenta / normale / veloce ----------
+   voice = quanto parla svelto l'insegnante (ognuno resta col suo carattere, tutti un po' più piano o più svelti);
+   pace = pausa tra una domanda e l'altra; waits = quante volte il microfono riascolta in silenzio prima di arrendersi. */
+const SPEEDS = {
+  slow:   { voice: 0.85, pace: 1.7,  waits: 2 },
+  normal: { voice: 1,    pace: 1,    waits: 0 },
+  fast:   { voice: 1.12, pace: 0.7,  waits: 0 }
+};
+const speed = () => SPEEDS[DB.settings.speed] || SPEEDS.normal;
+(function () {
+  const base = Mouth.speak;
+  Mouth.speak = function (text, rate, pitch, cb, gender) { return base.call(this, text, (rate || 1) * speed().voice, pitch, cb, gender); };
+})();
 function clearLessonTimers() { lessonTimers.forEach(clearTimeout); lessonTimers = []; }
 // Ferma tutto ciò che è in corso: timer, microfono, voce (prima di un passo nuovo o di uscire)
 function quiet() { clearLessonTimers(); Ears.abort(); Mouth.cancel(); }
@@ -628,8 +647,11 @@ function handleListenError(code, run) {
   if (code === 'network') { setStatus(tx('needNet', { talk: uiWord('talk') }), 'err'); return; }
   L.noSpeech++;
   const st = cur();
+  const waits = speed().waits;
+  // lenta: prima di rispondere al posto dell'allievo, il microfono riascolta ancora (più tempo per pensare)
+  if (L.noSpeech <= waits) { setStatus(tx('speakNow'), 'rec'); later(() => { if (alive(run)) listen(); }, 200); return; }
   if (coachable(st) && !L.coached) { L.coach = true; coachAnswer(st, run); return; }
-  if (L.noSpeech <= 2) {
+  if (L.noSpeech <= 2 + waits) {
     setStatus(tx('notHeard'), 'wait');
     later(() => { if (alive(run)) listen(); }, 700);
   } else {
@@ -722,7 +744,7 @@ function nextStep(run, delay) {
   L.repFails = 0;
   L.pick = null;
   L.coached = false;
-  later(() => { if (alive(run)) runStep(); }, delay);
+  later(() => { if (alive(run)) runStep(); }, delay * speed().pace);
 }
 
 // Errore: parola secca dell'insegnante con la sua icona, poi la risposta giusta.
