@@ -53,13 +53,14 @@ const COLORS = {
 // finché l'allievo non è "stufo" di dire di no (poi arriva «Che cos'è?»).
 const LESSONS = [
   { id: 'l1', title: 'Lezione 1', known: ['book', 'table', 'chair'], fresh: 'pen' },
-  { id: 'l2', title: 'Lezione 2', known: ['chair', 'door'], fresh: 'window' },
+  // dalla lezione 2: «questo/questa». Libro e tavolo (lezione 1) in ripasso, per avere anche il maschile
+  { id: 'l2', title: 'Lezione 2', known: ['chair', 'door'], review: ['book', 'table'], fresh: 'window', dq: true, questoIntro: true },
   // dal capitolo 1 del libro: «Una bottiglia e una tazza», «È questo un computer?» (era il magnetofono)
   { id: 'l3', title: 'Lezione 3', known: ['bottle', 'cup'], review: ['book', 'table', 'chair', 'pen', 'door', 'window'],
-    fresh: 'computer', questo: true },
+    fresh: 'computer', questo: true, dq: true },
   // oggetti nuovi (con «il» e «la» nella lezione 5 arrivano i colori)
   { id: 'l4', title: 'Lezione 4', known: ['phone', 'key', 'notebook', 'bag'], review: ['book', 'pen', 'cup', 'chair'],
-    fresh: 'lamp', questo: true },
+    fresh: 'lamp', questo: true, dq: true },
   // «Il o la? Nero o nera?»: ogni oggetto ha il suo colore. known = presentati subito (nero e bianco);
   // fresh = oggetti rossi, il colore nuovo da scoprire con «Di che colore è…?»
   { id: 'l5', title: 'Lezione 5', colors: true,

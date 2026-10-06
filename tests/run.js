@@ -186,31 +186,56 @@ LESSONS.forEach(l => {
         const word = ITEMS[F].word;
         d.forEach(x => {
           if (!evaluate(x, x.model).ok) check('drill modello accettato «' + x.model + '»', false);
-          if (!(st.type === 'echo' && st.check === 'question') && x.model.indexOf(word) === -1) check('drill gira intorno a «' + word + '»: ' + x.model, false);
+          if (!(st.type === 'echo' && (st.check === 'question' || st.check === 'dem')) && x.model.indexOf(word) === -1) check('drill gira intorno a «' + word + '»: ' + x.model, false);
           // prima dello sfogo il nome dell'oggetto nuovo non si dice mai
           if (i < reveal && (x.prompt + x.model).indexOf(ITEMS[l.fresh].word) !== -1) check('drill non svela l\'oggetto nuovo', false);
         });
-        if (n >= 2 && !(st.type === 'echo' && st.check === 'question') && d[1].prompt === d[0].prompt) check('drill: la seconda è diversa dalla prima', false);
-        if (n >= 3 && !(st.type === 'echo' && st.check === 'question') && new Set(d.map(x => x.type)).size < 2) check('drill variato', false);
+        if (n >= 2 && !(st.type === 'echo' && (st.check === 'question' || st.check === 'dem')) && d[1].prompt === d[0].prompt) check('drill: la seconda è diversa dalla prima', false);
+        if (n >= 3 && !(st.type === 'echo' && (st.check === 'question' || st.check === 'dem')) && new Set(d.map(x => x.type)).size < 2) check('drill variato', false);
       }
     });
   }
 });
 count++;
 
-// 3b2. Presentazione: primo giro «Questo è un libro.», secondo «È un libro.»
+// 3b2. Presentazione: nella lezione 1 solo «È un libro.»; «Questo è…» dalla lezione 2 (dq)
 LESSONS.forEach(l => {
-  const p = buildSteps(l).filter(s => s.phase === 'present').slice(0, l.known.length * 2);
-  check(l.id + ': presentazione con questo/questa', p.slice(0, l.known.length).every(s => /^Quest[oa] è /.test(s.prompt) && s.prompt.startsWith(ITEMS[s.show].art === 'una' ? 'Questa' : 'Questo')) &&
-    p.slice(l.known.length).every(s => /^È /.test(s.prompt)));
-  check(l.id + ': domande senza «questo» nelle lezioni che non lo insegnano', l.questo || buildSteps(l).every(s => !/^È quest/.test(s.prompt)));
+  const st = buildSteps(l), first = st.findIndex(s => s.phase !== 'present'), pres = st.slice(0, first);
+  const claims = pres.filter(s => s.check === 'claim'), dems = pres.filter(s => s.check === 'dem');
+  if (!l.dq) check(l.id + ': niente «Questo è…» nella presentazione', claims.every(s => /^È /.test(s.prompt)) && !dems.length);
+  else {
+    const n1 = l.questoIntro ? l.known.length + (l.review || []).length : l.known.length;
+    check(l.id + ': primo giro con «Questo/Questa» d\'accordo', claims.slice(0, n1).every(s => s.prompt.startsWith(ITEMS[s.show].art === 'una' ? 'Questa è ' : 'Questo è ')));
+    check(l.id + ': poi «È un…»', claims.slice(n1).every(s => /^È /.test(s.prompt)));
+  }
+  check(l.id + ': domande senza «questo» nelle lezioni che non lo insegnano', l.questo || st.every(s => !/^È quest/.test(s.prompt)));
 });
+check('lezione 1: niente «Questo/Questa»', buildSteps(LESSONS[0]).every(s => !/Quest/.test(s.prompt + s.model)));
+// lezione 2: prima l'insegnante indica e dice solo «Questo.» «Questa.», maschili e femminili mescolati, poi il nome
+{
+  const l2 = LESSONS[1];
+  for (let n = 0; n < 50; n++) {
+    const st = buildSteps(l2), dems = st.filter(s => s.check === 'dem');
+    const P = l2.known.concat(l2.review);
+    if (n === 0) {
+      check('lezione 2: comincia con «Questo.» «Questa.» su tutti gli oggetti', st.slice(0, P.length).every(s => s.check === 'dem') && dems.length === P.length && P.every(k => dems.some(d => d.show === k)));
+      check('lezione 2: «Questo.» per i maschili, «Questa.» per i femminili', dems.every(d => d.prompt === (ITEMS[d.show].art === 'una' ? 'Questa.' : 'Questo.')));
+      check('lezione 2: c\'è anche il maschile (libro, tavolo)', dems.some(d => d.prompt === 'Questo.') && dems.some(d => d.prompt === 'Questa.'));
+      check('lezione 2: poi il nome con lo stesso ordine', st.slice(P.length, 2 * P.length).map(s => s.show).join() === dems.map(d => d.show).join() && /^Quest/.test(st[P.length].prompt));
+    }
+    if (dems.some((d, i) => i && d.prompt === dems[i - 1].prompt)) { check('lezione 2: «Questo/Questa» alternati', false); break; }
+  }
+  const dq = { type: 'echo', check: 'dem', dem: 'questo', show: 'book', prompt: 'Questo.', model: 'Questo.' };
+  check('«Questo.» ripetuto', evaluate(dq, 'Questo.').ok && evaluate(dq, 'questo').ok);
+  check('«Questa.» al posto di «Questo.» è sbagliato', !evaluate(dq, 'Questa.').ok);
+  check('ripetizioni di «Questo.» dopo un errore', run('buildDrill')(dq, 3, ['book']).every(d => d.prompt === 'Questo.'));
+}
 // 3b3. Presentazione di tutti gli oggetti prima della prima domanda: ognuno 2 o 3 volte
-const presCount = (st) => { const first = st.findIndex(s => s.phase !== 'present'), c = {}; st.slice(0, first).forEach(s => { c[s.show] = (c[s.show] || 0) + 1; }); return c; };
+const presCount = (st) => { const first = st.findIndex(s => s.phase !== 'present'), c = {}; st.slice(0, first).filter(s => s.check === 'claim').forEach(s => { c[s.show] = (c[s.show] || 0) + 1; }); return c; };
 LESSONS.forEach(l => {
   const st = buildSteps(l), c = presCount(st);
-  check(l.id + ': ogni oggetto presentato 2 o 3 volte prima delle domande', l.known.every(k => c[k] === 2 || c[k] === 3) && Object.keys(c).length === l.known.length);
-  check(l.id + ': primo giro in ordine con «Questo/Questa»', st.slice(0, l.known.length).map(s => s.show).join() === l.known.join() && st.slice(0, l.known.length).every(s => /^Quest/.test(s.prompt)));
+  check(l.id + ': ogni oggetto presentato 2 o 3 volte prima delle domande', l.known.every(k => c[k] === 2 || c[k] === 3));
+  check(l.id + ': ripasso nominato al massimo una volta', (l.review || []).every(k => (c[k] || 0) <= 1));
 });
 // mai lo stesso oggetto due volte di fila nella presentazione
 check('presentazione: mai due volte di fila lo stesso oggetto', LESSONS.concat(COLOR_LESSONS).every(l => {
@@ -223,7 +248,7 @@ check('presentazione: mai due volte di fila lo stesso oggetto', LESSONS.concat(C
 // percentuali: 60% due volte con pochi oggetti (3 o meno), 70% con tanti
 [[LESSONS[0], 0.6], [LESSONS.find(l => l.known.length >= 4), 0.7]].forEach(([l, p]) => {
   let two = 0, all = 0;
-  for (let n = 0; n < 2000; n++) { const c = presCount(buildSteps(l)); Object.keys(c).forEach(k => { all++; if (c[k] === 2) two++; }); }
+  for (let n = 0; n < 2000; n++) { const c = presCount(buildSteps(l)); l.known.forEach(k => { all++; if (c[k] === 2) two++; }); }
   check(l.id + ': due volte nel ' + Math.round(p * 100) + '% circa (' + Math.round(two / all * 100) + '%)', Math.abs(two / all - p) < 0.04);
 });
 check('«Sì, questo è un libro.» accettato', evaluate({ type: 'yes', show: 'book' }, 'Sì, questo è un libro.').ok);

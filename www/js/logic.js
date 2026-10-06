@@ -77,6 +77,7 @@ function evaluate(step, text) {
   switch (step.type) {
     case 'echo':
       if (step.check === 'question') return { ok: has(s, 'che cosa e') && !c.length, full: true };
+      if (step.check === 'dem') return { ok: has(s, step.dem) && !has(s, step.dem === 'questo' ? 'questa' : 'questo') && !c.length && !n.length, full: true };
       return { ok: c.indexOf(X) !== -1 && onlyX && !n.length, full: true };
     case 'yes':
       return { ok: yes && !no && !n.length && c.indexOf(X) !== -1 && onlyX, full: true };
@@ -208,7 +209,9 @@ const S = {
   key:     (X) => ({ type: 'key', show: X, prompt: Q, model: 'È ' + np(X) + '.' }),
   // L'insegnante si risponde da solo: nessuna risposta attesa
   reveal:  (X) => ({ type: 'reveal', show: X, prompt: Q + ' È ' + np(X) + '.', model: '' }),
-  askQ:    (X) => ({ type: 'echo', check: 'question', show: X, prompt: Q, model: Q })
+  askQ:    (X) => ({ type: 'echo', check: 'question', show: X, prompt: Q, model: Q }),
+  // l'insegnante indica e dice solo «Questo.» / «Questa.»
+  dem:     (X) => { const p = dem(X).charAt(0).toUpperCase() + dem(X).slice(1) + '.'; return { type: 'echo', check: 'dem', dem: dem(X), show: X, prompt: p, model: p }; }
 };
 
 // Ripetizioni dopo un errore: quante, secondo l'insegnante e il numero dell'errore
@@ -221,7 +224,7 @@ function repeatsFor(t, nErr) { return t.repeats[nErr % t.repeats.length]; }
 function buildDrill(st, n, items) {
   const first = Object.assign({}, st, { prompt: st.model, drill: true });
   const out = [first];
-  if (st.type === 'echo' && st.check === 'question') {
+  if (st.type === 'echo' && (st.check === 'question' || st.check === 'dem')) {
     while (out.length < n) out.push(Object.assign({}, first));
     return out;
   }
@@ -271,19 +274,19 @@ const ASK_TURNS = 4;   // e in fondo, come verifica
 // per introdurre le nuove; fresh = oggetto da scoprire con «Che cos'è?».
 // Giri di presentazione: ogni oggetto 2 o 3 volte, a caso. Con pochi oggetti (3 o meno) 2 volte nel 60%
 // dei casi, con tanti oggetti nel 70% (lì la presentazione è già lunga). Primo giro in ordine, gli altri mescolati.
-function presentRounds(K) {
+function presentRounds(K, firstRound) {
   const p2 = K.length <= 3 ? 0.6 : 0.7;
   let three = K.filter(() => Math.random() >= p2);
   // mai lo stesso oggetto due volte di fila tra un giro e l'altro: si provano altri ordini
   const ok = (rs) => rs.every((r, i) => !i || r[0] !== rs[i - 1][rs[i - 1].length - 1]);
   for (let tries = 0; tries < 40; tries++) {
-    const rounds = [K.slice(), shuffle(K)];
+    const rounds = [(firstRound || K).slice(), shuffle(K)];
     if (three.length) rounds.push(shuffle(three));
     if (ok(rounds)) return rounds;
     // con due soli oggetti a volte non c'è ordine possibile: il terzo giro va all'altro oggetto
     if (tries === 20 && three.length === 1) three = K.filter(x => x !== three[0]).slice(0, 1);
   }
-  return [K.slice(), shuffle(K)];
+  return [(firstRound || K).slice(), shuffle(K)];
 }
 function lessonWords(l) { return l.known.concat(l.review || []).concat(l.fresh ? [l.fresh] : []); }
 function buildSteps(lesson) {
@@ -297,8 +300,18 @@ function buildSteps(lesson) {
   const st = [];
   const add = (s, phase) => { s.phase = phase; st.push(s); return s; };
 
-  // Presentazione di TUTTI gli oggetti prima della prima domanda: ognuno 2 o 3 volte (presentRounds)
-  presentRounds(K).forEach((round, r) => round.forEach(x => add(S.present(x, !r), 'present')));   // «Questo è…», poi «È un libro.»
+  // Lezione 2 (questoIntro): l'insegnante indica gli oggetti, maschili e femminili mescolati,
+  // e dice solo «Questo.» «Questa.»; poi il nome: «Questo è un libro.» «Questa è una sedia.»
+  let first = null;
+  if (lesson.questoIntro) {
+    const m = shuffle(K.concat(R).filter(x => dem(x) === 'questo')), f = shuffle(K.concat(R).filter(x => dem(x) === 'questa'));
+    first = [];
+    while (m.length || f.length) { if (m.length) first.push(m.shift()); if (f.length) first.push(f.shift()); }
+    first.forEach(x => add(S.dem(x), 'present'));
+  }
+  // Presentazione di TUTTI gli oggetti prima della prima domanda: ognuno 2 o 3 volte (presentRounds).
+  // «Questo è un libro.» solo dalla lezione 2 (dq); nella lezione 1 sempre «È un libro.»
+  presentRounds(K, first).forEach((round, r) => round.forEach(x => add(S.present(x, !r && !!lesson.dq), 'present')));
   for (let r = 0; r < 2; r++) shuffle(K).forEach(x => add(S.yes(x, q()), 'yes'));
   if (!R.length) {
     const pairs = [];
@@ -318,7 +331,7 @@ function buildSteps(lesson) {
     add(S.reveal(F), 'reveal').pause = 1500;
     add(S.reveal(K[0]), 'reveal');
     for (let i = 0; i < (R.length ? 2 : 4); i++) add(S.askQ(F), 'askq');
-    add(S.present(F, true), 'present');
+    if (lesson.dq) add(S.present(F, true), 'present');   // «Questa è una penna.» solo dalla lezione 2
     add(S.present(F), 'present');
   }
   const keyItems = F ? K.concat([F]) : K;

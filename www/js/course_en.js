@@ -39,11 +39,11 @@ const ITEMS = {
 // Lezione 4: l'ombrello al posto della lampada, per il primo «an».
 const LESSONS = [
   { id: 'e1', title: 'Lesson 1', known: ['book', 'table', 'chair'], fresh: 'pen' },
-  { id: 'e2', title: 'Lesson 2', known: ['chair', 'door'], fresh: 'window' },
+  { id: 'e2', title: 'Lesson 2', known: ['chair', 'door'], fresh: 'window', dq: true },
   { id: 'e3', title: 'Lesson 3', known: ['bottle', 'cup'], review: ['book', 'table', 'chair', 'pen', 'door', 'window'],
-    fresh: 'computer', questo: true },
+    fresh: 'computer', questo: true, dq: true },
   { id: 'e4', title: 'Lesson 4', known: ['phone', 'key', 'notebook', 'bag'], review: ['book', 'pen', 'cup', 'chair'],
-    fresh: 'umbrella', questo: true }
+    fresh: 'umbrella', questo: true, dq: true }
 ];
 
 // Quattro insegnanti, dal più rigido al più indulgente: uomo, donna, donna, uomo.
