@@ -6,7 +6,7 @@ const vm = require('vm');
 
 const ctx = { console: console };
 vm.createContext(ctx);
-['course.js', 'data.js', 'logic.js', 'colors_it.js', 'ui_lang.js'].forEach(f => {
+['course.js', 'data.js', 'logic.js', 'colors_it.js', 'numbers_it.js', 'ui_lang.js'].forEach(f => {
   vm.runInContext(fs.readFileSync(path.join(__dirname, '..', 'www', 'js', f), 'utf8'), ctx, { filename: f });
 });
 const run = (code) => vm.runInContext(code, ctx);
@@ -14,7 +14,8 @@ const evaluate = run('evaluate');
 const evaluateAll = run('evaluateAll');
 const buildSteps = run('buildSteps');
 const answerSteps = run('answerSteps');
-const LESSONS = run('LESSONS').filter(l => !l.colors);   // lezioni con gli oggetti (i colori hanno i loro test)
+const LESSONS = run('LESSONS').filter(l => !l.colors && !l.numbers);   // lezioni con gli oggetti (colori e numeri hanno i loro test)
+const NUM_LESSONS = run('LESSONS').filter(l => l.numbers);
 const COLOR_LESSONS = run('LESSONS').filter(l => l.colors);
 const ITEMS = run('ITEMS');
 const TEACHERS = run('TEACHERS');
@@ -353,6 +354,45 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].map(k => TEACHER
     }
     check('lezione 5 (giro ' + n + '): niente domanda impossibile', st.every(s => s.type !== 'neg' || s.ask !== s.show.split('_')[1]));
   }
+}
+
+// Lezioni dei numeri: «Che numero è?»
+{
+  const S = run('S'), evalAsk = run('evalAsk'), answerAsk = run('answerAsk'), buildDrill = run('buildDrill'), isEcho = run('isEcho');
+  const ok = (st, t) => evaluate(st, t).ok;
+  check('lezioni 6 e 7 ci sono', NUM_LESSONS.map(l => l.id).join() === 'l6,l7');
+  check('cartellini 1–10', [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].every(i => FIG['n' + i]));
+  check('frasi', S.present('n3').prompt === 'È il numero tre.' && S.yes('n3').model === 'Sì, è il numero tre.' &&
+    S.neg('n3', 'n2').prompt === 'È il numero due?' && S.neg('n3', 'n2').model === 'No, non è il numero due.' &&
+    S.key('n3').prompt === 'Che numero è?' && S.reveal('n6').prompt === 'Che numero è? È il numero sei.');
+  const k3 = S.key('n3'), y3 = S.yes('n3'), n32 = S.neg('n3', 'n2');
+  check('giusto: forma lunga e corta', ok(k3, 'È il numero tre.') && ok(k3, 'È il tre.'));
+  check('giusto: cifre del microfono', ok(k3, 'è il numero 3') && ok(y3, 'sì è il 3') && ok(S.key('n10'), 'è il numero 10'));
+  check('giusto: l\'otto', ok(S.key('n8'), 'È l\'otto.'));
+  check('giusto: sì e no', ok(y3, 'Sì, è il numero tre.') && ok(n32, 'No, non è il numero due.') && evaluate(n32, 'No, non è il due, è il tre.').full);
+  check('giusto: ripete «Che numero è?»', ok(S.askQ('n6'), 'Che numero è?'));
+  check('sbagliato: numero sbagliato', !ok(k3, 'È il numero quattro.') && !ok(k3, 'è il 4'));
+  check('sbagliato: manca il sì', !ok(y3, 'È il numero tre.'));
+  check('sbagliato: solo il numero', !ok(k3, 'tre'));
+  check('sbagliato: domanda ripetuta', !ok(S.alt('n3', 'n5'), S.alt('n3', 'n5').prompt));
+  check('eco con le cifre', isEcho(y3, 'è il numero 3') && evaluateAll(y3, ['è il numero 3']).ok === false);
+  check('domanda attaccata davanti', evaluateAll(k3, ['che numero è è il numero 3']).ok);
+  check('allievo: Che numero è?', evalAsk('n3', 'Che numero è?').kind === 'what');
+  check('allievo: È il numero due? (no)', evalAsk('n3', 'È il numero 2?').kind === 'no');
+  check('allievo: È il tre o il quattro?', evalAsk('n3', 'È il tre o il quattro?').kind === 'alt');
+  check('insegnante risponde', answerAsk('n3', { kind: 'no', ask: 'n2' }) === 'No, non è il numero due. È il numero tre.');
+  NUM_LESSONS.forEach(l => {
+    for (let n = 0; n < 20; n++) {
+      const st = buildSteps(l);
+      if (n === 0) {
+        check(l.id + ': il numero nuovo non si dice prima dello sfogo', st.slice(0, st.findIndex(s => s.type === 'reveal')).every(s => (s.prompt + ' ' + s.model).indexOf(' ' + run('NUMS')[l.fresh] + '.') === -1));
+        check(l.id + ': tutte le risposte modello giuste', st.filter(s => s.model && s.type !== 'reveal').every(s => evaluate(s, s.model).ok));
+        check(l.id + ': ripetizioni giuste', st.filter(s => s.model && s.type !== 'reveal').every(s => buildDrill(s, 5, l.known.concat(l.review || [], [l.fresh])).every(d => evaluate(d, d.model).ok)));
+        check(l.id + ': lunghezza ragionevole', st.length < 110);
+      }
+      if (st.some(s => s.type === 'neg' && s.ask === s.show)) { check(l.id + ': niente domanda impossibile', false); break; }
+    }
+  });
 }
 
 // Lingua dello studente: ogni scritta c'è in tutte le lingue, con gli stessi segnaposto {…}

@@ -64,7 +64,11 @@ const LESSONS = [
   // «Il o la? Nero o nera?»: ogni oggetto ha il suo colore. known = presentati subito (nero e bianco);
   // fresh = oggetti rossi, il colore nuovo da scoprire con «Di che colore è…?»
   { id: 'l5', title: 'Lezione 5', colors: true,
-    known: ['phone_nero', 'laptop_bianco', 'suitcase_nero', 'flask_bianco'], reds: ['coat_rosso', 'cup_rosso'] }
+    known: ['phone_nero', 'laptop_bianco', 'suitcase_nero', 'flask_bianco'], reds: ['coat_rosso', 'cup_rosso'] },
+  // «Che numero è?» (capitolo 1, esercizio 4): da uno a cinque, poi il sei da scoprire
+  { id: 'l6', title: 'Lezione 6', numbers: true, known: ['n1', 'n2', 'n3', 'n4', 'n5'], fresh: 'n6' },
+  // sette, otto, nove (ripasso 1–6), poi il dieci da scoprire
+  { id: 'l7', title: 'Lezione 7', numbers: true, known: ['n7', 'n8', 'n9'], review: ['n1', 'n2', 'n3', 'n4', 'n5', 'n6'], fresh: 'n10' }
 ];
 
 // Quattro insegnanti, dal più rigido al più indulgente. gender = voce maschile o femminile.

@@ -316,7 +316,7 @@ function buildSteps(lesson) {
   if (!R.length) {
     const pairs = [];
     K.forEach(x => K.forEach(y => { if (x !== y) pairs.push([x, y]); }));
-    shuffle(pairs).forEach(p => add(S.neg(p[0], p[1], q()), 'neg'));
+    shuffle(pairs).slice(0, Math.max(6, K.length * 3)).forEach(p => add(S.neg(p[0], p[1], q()), 'neg'));
   } else {
     // parola nuova indicata, domanda con le parole vecchie (e viceversa)
     K.forEach(x => shuffle(KQ.filter(y => y !== x)).slice(0, 3).forEach(y => add(S.neg(x, y, q()), 'neg')));

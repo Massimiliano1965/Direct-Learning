@@ -30,7 +30,7 @@ Durante il test l'insegnante non corregge; contano solo gli errori, mostrati all
 4. **Sì o no** — *fatto*
 5. **Il o la?** (articolo determinativo) — *fatto: Lezione 5*
 6. **Colori e accordo**: nero o nera? — *fatto: Lezione 5*
-7. **Numeri**: «Che numero è?»
+7. **Numeri**: «Che numero è?» — *fatto: Lezioni 6 e 7 (1–10)*
 
 ## Capitolo 2
 
