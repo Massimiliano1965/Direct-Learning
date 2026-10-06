@@ -44,183 +44,61 @@ const SHADOW = '<ellipse cx="50" cy="92" rx="32" ry="4.5" fill="#000" opacity=".
 const SHINE = 'fill="#fff" opacity=".35"';
 const svg = (inner) => '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">' + SHADOW + inner + '</svg>';
 
+// Oggetti in stile piatto e sobrio (adulti, business): niente contorni, colori smorzati
+const FLAT = (inner, w) => '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><ellipse cx="50" cy="91" rx="' + (w || 30) + '" ry="3" fill="#000" opacity=".25"/>' + inner + '</svg>';
 const FIG = {
-  book: svg(`
-    <rect x="28" y="12" width="50" height="74" rx="4" fill="#f5ecd8" ${O}/>
-    <line x1="74" y1="18" x2="74" y2="80" stroke="#d8ccb0" stroke-width="1.5"/>
-    <rect x="22" y="9" width="50" height="74" rx="4" fill="url(#gRed)" ${O}/>
-    <rect x="22" y="9" width="10" height="74" rx="3" fill="#8b2c27" ${O}/>
-    <line x1="22" y1="20" x2="32" y2="20" stroke="#f2c744" stroke-width="2.5"/>
-    <line x1="22" y1="72" x2="32" y2="72" stroke="#f2c744" stroke-width="2.5"/>
-    <rect x="39" y="24" width="26" height="15" rx="2.5" fill="#fbefcf" ${O}/>
-    <line x1="43" y1="30" x2="61" y2="30" stroke="#a8352f" stroke-width="2.2" stroke-linecap="round"/>
-    <line x1="43" y1="34.5" x2="56" y2="34.5" stroke="#a8352f" stroke-width="2.2" stroke-linecap="round"/>
-    <rect x="35" y="13" width="3" height="66" rx="1.5" ${SHINE}/>`),
-
-  pen: svg(`<g transform="rotate(-40 50 50)">
-    <rect x="8" y="44" width="10" height="12" rx="3" fill="#1f2a6b" ${O}/>
-    <rect x="16" y="43" width="56" height="14" rx="7" fill="url(#gBlue)" ${O}/>
-    <rect x="22" y="37" width="24" height="5" rx="2.5" fill="url(#gSilver)" ${O}/>
-    <polygon points="72,44.5 88,50 72,55.5" fill="url(#gSilver)" ${O}/>
-    <circle cx="88.5" cy="50" r="1.8" fill="#2a2440"/>
-    <rect x="20" y="45.5" width="48" height="3" rx="1.5" ${SHINE}/>
-    <rect x="58" y="43" width="4" height="14" fill="#1f2a6b" opacity=".6"/></g>`),
-
-  pencil: svg(`<g transform="rotate(-40 50 50)">
-    <rect x="5" y="43" width="11" height="14" rx="4" fill="#f59ab0" ${O}/>
-    <rect x="14" y="43" width="9" height="14" fill="url(#gSilver)" ${O}/>
-    <line x1="17" y1="43" x2="17" y2="57" stroke="#8a8ea3" stroke-width="1.5"/>
-    <line x1="20" y1="43" x2="20" y2="57" stroke="#8a8ea3" stroke-width="1.5"/>
-    <rect x="23" y="43" width="50" height="14" fill="url(#gYellow)" ${O}/>
-    <line x1="23" y1="47.7" x2="73" y2="47.7" stroke="#d9a313" stroke-width="1.3"/>
-    <line x1="23" y1="52.3" x2="73" y2="52.3" stroke="#d9a313" stroke-width="1.3"/>
-    <polygon points="73,43 90,50 73,57" fill="#f1d3a4" ${O}/>
-    <polygon points="84.5,47.7 90,50 84.5,52.3" fill="#2a2440"/>
-    <rect x="25" y="44.5" width="46" height="2.2" rx="1" ${SHINE}/></g>`),
-
-  table: svg(`
-    <rect x="25" y="42" width="6" height="34" rx="2" fill="#6b4120" ${O}/>
-    <rect x="69" y="42" width="6" height="34" rx="2" fill="#6b4120" ${O}/>
-    <polygon points="18,26 82,26 92,36 8,36" fill="url(#gWoodTop)" ${O}/>
-    <rect x="8" y="36" width="84" height="9" rx="2" fill="url(#gWood)" ${O}/>
-    <rect x="13" y="45" width="8" height="43" rx="2" fill="url(#gWood)" ${O}/>
-    <rect x="79" y="45" width="8" height="43" rx="2" fill="url(#gWood)" ${O}/>
-    <path d="M30 30 H70" stroke="#fff" stroke-width="2" opacity=".35" stroke-linecap="round"/>`),
-
-  chair: svg(`
-    <rect x="31" y="66" width="5" height="18" rx="2" fill="#6b4120" ${O}/>
-    <rect x="64" y="66" width="5" height="18" rx="2" fill="#6b4120" ${O}/>
-    <rect x="28" y="8" width="44" height="36" rx="6" fill="url(#gWood)" ${O}/>
-    <rect x="35" y="15" width="30" height="7" rx="3" fill="#e2b07a" opacity=".8"/>
-    <rect x="35" y="27" width="30" height="7" rx="3" fill="#e2b07a" opacity=".8"/>
-    <rect x="29" y="42" width="6" height="12" fill="#8a5629" ${O}/>
-    <rect x="65" y="42" width="6" height="12" fill="#8a5629" ${O}/>
-    <polygon points="26,52 74,52 80,60 20,60" fill="url(#gWoodTop)" ${O}/>
-    <rect x="20" y="60" width="60" height="7" rx="2" fill="url(#gWood)" ${O}/>
-    <rect x="22" y="67" width="7" height="23" rx="2" fill="url(#gWood)" ${O}/>
-    <rect x="71" y="67" width="7" height="23" rx="2" fill="url(#gWood)" ${O}/>`),
-
-  door: svg(`
-    <rect x="21" y="5" width="58" height="87" rx="2" fill="#5b3a20" ${O}/>
-    <rect x="26" y="9" width="48" height="83" fill="url(#gDoor)" ${O}/>
-    <rect x="32" y="16" width="36" height="27" rx="2" fill="#93592e" opacity=".55" ${O}/>
-    <rect x="32" y="50" width="36" height="34" rx="2" fill="#93592e" opacity=".55" ${O}/>
-    <rect x="35" y="19" width="3" height="21" rx="1.5" ${SHINE}/>
-    <rect x="35" y="53" width="3" height="28" rx="1.5" ${SHINE}/>
-    <circle cx="67" cy="47" r="4.5" fill="url(#gGold)" ${O}/>
-    <circle cx="65.8" cy="45.8" r="1.3" fill="#fff" opacity=".8"/>`),
-
-  window: svg(`
-    <rect x="12" y="8" width="76" height="76" rx="4" fill="#f1f1f7" ${O}/>
-    <rect x="18" y="14" width="29" height="64" rx="2" fill="url(#gSky)" ${O}/>
-    <rect x="53" y="14" width="29" height="64" rx="2" fill="url(#gSky)" ${O}/>
-    <path d="M58 30 a6 6 0 0 1 11 -2 a5 5 0 0 1 8 4 a4 4 0 0 1 -1 8 h-17 a5 5 0 0 1 -1 -10z" fill="#fff" opacity=".9"/>
-    <polygon points="22,40 38,18 44,18 22,48" ${SHINE}/>
-    <polygon points="57,66 73,44 77,44 57,72" ${SHINE}/>
-    <rect x="6" y="83" width="88" height="8" rx="3" fill="#dcdbe8" ${O}/>`),
-
-  key: svg(`<g transform="rotate(-20 50 50)">
-    <rect x="40" y="45" width="50" height="10" rx="3" fill="url(#gGold)" ${O}/>
-    <path d="M66 55 v11 h6 v-6 h5 v8 h6 v-13" fill="url(#gGold)" ${O}/>
-    <circle cx="27" cy="50" r="18" fill="url(#gGold)" ${O}/>
-    <circle cx="27" cy="50" r="7" fill="#211f33" ${O}/>
-    <path d="M15 43 a14 14 0 0 1 9 -8" stroke="#fff" stroke-width="3" opacity=".6" fill="none" stroke-linecap="round"/>
-    <rect x="46" y="46.5" width="38" height="2.4" rx="1.2" ${SHINE}/></g>`),
-
-  box: svg(`
-    <polygon points="14,38 62,38 62,88 14,88" fill="url(#gCard)" ${O}/>
-    <polygon points="62,38 86,24 86,74 62,88" fill="url(#gCardSide)" ${O}/>
-    <polygon points="14,38 38,24 86,24 62,38" fill="#ecc28c" ${O}/>
-    <polygon points="14,38 4,26 28,14 38,24" fill="#d9a568" ${O}/>
-    <polygon points="62,38 86,24 96,34 72,48" fill="#c99351" ${O}/>
-    <polygon points="31,38 42,38 42,58 31,58" fill="#f3e2c2" opacity=".85"/>
-    <polygon points="31,38 55,24 66,24 42,38" fill="#f3e2c2" opacity=".85"/>
-    <line x1="20" y1="76" x2="40" y2="76" stroke="#8d5f2b" stroke-width="2" stroke-linecap="round"/>
-    <line x1="20" y1="81" x2="32" y2="81" stroke="#8d5f2b" stroke-width="2" stroke-linecap="round"/>`),
-
-  clock: svg(`
-    <circle cx="50" cy="48" r="40" fill="url(#gClockRim)" ${O}/>
-    <circle cx="50" cy="48" r="32" fill="url(#gFace)" ${O}/>
-    <g stroke="#2a2440" stroke-width="2.5" stroke-linecap="round">
-      <line x1="50" y1="20" x2="50" y2="25"/><line x1="78" y1="48" x2="73" y2="48"/>
-      <line x1="50" y1="76" x2="50" y2="71"/><line x1="22" y1="48" x2="27" y2="48"/></g>
-    <g fill="#6a6dd6"><circle cx="64" cy="23.8" r="1.5"/><circle cx="74.2" cy="34" r="1.5"/><circle cx="74.2" cy="62" r="1.5"/>
-      <circle cx="64" cy="72.2" r="1.5"/><circle cx="36" cy="72.2" r="1.5"/><circle cx="25.8" cy="62" r="1.5"/>
-      <circle cx="25.8" cy="34" r="1.5"/><circle cx="36" cy="23.8" r="1.5"/></g>
-    <line x1="50" y1="48" x2="50" y2="29" stroke="#2a2440" stroke-width="4" stroke-linecap="round"/>
-    <line x1="50" y1="48" x2="65" y2="56" stroke="#2a2440" stroke-width="4" stroke-linecap="round"/>
-    <line x1="50" y1="48" x2="38" y2="66" stroke="#e5533c" stroke-width="1.8" stroke-linecap="round"/>
-    <circle cx="50" cy="48" r="4" fill="#e5533c" ${O}/>
-    <path d="M24 34 a30 30 0 0 1 16 -14" stroke="#fff" stroke-width="3" fill="none" opacity=".7" stroke-linecap="round"/>`),
-
-  cup: svg(`
-    <ellipse cx="46" cy="86" rx="36" ry="6" fill="#e9e8f2" ${O}/>
-    <path d="M68 42 h6 a12 12 0 0 1 0 24 h-6" fill="none" stroke="#2a2440" stroke-width="9" stroke-linecap="round"/>
-    <path d="M68 42 h6 a12 12 0 0 1 0 24 h-6" fill="none" stroke="#e5533c" stroke-width="4.5" stroke-linecap="round"/>
-    <path d="M20 34 H72 V68 a14 14 0 0 1 -14 14 H34 a14 14 0 0 1 -14 -14 Z" fill="url(#gMug)" ${O}/>
-    <ellipse cx="46" cy="34" rx="26" ry="5" fill="#6b3a22" ${O}/>
-    <rect x="26" y="42" width="5" height="30" rx="2.5" ${SHINE}/>
-    <g class="steam" fill="none" stroke="#d8d6e8" stroke-width="3" stroke-linecap="round" opacity=".85">
-      <path d="M37 24 q5 -6 0 -12 q-5 -6 0 -10"/><path d="M55 24 q5 -6 0 -12 q-5 -6 0 -10"/></g>`),
-
-  bottle: svg(`
-    <rect x="42" y="6" width="16" height="9" rx="2.5" fill="#e5533c" ${O}/>
-    <path d="M44 15 h12 v14 c0 4 14 9 14 22 v32 a6 6 0 0 1 -6 6 h-28 a6 6 0 0 1 -6 -6 v-32 c0 -13 14 -18 14 -22 z" fill="url(#gGlass)" ${O}/>
-    <path d="M30 60 h40 v16 h-40 z" fill="#f4f1e6" ${O}/>
-    <path d="M30 70 q10 -5 20 0 t20 0 v13 a6 6 0 0 1 -6 6 h-28 a6 6 0 0 1 -6 -6 z" fill="#4f9fe0" opacity=".55"/>
-    <line x1="38" y1="66" x2="62" y2="66" stroke="#8c8fe8" stroke-width="3" stroke-linecap="round"/>
-    <rect x="36" y="36" width="4" height="22" rx="2" ${SHINE}/>`),
-
-  computer: svg(`
-    <rect x="16" y="14" width="68" height="48" rx="5" fill="url(#gAlu)" ${O}/>
-    <rect x="21" y="19" width="58" height="38" rx="2" fill="url(#gScreen)"/>
-    <rect x="27" y="26" width="26" height="4" rx="2" fill="#a9abf2" opacity=".9"/>
-    <rect x="27" y="34" width="40" height="3" rx="1.5" fill="#fff" opacity=".45"/>
-    <rect x="27" y="40" width="34" height="3" rx="1.5" fill="#fff" opacity=".45"/>
-    <rect x="27" y="46" width="22" height="3" rx="1.5" fill="#fff" opacity=".45"/>
-    <polygon points="21,19 44,19 21,44" fill="#fff" opacity=".12"/>
-    <path d="M8 64 h84 l-6 14 a4 4 0 0 1 -4 3 h-64 a4 4 0 0 1 -4 -3 z" fill="url(#gAlu)" ${O}/>
-    <rect x="40" y="66" width="20" height="4" rx="2" fill="#a9acbb"/>
-    <line x1="18" y1="74" x2="82" y2="74" stroke="#c9cbd6" stroke-width="2"/>`),
-
-  bag: svg(`
-    <path d="M36 32 V24 a14 14 0 0 1 28 0 V32" fill="none" stroke="#2a2440" stroke-width="9" stroke-linecap="round"/>
-    <path d="M36 32 V24 a14 14 0 0 1 28 0 V32" fill="none" stroke="#2b9a98" stroke-width="4.5" stroke-linecap="round"/>
-    <rect x="12" y="30" width="76" height="58" rx="12" fill="url(#gBag)" ${O}/>
-    <path d="M12 44 a12 12 0 0 1 12 -14 H76 a12 12 0 0 1 12 14 V58 H12 Z" fill="url(#gBagFlap)" ${O}/>
-    <rect x="42" y="52" width="16" height="13" rx="3" fill="url(#gGold)" ${O}/>
-    <rect x="47" y="56" width="6" height="5" rx="1.5" fill="#2a2440"/>
-    <rect x="18" y="35" width="40" height="3" rx="1.5" ${SHINE}/>
-    <line x1="22" y1="68" x2="22" y2="82" stroke="#1f7f86" stroke-width="2" stroke-dasharray="3 3"/>
-    <line x1="78" y1="68" x2="78" y2="82" stroke="#1f7f86" stroke-width="2" stroke-dasharray="3 3"/>`),
-
-  phone: svg(`
-    <rect x="30" y="8" width="40" height="78" rx="8" fill="#2a2440" ${O}/>
-    <rect x="34" y="16" width="32" height="60" rx="3" fill="url(#gScreen)"/>
-    <rect x="44" y="11" width="12" height="2.6" rx="1.3" fill="#6a6dd6"/>
-    <rect x="38" y="22" width="7" height="7" rx="2" fill="#f2c744"/><rect x="47" y="22" width="7" height="7" rx="2" fill="#5fd6c6"/><rect x="56" y="22" width="7" height="7" rx="2" fill="#ef7a6f"/>
-    <rect x="38" y="32" width="7" height="7" rx="2" fill="#7c95ff"/><rect x="47" y="32" width="7" height="7" rx="2" fill="#a9abf2"/><rect x="56" y="32" width="7" height="7" rx="2" fill="#34a847"/>
-    <circle cx="50" cy="80.5" r="2.6" fill="#6a6dd6"/>
-    <polygon points="34,16 52,16 34,40" fill="#fff" opacity=".12"/>`),
-
-  notebook: svg(`
-    <rect x="24" y="10" width="54" height="76" rx="4" fill="url(#gBlue)" ${O}/>
-    <rect x="34" y="24" width="34" height="16" rx="2.5" fill="#f5ecd8" ${O}/>
-    <line x1="38" y1="30" x2="64" y2="30" stroke="#3f57c9" stroke-width="2" stroke-linecap="round"/>
-    <line x1="38" y1="35" x2="56" y2="35" stroke="#3f57c9" stroke-width="2" stroke-linecap="round"/>
-    <g fill="none" stroke="#b9bccb" stroke-width="3" stroke-linecap="round">
-      <path d="M20 18 h8"/><path d="M20 28 h8"/><path d="M20 38 h8"/><path d="M20 48 h8"/><path d="M20 58 h8"/><path d="M20 68 h8"/><path d="M20 78 h8"/></g>
-    <rect x="70" y="14" width="3" height="68" rx="1.5" ${SHINE}/>`),
-
-  lamp: svg(`
-    <ellipse cx="46" cy="84" rx="20" ry="5" fill="url(#gSilver)" ${O}/>
-    <path d="M46 82 L36 54 L58 30" fill="none" stroke="#2a2440" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
-    <path d="M46 82 L36 54 L58 30" fill="none" stroke="#b9bccb" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
-    <circle cx="36" cy="54" r="4" fill="url(#gSilver)" ${O}/>
-    <path d="M52 22 L74 14 L88 44 L66 50 Z" fill="url(#gYellow)" ${O}/>
-    <ellipse cx="77" cy="47" rx="11" ry="4" transform="rotate(-18 77 47)" fill="#fff6c8" ${O}/>
-    <circle cx="58" cy="30" r="5" fill="url(#gSilver)" ${O}/>
-    <path d="M70 52 L62 72 M80 50 L80 72 M88 48 L96 66" stroke="#f5c431" stroke-width="2.5" stroke-linecap="round" opacity=".6"/>`)
+  book: FLAT(`<path d="M30 14 h44 a3 3 0 0 1 3 3 v68 a3 3 0 0 1 -3 3 h-44z" fill="#ece4d2"/>
+    <path d="M74 18 v66 M71 18 v66" stroke="#d4c9b0" stroke-width="1"/>
+    <path d="M24 11 h46 a3 3 0 0 1 3 3 v69 a3 3 0 0 1 -3 3 h-46z" fill="#2c3e66"/><path d="M24 11 h8 v75 h-8z" fill="#223152"/>
+    <rect x="40" y="26" width="24" height="2" fill="#c9a45c"/><rect x="44" y="31" width="16" height="1.4" fill="#c9a45c" opacity=".7"/>`),
+  pen: FLAT(`<g transform="rotate(-35 50 50)"><rect x="12" y="46" width="62" height="9" rx="4.5" fill="#1f2433"/><rect x="12" y="46" width="62" height="3" rx="1.5" fill="#3a4258"/>
+    <path d="M74 46.5 L88 50.5 L74 54.5z" fill="#b9bdc8"/><circle cx="88" cy="50.5" r="1.2" fill="#2a2a2a"/>
+    <rect x="20" y="42" width="26" height="3" rx="1.5" fill="#c9a45c"/><rect x="18" y="46" width="3" height="9" fill="#c9a45c"/></g>`),
+  pencil: FLAT(`<g transform="rotate(-35 50 50)"><rect x="8" y="45" width="10" height="11" rx="2" fill="#b56b6b"/><rect x="17" y="45" width="7" height="11" fill="#b9bdc8"/>
+    <rect x="24" y="45" width="48" height="11" fill="#d4b06a"/><rect x="24" y="48.6" width="48" height="3.6" fill="#c19a52"/>
+    <path d="M72 45 L88 50.5 L72 56z" fill="#e2c9a0"/><path d="M83 48.8 L88 50.5 L83 52.2z" fill="#2a2a2a"/></g>`),
+  table: FLAT(`<path d="M14 34 h72 l6 8 h-84z" fill="#b58a5e"/><rect x="8" y="42" width="84" height="6" fill="#8e6741"/>
+    <rect x="14" y="48" width="5" height="42" fill="#7a5735"/><rect x="81" y="48" width="5" height="42" fill="#7a5735"/>
+    <rect x="26" y="48" width="4" height="34" fill="#664729"/><rect x="70" y="48" width="4" height="34" fill="#664729"/>`, 38),
+  chair: FLAT(`<rect x="30" y="10" width="40" height="32" rx="3" fill="#8e6741"/><rect x="34" y="16" width="32" height="4" fill="#a37a52"/><rect x="34" y="26" width="32" height="4" fill="#a37a52"/>
+    <rect x="31" y="42" width="5" height="16" fill="#7a5735"/><rect x="64" y="42" width="5" height="16" fill="#7a5735"/>
+    <path d="M26 56 h48 l4 7 h-56z" fill="#b58a5e"/><rect x="22" y="63" width="56" height="5" fill="#8e6741"/>
+    <rect x="25" y="68" width="5" height="22" fill="#7a5735"/><rect x="70" y="68" width="5" height="22" fill="#7a5735"/>`, 26),
+  door: FLAT(`<rect x="22" y="6" width="56" height="85" fill="#4a3628"/><rect x="27" y="10" width="46" height="81" fill="#8e6741"/>
+    <rect x="33" y="17" width="34" height="26" fill="#7a5735"/><rect x="33" y="50" width="34" height="34" fill="#7a5735"/>
+    <circle cx="66" cy="47" r="3.2" fill="#c9a45c"/>`, 32),
+  window: FLAT(`<rect x="12" y="8" width="76" height="76" rx="2" fill="#dfe4ea"/>
+    <rect x="18" y="14" width="29" height="64" fill="#5d7f99"/><rect x="53" y="14" width="29" height="64" fill="#5d7f99"/>
+    <path d="M18 14 h29 v20 l-29 22z M53 14 h29 v12 l-29 26z" fill="#7d9bb3"/>
+    <rect x="6" y="83" width="88" height="6" fill="#c8ced6"/>`, 40),
+  key: FLAT(`<g transform="rotate(-20 50 50)"><rect x="40" y="46" width="50" height="8" rx="2" fill="#c9a45c"/>
+    <path d="M66 54 v10 h5 v-5 h5 v7 h5 v-12z" fill="#b8923f"/>
+    <circle cx="27" cy="50" r="17" fill="#c9a45c"/><circle cx="27" cy="50" r="7" fill="#161d2b"/><path d="M14 44 a14 14 0 0 1 8 -8" stroke="#e0c287" stroke-width="2.5" fill="none" stroke-linecap="round"/></g>`),
+  box: FLAT(`<path d="M14 38 h48 v50 h-48z" fill="#b58a5e"/><path d="M62 38 l24 -14 v50 l-24 14z" fill="#8e6741"/>
+    <path d="M14 38 l24 -14 h48 l-24 14z" fill="#c9a073"/><path d="M31 38 l24 -14 h9 l-24 14z M31 38 h9 v18 h-9z" fill="#d8c29a"/>`, 36),
+  clock: FLAT(`<circle cx="50" cy="48" r="38" fill="#3a4258"/><circle cx="50" cy="48" r="32" fill="#ece4d2"/>
+    <path d="M50 20 v6 M50 70 v6 M22 48 h6 M72 48 h6" stroke="#3a4258" stroke-width="3" stroke-linecap="round"/>
+    <path d="M50 48 V31 M50 48 L63 56" stroke="#1f2433" stroke-width="3.5" stroke-linecap="round"/><circle cx="50" cy="48" r="3" fill="#a3263a"/>`),
+  cup: FLAT(`<ellipse cx="48" cy="84" rx="34" ry="6" fill="#c8ced6"/>
+    <path d="M22 40 h52 l-5 38 a6 6 0 0 1 -6 5 h-30 a6 6 0 0 1 -6 -5z" fill="#e9edf2"/>
+    <path d="M73 48 h6 a9 9 0 0 1 0 18 h-8" fill="none" stroke="#e9edf2" stroke-width="5"/>
+    <ellipse cx="48" cy="40" rx="26" ry="5" fill="#5a3826"/><path d="M25 52 h46" stroke="#c9a45c" stroke-width="2"/>`, 34),
+  bottle: FLAT(`<rect x="42" y="6" width="16" height="9" rx="2" fill="#2c3e66"/><path d="M43 15 h14 v8 q12 6 12 18 v42 a6 6 0 0 1 -6 6 h-26 a6 6 0 0 1 -6 -6 v-42 q0 -12 12 -18z" fill="#8fb0c4"/>
+    <path d="M37 40 q0 -8 6 -12 v56 h-6z" fill="#b5ccda"/><rect x="31" y="50" width="38" height="20" fill="#ece4d2"/><rect x="38" y="57" width="24" height="2.5" fill="#2c3e66"/>`, 22),
+  computer: FLAT(`<rect x="18" y="16" width="64" height="44" rx="3" fill="#2a3040"/><rect x="22" y="20" width="56" height="36" fill="#2c3e66"/>
+    <path d="M22 20 h30 l-30 22z" fill="#3a4f7e"/><path d="M8 62 h84 l-6 12 h-72z" fill="#b9bdc8"/><rect x="42" y="64" width="16" height="3" rx="1.5" fill="#8d93a3"/>`, 40),
+  bag: FLAT(`<path d="M38 26 a6 6 0 0 1 6 -6 h12 a6 6 0 0 1 6 6 v6 h-5 v-6 a1.5 1.5 0 0 0 -1.5 -1.5 h-11 a1.5 1.5 0 0 0 -1.5 1.5 v6 h-5z" fill="#3a2a20"/>
+    <rect x="14" y="32" width="72" height="54" rx="5" fill="#6b4430"/><rect x="14" y="32" width="72" height="20" rx="5" fill="#5a3826"/>
+    <rect x="44" y="47" width="12" height="9" rx="1.5" fill="#c9a45c"/>`, 38),
+  phone: FLAT(`<rect x="30" y="8" width="40" height="80" rx="7" fill="#1f2433"/><rect x="33.5" y="15" width="33" height="64" rx="2" fill="#2c3e66"/>
+    <path d="M33.5 15 h20 l-20 26z" fill="#3a4f7e"/><rect x="44" y="10.5" width="12" height="2" rx="1" fill="#3a4258"/><circle cx="50" cy="83.5" r="2.2" fill="#3a4258"/>`, 22),
+  notebook: FLAT(`<rect x="24" y="14" width="52" height="74" rx="3" fill="#ece4d2"/><rect x="22" y="12" width="52" height="74" rx="3" fill="#8a3a3a"/>
+    <path d="M30 8 v10 M38 8 v10 M46 8 v10 M54 8 v10 M62 8 v10 M70 8 v10" stroke="#b9bdc8" stroke-width="2.5" stroke-linecap="round"/>
+    <rect x="32" y="30" width="32" height="14" rx="1.5" fill="#ece4d2"/><path d="M36 35 h24 M36 39 h16" stroke="#8a3a3a" stroke-width="1.6"/>`, 28),
+  lamp: FLAT(`<ellipse cx="50" cy="86" rx="20" ry="4" fill="#2a3040"/><rect x="47" y="56" width="5" height="30" fill="#3a4258"/>
+    <path d="M49 58 L36 34" stroke="#3a4258" stroke-width="5" stroke-linecap="round"/>
+    <path d="M24 34 l14 -22 l22 14 l-10 14z" fill="#c9a45c"/><path d="M40 40 l10 -14 l10 6 z" fill="#e0c287" opacity=".35"/>
+    <path d="M46 44 l10 14 l6 -4z" fill="#f3dfa8" opacity=".35"/>`, 24)
 };
 
 const HAND = `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
@@ -232,8 +110,8 @@ const HAND = `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
   <path d="M20 40 a10 10 0 0 1 8 -4" stroke="#fff" stroke-width="3" opacity=".6" fill="none" stroke-linecap="round"/></svg>`;
 
 const UNKNOWN = `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-  <circle cx="50" cy="50" r="40" fill="url(#gUnknown)" stroke="#8c8fe8" stroke-width="3"/>
-  <text x="50" y="67" font-size="48" font-family="Arial, sans-serif" font-weight="bold" fill="#8c8fe8" text-anchor="middle">?</text></svg>`;
+  <circle cx="50" cy="50" r="38" fill="#1d2638" stroke="#2a3448" stroke-width="2"/>
+  <text x="50" y="66" font-size="46" font-family="Georgia, 'Times New Roman', serif" fill="#c9a45c" text-anchor="middle">?</text></svg>`;
 
 // Ritratti degli insegnanti (gli altri hanno l'iniziale). Mass: cartoon dalla foto di Papa.
 const AVATARS = {
@@ -264,14 +142,13 @@ const MARKS = {
 // In italiano la domanda si sente solo dall'intonazione: il segnale la rende chiara.
 const CUES = {
   // «tocca una figura e fai tu la domanda»
-  pick: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="46" fill="url(#gLilla)" stroke="#fff" stroke-width="4"/>
-    <circle cx="44" cy="34" r="12" fill="none" stroke="#fff" stroke-width="3" opacity=".7"/>
-    <path d="M40 34 v28 l-7 -6 a5 5 0 0 0 -7 7 l14 16 h22 l5 -18 v-12 a4 4 0 0 0 -8 0 v-2 a4 4 0 0 0 -8 0 v-1 a4 4 0 0 0 -8 0 v-12 a3.5 3.5 0 0 0 -3 -0 z" fill="#fff" stroke="#2a2440" stroke-width="2.5" stroke-linejoin="round"/></svg>`,
+  pick: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="46" fill="none" stroke="#c9a45c" stroke-width="4"/>
+    <path d="M40 34 v28 l-7 -6 a5 5 0 0 0 -7 7 l14 16 h22 l5 -18 v-12 a4 4 0 0 0 -8 0 v-2 a4 4 0 0 0 -8 0 v-1 a4 4 0 0 0 -8 0 v-12 a3.5 3.5 0 0 0 -3 0 z" fill="#c9a45c"/></svg>`,
   ok: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="46" fill="#34a847" stroke="#fff" stroke-width="4"/>
     <rect x="22" y="44" width="15" height="34" rx="3" fill="#fff"/>
     <path d="M41 46 L52 24 C54 19 61 20 61 26 L59 40 L74 40 C80 40 83 45 82 50 L78 71 C77 76 73 79 68 79 L41 79 Z" fill="#fff"/></svg>`,
-  q: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="46" fill="url(#gLilla)" stroke="#fff" stroke-width="4"/>
-    <text x="50" y="72" font-size="66" font-family="Arial, sans-serif" font-weight="900" fill="#fff" text-anchor="middle">?</text></svg>`,
+  q: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="48" fill="#c9a45c"/>
+    <text x="50" y="73" font-size="68" font-family="Georgia, 'Times New Roman', serif" font-weight="700" fill="#1a1408" text-anchor="middle">?</text></svg>`,
   r: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="46" fill="#2e2b4a" stroke="#8c8fe8" stroke-width="4"/>
     <path d="M30 44 a21 21 0 0 1 38 -8" fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round"/><path d="M72 22 l-2 18 l-17 -5 z" fill="#fff"/>
     <path d="M70 56 a21 21 0 0 1 -38 8" fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round"/><path d="M28 78 l2 -18 l17 5 z" fill="#fff"/></svg>`
@@ -279,8 +156,8 @@ const CUES = {
 
 // Logo nel menu: fumetto con le onde della voce
 const LOGO = `<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-  <rect width="200" height="200" rx="46" fill="url(#gLilla)"/>
-  <path d="M58 44 H142 a28 28 0 0 1 28 28 V112 a28 28 0 0 1 -28 28 H96 L62 168 L68 140 H58 a28 28 0 0 1 -28 -28 V72 a28 28 0 0 1 28 -28 Z" fill="#fff"/>
-  <g fill="#6a6dd6"><rect x="62" y="80" width="14" height="32" rx="7"/><rect x="85" y="66" width="14" height="60" rx="7"/>
+  <rect width="200" height="200" rx="40" fill="#1d2638" stroke="#c9a45c" stroke-width="6"/>
+  <path d="M58 44 H142 a28 28 0 0 1 28 28 V112 a28 28 0 0 1 -28 28 H96 L62 168 L68 140 H58 a28 28 0 0 1 -28 -28 V72 a28 28 0 0 1 28 -28 Z" fill="#eef1f6"/>
+  <g fill="#c9a45c"><rect x="62" y="80" width="14" height="32" rx="7"/><rect x="85" y="66" width="14" height="60" rx="7"/>
   <rect x="108" y="74" width="14" height="44" rx="7"/><rect x="131" y="84" width="14" height="24" rx="7"/></g></svg>`;
 

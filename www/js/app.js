@@ -128,8 +128,7 @@ function renderHome() {
 }
 
 function avatarHtml(t, size) {
-  const cls = 'avatar' + (size ? ' ' + size : '') + (AVATARS[t.key] ? ' photo' : '');
-  return '<span class="' + cls + '">' + (AVATARS[t.key] || t.name.charAt(0)) + '</span>';
+  return '<span class="avatar photo' + (size ? ' ' + size : '') + '">' + teacherHead(t.key) + '</span>';
 }
 
 /* ---------- Lingua dei pulsanti della lezione ---------- */
@@ -201,6 +200,8 @@ function startLesson(id) {
   showScreen('lesson', currentScreen !== 'home');
   Awake.keep();
   Mouth.gender = teacher.gender;
+  setStageTeacher(teacher.key);
+  setPose('show');
   runStep();
 }
 
@@ -244,19 +245,27 @@ function restartAnim(el, cls) {
   el.classList.add(cls);
 }
 
+/* ---------- L'insegnante sul palco: i suoi gesti al posto delle icone ----------
+   show = mostra, ask = domanda, you = tocca a te, wrong = braccia a X, ok = braccia aperte,
+   great = esulta. A ogni cambio di posa fa un piccolo movimento. */
+let stageTeacher = 'luca', stagePose = '';
+function setPose(pose) {
+  if (pose === stagePose) return;
+  stagePose = pose;
+  const h = $('stage-hand');
+  h.innerHTML = teacherFig(stageTeacher, pose, true);
+  h.dataset.pose = pose;
+  restartAnim(h, 'move');
+}
+function setStageTeacher(key) { stageTeacher = key; stagePose = ''; }
+
 let shownObj;
 function showIndicated(obj, right) {
   if (obj !== shownObj) {
-    if (obj && FIG[obj]) {
-      $('stage-hand').innerHTML = HAND;
-      $('stage-hand').style.visibility = 'visible';
-      $('stage-figure').innerHTML = FIG[obj];
-    } else {
-      $('stage-hand').style.visibility = 'hidden';
-      $('stage-figure').innerHTML = UNKNOWN;
-    }
+    $('stage-figure').innerHTML = obj && FIG[obj] ? FIG[obj] : UNKNOWN;
     restartAnim($('stage-figure'), 'pop');
     shownObj = obj;
+    setPose('show');
   }
   document.querySelectorAll('.object-box').forEach(b => {
     b.classList.toggle('indicated', b.dataset.obj === obj && !right);
@@ -265,10 +274,11 @@ function showIndicated(obj, right) {
 }
 
 // Effetti: bagliore verde quando è giusto, rosso e "tunnel" quando è sbagliato
-function flashGood() {
+function flashGood(great) {
   const st = $('stage');
   st.classList.remove('bad');
   restartAnim(st, 'good');
+  setPose(great ? 'great' : 'ok');
 }
 function flashBad() {
   const st = $('stage');
@@ -313,6 +323,7 @@ function askStep() {
   setStatus('Listen', '');
   if (st.type === 'ask') { askTurn(st, run); return; }
   setCue(cueFor(st));
+  setPose(cueFor(st) === 'q' ? 'ask' : 'show');
   // Durante le ripetizioni l'insegnante parla col ritmo del modello
   const rate = st.drill ? L.teacher.modelRate : L.teacher.rate * (st.speed || 1);
   const speak = () => Mouth.speak(st.prompt, rate, L.teacher.pitch, () => {
@@ -321,6 +332,7 @@ function askStep() {
     // L'insegnante si è risposto da solo («Che cos'è? È una penna.»): avanti
     if (st.type === 'reveal' && !st.drill) { L.busy = true; nextStep(run, 900); return; }
     if (coachable(st) && L.coach) { coachAnswer(st, run); return; }   // anche con Repeat
+    if (cueFor(st) === 'r') setPose('you');
     listenSoon(run);
   });
   // Un attimo di silenzio prima dello sfogo
@@ -462,17 +474,11 @@ function coachAnswer(st, run) {
   }, 350);
 }
 // L'insegnante punta il dito verso l'allievo: «tocca a te»
-function showYourTurn(t) {
-  setCue('r');
-  $('stage-you').innerHTML = avatarHtml(t, 'big') + '<span class="you-hand">' + HAND + '</span>';
-  $('stage-you').classList.remove('hidden');
-  $('stage').classList.add('yourturn');
-  restartAnim($('stage-you'), 'show');
+function showYourTurn() {
+  setCue('');
+  setPose('you');
 }
-function hideYourTurn() {
-  $('stage-you').classList.add('hidden');
-  $('stage').classList.remove('yourturn');
-}
+function hideYourTurn() {}
 // Dopo una risposta a una domanda col sì: serve ancora l'esempio alla prossima?
 function coachAfter(st, ok) {
   if (!coachable(st)) return;
@@ -575,7 +581,7 @@ function onCorrect(res) {
   L.streak++;
   const parts = [];
   // Il ritmo conta più delle lodi: l'insegnante loda solo ogni tanto (o mai)
-  if (t.praiseEvery && L.streak % t.praiseEvery === 0) parts.push({ text: pick(t.praise), rate: t.rate });
+  if (t.praiseEvery && L.streak % t.praiseEvery === 0) { parts.push({ text: pick(t.praise), rate: t.rate }); setPose('great'); }
   // «No, non è un tavolo.» su un oggetto noto: l'insegnante completa con quello che è.
   // Sull'oggetto nuovo no: il nome non si dice finché non arriva «Che cos'è?»
   if (st.type === 'neg' && !res.full && !st.fresh) parts.push({ text: S.present(st.show).model, rate: t.modelRate });
@@ -657,17 +663,16 @@ function onWrong() {
     if (!alive(run)) return;
     scr.classList.remove('tunnel');
     L.busy = false;
+    setPose('you');
     listenSoon(run);
   });
 }
 function repLabel() { return 'Practice ' + (L.di + 1) + ' / ' + L.drill.length; }
 
-function showMark(mark) {
-  setCue('');   // stesso angolo: l'icona dell'errore prende il posto del segnale
-  const m = $('stage-mark');
-  m.innerHTML = MARKS[mark] || '';
-  m.classList.remove('hidden');
-  restartAnim(m, 'show');
+// Errore: niente icone, l'insegnante incrocia le braccia a X
+function showMark() {
+  setCue('');
+  setPose('wrong');
 }
 // Segnale della frase: «?» per le domande, frecce per le frasi da ripetere
 function cueFor(st) {
@@ -678,6 +683,7 @@ function cueFor(st) {
 }
 function setCue(kind) {
   const c = $('stage-cue');
+  if (kind === 'ok' || kind === 'r') kind = '';   // pollice e frecce: li fa l'insegnante coi gesti
   if (!kind) { c.classList.add('hidden'); c.dataset.kind = ''; return; }
   if (c.dataset.kind !== kind || c.classList.contains('hidden')) {
     c.innerHTML = CUES[kind];
