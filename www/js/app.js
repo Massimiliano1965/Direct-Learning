@@ -233,6 +233,7 @@ function startLesson(id) {
   setLevel(lesson.level || 1);
   setStageTeacher(teacher.look || teacher.key);
   setPose('show');
+  fitLesson();
   runStep();
 }
 
@@ -255,6 +256,7 @@ function stopLesson() {
   hideMark();
   hideYourTurn();
   $('stage-places').innerHTML = '';
+  delete $('prompt-text').dataset.room;
   $('btn-talk').classList.remove('flash');
   setCue('');
   setPickable(false);
@@ -276,6 +278,51 @@ function buildGrid(items) {
     grid.appendChild(box);
   });
 }
+
+/* ---------- Tutta la lezione dentro lo schermo ----------
+   A inizio lezione si tiene il posto per la frase più lunga e per i luoghi colorati (così la pagina non salta).
+   Se è ancora più alta dello schermo, un po' alla volta: frase più piccola, luoghi più piccoli, palco più basso,
+   e solo alla fine figure in basso più piccole. */
+function fitLesson() {
+  if (!L || currentScreen !== 'lesson') return;
+  const grid = $('objects-grid'), stage = $('stage'), hand = $('stage-hand'), fig = $('stage-figure'), pl = $('stage-places'), pr = $('prompt-text');
+  [grid, stage, hand, fig, pl, pr].forEach(el => el.removeAttribute('style'));
+  delete pr.dataset.room;
+  pl.querySelectorAll('.place').forEach(el => el.removeAttribute('style'));
+  const over = () => Math.ceil($('screen-lesson').getBoundingClientRect().bottom + window.scrollY - window.innerHeight);
+  const placeSize = (px) => { if (L.lesson.placeHints) { pl.style.display = 'flex'; pl.style.minHeight = px + 'px'; pl.style.setProperty('--place', px + 'px'); } };
+  // posto per la frase: quanto la più lunga, ma al massimo due righe (le più lunghe si scrivono più piccole)
+  const promptRoom = () => {
+    if (!DB.settings.showText) return;
+    const keep = pr.textContent;
+    let tall = 0;
+    pr.style.minHeight = '0';
+    pr.textContent = 'A\nA';
+    const two = pr.offsetHeight;
+    L.steps.forEach(st => { pr.textContent = shown(st.prompt); tall = Math.max(tall, pr.offsetHeight); });
+    pr.textContent = keep;
+    pr.style.minHeight = Math.min(tall, two) + 'px';
+    pr.dataset.room = Math.min(tall, two);
+    pr.dataset.font = pr.style.fontSize;
+  };
+  placeSize(84);
+  promptRoom();
+  if (over() > 0) { pr.style.fontSize = '23px'; pr.style.marginTop = '10px'; promptRoom(); }
+  if (over() > 0) placeSize(64);
+  if (over() > 0) {
+    const h0 = stage.offsetHeight, h = Math.max(130, h0 - over()), r = h / h0;
+    stage.style.height = h + 'px';
+    [hand, fig].forEach(el => { el.style.width = el.style.height = Math.round(el.offsetWidth * r) + 'px'; });
+    fig.style.marginBottom = Math.round(parseFloat(getComputedStyle(fig).marginBottom) * r) + 'px';
+  }
+  const full = grid.clientWidth;
+  for (let k = 0; k < 4 && over() > 0; k++) {   // le figure sono quadrate: altezza e larghezza calano insieme
+    const gh = grid.offsetHeight;
+    grid.style.maxWidth = Math.max(full * 0.5, grid.clientWidth * (gh - over()) / gh) + 'px';
+    grid.style.marginLeft = grid.style.marginRight = 'auto';
+  }
+}
+window.addEventListener('resize', fitLesson);
 
 function restartAnim(el, cls) {
   el.classList.remove(cls);
@@ -333,7 +380,15 @@ function setStatus(text, mode) {
   // Il tasto Talk lampeggia quando deve parlare lo studente (microfono acceso o «tocca Talk»)
   $('btn-talk').classList.toggle('flash', mode === 'rec' || text.indexOf(uiWord('talk')) !== -1);
 }
-function setPrompt(text) { $('prompt-text').textContent = DB.settings.showText ? shown(text) : ''; }
+function setPrompt(text) { $('prompt-text').textContent = DB.settings.showText ? shown(text) : ''; squeezePrompt(); }
+// Se la frase non sta nel suo posto (vedi fitLesson), si scrive un po' più piccola
+function squeezePrompt() {
+  const pr = $('prompt-text'), room = +pr.dataset.room || 0;
+  pr.style.fontSize = pr.dataset.font || '';
+  if (!room || !L) return;
+  let f = parseFloat(getComputedStyle(pr).fontSize);
+  while (pr.offsetHeight > room + 1 && f > 15) { f--; pr.style.fontSize = f + 'px'; }
+}
 function setProgress(done, total) { $('progress-fill').style.width = Math.round(done / total * 100) + '%'; }
 
 // Disegna il passo corrente senza azzerare i tentativi
