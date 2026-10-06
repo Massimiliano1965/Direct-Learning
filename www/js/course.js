@@ -1,13 +1,13 @@
 'use strict';
 /* =====================================================================
-   CORSO: italiano per chi parla inglese.
+   CORSO: italiano per chi parla inglese, tedesco o giapponese.
    Qui stanno solo le parole, le lezioni e gli insegnanti; le regole della
    lezione sono in logic.js. Un altro corso = un altro file come questo.
    ===================================================================== */
 
 const COURSE = {
   lang: 'it-IT',        // lingua che si impara: voce e microfono
-  ui: 'en',             // lingua dell'allievo: menu e messaggi
+  students: ['en', 'de', 'ja'],   // lingue dello studente offerte («Che lingua parli?»): menu e messaggi
   name: 'Italiano',
   voiceTags: ['it-it'],                 // come si riconoscono le voci italiane del telefono
   yourTurn: 'Tocca a te.',
@@ -94,9 +94,9 @@ const MIN_ANSWERS_FOR_VERDICT = 20;
 // Pulsanti della lezione: prima nella lingua dell'allievo, poi nella lingua del corso
 // (quando ci sarà la lezione dei pulsanti: MENU_LESSON).
 const UI_WORDS = {
-  talk:   { ui: 'Talk',   lang: 'Parla' },
-  repeat: { ui: 'Repeat', lang: 'Riascolta' },
-  exit:   { ui: 'Exit',   lang: 'Esci' }
+  talk:   { lang: 'Parla' },
+  repeat: { lang: 'Riascolta' },
+  exit:   { lang: 'Esci' }
 };
 const MENU_LESSON = null;
 const UI_SWITCH_DAYS = 3;   // giorni dopo la lezione dei pulsanti prima del cambio

@@ -11,24 +11,30 @@
 </head>
 <body>
 
+<!-- ============ CHE LINGUA PARLI? (prima volta) ============ -->
+<section id="screen-lang" class="screen hidden">
+  <div class="brand"><div class="logo" id="logo2"></div><div><h1>CIAO</h1><div class="tagline">Communicator for Immersive Audio-Oral learning</div></div></div>
+  <div id="lang-list"></div>
+</section>
+
 <!-- ============ MENU ============ -->
 <section id="screen-home" class="screen">
   <div class="brand"><div class="logo" id="logo"></div><div><h1>CIAO</h1><div class="tagline">Communicator for Immersive Audio-Oral learning</div></div></div>
   <div class="card" id="trial-card"></div>
 
-  <div class="label">Teacher</div>
+  <div class="label" data-t="labelTeacher">Teacher</div>
   <div id="teacher-list"></div>
 
   <div id="lang-box"></div>
 
-  <div class="label">Lessons</div>
+  <div class="label" data-t="labelLessons">Lessons</div>
   <div id="lesson-list"></div>
 
-  <div class="label">Options</div>
-  <label class="switch"><input type="checkbox" id="opt-text"> Show the sentences in writing</label>
+  <div class="label" data-t="labelOptions">Options</div>
+  <label class="switch"><input type="checkbox" id="opt-text"> <span data-t="optText">Show the sentences in writing</span></label>
 
   <div style="height:18px"></div>
-  <button id="btn-report" class="secondary">Trial results</button>
+  <button id="btn-report" class="secondary" data-t="btnReport">Trial results</button>
 </section>
 
 <!-- ============ LEZIONE ============ -->
@@ -55,34 +61,29 @@
 
 <!-- ============ FINE LEZIONE ============ -->
 <section id="screen-end" class="screen hidden">
-  <h2>Lesson complete</h2>
+  <h2 data-t="lessonComplete">Lesson complete</h2>
   <div class="card result" id="end-body"></div>
   <div style="height:18px"></div>
-  <button id="btn-again">Repeat the lesson</button>
-  <button id="btn-end-home" class="secondary">Menu</button>
+  <button id="btn-again" data-t="again">Repeat the lesson</button>
+  <button id="btn-end-home" class="secondary" data-t="menu">Menu</button>
 </section>
 
 <!-- ============ RISULTATI ============ -->
 <section id="screen-report" class="screen hidden">
-  <h2>Trial results</h2>
+  <h2 data-t="reportTitle">Trial results</h2>
   <div id="report-body"></div>
-  <button id="btn-report-home">Menu</button>
-  <button id="btn-reset" class="ghost">Delete all data</button>
+  <button id="btn-report-home" data-t="menu">Menu</button>
+  <button id="btn-reset" class="ghost" data-t="resetAll">Delete all data</button>
 </section>
 
 <div id="demo-finger" class="hidden"></div>
 <div id="pick-finger" class="hidden"></div>
 
-<script>
-// Pacchetto della lingua del corso (prova: italiano o cinese). In vendita: un'app per lingua.
-(function () {
-  var L = 'it';
-  try { L = localStorage.getItem('dl_lang') || 'it'; } catch (e) {}
-  var f = L === 'zh' ? ['course_zh', 'data', 'logic', 'pinyin_zh', 'grammar_zh'] :
-          L === 'ar' ? ['course_ar', 'data', 'logic', 'grammar_ar'] : ['course', 'data', 'logic'];
-  for (var i = 0; i < f.length; i++) document.write('<script src="js/' + f[i] + '.js"><\/script>');
-})();
-</script>
+<!-- Corso (in vendita: un'app per lingua da imparare) -->
+<script src="js/course.js"></script>
+<script src="js/data.js"></script>
+<script src="js/logic.js"></script>
+<script src="js/ui_lang.js"></script>
 <script src="js/teacher.js"></script>
 <script src="js/voice.js"></script>
 <script src="js/storage.js"></script>

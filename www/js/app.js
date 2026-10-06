@@ -9,7 +9,7 @@ const $ = (id) => document.getElementById(id);
 const IS_CORDOVA = !!window.cordova;
 let currentScreen = 'home';
 function showScreen(name, replace) {
-  ['home', 'lesson', 'end', 'report'].forEach(n => $('screen-' + n).classList.toggle('hidden', n !== name));
+  ['lang', 'home', 'lesson', 'end', 'report'].forEach(n => $('screen-' + n).classList.toggle('hidden', n !== name));
   const wasHome = currentScreen === 'home';
   currentScreen = name;
   window.scrollTo(0, 0);
@@ -27,7 +27,8 @@ function goHome() {
   showScreen('home');
 }
 function onBack() {
-  if (currentScreen === 'home') {
+  if (currentScreen === 'lang' && DB.settings.uiLang) { showScreen('home'); return; }
+  if (currentScreen === 'home' || currentScreen === 'lang') {
     if (navigator.app && navigator.app.exitApp) navigator.app.exitApp();
     return;
   }
@@ -57,13 +58,13 @@ function renderHome() {
   const sel = selectedTeacherKey();
   let html;
   if (TEST_MODE) {
-    html = '<p><strong>Test mode</strong></p><p class="muted">Tap a teacher to choose. Your choice stays until you change it.</p>';
+    html = '<p><strong>' + tx('testTitle') + '</strong></p><p class="muted">' + tx('testText') + '</p>';
   } else if (ti.day === 0) {
-    html = '<p><strong>' + TRIAL_DAYS + '-day trial</strong></p><p class="muted">Each teacher for ' + (TRIAL_DAYS / TRIAL_ROTATION.length) + ' days. Then the app tells you which one works best for you.</p>';
+    html = '<p><strong>' + tx('trialTitle', { d: TRIAL_DAYS }) + '</strong></p><p class="muted">' + tx('trialText', { n: TRIAL_DAYS / TRIAL_ROTATION.length }) + '</p>';
   } else if (ti.day <= TRIAL_DAYS) {
-    html = '<p><strong>Trial: day ' + ti.day + ' of ' + TRIAL_DAYS + '</strong></p><p class="muted">Today\'s teacher: ' + TEACHERS[ti.today].name + '.</p>';
+    html = '<p><strong>' + tx('trialDay', { d: ti.day, n: TRIAL_DAYS }) + '</strong></p><p class="muted">' + tx('trialToday', { t: TEACHERS[ti.today].name }) + '</p>';
   } else {
-    html = '<p><strong>Trial complete</strong></p><p class="muted">Open the results to see which teacher suits you best.</p>';
+    html = '<p><strong>' + tx('trialDone') + '</strong></p><p class="muted">' + tx('trialDoneText') + '</p>';
   }
   $('trial-card').innerHTML = html;
 
@@ -75,7 +76,7 @@ function renderHome() {
     b.className = 'choice' + (k === sel ? ' selected' : '');
     b.innerHTML = avatarHtml(t) +
                   '<span class="t-name">' + t.name + '</span>' +
-                  (!TEST_MODE && ti.today === k ? '<span class="badge">today</span>' : '');
+                  (!TEST_MODE && ti.today === k ? '<span class="badge">' + tx('today') + '</span>' : '');
     b.onclick = () => {
       DB.settings.teacher = k;
       DB.settings.pickedDay = todayKey();
@@ -85,29 +86,19 @@ function renderHome() {
     tl.appendChild(b);
   });
 
-  // Solo in prova: scelta della lingua del corso (ricarica l'app con l'altro pacchetto)
-  const lb = $('lang-box');
-  lb.innerHTML = '';
-  if (TEST_MODE) {
-    lb.innerHTML = '<div class="label">Course language</div>';
-    const row = document.createElement('div');
-    row.className = 'lang-row';
-    [['it', 'Italiano'], ['zh', '中文'], ['ar', 'العربية']].forEach(([code, name]) => {
-      const b = document.createElement('button');
-      const on = (COURSE.lang.slice(0, 2) === code);
-      b.className = 'lang-btn' + (on ? ' on' : '');
-      b.textContent = name;
-      b.onclick = () => { if (on) return; try { localStorage.setItem('dl_lang', code); } catch (e) {} location.reload(); };
-      row.appendChild(b);
-    });
-    lb.appendChild(row);
-  }
+  // La lingua dello studente: si cambia da qui
+  $('lang-box').innerHTML = '';
+  const lbtn = document.createElement('button');
+  lbtn.className = 'lesson-btn';
+  lbtn.innerHTML = '<span>' + tx('yourLang') + '</span><span class="score">' + UI_LANGS[UI_LANG].name + '</span>';
+  lbtn.onclick = () => showLangChoice();
+  $('lang-box').appendChild(lbtn);
 
   const ll = $('lesson-list');
   ll.innerHTML = '';
   const db = document.createElement('button');
   db.className = 'lesson-btn demo';
-  db.innerHTML = '<span>Demo lesson</span><span class="score">' + (DB.settings.demoSeen ? 'seen' : 'watch first') + '</span>';
+  db.innerHTML = '<span>' + tx('demoLesson') + '</span><span class="score">' + tx(DB.settings.demoSeen ? 'seen' : 'watchFirst') + '</span>';
   db.onclick = once(() => startDemo(null));
   ll.appendChild(db);
   LESSONS.forEach(l => {
@@ -116,7 +107,7 @@ function renderHome() {
     // nel menu solo le parole nuove della lezione
     const icons = l.known.concat(l.fresh ? [l.fresh] : []).map(w => FIG[w]).join('');
     const best = DB.lessons[l.id];
-    const name = 'Lesson ' + (LESSONS.indexOf(l) + 1);
+    const name = tx('lesson', { n: LESSONS.indexOf(l) + 1 });
     b.innerHTML = '<span>' + name + '</span><span class="icons">' + icons + '</span>' +
                   '<span class="score' + (best >= 80 ? ' top' : '') + '">' + (best != null ? best + '%' : '') + '</span>';
     b.onclick = once(() => startLesson(l.id));
@@ -124,7 +115,34 @@ function renderHome() {
   });
 
   $('opt-text').checked = !!DB.settings.showText;
+  applyStaticText();
   applyUiWords();
+}
+
+/* ---------- Prima schermata: «Che lingua parli?» ----------
+   Le lingue offerte dal corso (COURSE.students); ogni pulsante ha la domanda nella sua lingua. */
+function showLangChoice() {
+  const box = $('lang-list');
+  box.innerHTML = '';
+  (COURSE.students || ['en']).forEach(code => {
+    const L = UI_LANGS[code];
+    const b = document.createElement('button');
+    b.className = 'lang-choice' + (DB.settings.uiLang === code ? ' selected' : '');
+    b.innerHTML = '<span class="lc-name">' + L.name + '</span><span class="lc-ask">' + L.ask + '</span>';
+    b.onclick = () => {
+      DB.settings.uiLang = code;
+      saveDB();
+      setUiLang(code);
+      renderHome();
+      showScreen('home', true);
+    };
+    box.appendChild(b);
+  });
+  showScreen('lang', currentScreen !== 'home');
+}
+// Scritte fisse della pagina (data-t = chiave della traduzione)
+function applyStaticText() {
+  document.querySelectorAll('[data-t]').forEach(el => { el.textContent = tx(el.dataset.t); });
 }
 
 function avatarHtml(t, size) {
@@ -134,11 +152,11 @@ function avatarHtml(t, size) {
 /* ---------- Lingua dei pulsanti della lezione ---------- */
 
 function uiLevelNow() { return uiLevel(DB.settings.menuDay, todayKey()); }
-function uiWord(k) { return uiLevelNow() ? UI_WORDS[k].lang : UI_WORDS[k].ui; }
+function uiWord(k) { return uiLevelNow() ? UI_WORDS[k].lang : tx(k); }
 function setUiButton(id, k) {
   const lv = uiLevelNow();
   const w = UI_WORDS[k];
-  $(id).innerHTML = lv === 0 ? w.ui : lv === 1 ? w.lang + '<small class="hint">' + w.ui + '</small>' : w.lang;
+  $(id).innerHTML = lv === 0 ? tx(k) : lv === 1 ? w.lang + '<small class="hint">' + tx(k) + '</small>' : w.lang;
 }
 function applyUiWords() {
   setUiButton('btn-talk', 'talk');
@@ -323,7 +341,7 @@ function askStep() {
   const st = cur();
   const run = L.run;
   L.busy = true;
-  setStatus('Listen', '');
+  setStatus(tx('listen'), '');
   if (st.type === 'ask') { askTurn(st, run); return; }
   setCue(cueFor(st));
   setPose(cueFor(st) === 'q' ? 'ask' : 'show');
@@ -358,7 +376,7 @@ function askTurn(st, run) {
   const ready = () => {
     if (!alive(run)) return;
     L.busy = false;
-    setStatus('Your turn: tap a picture, then ask', 'wait');
+    setStatus(tx('pickAsk'), 'wait');
     sweepFinger(() => alive(run) && !L.pick && !L.paused);
   };
   if (st.intro) Mouth.speak(COURSE.yourTurn, t.rate, t.pitch, ready); else ready();
@@ -418,7 +436,7 @@ function handleAsk(alts) {
     ts.items++;
     if (!L.attempts) { ts.first++; L.first++; ts.lat += (Date.now() - L.listenStart) / 1000; ts.latN++; }
     saveDB();
-    setStatus('Correct', 'ok');
+    setStatus(tx('correct'), 'ok');
     flashGood();
     setCue('ok');
     const answer = answerAsk(X, r);
@@ -436,7 +454,7 @@ function handleAsk(alts) {
   showMark(t.mark);
   if (L.attempts >= 3) {
     // dopo 3 tentativi l'insegnante fa la domanda e risponde da solo
-    setStatus('Moving on', 'err');
+    setStatus(tx('movingOn'), 'err');
     Mouth.speak(S.reveal(X).prompt, t.modelRate, t.pitch, () => {
       if (!alive(run)) return;
       scr.classList.remove('tunnel');
@@ -444,7 +462,7 @@ function handleAsk(alts) {
     });
     return;
   }
-  setStatus('Try again', 'err');
+  setStatus(tx('tryAgain'), 'err');
   if (DB.settings.showText) $('prompt-text').textContent = shown(r.model);
   Mouth.speakParts([{ text: t.wrong, rate: t.rate }, { text: r.model, rate: t.modelRate }], t.pitch, () => {
     if (!alive(run)) return;
@@ -502,7 +520,7 @@ function listen() {
   const run = L.run;
   L.busy = true;
   L.listenStart = Date.now();
-  setStatus('Speak now', 'rec');
+  setStatus(tx('speakNow'), 'rec');
   Ears.listen(
     (alts) => { if (!alive(run)) return; L.busy = false; handleAnswer(alts); },
     (code) => { if (!alive(run)) return; L.busy = false; handleListenError(code, run); }
@@ -510,17 +528,17 @@ function listen() {
 }
 
 function handleListenError(code, run) {
-  if (code === 'not-allowed') { setStatus('Microphone blocked: allow it, then tap ' + uiWord('talk'), 'err'); return; }
-  if (code === 'unsupported') { setStatus('This phone has no speech recognition. You can only listen', 'err'); return; }
-  if (code === 'network') { setStatus('Speech recognition needs internet. Tap ' + uiWord('talk'), 'err'); return; }
+  if (code === 'not-allowed') { setStatus(tx('micBlocked', { talk: uiWord('talk') }), 'err'); return; }
+  if (code === 'unsupported') { setStatus(tx('noSR'), 'err'); return; }
+  if (code === 'network') { setStatus(tx('needNet', { talk: uiWord('talk') }), 'err'); return; }
   L.noSpeech++;
   const st = cur();
   if (coachable(st) && !L.coached) { L.coach = true; coachAnswer(st, run); return; }
   if (L.noSpeech <= 2) {
-    setStatus('I didn\'t hear you', 'wait');
+    setStatus(tx('notHeard'), 'wait');
     later(() => { if (alive(run)) listen(); }, 700);
   } else {
-    setStatus('Tap ' + uiWord('talk') + ' when you are ready', 'wait');
+    setStatus(tx('tapReady', { talk: uiWord('talk') }), 'wait');
   }
 }
 
@@ -532,18 +550,18 @@ function handleAnswer(alts) {
     if (alts.length && alts.every(a => isEcho(st, a))) {
       // era la voce dell'insegnante: si riascolta senza contare niente
       const run = L.run;
-      setStatus('Speak now', 'rec');
+      setStatus(tx('speakNow'), 'rec');
       later(() => { if (alive(run)) listen(); }, 200);
       return;
     }
   }
   if (st.type === 'ask') {
-    $('heard').textContent = alts[0] ? 'Heard: “' + (COURSE.heard ? COURSE.heard(alts[0]) : alts[0]) + '”' : '';
+    $('heard').textContent = alts[0] ? tx('heard') + ': “' + (COURSE.heard ? COURSE.heard(alts[0]) : alts[0]) + '”' : '';
     handleAsk(alts);
     return;
   }
   const res = evaluateAll(st, alts);
-  $('heard').textContent = alts[0] ? 'Heard: “' + (COURSE.heard ? COURSE.heard(alts[0]) : alts[0]) + '”' : '';
+  $('heard').textContent = alts[0] ? tx('heard') + ': “' + (COURSE.heard ? COURSE.heard(alts[0]) : alts[0]) + '”' : '';
   if (res.ok) onCorrect(res); else onWrong();
 }
 
@@ -557,7 +575,7 @@ function onCorrect(res) {
     L.busy = true;
     flashGood();
     setCue('ok');
-    if (L.di >= L.drill.length) { setStatus('Correct', 'ok'); hideMark(); nextStep(run, 300); return; }
+    if (L.di >= L.drill.length) { setStatus(tx('correct'), 'ok'); hideMark(); nextStep(run, 300); return; }
     const d = cur();
     $('heard').textContent = '';
     showIndicated(d.show);
@@ -577,7 +595,7 @@ function onCorrect(res) {
   saveDB();
   L.busy = true;
   L.answered = true;
-  setStatus('Correct', 'ok');
+  setStatus(tx('correct'), 'ok');
   flashGood();
   setCue('ok');
   const t = L.teacher;
@@ -634,7 +652,7 @@ function onWrong() {
       quiet();
       L.drill = null;
       L.di = 0;
-      setStatus('Moving on', 'err');
+      setStatus(tx('movingOn'), 'err');
       if (DB.settings.showText) $('prompt-text').textContent = shown(st.model);
       later(() => {
         if (!alive(run)) return;
@@ -670,7 +688,7 @@ function onWrong() {
     listenSoon(run);
   });
 }
-function repLabel() { return 'Practice ' + (L.di + 1) + ' / ' + L.drill.length; }
+function repLabel() { return tx('practice', { i: L.di + 1, n: L.drill.length }); }
 
 // Errore: niente icone, l'insegnante incrocia le braccia a X
 function showMark() {
@@ -713,7 +731,7 @@ function finishLesson() {
     '<div class="ring"><svg viewBox="0 0 160 160"><circle class="track" cx="80" cy="80" r="68"/>' +
     '<circle class="val" cx="80" cy="80" r="68" stroke-dasharray="' + C + '" stroke-dashoffset="' + Math.round(C * (1 - pct / 100)) + '"/></svg>' +
     '<div class="num">' + pct + '%</div></div>' +
-    '<p>right first time</p><p class="muted">Teacher: ' + t.name + '</p>';
+    '<p>' + tx('rightFirst') + '</p><p class="muted">' + tx('teacherIs', { t: t.name }) + '</p>';
   showScreen('end', true);
 }
 
@@ -725,7 +743,7 @@ $('btn-replay').onclick = () => {
 };
 $('btn-talk').onclick = () => {
   if (!L || L.busy || L.paused) return;
-  if (cur().type === 'ask' && !L.pick) { setStatus('Tap a picture first', 'wait'); return; }
+  if (cur().type === 'ask' && !L.pick) { setStatus(tx('tapPicFirst'), 'wait'); return; }
   L.noSpeech = 0;
   listen();
 };
@@ -750,7 +768,7 @@ function onPause() {
     L.paused = true;
     L.busy = false;
     $('screen-lesson').classList.remove('tunnel');
-    setStatus('Paused', '');
+    setStatus(tx('paused'), '');
   }
 }
 function onResume() {
@@ -784,35 +802,35 @@ document.addEventListener('visibilitychange', () => {
 function renderReport() {
   const ti = trialInfo();
   let html = '';
-  if (ti.day > 0 && ti.day <= TRIAL_DAYS) html += '<div class="card t-card"><p>Trial day ' + ti.day + ' of ' + TRIAL_DAYS + '.</p></div>';
+  if (ti.day > 0 && ti.day <= TRIAL_DAYS) html += '<div class="card t-card"><p>' + tx('repTrialDay', { d: ti.day, n: TRIAL_DAYS }) + '</p></div>';
 
   const keys = Object.keys(TEACHERS);
   keys.forEach(k => {
     const s = DB.teachers[k];
     const firstPct = s.items ? Math.round(s.first / s.items * 100) : 0;
-    const lat = s.latN ? (s.lat / s.latN).toFixed(1) + ' s' : 'no data yet';
+    const lat = s.latN ? (s.lat / s.latN).toFixed(1) + ' s' : tx('repNoData');
     html += '<div class="card t-card"><h3>' + TEACHERS[k].name + '</h3>' +
-      '<p>Right first time: <strong>' + firstPct + '%</strong></p>' +
+      '<p>' + tx('repFirst') + ': <strong>' + firstPct + '%</strong></p>' +
       '<div class="bar"><div style="width:' + firstPct + '%"></div></div>' +
-      '<p class="muted">Average answer time: ' + lat + '</p>' +
-      '<p class="muted">Answers: ' + s.items + ', mistakes: ' + s.errors + ', lessons: ' + s.sessions + ', days: ' + s.days.length + '</p></div>';
+      '<p class="muted">' + tx('repAvg', { s: lat }) + '</p>' +
+      '<p class="muted">' + tx('repLine', { a: s.items, e: s.errors, l: s.sessions, d: s.days.length }) + '</p></div>';
   });
 
   const missing = keys.filter(k => DB.teachers[k].items < MIN_ANSWERS_FOR_VERDICT);
   if (missing.length) {
-    html += '<div class="card t-card verdict"><p><strong>No advice yet</strong></p><p class="muted">At least ' +
-      MIN_ANSWERS_FOR_VERDICT + ' answers with each teacher are needed. Still missing: ' + missing.map(k => TEACHERS[k].name).join(', ') + '.</p></div>';
+    html += '<div class="card t-card verdict"><p><strong>' + tx('repNoAdvice') + '</strong></p><p class="muted">' +
+      tx('repNeed', { n: MIN_ANSWERS_FOR_VERDICT, names: missing.map(k => TEACHERS[k].name).join(', ') }) + '</p></div>';
   } else {
     let best = keys[0];
     keys.forEach(k => { if (teacherScore(DB.teachers[k]) > teacherScore(DB.teachers[best])) best = k; });
-    html += '<div class="card t-card verdict"><p><strong>Best for you: ' + TEACHERS[best].name + '</strong></p>' +
-      '<p class="muted">With this teacher you got more answers right first time, and answered faster.</p></div>';
+    html += '<div class="card t-card verdict"><p><strong>' + tx('repBest', { t: TEACHERS[best].name }) + '</strong></p>' +
+      '<p class="muted">' + tx('repWhy') + '</p></div>';
   }
   $('report-body').innerHTML = html;
 }
 $('btn-report-home').onclick = () => goHome();
 $('btn-reset').onclick = () => {
-  if (!confirm('Delete all trial and lesson data?')) return;
+  if (!confirm(tx('confirmReset'))) return;
   DB = emptyDB();
   saveDB();
   renderReport();
@@ -822,7 +840,10 @@ $('btn-reset').onclick = () => {
 
 document.body.insertAdjacentHTML('afterbegin', SVG_DEFS);
 $('logo').innerHTML = LOGO;
+$('logo2').innerHTML = LOGO;
+if (DB.settings.uiLang && (COURSE.students || []).indexOf(DB.settings.uiLang) !== -1) setUiLang(DB.settings.uiLang);
 renderHome();
+if (!DB.settings.uiLang || (COURSE.students || []).indexOf(DB.settings.uiLang) === -1) showLangChoice();
 ttsWarmUp();
 document.addEventListener('deviceready', () => {
   document.addEventListener('backbutton', (e) => { if (e && e.preventDefault) e.preventDefault(); onBack(); }, false);

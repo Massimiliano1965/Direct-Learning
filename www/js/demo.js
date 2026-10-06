@@ -18,11 +18,11 @@ function startDemo(next) {
   demoActive = true;
   demoNext = next;
   const t = TEACHERS[selectedTeacherKey()];
-  $('l-title').textContent = 'Demo';
+  $('l-title').textContent = tx('demoLesson');
   $('l-teacher').innerHTML = avatarHtml(t, 'small') + '<span>' + t.name + '</span>';
   $('heard').textContent = '';
   applyUiWords();
-  $('btn-exit').textContent = 'Skip the demo';
+  $('btn-exit').textContent = tx('skipDemo');
   $('demo-caption').classList.remove('hidden');
   $('demo-finger').classList.add('hidden');
   setProgress(0, DEMO_STEPS);
@@ -82,7 +82,7 @@ async function demoScript(t, run) {
   const P = (text) => say(text, 1.0, studentPitch, t.gender === 'm' ? 'f' : 'm');
   const praise = async () => { flashGood(!!t.praiseEvery); setCue('ok'); if (t.praiseEvery) await T(pick(t.praise)); else await sleep(300); };
   const cap = (text) => { $('demo-caption').textContent = text; };
-  const heard = (text) => { $('heard').textContent = text ? 'Heard: “' + text + '”' : ''; };
+  const heard = (text) => { $('heard').textContent = text ? tx('heard') + ': “' + text + '”' : ''; };
   const step = (n, obj, prompt) => {
     hideYourTurn();
     $('l-count').textContent = n + ' / ' + DEMO_STEPS;
@@ -92,7 +92,7 @@ async function demoScript(t, run) {
     setPrompt(prompt);
     setCue(/[?？]$/.test(prompt) ? 'q' : 'r');
     setPose(/[?？]$/.test(prompt) ? 'ask' : 'show');
-    setStatus('Listen', '');
+    setStatus(tx('listen'), '');
   };
   const finger = $('demo-finger');
   const tap = async (el) => {
@@ -114,15 +114,15 @@ async function demoScript(t, run) {
   };
   const studentTalks = async (text) => {
     if (stagePose === 'show') setPose('you');
-    setStatus('Speak now', 'rec');
+    setStatus(tx('speakNow'), 'rec');
     await sleep(500);
     await P(text);
     heard(text.toLowerCase().replace(/[.!?。！？]/g, ''));
-    setStatus('Correct', 'ok');
+    setStatus(tx('correct'), 'ok');
     await sleep(300);
   };
 
-  cap('Demo lesson: just watch and listen. You don\'t need to touch anything.');
+  cap(tx('d1'));
   setStatus('', '');
   showIndicated(null);
   await sleep(3000);
@@ -134,23 +134,23 @@ async function demoScript(t, run) {
   const altQ = altPrompt('book', 'pen');
 
   // 1. Presentazione: tutti gli oggetti, tre giri, prima di qualsiasi domanda
-  cap('The teacher points at each picture and says what it is. You repeat.');
+  cap(tx('d2'));
   for (let r = 0; r < 3; r++) {
     for (const x of ['book', 'table', 'chair']) {
       step(1, x, pres(x));
       await T(pres(x));
-      if (r === 0 && x === 'book') cap('Arrows: repeat the sentence. Red dot: your turn to speak.');
+      if (r === 0 && x === 'book') cap(tx('d3'));
       await studentTalks(pres(x));
     }
-    if (r === 0) cap('Three times, all the objects.');
+    if (r === 0) cap(tx('d4'));
   }
   await praise();
 
   // 2. Domanda con il sì: l'insegnante chiede, risponde lui e poi indica l'allievo
   step(2, 'book', yesQ.prompt);
-  cap('Big «?»: it\'s a question.');
+  cap(tx('d5'));
   await T(yesQ.prompt);
-  cap('The teacher gives the answer, then points at you: repeat it.');
+  cap(tx('d6'));
   await sleep(350);
   if (DB.settings.showText) $('prompt-text').textContent = shown(yesQ.model);
   await T(yesQ.model, t.modelRate);
@@ -161,23 +161,23 @@ async function demoScript(t, run) {
 
   // 3. Domanda con il no
   step(3, 'table', noBook.prompt);
-  cap('If the question is wrong, say no.');
+  cap(tx('d7'));
   await T(noBook.prompt);
   await studentTalks(noBook.model);
   await praise();
 
   // 4. Errore e correzione
   step(4, 'chair', chairQ.prompt);
-  cap('If you make a mistake…');
+  cap(tx('d8'));
   await T(chairQ.prompt);
-  setStatus('Speak now', 'rec');
+  setStatus(tx('speakNow'), 'rec');
   await sleep(500);
   await P(COURSE.demoWrong);
   heard(COURSE.demoWrong.toLowerCase().replace(/[.!?。！？]/g, ''));
   flashBad();
   showMark(t.mark);
-  setStatus('Try again', 'err');
-  cap('…the teacher says the right answer. You repeat it, then you practise that word a little.');
+  setStatus(tx('tryAgain'), 'err');
+  cap(tx('d9'));
   await T(t.wrong);
   if (DB.settings.showText) $('prompt-text').textContent = shown(chairQ.model);
   setCue('r');
@@ -197,7 +197,7 @@ async function demoScript(t, run) {
   // 5. Oggetto nuovo: solo no, poi «Che cos'è?»
   const penNo = ['book', 'table', 'chair'].map(y => S.neg('pen', y));
   step(5, 'pen', penNo[0].prompt);
-  cap('A new object. The teacher won\'t tell you its name. Keep saying no.');
+  cap(tx('d10'));
   await T(penNo[0].prompt);
   await studentTalks(penNo[0].model);
   setPrompt(penNo[1].prompt);
@@ -207,8 +207,8 @@ async function demoScript(t, run) {
   setPrompt(penNo[2].prompt);
   await T(penNo[2].prompt);
   await studentTalks(penNo[2].model);
-  cap('…until you learn the question to ask.');
-  setStatus('Listen', '');
+  cap(tx('d11'));
+  setStatus(tx('listen'), '');
   setPrompt(S.reveal('pen').prompt);
   setCue('');
   await sleep(1200);
@@ -219,12 +219,12 @@ async function demoScript(t, run) {
 
   // 6. Silenzio: tasto Talk
   step(6, 'chair', Q);
-  cap('If the app doesn\'t hear you…');
+  cap(tx('d12'));
   await T(Q);
-  setStatus('Speak now', 'rec');
+  setStatus(tx('speakNow'), 'rec');
   await sleep(2200);
-  setStatus('Tap ' + uiWord('talk') + ' when you are ready', 'wait');
-  cap('…tap ' + uiWord('talk') + ' and answer.');
+  setStatus(tx('tapReady', { talk: uiWord('talk') }), 'wait');
+  cap(tx('d13', { talk: uiWord('talk') }));
   await sleep(600);
   await tap($('btn-talk'));
   await studentTalks(S.key('chair').model);
@@ -232,11 +232,11 @@ async function demoScript(t, run) {
 
   // 7. Non ho capito: tasto Repeat
   step(7, 'pen', altQ);
-  cap('Didn\'t catch the question?');
+  cap(tx('d14'));
   await T(altQ);
-  cap('Tap ' + uiWord('repeat') + ' to hear it again.');
+  cap(tx('d15', { repeat: uiWord('repeat') }));
   await tap($('btn-replay'));
-  setStatus('Listen', '');
+  setStatus(tx('listen'), '');
   await T(altQ);
   await studentTalks(S.key('pen').model);
   await praise();
@@ -244,9 +244,9 @@ async function demoScript(t, run) {
   // 8. Le domande le fa l'allievo
   step(8, null, '');
   setCue('pick');
-  cap('Once you know the question, you ask too: tap a picture and ask.');
+  cap(tx('d16'));
   await T(COURSE.yourTurn);
-  setStatus('Your turn: tap a picture, then ask', 'wait');
+  setStatus(tx('pickAsk'), 'wait');
   setPickable(true);
   sweepFinger(() => run === DEMO);
   await sleep(4000);
@@ -267,7 +267,7 @@ async function demoScript(t, run) {
   await T(answerAsk('pen', { ok: true, kind: 'what' }), t.modelRate);
 
   setProgress(DEMO_STEPS, DEMO_STEPS);
-  cap('Now it\'s your turn!');
+  cap(tx('d17'));
   setStatus('', '');
   setCue('');
   await T(COURSE.nowYou);

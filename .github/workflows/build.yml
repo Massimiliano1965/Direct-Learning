@@ -19,8 +19,6 @@ jobs:
         run: |
           for f in www/js/*.js tests/*.js; do node --check "$f"; done
           node tests/run.js
-          node tests/run_zh.js
-          node tests/run_ar.js
           node tests/run_voice.js
 
       - uses: actions/setup-java@v4

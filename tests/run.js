@@ -6,7 +6,7 @@ const vm = require('vm');
 
 const ctx = { console: console };
 vm.createContext(ctx);
-['course.js', 'data.js', 'logic.js'].forEach(f => {
+['course.js', 'data.js', 'logic.js', 'ui_lang.js'].forEach(f => {
   vm.runInContext(fs.readFileSync(path.join(__dirname, '..', 'www', 'js', f), 'utf8'), ctx, { filename: f });
 });
 const run = (code) => vm.runInContext(code, ctx);
@@ -256,6 +256,21 @@ Object.keys(TEACHERS).forEach(k => check('insegnante ' + k, TEACHERS[k].key === 
 check('ripetizioni: massimo 5, mai tutte uguali', Object.keys(TEACHERS).every(k => TEACHERS[k].repeats.every(n => n >= 1 && n <= 5) && new Set(TEACHERS[k].repeats).size > 1));
 check('dal più rigido al più indulgente', ['mass', 'giulia', 'luca', 'sara'].map(k => TEACHERS[k].repeats.reduce((a, b) => a + b, 0)).every((v, i, a) => !i || v <= a[i - 1]));
 check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].map(k => TEACHERS[k].wrong).join('|') === 'Errato.|Non corretto.|Hai sbagliato.|Peccato.');
+
+// Lingua dello studente: ogni scritta c'è in tutte le lingue, con gli stessi segnaposto {…}
+{
+  const T = run('UI_TEXT'), langs = Object.keys(T), keys = Object.keys(T.en);
+  const ph = (x) => (x.match(/\{\w+\}/g) || []).sort().join();
+  langs.forEach(l => {
+    check('lingua ' + l + ': tutte le scritte', keys.every(k => typeof T[l][k] === 'string' && T[l][k].length) && Object.keys(T[l]).length === keys.length);
+    check('lingua ' + l + ': stessi segnaposto', keys.every(k => ph(T[l][k]) === ph(T.en[k])));
+  });
+  check('il corso offre lingue che esistono', run('COURSE').students.every(l => T[l] && run('UI_LANGS')[l]));
+  run('setUiLang("de")');
+  check('tx con segnaposto', run('tx("practice", { i: 2, n: 5 })') === 'Übung 2 / 5');
+  run('setUiLang("xx")');
+  check('lingua sconosciuta → inglese', run('tx("talk")') === 'Talk');
+}
 
 console.log(count - fails + ' / ' + count + ' test passati');
 process.exit(fails ? 1 : 0);

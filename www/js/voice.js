@@ -81,7 +81,7 @@ let voiceWarned = false;
 function warnNoVoice() {
   if (voiceWarned) return;
   voiceWarned = true;
-  if (typeof setStatus === 'function') setStatus('To hear the teacher, install the Italian text-to-speech voice on your phone', 'err');
+  if (typeof setStatus === 'function') setStatus(tx('installVoice', { lang: (COURSE_LANG_NAME[COURSE.lang.slice(0, 2)] || {})[UI_LANG] || COURSE.lang }), 'err');
 }
 
 // Ferma l'audio nativo senza mai far fallire nulla
