@@ -13,7 +13,7 @@ const COURSE = {
   yourTurn: 'Tocca a te.',
   nowYou: 'Adesso tocca a te.',
   demoWrong: 'Sì, è un sedia.',         // l'errore della lezione di prova
-  speedSample: ['È una sedia?', 'Sì, è una sedia.']   // la frase d'esempio quando si sceglie la velocità
+  speedSample: ['Ciao, sono {name}.', 'Parliamo italiano insieme.']   // la frase d'esempio quando si sceglie la velocità
 };
 
 // Oggetti: chiave = figura in data.js. art = articolo indeterminativo.

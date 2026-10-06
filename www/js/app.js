@@ -182,11 +182,11 @@ function showSpeed() {
   const cur = SPEEDS[DB.settings.speed] ? DB.settings.speed : 'normal';
   document.querySelectorAll('#opt-speed button').forEach(b => b.classList.toggle('on', b.dataset.speed === cur));
 }
-// Toccando una velocità, l'insegnante scelto fa sentire subito una domanda e la risposta, con la pausa in mezzo
+// Toccando una velocità, l'insegnante scelto si presenta («Ciao, sono Luca.» … «Parliamo italiano insieme.»), con la pausa in mezzo
 let speedDemo = null;
 function saySpeedSample() {
-  const t = TEACHERS[selectedTeacherKey()], ex = COURSE.speedSample;
-  if (!t || !ex) return;
+  const t = TEACHERS[selectedTeacherKey()], ex = (COURSE.speedSample || []).map(x => x.replace('{name}', t ? t.name : ''));
+  if (!t || !ex.length) return;
   clearTimeout(speedDemo);
   Mouth.cancel();
   Mouth.gender = t.gender;

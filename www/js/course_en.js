@@ -14,7 +14,7 @@ const COURSE = {
   yourTurn: 'Your turn.',
   nowYou: 'Now it\'s your turn.',
   demoWrong: 'Yes, it is an chair.',    // l'errore della lezione di prova («an» al posto di «a»)
-  speedSample: ['Is it a chair?', 'Yes, it is a chair.']   // la frase d'esempio quando si sceglie la velocità
+  speedSample: ['Hello, I\'m {name}.', 'Let\'s speak English together.']   // la frase d'esempio quando si sceglie la velocità
 };
 
 // Oggetti: chiave = figura in data.js. art = «a» o «an» (il punto di grammatica, come un/una).
