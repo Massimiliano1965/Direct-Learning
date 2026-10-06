@@ -26,7 +26,10 @@ const ITEMS = {
   cup:    { word: 'tazza',    art: 'una', alias: ['tazze'] },
   bag:    { word: 'borsa',    art: 'una', alias: ['borse'] },
   bottle:   { word: 'bottiglia', art: 'una', alias: ['bottiglie'] },
-  computer: { word: 'computer',  art: 'un',  alias: ['computers', 'compiuter'] }
+  computer: { word: 'computer',  art: 'un',  alias: ['computers', 'compiuter'] },
+  phone:    { word: 'telefono',  art: 'un',  alias: ['telefoni'] },
+  notebook: { word: 'quaderno',  art: 'un',  alias: ['quaderni'] },
+  lamp:     { word: 'lampada',   art: 'una', alias: ['lampade'] }
 };
 
 // Lezioni. known = parole presentate subito; fresh = oggetto nuovo che non si nomina
@@ -36,7 +39,10 @@ const LESSONS = [
   { id: 'l2', title: 'Lezione 2', known: ['chair', 'door'], fresh: 'window' },
   // dal capitolo 1 del libro: «Una bottiglia e una tazza», «È questo un computer?» (era il magnetofono)
   { id: 'l3', title: 'Lezione 3', known: ['bottle', 'cup'], review: ['book', 'table', 'chair', 'pen', 'door', 'window'],
-    fresh: 'computer', questo: true }
+    fresh: 'computer', questo: true },
+  // oggetti nuovi (con «il» e «la» nella lezione 5 arrivano i colori)
+  { id: 'l4', title: 'Lezione 4', known: ['phone', 'key', 'notebook', 'bag'], review: ['book', 'pen', 'cup', 'chair'],
+    fresh: 'lamp', questo: true }
 ];
 
 // Quattro insegnanti, dal più rigido al più indulgente. gender = voce maschile o femminile.

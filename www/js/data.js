@@ -192,7 +192,35 @@ const FIG = {
     <rect x="47" y="56" width="6" height="5" rx="1.5" fill="#2a2440"/>
     <rect x="18" y="35" width="40" height="3" rx="1.5" ${SHINE}/>
     <line x1="22" y1="68" x2="22" y2="82" stroke="#1f7f86" stroke-width="2" stroke-dasharray="3 3"/>
-    <line x1="78" y1="68" x2="78" y2="82" stroke="#1f7f86" stroke-width="2" stroke-dasharray="3 3"/>`)
+    <line x1="78" y1="68" x2="78" y2="82" stroke="#1f7f86" stroke-width="2" stroke-dasharray="3 3"/>`),
+
+  phone: svg(`
+    <rect x="30" y="8" width="40" height="78" rx="8" fill="#2a2440" ${O}/>
+    <rect x="34" y="16" width="32" height="60" rx="3" fill="url(#gScreen)"/>
+    <rect x="44" y="11" width="12" height="2.6" rx="1.3" fill="#6a6dd6"/>
+    <rect x="38" y="22" width="7" height="7" rx="2" fill="#f2c744"/><rect x="47" y="22" width="7" height="7" rx="2" fill="#5fd6c6"/><rect x="56" y="22" width="7" height="7" rx="2" fill="#ef7a6f"/>
+    <rect x="38" y="32" width="7" height="7" rx="2" fill="#7c95ff"/><rect x="47" y="32" width="7" height="7" rx="2" fill="#a9abf2"/><rect x="56" y="32" width="7" height="7" rx="2" fill="#34a847"/>
+    <circle cx="50" cy="80.5" r="2.6" fill="#6a6dd6"/>
+    <polygon points="34,16 52,16 34,40" fill="#fff" opacity=".12"/>`),
+
+  notebook: svg(`
+    <rect x="24" y="10" width="54" height="76" rx="4" fill="url(#gBlue)" ${O}/>
+    <rect x="34" y="24" width="34" height="16" rx="2.5" fill="#f5ecd8" ${O}/>
+    <line x1="38" y1="30" x2="64" y2="30" stroke="#3f57c9" stroke-width="2" stroke-linecap="round"/>
+    <line x1="38" y1="35" x2="56" y2="35" stroke="#3f57c9" stroke-width="2" stroke-linecap="round"/>
+    <g fill="none" stroke="#b9bccb" stroke-width="3" stroke-linecap="round">
+      <path d="M20 18 h8"/><path d="M20 28 h8"/><path d="M20 38 h8"/><path d="M20 48 h8"/><path d="M20 58 h8"/><path d="M20 68 h8"/><path d="M20 78 h8"/></g>
+    <rect x="70" y="14" width="3" height="68" rx="1.5" ${SHINE}/>`),
+
+  lamp: svg(`
+    <ellipse cx="46" cy="84" rx="20" ry="5" fill="url(#gSilver)" ${O}/>
+    <path d="M46 82 L36 54 L58 30" fill="none" stroke="#2a2440" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M46 82 L36 54 L58 30" fill="none" stroke="#b9bccb" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="36" cy="54" r="4" fill="url(#gSilver)" ${O}/>
+    <path d="M52 22 L74 14 L88 44 L66 50 Z" fill="url(#gYellow)" ${O}/>
+    <ellipse cx="77" cy="47" rx="11" ry="4" transform="rotate(-18 77 47)" fill="#fff6c8" ${O}/>
+    <circle cx="58" cy="30" r="5" fill="url(#gSilver)" ${O}/>
+    <path d="M70 52 L62 72 M80 50 L80 72 M88 48 L96 66" stroke="#f5c431" stroke-width="2.5" stroke-linecap="round" opacity=".6"/>`)
 };
 
 const HAND = `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
