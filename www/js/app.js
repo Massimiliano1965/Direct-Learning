@@ -736,7 +736,10 @@ function onCorrect(res) {
   L.streak++;
   const parts = [];
   // Il ritmo conta più delle lodi: l'insegnante loda solo ogni tanto (o mai)
-  if (t.praiseEvery && L.streak % t.praiseEvery === 0) { parts.push({ text: pick(t.praise), rate: t.rate }); setPose('great'); }
+  if ((t.praiseEvery && L.streak % t.praiseEvery === 0) || (t.praiseChance && Math.random() < t.praiseChance)) {
+    parts.push({ text: pick(t.praise), rate: t.rate });
+    setPose(t.praisePose || 'great');
+  }
   // «No, non è un tavolo.» su un oggetto noto: l'insegnante completa con quello che è.
   // Sull'oggetto nuovo no: il nome non si dice finché non arriva «Che cos'è?»
   if (st.type === 'neg' && !res.full && !st.fresh) parts.push({ text: st.complete || S.present(st.show).model, rate: t.modelRate });

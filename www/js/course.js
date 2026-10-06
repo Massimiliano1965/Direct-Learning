@@ -83,12 +83,13 @@ const LESSONS = [
 // Quattro insegnanti, dal più rigido al più indulgente. gender = voce maschile o femminile.
 // wrong = solo «No.» quando l'allievo sbaglia (con la sua icona, mark in data.js); praise vuoto: quando è giusto
 // l'insegnante esulta col corpo, senza parole nuove; praiseEvery = ogni quante risposte giuste esulta;
+// praiseChance = invece di un ritmo fisso, approva ogni tanto a caso (Max: sobrio, pollice in su, praisePose 'nod');
 // repeats = quante ripetizioni dopo ogni errore, una voce per errore e poi da capo
 // (massimo 5, mai sempre uguali). style serve solo a noi: l'allievo non lo vede.
 const TEACHERS = {
   mass: {
-    key: 'mass', name: 'Mass', gender: 'm', style: 'Very strict', mark: 'wrong',
-    rate: 1.1, pitch: 0.85, modelRate: 1.0, praiseEvery: 0, repeats: [3, 5, 4, 5, 4],
+    key: 'mass', name: 'Max', gender: 'm', style: 'Very strict', mark: 'wrong',
+    rate: 1.1, pitch: 0.85, modelRate: 1.0, praiseEvery: 0, praiseChance: 0.25, praisePose: 'nod', repeats: [3, 5, 4, 5, 4],
     praise: [],
     wrong: 'No.',
     done: ''
