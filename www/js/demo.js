@@ -221,7 +221,7 @@ async function demoScript(t, run) {
   // 8. Le domande le fa l'allievo
   step(8, null, '');
   setCue('pick');
-  cap('At the end you ask the questions: tap a picture and ask.');
+  cap('Once you know the question, you ask too: tap a picture and ask.');
   await T('Tocca a te.');
   setStatus('Your turn: tap a picture, then ask', 'wait');
   setPickable(true);

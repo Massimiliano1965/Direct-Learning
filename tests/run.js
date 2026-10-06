@@ -92,7 +92,12 @@ check('domanda corretta suggerita è accettata', evalAsk('chair', 'È un tavolo?
 LESSONS.forEach(l => {
   const steps = buildSteps(l);
   const asks = steps.filter(s => s.type === 'ask');
-  check(l.id + ': in fondo 6 domande dell\'allievo', asks.length === 6 && steps.slice(-6).every(s => s.type === 'ask') && asks[0].intro);
+  const early = steps.filter(s => s.phase === 'askfirst'), last = steps.filter(s => s.phase === 'ask');
+  const lastKey = steps.map(s => s.phase).lastIndexOf('key'), firstMix = steps.findIndex(s => s.phase === 'mix');
+  check(l.id + ': 3 domande dell\'allievo subito dopo la key question', early.length === 3 && early[0].intro &&
+    steps.slice(lastKey + 1, lastKey + 4).every(s => s.phase === 'askfirst') && lastKey + 3 < firstMix);
+  check(l.id + ': in fondo 4 domande dell\'allievo', last.length === 4 && steps.slice(-4).every(s => s.type === 'ask') && last[0].intro);
+  check(l.id + ': 7 domande dell\'allievo in tutto', asks.length === 7);
 });
 
 // 1b. Eco della voce dell'insegnante

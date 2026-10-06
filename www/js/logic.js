@@ -213,7 +213,8 @@ function mixStep(items, types, prevShow, q) {
 // 9. si ricomincia: tutto mescolato, sempre più veloce
 const MIX_BLOCKS = 3;
 const MIX_BLOCK_SIZE = 8;
-const ASK_TURNS = 6;
+const ASK_EARLY = 3;   // domande dell'allievo subito dopo la key question
+const ASK_TURNS = 4;   // e in fondo, come verifica
 // Parole della lezione: known = presentate ora; review = già imparate, usate nelle domande
 // per introdurre le nuove; fresh = oggetto da scoprire con «Che cos'è?».
 function lessonWords(l) { return l.known.concat(l.review || []).concat(l.fresh ? [l.fresh] : []); }
@@ -254,6 +255,11 @@ function buildSteps(lesson) {
   }
   const keyItems = F ? K.concat([F]) : K;
   for (let r = 0; r < 2; r++) shuffle(keyItems).forEach(x => add(S.key(x), 'key'));
+  // 9. imparata la key question, l'allievo comincia a fare le domande
+  for (let i = 0; i < ASK_EARLY; i++) {
+    const s = add({ type: 'ask', prompt: '', model: '' }, 'askfirst');
+    if (!i) s.intro = true;
+  }
 
   prev = null;
   for (let b = 0; b < MIX_BLOCKS; b++) {
