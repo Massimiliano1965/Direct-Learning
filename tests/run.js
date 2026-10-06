@@ -6,7 +6,7 @@ const vm = require('vm');
 
 const ctx = { console: console };
 vm.createContext(ctx);
-['course.js', 'data.js', 'logic.js', 'colors_it.js', 'numbers_it.js', 'geo_fig.js', 'geo_it.js', 'ui_lang.js'].forEach(f => {
+['course.js', 'data.js', 'logic.js', 'colors_it.js', 'numbers_it.js', 'geo_fig.js', 'geo_it.js', 'poss_it.js', 'ui_lang.js'].forEach(f => {
   vm.runInContext(fs.readFileSync(path.join(__dirname, '..', 'www', 'js', f), 'utf8'), ctx, { filename: f });
 });
 const run = (code) => vm.runInContext(code, ctx);
@@ -14,7 +14,7 @@ const evaluate = run('evaluate');
 const evaluateAll = run('evaluateAll');
 const buildSteps = run('buildSteps');
 const answerSteps = run('answerSteps');
-const LESSONS = run('LESSONS').filter(l => !l.colors && !l.numbers && !l.geo);   // lezioni con gli oggetti (colori e numeri hanno i loro test)
+const LESSONS = run('LESSONS').filter(l => !l.colors && !l.numbers && !l.geo && !l.poss);   // lezioni con gli oggetti (colori e numeri hanno i loro test)
 const NUM_LESSONS = run('LESSONS').filter(l => l.numbers);
 const COLOR_LESSONS = run('LESSONS').filter(l => l.colors);
 const ITEMS = run('ITEMS');
@@ -439,6 +439,28 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].map(k => TEACHER
       if (st.slice(1, first).some((s, i) => s.show === st[i].show)) { check(l.id + ': presentazione mai due di fila', false); break; }
     }
   });
+}
+
+// Lezione 10: «Il mio, la Sua» (il punto di vista si inverte)
+{
+  const SP = run('SP'), evalAsk = run('evalAsk'), answerAsk = run('answerAsk'), buildDrill = run('buildDrill');
+  const ok = (st, t) => evaluate(st, t).ok;
+  const l10 = run('LESSONS').find(l => l.id === 'l10');
+  check('lezione 10 c\'è', !!l10 && l10.poss);
+  check('figure con il bollino', l10.known.every(k => FIG[k] && FIG[k].indexOf('<svg') === 0 && FIG[k].indexOf(' id=') === -1));
+  check('frasi', SP.yes('o_t_phone').prompt === 'È il mio telefono?' && SP.yes('o_t_phone').model === 'Sì, è il Suo telefono.' &&
+    SP.yes('o_s_suitcase').model === 'Sì, è la mia valigia.' && SP.neg('o_t_phone').model === 'No, non è il mio telefono.' && SP.key('o_s_suitcase').prompt === 'Di chi è questa valigia?');
+  check('giusto: punto di vista rovesciato', ok(SP.yes('o_t_phone'), 'Sì, è il Suo telefono.') && ok(SP.key('o_s_suitcase'), 'È la mia valigia.') && ok(SP.neg('o_t_phone'), 'No, non è il mio telefono.'));
+  check('sbagliato: ripete il punto di vista dell\'insegnante', !ok(SP.yes('o_t_phone'), 'Sì, è il mio telefono.'));
+  check('sbagliato: accordo «la mio valigia»', !ok(SP.yes('o_s_suitcase'), 'Sì, è la mio valigia.') && !ok(SP.key('o_t_laptop'), 'È il Sua portatile.'));
+  check('sbagliato: «tua» invece di «Sua»', !ok(SP.key('o_t_laptop'), 'È il tuo portatile.'));
+  check('ripete «Di chi è?»', ok(SP.askQ('o_t_phone'), 'Di chi è?'));
+  check('allievo', evalAsk('o_t_phone', 'Di chi è questo telefono?').kind === 'what' && answerAsk('o_t_phone', { kind: 'what' }) === 'È il mio telefono.' &&
+    evalAsk('o_t_phone', 'È il Suo telefono?').kind === 'yes' && evalAsk('o_s_bag', 'È la mio borsa?').model === 'È la mia borsa?');
+  const st = buildSteps(l10), models = st.filter(s => s.model && s.type !== 'reveal');
+  check('lezione 10: risposte modello giuste', models.every(s => evaluate(s, s.model).ok));
+  check('lezione 10: ripetizioni giuste', models.every(s => buildDrill(s, 5, []).every(d => evaluate(d, d.model).ok)));
+  check('gesti: le sue cose → mano sul petto, quelle dello studente → lo indica', run('possPose')(SP.yes('o_t_phone')) === 'me' && run('possPose')(SP.yes('o_s_bag')) === 'you');
 }
 
 // Lingua dello studente: ogni scritta c'è in tutte le lingue, con gli stessi segnaposto {…}

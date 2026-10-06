@@ -9,6 +9,7 @@
      wrong = braccia incrociate a X (come in Giappone)
      ok    = apre le braccia
      great = esulta, braccia in alto
+     me    = mano sul petto («il mio», lezione dei possessivi)
    ===================================================================== */
 const LOOKS = {
   mass:   { man: true, skin: '#c98e62', skin2: '#b27a50', hair: '#a9a9b0', hair2: '#7d7d86', style: 'back',
@@ -90,6 +91,7 @@ const DOWN_L = [[35, 47], [32, 70], [34, 90]], DOWN_R = [[65, 47], [68, 70], [66
 const POSES = {
   show:  { f: { mouth: 'talk' }, arms: L => tArm(L, ...DOWN_L) + tArm(L, [65, 47], [80, 60], [95, 55]) },
   ask:   { f: { mouth: 'o', brow: 1 }, tilt: 6, arms: L => tArm(L, ...DOWN_L) + tArm(L, [65, 47], [74, 72], [86, 66]) },
+  me:    { f: { mouth: 'talk' }, arms: L => tArm(L, ...DOWN_L) + tArm(L, [65, 47], [73, 67], [55, 58]) },   // mano sul petto: «il mio»
   you:   { f: { mouth: 'smile' }, arms: L => tArm(L, ...DOWN_L) + tArm(L, [65, 47], [78, 64], [88, 74], [5, 5]) },
   wrong: { f: { mouth: 'flat', brow: -1 }, arms: L => tArm(L, [35, 47], [33, 64], [67, 38]) + tArm(L, [65, 47], [67, 64], [33, 38]) },
   ok:    { f: { mouth: 'smile', happy: true }, arms: L => tArm(L, [35, 47], [22, 64], [11, 57]) + tArm(L, [65, 47], [78, 64], [89, 57]) },

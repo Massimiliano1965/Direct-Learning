@@ -377,7 +377,7 @@ function askStep() {
   setCue(cueFor(st));
   // frase che dice dov'è (o l'insegnante che risponde da solo): il luogo è già verde; domanda: pulsa in oro
   showPlaces(st, (st.type === 'echo' && st.check === 'claim') || st.type === 'reveal' ? 'result' : 'ask');
-  setPose(cueFor(st) === 'q' ? 'ask' : 'show');
+  setPose((typeof possPose === 'function' && possPose(st)) || (cueFor(st) === 'q' ? 'ask' : 'show'));
   // Durante le ripetizioni l'insegnante parla col ritmo del modello
   const rate = st.drill ? L.teacher.modelRate : L.teacher.rate * (st.speed || 1);
   const speak = () => Mouth.speak(st.prompt, rate, L.teacher.pitch, () => {
