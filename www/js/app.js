@@ -279,6 +279,8 @@ function setPose(pose) {
   restartAnim(h, 'move');
 }
 function setStageTeacher(key) { stageTeacher = key; stagePose = ''; }
+// Chiamata dalla voce (voice.js): mentre l'insegnante parla, le labbra si muovono
+function onTeacherTalk(on) { const st = $('stage'); if (st) st.classList.toggle('talking', !!on); }
 
 let shownObj;
 function showIndicated(obj, right) {

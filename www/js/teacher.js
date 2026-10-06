@@ -82,7 +82,9 @@ function tHead(L, f) {
               flat: `<path d="M47.4 31 h5.2" stroke="${lip}" stroke-width="1.1" stroke-linecap="round"/>`,
               open: `<path d="M46.6 30 q3.4 4 6.8 0z" fill="#6a2a2a"/>`,
               o: `<ellipse cx="50" cy="31" rx="1.2" ry="1.3" fill="#6a2a2a"/>` };
-  return back + head + front + feat + m[f.mouth];
+  // bocca normale + bocca che parla (si vede e si muove solo mentre l'insegnante parla: #stage.talking)
+  return back + head + front + feat + '<g class="tmouth">' + m[f.mouth] + '</g>' +
+    '<ellipse class="tlips" cx="50" cy="31.2" rx="2.9" ry="2.2" fill="#5a2424"/>';
 }
 const DOWN_L = [[35, 47], [32, 70], [34, 90]], DOWN_R = [[65, 47], [68, 70], [66, 90]];
 const POSES = {

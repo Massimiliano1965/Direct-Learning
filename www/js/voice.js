@@ -92,6 +92,9 @@ function ttsHardStop() {
   try { if (window.speechSynthesis) window.speechSynthesis.cancel(); } catch (e) {}
 }
 
+// Labbra dell'insegnante disegnato: si muovono mentre parla lui (non la voce dello studente finto)
+function lipsTalking(on) { if (typeof onTeacherTalk === 'function') onTeacherTalk(on); }
+
 const Mouth = {
   token: 0,
   gender: '',   // 'm' o 'f': voce dell'insegnante di turno
@@ -104,10 +107,12 @@ const Mouth = {
     const tok = ++this.token;
     let done = false;
     let timer = null;
+    lipsTalking(!gender);
     const finish = () => {
       if (done) return;
       done = true;
       clearTimeout(timer);
+      if (tok === this.token) lipsTalking(false);
       if (tok === this.token && cb) cb();
     };
     // Rete di sicurezza scattata (fine frase persa): si spegne l'audio prima di andare avanti,
@@ -179,6 +184,7 @@ const Mouth = {
   cancel() {
     this.token++;
     this.clearTimers();
+    lipsTalking(false);
     ttsHardStop();
   }
 };
