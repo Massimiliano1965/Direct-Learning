@@ -355,7 +355,8 @@ function askStep() {
     // L'insegnante si è risposto da solo («Che cos'è? È una penna.»): avanti
     if (st.type === 'reveal' && !st.drill) { L.busy = true; nextStep(run, 900); return; }
     if (coachable(st) && L.coach) { coachAnswer(st, run); return; }   // anche con Repeat
-    if (cueFor(st) === 'r') setPose('you');
+    // «Questo.» / «Questa.»: il dito resta sull'oggetto (se indicasse lo studente, «questa» sembrerebbe lui)
+    if (cueFor(st) === 'r' && st.check !== 'dem') setPose('you');
     listenSoon(run);
   });
   // Un attimo di silenzio prima dello sfogo
@@ -686,7 +687,7 @@ function onWrong() {
     if (!alive(run)) return;
     scr.classList.remove('tunnel');
     L.busy = false;
-    setPose('you');
+    setPose(cur().check === 'dem' ? 'show' : 'you');
     listenSoon(run);
   });
 }
