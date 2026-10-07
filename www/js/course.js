@@ -343,7 +343,10 @@ const LESSONS = [
     known: ['via_m_treno_roma', 'via_f_aereo_napoli', 'via_m_taxi_milano', 'via_f_bicicletta_pisa', 'via_m_autobus_firenze', 'via_f_piedi_venezia'] },
   // «In albergo» — Dov'è Mario? Mario è alla reception / in camera / in ascensore / al ristorante / in piscina / al bar. (scelta_it.js)
   { id: 'l93', title: 'Lezione 93', level: 4, hot: true, hilite: ['alla', 'al', 'in'],
-    known: ['hot_m_reception', 'hot_f_camera', 'hot_m_ascensore', 'hot_f_ristorante', 'hot_m_piscina', 'hot_f_bar'] }
+    known: ['hot_m_reception', 'hot_f_camera', 'hot_m_ascensore', 'hot_f_ristorante', 'hot_m_piscina', 'hot_f_bar'] },
+  // «Città e monumenti d'Italia» — Dov'è la Torre di Pisa? La Torre di Pisa è a Pisa. (scelta_it.js)
+  { id: 'l94', title: 'Lezione 94', level: 4, mit: true, hilite: ['Dov\'è', 'a Roma', 'a Pisa', 'a Milano', 'a Venezia', 'a Firenze', 'a Napoli'],
+    known: ['mit_colosseo', 'mit_torre', 'mit_duomo', 'mit_rialto', 'mit_david', 'mit_vesuvio'] }
 ];
 
 // Quattro insegnanti, dal più rigido al più indulgente. gender = voce maschile o femminile.

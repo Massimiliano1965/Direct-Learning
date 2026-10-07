@@ -268,3 +268,44 @@ const SHOT = choiceLesson({
   fig: hotFig,
   wrong: ['sono', 'sei', 'va', 'sta']
 });
+
+/* ---------- Lezione 94: le città e i monumenti d'Italia ---------- */
+const MON_CITY = { roma: { the: 'a Roma' }, pisa: { the: 'a Pisa' }, milano: { the: 'a Milano' }, venezia: { the: 'a Venezia' }, firenze: { the: 'a Firenze' }, napoli: { the: 'a Napoli' } };
+const MON_IT = { colosseo: 'il Colosseo', torre: 'la Torre di Pisa', duomo: 'il Duomo di Milano', rialto: 'il Ponte di Rialto', david: 'il David', vesuvio: 'il Vesuvio' };
+const MON_SKY = '<rect x="2" y="2" width="96" height="96" rx="10" fill="#9fd3ef"/>';
+const MON_ART = {
+  colosseo: null,
+  torre: MON_SKY + '<path d="M2 84 h96 V88 a10 10 0 0 1 -10 10 H12 a10 10 0 0 1 -10 -10z" fill="#7cc06a"/>' +
+    '<g transform="rotate(8 50 86)"><rect x="40" y="16" width="20" height="70" rx="2" fill="#f3eee2"/><rect x="42" y="10" width="16" height="8" rx="2" fill="#e6dfcf"/>' +
+    [24, 34, 44, 54, 64, 74].map(y => '<path d="M40 ' + y + ' h20" stroke="#c9c1ad" stroke-width="1.4"/>' + [43, 48, 53].map(x => '<rect x="' + x + '" y="' + (y + 2) + '" width="3" height="6" rx="1.5" fill="#b8ae97"/>').join('')).join('') + '</g>',
+  // il Duomo di Milano: la facciata a punta, tante guglie bianche, la Madonnina d'oro in cima
+  duomo: MON_SKY + '<path d="M2 88 h96 V88 a10 10 0 0 1 -10 10 H12 a10 10 0 0 1 -10 -10z" fill="#c9ced8"/>' +
+    '<path d="M12 88 v-38 h76 v38z" fill="#f1ede4"/><path d="M28 50 l22 -18 l22 18z" fill="#f1ede4"/>' +
+    [12, 20, 28, 36, 64, 72, 80, 88].map(x => '<rect x="' + (x - 1.6) + '" y="34" width="3.2" height="18" fill="#e6dfcf"/><path d="M' + (x - 2) + ' 34 l2 -9 l2 9z" fill="#e6dfcf"/>').join('') +
+    '<rect x="48.2" y="10" width="3.6" height="24" fill="#e6dfcf"/><path d="M47.6 10 l2.4 -6 l2.4 6z" fill="#e6dfcf"/><circle cx="50" cy="3.6" r="2" fill="#f3d36b"/>' +
+    [22, 34, 66, 78].map(x => '<path d="M' + (x - 3) + ' 80 v-14 a3 3 0 0 1 6 0 v14z" fill="#b9c3d2"/>').join('') +
+    '<path d="M44 88 v-18 a6 6 0 0 1 12 0 v18z" fill="#8d93a3"/><circle cx="50" cy="58" r="5" fill="#c9ced8" stroke="#a9a089" stroke-width="1.2"/>',
+  rialto: MON_SKY + '<path d="M2 68 h96 V88 a10 10 0 0 1 -10 10 H12 a10 10 0 0 1 -10 -10z" fill="#3f8fb5"/>' +
+    '<path d="M8 68 q42 -46 84 0 v6 h-12 q-30 -30 -60 0 h-12z" fill="#f1ede4"/><path d="M30 46 h40 v-10 h-40z" fill="#e6dfcf"/><path d="M34 46 v-10 M42 46 v-10 M50 46 v-10 M58 46 v-10 M66 46 v-10" stroke="#c9c1ad" stroke-width="2"/>' +
+    '<path d="M28 36 l22 -12 l22 12z" fill="#c8a37a"/><path d="M16 82 q14 6 30 0 l-4 -3 q-12 4 -22 0z" fill="#2a3346"/><path d="M40 78 l6 -10" stroke="#5a4030" stroke-width="1.4"/>',
+  // il David: la statua bianca nel museo (il muro scuro, così si vede bene)
+  david: '<rect x="2" y="2" width="96" height="96" rx="10" fill="#6b3a3a"/><path d="M2 86 h96 V88 a10 10 0 0 1 -10 10 H12 a10 10 0 0 1 -10 -10z" fill="#4a2a2a"/>' +
+    '<ellipse cx="50" cy="40" rx="30" ry="36" fill="#f3d36b" opacity=".12"/><rect x="32" y="80" width="36" height="12" rx="2" fill="#c9ced8"/><rect x="34" y="78" width="32" height="4" fill="#dfe4ea"/>' +
+    '<g stroke="#b9b09c" stroke-width="1"><circle cx="50" cy="18" r="7.5" fill="#f1ede4"/><path d="M43 14 q7 -8 14 0 q-2 -5 -7 -5 q-5 0 -7 5z" fill="#d8cfbb"/>' +
+    '<path d="M42 28 q8 -4 16 0 l2 24 h-4 l-1 26 h-4.5 l-1 -16 l-1 16 h-4.5 l-1 -26 h-4z" fill="#f1ede4"/></g>' +
+    '<path d="M42 30 l-7 16 l3 2 l6 -12 M58 30 l5 10 l-6 6" stroke="#f1ede4" stroke-width="4.2" fill="none" stroke-linecap="round"/><path d="M42 30 l-7 16 M58 30 l5 10 l-6 6" stroke="#b9b09c" stroke-width=".6" fill="none"/>',
+  vesuvio: MON_SKY + '<path d="M2 70 L36 30 h28 L98 70 V88 a10 10 0 0 1 -10 10 H12 a10 10 0 0 1 -10 -10z" fill="#7d6b5a"/><path d="M36 30 h28 l-6 8 h-16z" fill="#5a4a3c"/>' +
+    '<path d="M50 28 q-6 -8 0 -14 q6 -6 2 -12" stroke="#dfe4ea" stroke-width="5" fill="none" stroke-linecap="round" opacity=".85"/>' +
+    '<path d="M2 80 h96 V88 a10 10 0 0 1 -10 10 H12 a10 10 0 0 1 -10 -10z" fill="#3f7fb5"/><path d="M10 86 h10 M34 90 h14 M66 86 h12" stroke="#cfe6f5" stroke-width="1.4"/>'
+};
+const SMON = choiceLesson({
+  flag: 'mit', CH: MON_CITY,
+  items: { mit_colosseo: { who: null, c: 'roma' }, mit_torre: { who: null, c: 'pisa' }, mit_duomo: { who: null, c: 'milano' },
+    mit_rialto: { who: null, c: 'venezia' }, mit_david: { who: null, c: 'firenze' }, mit_vesuvio: { who: null, c: 'napoli' } },
+  say: (X, c, neg) => gCap(MON_IT[X.slice(4)]) + (neg ? ' non' : '') + ' è ' + MON_CITY[c].the,
+  // il nome del monumento si toglie prima di capire (la Torre «di Pisa» non è la risposta)
+  strip: / (il |la )?(colosseo|torre di pisa|duomo di milano|duomo|ponte di rialto|david|vesuvio) /g,
+  q: (X) => 'Dov\'è ' + MON_IT[X.slice(4)] + '?',
+  fig: (X) => '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">' + (X === 'mit_colosseo' ? inner(MON2.colosseo) : MON_ART[X.slice(4)]) + '</svg>',
+  wrong: ['sono', 'in']
+});
