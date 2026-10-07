@@ -253,7 +253,10 @@ const LESSONS = [
     known: ['cz_m_cornetto', 'cz_f_pane', 'cz_m_mela', 'cz_f_latte', 'cz_m_caffe', 'cz_f_succo'] },
   // capitolo 12: «Questo / quello; quale?» — Quale tazza è rossa? Questa tazza. Quale telefono è rosso? Quel telefono. (quale_it.js)
   { id: 'l64', title: 'Lezione 64', level: 3, qu: true, gender: true, hilite: ['quale'],
-    known: ['qu_cup_rosso_bianco_n', 'qu_phone_bianco_rosso_f', 'qu_suitcase_bianco_rosso_n', 'qu_umbrella_nero_giallo_f', 'qu_laptop_rosso_bianco_n', 'qu_coat_bianco_rosso_f'] }
+    known: ['qu_cup_rosso_bianco_n', 'qu_phone_bianco_rosso_f', 'qu_suitcase_bianco_rosso_n', 'qu_umbrella_nero_giallo_f', 'qu_laptop_rosso_bianco_n', 'qu_coat_bianco_rosso_f'] },
+  // capitolo 12: «I fiori» — Che fiore è? È una rosa rossa. (fiori_it.js)
+  { id: 'l65', title: 'Lezione 65', level: 3, fi: true, gender: true,
+    known: ['fi_rosa_rosso', 'fi_tulipano_giallo', 'fi_margherita_bianco', 'fi_girasole_giallo', 'fi_rosa_bianco', 'fi_tulipano_rosso'] }
 ];
 
 // Quattro insegnanti, dal più rigido al più indulgente. gender = voce maschile o femminile.
