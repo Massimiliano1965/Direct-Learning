@@ -30,6 +30,9 @@ function norm(text) {
   s = s.replace(/['’`´]/g, ' ').replace(/[^a-z\s]/g, ' ');
   s = ' ' + s.replace(/\s+/g, ' ').trim() + ' ';
   s = s.replace(/ cos e(?= )/g, ' cosa e').replace(/ cose(?= )/g, ' cosa e');
+  // parole che vanno bene tutte e due (COURSE.synonyms): «Cos'è?» = «Che cos'è?», «oppure» = «o»
+  s = s.replace(/ cosa e(?= )/g, (m, off) => s.slice(Math.max(0, off - 4), off) === ' che' ? m : ' che cosa e');
+  s = s.replace(/ oppure(?= )/g, ' o');
   Object.keys(ITEMS).forEach(k => {
     ITEMS[k].alias.forEach(a => {
       s = s.replace(new RegExp(' ' + a + '(?= )', 'g'), ' ' + ITEMS[k].word);

@@ -17,7 +17,8 @@ const COURSE = {
   demoWrong: 'Sì, è un sedia.',         // l'errore della lezione di prova
   speedSample: ['Ciao, sono {name}.', 'Parliamo italiano insieme.'],   // la frase d'esempio quando si sceglie la velocità
   // parole che vanno bene tutte e due: nella frase scritta si alternano (la prima è quella principale)
-  synonyms: [['neanche', 'nemmeno'], ['che ora è', 'che ore sono']]
+  // (la voce dell'insegnante, nelle domande, ogni tanto usa la seconda; il microfono le accetta tutte e due)
+  synonyms: [['neanche', 'nemmeno'], ['che ora è', 'che ore sono'], ['che cos\'è', 'cos\'è'], ['o', 'oppure']]
 };
 
 // Oggetti: chiave = figura in data.js. art = articolo indeterminativo.

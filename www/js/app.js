@@ -448,10 +448,20 @@ function synWrap() {
   });
   // larghezza fissa (la più lunga delle due parole): la frase non salta quando la parola cambia
   el.querySelectorAll('.syn').forEach(sp => {
-    if (sp.dataset.a.indexOf(' ') !== -1) return;   // le frasi («che ora è» / «che ore sono») vanno a capo da sole
+    // le frasi («che ora è» / «che ore sono») e le parole molto diverse («o» / «oppure») vanno a capo da sole
+    if (sp.dataset.a.indexOf(' ') !== -1 || Math.max(sp.dataset.a.length, sp.dataset.b.length) > 1.5 * Math.min(sp.dataset.a.length, sp.dataset.b.length)) return;
     const wa = sp.offsetWidth; sp.textContent = sp.dataset.b; const wb = sp.offsetWidth; sp.textContent = sp.dataset.a;
     sp.style.minWidth = Math.max(wa, wb) + 'px';
   });
+}
+// La voce, nelle domande, ogni tanto usa l'altra parola (una volta su tre): l'allievo le sente tutte e due
+function synVoice(text) {
+  let t = String(text || '');
+  (COURSE.synonyms || []).forEach(([a, b]) => {
+    const re = new RegExp('(^|[^\\p{L}])(' + a.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')(?![\\p{L}])', 'giu');
+    t = t.replace(re, (m, pre, w) => Math.random() < 0.33 ? pre + (w.charAt(0) !== w.charAt(0).toLowerCase() ? b.charAt(0).toUpperCase() + b.slice(1) : b) : m);
+  });
+  return t;
 }
 setInterval(() => {
   document.querySelectorAll('#prompt-text .syn').forEach(sp => {
@@ -515,7 +525,7 @@ function askStep() {
   setPose((typeof possPose === 'function' && possPose(st)) || (cueFor(st) === 'q' ? 'ask' : 'show'));
   // Durante le ripetizioni l'insegnante parla col ritmo del modello
   const rate = st.drill ? L.teacher.modelRate : L.teacher.rate * (st.speed || 1);
-  const speak = () => Mouth.speak(st.prompt, rate, L.teacher.pitch, () => {
+  const speak = () => Mouth.speak(synVoice(st.prompt), rate, L.teacher.pitch, () => {
     if (!alive(run)) return;
     L.busy = false;
     // L'insegnante si è risposto da solo («Che cos'è? È una penna.»): avanti

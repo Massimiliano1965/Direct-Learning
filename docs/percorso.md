@@ -176,3 +176,10 @@ Durante il test l'insegnante non corregge; contano solo gli errori, mostrati all
 - magnetofono → computer
 - lire → euro
 - personaggi e alberghi del libro → nomi nostri, nessun nome di marca
+
+## Regole del corso (decise da Massi)
+
+- **Parole che vanno bene tutte e due** (neanche/nemmeno, che ora è/che ore sono, che cos'è/cos'è, o/oppure):
+  nella frase scritta si alternano in oro ogni 2 secondi; la voce, nelle domande, ogni tanto usa la seconda;
+  il microfono le accetta tutte e due. L'elenco è `COURSE.synonyms` in `www/js/course.js`: per una coppia nuova basta aggiungerla lì.
+- L'insegnante non usa parole che l'allievo non conosce ancora (niente «bravo», «ottimo»: l'entusiasmo lo mostra il corpo; l'errore è «No.»).

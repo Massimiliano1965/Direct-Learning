@@ -687,6 +687,15 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
   check('lezione 20: domanda «o» con l\'una detta bene', [1, 2, 3, 4, 5, 6, 7, 8].map(() => SO.alt('h1').prompt).every(p => /^È l'una o (sono le [a-z]+|mezzogiorno|mezzanotte)\?$|^Sono le [a-z]+ o è l'una\?$|^È (mezzogiorno|mezzanotte) o l'una\?$/.test(p)));
 }
 
+// Parole che vanno bene tutte e due (COURSE.synonyms): il microfono le accetta tutte e due
+{
+  const norm = run('norm'), S_ = run('S'), evalAsk = run('evalAsk');
+  check('«Cos\'è?» = «Che cos\'è?», «oppure» = «o»', norm('Cos\'è?') === norm('Che cos\'è?') && norm('Cosa è?') === norm('Che cosa è?') && norm('un libro oppure un tavolo') === norm('un libro o un tavolo'));
+  check('l\'allievo può chiedere «Cos\'è?» e «… oppure …?»', evalAsk('chair', 'Cos\'è?').ok && evalAsk('chair', 'È un tavolo oppure una sedia?').ok);
+  check('ripetere «Cos\'è?» va bene', evaluate(S_.askQ('pen'), 'Cos\'è?').ok);
+  check('elenco delle coppie', run('COURSE').synonyms.length >= 4 && run('COURSE').synonyms.every(p => p.length === 2));
+}
+
 // Lingua dello studente: ogni scritta c'è in tutte le lingue, con gli stessi segnaposto {…}
 {
   const T = run('UI_TEXT'), langs = Object.keys(T), keys = Object.keys(T.en);
