@@ -117,7 +117,7 @@ Durante il test l'insegnante non corregge; contano solo gli errori, mostrati all
 58. **Cibi della colazione**: pane, frutta, contorni — *fatto: Lezione 63 (cornetto, pane con la marmellata, mela, latte, caffè, succo d'arancia)*
 59. **Questo/quel, questa/quella; quale?** — *fatto: Lezione 64 (Quale tazza è rossa? Questa tazza.)*
 60. **Quello studente, ecc.**
-61. **Gli, le, loro; le, mi, ci** (complemento indiretto)
+61. **Gli, le, loro; le, mi, ci** (complemento indiretto) — *fatto: Lezioni 55 (gli / le) e 76 (mi → Le, ci)*
 62. **I fiori** — *fatto: Lezione 65 (Che fiore è? È una rosa rossa.)*
 
 ## Capitolo 13

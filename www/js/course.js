@@ -286,7 +286,10 @@ const LESSONS = [
     known: ['tl_m', 'tl_f', 'tl_marco', 'tl_anna', 'tl_nonno', 'tl_nonna'] },
   // capitolo 11: «Preposizioni» — Dov'è la valigia? La valigia è sotto il tavolo / davanti al tavolo / dietro il tavolo… (dove_it.js)
   { id: 'l75', title: 'Lezione 75', level: 3, dvp: true, hilite: ['sul', 'sotto', 'davanti al', 'dietro', 'accanto al'],
-    known: ['dvp_suitcase_sotto', 'dvp_book_sul', 'dvp_suitcase_davanti', 'dvp_book_accanto', 'dvp_suitcase_dietro', 'dvp_book_sotto'] }
+    known: ['dvp_suitcase_sotto', 'dvp_book_sul', 'dvp_suitcase_davanti', 'dvp_book_accanto', 'dvp_suitcase_dietro', 'dvp_book_sotto'] },
+  // capitolo 12: «Mi, Le, ci» — Che cosa mi dà Max? Le dà il libro. Che cosa ci dà Isa? Ci dà la tazza. (mici_it.js)
+  { id: 'l76', title: 'Lezione 76', level: 3, mc: true, hilite: ['mi', 'Le', 'ci'],
+    known: ['mc_m_me_book', 'mc_f_us_cup', 'mc_f_me_key', 'mc_m_us_phone', 'mc_m_me_pen', 'mc_f_us_umbrella'] }
 ];
 
 // Quattro insegnanti, dal più rigido al più indulgente. gender = voce maschile o femminile.
