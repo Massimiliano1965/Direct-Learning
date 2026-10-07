@@ -48,17 +48,25 @@ function vArrow(a, c, b) {
     '<path d="' + d + '" fill="none" stroke="#3fb35f" stroke-width="3.2" stroke-linecap="round"/>' +
     '<path d="M' + tip.join(' ') + ' L' + l.join(' ') + ' L' + r.join(' ') + 'z" fill="#3fb35f" stroke="#141a27" stroke-width=".8" stroke-opacity=".5"/>';
 }
+// il panorama dietro la porta e la finestra: cielo, sole, colline (sea = il mare)
+const vView = (x, y, w, h, sea) => '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" fill="#8cc4e3"/>' +
+  '<circle cx="' + (x + w - 6) + '" cy="' + (y + 8) + '" r="3.6" fill="#f3d36b"/>' +
+  (sea ? '<path d="M' + x + ' ' + (y + h * .62) + ' h' + w + ' V' + (y + h) + ' H' + x + 'z" fill="#3f7fb5"/><path d="M' + (x + 3) + ' ' + (y + h * .75) + ' h6 M' + (x + 15) + ' ' + (y + h * .85) + ' h7" stroke="#cfe6f5" stroke-width="1"/>'
+       : '<path d="M' + x + ' ' + (y + h * .6) + ' q' + w * .3 + ' -9 ' + w * .55 + ' -3 q' + w * .25 + ' -6 ' + w * .45 + ' 1 V' + (y + h) + ' H' + x + 'z" fill="#6fae6a"/>' +
+         '<path d="M' + x + ' ' + (y + h * .8) + ' q' + w * .5 + ' -8 ' + w + ' 1 V' + (y + h) + ' H' + x + 'z" fill="#4f8f4f"/>');
 const V_SCENE = {
   // legge: il libro aperto tra le mani, davanti al petto
   read: (LK) => V_PERSON(LK, tArm(LK, [35, 47], [33, 68], [40, 62]) + tArm(LK, [65, 47], [67, 68], [60, 62]) +
     '<path d="M50 56 q-7 -4 -16 -2 v13 q9 -2 16 2z" fill="#f3eee2"/><path d="M50 56 q7 -4 16 -2 v13 q-9 -2 -16 2z" fill="#ece4d2"/>' +
     '<path d="M50 56 v13" stroke="#c9b994" stroke-width="1"/><path d="M38 59 h8 M38 62 h8 M54 59 h8 M54 62 h8" stroke="#a9a089" stroke-width="1"/>' +
     '<path d="M34 67 q8 -2 16 2 q8 -4 16 -2 v2.5 q-8 -2 -16 2 q-8 -4 -16 -2z" fill="#2c3e66"/>', { mouth: 'flat' }),
-  // apre la porta: la porta (a destra) si apre verso di lui (freccia verso sinistra), si vede la luce
-  open: (LK) => '<rect x="60" y="6" width="34" height="86" fill="#4a3628"/><rect x="63" y="9" width="28" height="83" fill="#f3dfa8"/>' +
-    '<path d="M63 9 l20 -4 v90 l-20 -3z" fill="#8e6741"/><path d="M67 16 l12 -2 v20 l-12 2z M67 44 l12 -2 v32 l-12 2z" fill="#7a5735"/>' +
-    '<circle cx="80" cy="50" r="2.6" fill="#c9a45c"/>' + V_PERSON(LK, tArm(LK, ...DOWN_L) + tArm(LK, [65, 47], [76, 54], [86, 46]), null, -16) +
-    vArrow([90, 62], [92, 30], [73, 26]),
+  // apre la porta: porta scorrevole (come gli shoji giapponesi); scorre verso Max e si vede il panorama (freccia ←)
+  open: (LK) => '<rect x="60" y="6" width="36" height="86" fill="#4a3628"/>' + vView(63, 9, 30, 83) +
+    '<rect x="63" y="9" width="17" height="83" fill="#8e6741"/><rect x="65.5" y="12" width="12" height="77" fill="#f3eee2"/>' +
+    '<path d="M71.5 12 v77 M65.5 28 h12 M65.5 44 h12 M65.5 60 h12 M65.5 76 h12" stroke="#b58a5e" stroke-width="1.2"/>' +
+    '<rect x="78" y="46" width="1.6" height="8" rx=".8" fill="#4a3628"/>' +
+    V_PERSON(LK, tArm(LK, ...DOWN_L) + tArm(LK, [65, 47], [80, 58], [94, 45]), null, -16) +
+    vArrow([93, 32], [84, 26], [70, 31]),
   // mangia un'arancia: l'arancia alla bocca
   eat: (LK) => V_PERSON(LK, tArm(LK, ...DOWN_L) + tArm(LK, [65, 47], [72, 62], [60, 38]) +
     '<circle cx="58" cy="32" r="6.5" fill="#e8862a"/><circle cx="56" cy="30" r="2" fill="#f2a54a" opacity=".7"/><path d="M58 25.5 q4 -4 8 -1 q-4 3 -8 1z" fill="#5a9a46"/>', { mouth: 'open' }),
@@ -68,12 +76,12 @@ const V_SCENE = {
     '<path d="M54 41 h8 l1.2 2.2 v18 l-1.2 2.2 h-8 l-1.2 -2.2 v-18z" fill="#c8262f"/><path d="M54 41 h8 l1.2 2.2 h-10.4z M52.8 61.2 h10.4 l-1.2 2.2 h-8z" fill="#c9ccd4"/>' +
     '<path d="M52.8 48 h10.4 v8 h-10.4z" fill="#f3eee2"/><circle cx="58" cy="52" r="2.6" fill="#e8862a"/><path d="M55 45 v15" stroke="#e26a6f" stroke-width="1.3" opacity=".6"/>' +
     tArm(LK, [65, 47], [72, 64], [63, 55]), { mouth: 'o' }),
-  // chiude la finestra: l'anta di sinistra è ancora aperta, la mano la spinge dentro (freccia verso destra)
-  close: (LK) => '<rect x="60" y="10" width="36" height="52" rx="1.5" fill="#dfe4ea"/><rect x="63" y="13" width="14" height="46" fill="#cfe0ec"/>' +
-    '<rect x="79" y="13" width="14" height="46" fill="#5d7f99"/><path d="M79 13 h14 v12 l-14 16z" fill="#7d9bb3"/><rect x="58" y="62" width="40" height="4" fill="#c8ced6"/>' +
-    '<path d="M63 13 l9 -4 v58 l-9 -4z" fill="#5d7f99" stroke="#dfe4ea" stroke-width="1.6"/><path d="M63.8 14 l7.4 -3.2 v14 l-7.4 8z" fill="#7d9bb3"/>' +
-    V_PERSON(LK, tArm(LK, ...DOWN_L) + tArm(LK, [65, 47], [72, 54], [86, 40]), null, -16) +
-    vArrow([69, 50], [70, 62], [84, 52]),
+  // chiude la finestra: finestra scorrevole; Giulia spinge il vetro verso destra e copre il panorama (freccia →)
+  close: (LK) => '<rect x="60" y="10" width="36" height="52" rx="1.5" fill="#dfe4ea"/>' + vView(63, 13, 30, 46, true) +
+    '<rect x="63" y="13" width="18" height="46" fill="#c8ced6"/><rect x="65" y="15" width="14" height="42" fill="#9fbcd0"/><path d="M65 15 h8 l-8 12z M79 33 v10 l-10 14 h-4z" fill="#eef4f8" opacity=".6"/>' +
+    '<rect x="79" y="31" width="1.6" height="8" rx=".8" fill="#8d93a3"/><rect x="58" y="62" width="40" height="4" fill="#c8ced6"/>' +
+    V_PERSON(LK, tArm(LK, ...DOWN_L) + tArm(LK, [65, 47], [76, 56], [88, 44]), null, -16) +
+    vArrow([66, 22], [76, 16], [89, 22]),
   // telefona: il telefono all'orecchio, parla
   phone: (LK) => V_PERSON(LK, tArm(LK, ...DOWN_L) + tArm(LK, [65, 47], [74, 58], [62, 30]) +
     '<g transform="rotate(14 62 24)"><rect x="58" y="13" width="9" height="20" rx="2" fill="#2c3e66" stroke="#b9bdc8" stroke-width="1.2"/><rect x="59.6" y="16" width="5.8" height="13" fill="#3a4f7e"/></g>' +
