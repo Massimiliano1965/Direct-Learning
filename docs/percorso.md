@@ -92,7 +92,7 @@ Durante il test l'insegnante non corregge; contano solo gli errori, mostrati all
 
 46. **Calendario**: giorni, mesi — *fatto: Lezioni 50 (Che giorno è oggi?) e 51 (Che mese è?)*
 47. **Possessivi** (sostituzioni) — *fatto: Lezione 52 (i suoi libri, le sue chiavi)*
-48. **Verbi al presente** (tabella completa) — *in parte: Lezione 53 (loro: leggono, mangiano…); mancano noi e voi*
+48. **Verbi al presente** (tabella completa) — *fatto: Lezioni 53 (loro: Max e Isa leggono) e 54 (noi e voi: Io e Max leggiamo → Voi leggete)*
 
 ## Capitolo 9
 
