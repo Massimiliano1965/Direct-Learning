@@ -169,8 +169,8 @@ Durante il test l'insegnante non corregge; contano solo gli errori, mostrati all
 
 86. **Frasi al negativo**
 87. **Segnali stradali**
-88. **Espressioni per il turista**
-89. **«Vorrei…»**
+88. **Espressioni per il turista** — *fatto: Lezione 100*
+89. **«Vorrei…»** — *fatto: Lezione 96*
 
 ## Da modernizzare
 

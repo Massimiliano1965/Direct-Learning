@@ -57,7 +57,22 @@ const TEST3_FREE = [
   { fig: 'pe_f_parigi', example: () => SPE.present('pe_f_parigi').model },   // Isa è andata a Parigi.
   { fig: 'an_m_read_1', example: () => SAN.present('an_m_read_1').model }    // Max legge ancora.
 ];
-const TESTS = { 1: { scenes: TEST1, free: TEST1_FREE }, 2: { scenes: TEST2, free: TEST2_FREE }, 3: { scenes: TEST3, free: TEST3_FREE } };
+// Livello 4 (le lezioni 79–100: si chiamano quando parte il test, i file sono caricati dopo)
+const TEST4 = [
+  { lesson: 'l79', step: () => SFU.key('fu_m_read') },                    // Che cosa farà Mario domani? Mario leggerà un libro.
+  { lesson: 'l81', step: () => SLG.key('lg_m_giappone') },                // Che lingua parla questo signore? Parla giapponese.
+  { lesson: 'l85', step: () => SPI.key('pi_f_scarpe') },                  // Che cosa piace ad Anna? Le piacciono le scarpe.
+  { lesson: 'l87', step: () => STF.key('tf_piove') },                     // Che tempo fa? Piove.
+  { lesson: 'l92', ask: 'via_m_treno_roma', q: () => SVIA.key('via_m_treno_roma').prompt },   // l'allievo fa la domanda («Come va Mario a Roma?»)
+  { lesson: 'l94', step: () => SMON.key('mit_torre') },                   // Dov'è la Torre di Pisa? A Pisa.
+  { lesson: 'l96', step: () => SVOR.key('vor_conto') },                   // Che cosa desidera? Vorrei il conto.
+  { lesson: 'l97', step: () => SCAL.key('cal_m_swim_past_2') }            // Che cosa ha fatto Mario ieri? Ha nuotato.
+];
+const TEST4_FREE = [
+  { fig: 'cibo_m_pizza', example: () => SCIBO.present('cibo_m_pizza').model },   // A Napoli Mario mangia la pizza.
+  { fig: 'hot_f_camera', example: () => SHOT.present('hot_f_camera').model }     // In albergo Anna è in camera.
+];
+const TESTS = { 1: { scenes: TEST1, free: TEST1_FREE }, 2: { scenes: TEST2, free: TEST2_FREE }, 3: { scenes: TEST3, free: TEST3_FREE }, 4: { scenes: TEST4, free: TEST4_FREE } };
 
 // I passi del test: le domande delle lezioni (con le loro regole), il turno dell'allievo, le descrizioni libere
 function buildTestSteps(lesson) {

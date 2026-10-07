@@ -361,7 +361,12 @@ const LESSONS = [
     known: ['casa_letto', 'casa_divano', 'casa_frigorifero', 'casa_doccia', 'casa_televisore', 'casa_forno'] },
   // capitolo 16: «Il congiuntivo» — Che cosa vuole Mario? Mario vuole che Anna cucini. (congiuntivo_it.js; la nuvoletta con il cuore)
   { id: 'l99', title: 'Lezione 99', level: 4, cg: true, hilite: ['vuole che', 'cucini', 'balli', 'canti', 'nuoti', 'giochi', 'dorma'],
-    known: ['cg_m_cook', 'cg_f_dance', 'cg_m_sing', 'cg_f_tennis', 'cg_m_swim', 'cg_f_sleep'] }
+    known: ['cg_m_cook', 'cg_f_dance', 'cg_m_sing', 'cg_f_tennis', 'cg_m_swim', 'cg_f_sleep'] },
+  // capitolo 20: «Espressioni per il turista» — Mario dice: «Scusi, dov'è la stazione?» (turista_it.js; nel fumetto il disegno, non le parole)
+  { id: 'l100', title: 'Lezione 100', level: 4, tu: true, hilite: ['Scusi', 'Quanto costa', 'per favore', 'Parla inglese', 'Mi può aiutare'],
+    known: ['tu_m_stazione', 'tu_f_costa', 'tu_m_conto', 'tu_f_inglese', 'tu_m_aiuto', 'tu_f_biglietto'] },
+  // TEST DI FINE LIVELLO 4 (test_it.js): 8 domande che contano e 2 descrizioni libere
+  { id: 't4', title: 'Test del livello 4', test: 4, level: 4, known: [] }
 ];
 
 // Quattro insegnanti, dal più rigido al più indulgente. gender = voce maschile o femminile.
