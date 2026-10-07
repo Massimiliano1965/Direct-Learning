@@ -355,7 +355,10 @@ const LESSONS = [
     known: ['vor_cappuccino', 'vor_conto', 'vor_acqua', 'vor_biglietto', 'vor_camera', 'vor_gelato'] },
   // capitolo 19: «Presente, passato, futuro» con il calendario — Ieri Mario ha nuotato. Oggi Anna cucina. Domani Mario ballerà. (calendario_it.js)
   { id: 'l97', title: 'Lezione 97', level: 4, cal: true, hilite: ['ieri', 'oggi', 'domani', 'ha nuotato', 'cucina', 'ballerà', 'ha cantato', 'gioca', 'dormirà'],
-    known: ['cal_m_swim_past_2', 'cal_f_cook_pres_4', 'cal_m_dance_fut_3', 'cal_f_sing_past_1', 'cal_m_tennis_pres_3', 'cal_f_sleep_fut_0'] }
+    known: ['cal_m_swim_past_2', 'cal_f_cook_pres_4', 'cal_m_dance_fut_3', 'cal_f_sing_past_1', 'cal_m_tennis_pres_3', 'cal_f_sleep_fut_0'] },
+  // capitolo 17: «La casa» — Dov'è il divano? Il divano è in soggiorno. (scelta_it.js; la piantina con la stanza accesa)
+  { id: 'l98', title: 'Lezione 98', level: 4, casa: true, hilite: ['in cucina', 'in bagno', 'in camera da letto', 'in soggiorno'],
+    known: ['casa_letto', 'casa_divano', 'casa_frigorifero', 'casa_doccia', 'casa_televisore', 'casa_forno'] }
 ];
 
 // Quattro insegnanti, dal più rigido al più indulgente. gender = voce maschile o femminile.

@@ -14,7 +14,7 @@ const evaluate = run('evaluate');
 const evaluateAll = run('evaluateAll');
 const buildSteps = run('buildSteps');
 const answerSteps = run('answerSteps');
-const LESSONS = run('LESSONS').filter(l => !l.colors && !l.numbers && !l.geo && !l.poss && !l.size && !l.third && !l.nat && !l.ess && !l.altro && !l.prep && !l.anche && !l.ora && !l.appt && !l.verbs && !l.purp && !l.pron && !l.sum && !l.km && !l.fam && !l.ea && !l.pl && !l.ce && !l.co && !l.dt && !l.ct && !l.sta && !l.cl && !l.imp && !l.qd && !l.ne && !l.ps && !l.lh && !l.cv && !l.sa && !l.lm && !l.gd && !l.ms && !l.sp && !l.lo && !l.nv && !l.da && !l.qn && !l.bv && !l.lp && !l.cm && !l.tv && !l.lq && !l.cz && !l.qu && !l.fi && !l.nh && !l.rf && !l.gn && !l.vo && !l.po && !l.dv && !l.an && !l.tl && !l.dvp && !l.mc && !l.pe && !l.vi && !l.fu && !l.ge && !l.lg && !l.pc && !l.md && !l.cu && !l.pi && !l.sg && !l.tf && !l.ipf && !l.spu && !l.bar && !l.moda && !l.via && !l.hot && !l.mit && !l.cibo && !l.vor && !l.cal && !l.test);   // lezioni con gli oggetti (colori e numeri hanno i loro test)
+const LESSONS = run('LESSONS').filter(l => !l.colors && !l.numbers && !l.geo && !l.poss && !l.size && !l.third && !l.nat && !l.ess && !l.altro && !l.prep && !l.anche && !l.ora && !l.appt && !l.verbs && !l.purp && !l.pron && !l.sum && !l.km && !l.fam && !l.ea && !l.pl && !l.ce && !l.co && !l.dt && !l.ct && !l.sta && !l.cl && !l.imp && !l.qd && !l.ne && !l.ps && !l.lh && !l.cv && !l.sa && !l.lm && !l.gd && !l.ms && !l.sp && !l.lo && !l.nv && !l.da && !l.qn && !l.bv && !l.lp && !l.cm && !l.tv && !l.lq && !l.cz && !l.qu && !l.fi && !l.nh && !l.rf && !l.gn && !l.vo && !l.po && !l.dv && !l.an && !l.tl && !l.dvp && !l.mc && !l.pe && !l.vi && !l.fu && !l.ge && !l.lg && !l.pc && !l.md && !l.cu && !l.pi && !l.sg && !l.tf && !l.ipf && !l.spu && !l.bar && !l.moda && !l.via && !l.hot && !l.mit && !l.cibo && !l.vor && !l.cal && !l.casa && !l.test);   // lezioni con gli oggetti (colori e numeri hanno i loro test)
 const NUM_LESSONS = run('LESSONS').filter(l => l.numbers);
 const COLOR_LESSONS = run('LESSONS').filter(l => l.colors);
 const ITEMS = run('ITEMS');
@@ -2157,6 +2157,20 @@ check('88: prima e ora', run("SIMPF.present('ipf_m_read').prompt") === 'Prima ' 
   const st = buildSteps(l), models = st.filter(s => s.model && s.type !== 'reveal');
   check('97: risposte modello giuste', models.every(s => evaluate(s, s.model).ok));
   check('97: ripetizioni giuste', models.every(s => buildDrill(s, 5, s.reviewItems || []).every(d => evaluate(d, d.model).ok)));
+}
+
+// Lezione 98: «La casa»
+{
+  const evalAsk = run('evalAsk'), buildDrill = run('buildDrill'), ok = (st, t) => evaluate(st, t).ok, SX = run('SCASA');
+  const l = run('LESSONS').find(l => l.id === 'l98');
+  check('lezione 98 c\'è, livello 4', !!l && l.casa && l.level === 4);
+  check('98: frasi', SX.key('casa_divano').prompt === 'Dov\'è il divano?' && SX.key('casa_letto').model === 'Il letto è in camera da letto.' && SX.key('casa_doccia').model === 'La doccia è in bagno.');
+  check('98: giusto e sbagliato', ok(SX.key('casa_letto'), 'In camera.') && ok(SX.key('casa_letto'), 'Il letto è nella camera da letto.') && ok(SX.key('casa_forno'), 'Il forno è in cucina.') &&
+    !ok(SX.key('casa_letto'), 'Il letto è in cucina.') && !ok(SX.key('casa_divano'), 'Il divano è a soggiorno.'));
+  check('98: allievo', evalAsk('casa_letto', 'Dov\'è il letto?').kind === 'what' && evalAsk('casa_letto', 'Il letto è in bagno?').kind === 'no');
+  const st = buildSteps(l), models = st.filter(s => s.model && s.type !== 'reveal');
+  check('98: risposte modello giuste', models.every(s => evaluate(s, s.model).ok));
+  check('98: ripetizioni giuste', models.every(s => buildDrill(s, 5, s.reviewItems || []).every(d => evaluate(d, d.model).ok)));
 }
 
 // Test del livello 3: 8 che contano e 2 libere, dopo la lezione 78

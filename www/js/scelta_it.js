@@ -24,7 +24,7 @@ function choiceLesson(cfg) {
     yes: (X) => ({ type: 'yes', show: X, prompt: ask(X) + '?', model: 'Sì, ' + lc(say(X)) + '.' }),
     neg: (X) => { const o = other(X); return { type: 'neg', show: X, ask: o, prompt: ask(X, o) + '?', model: 'No, ' + lc(say(X, o, true)) + '.', complete: say(X) + '.' }; },
     alt: (X) => { const o = other(X), ord = Math.random() < 0.5 ? [ch(X), o] : [o, ch(X)];
-      return { type: 'alt', show: X, prompt: ask(X, ord[0]) + ' o ' + CH[ord[1]].the + '?', model: say(X) + '.' }; },
+      return { type: 'alt', show: X, prompt: ask(X, ord[0]) + ' o ' + (cfg.the ? cfg.the(ord[1]) : CH[ord[1]].the) + '?', model: say(X) + '.' }; },
     key: (X) => ({ type: 'key', show: X, prompt: cfg.q(X), model: say(X) + '.' }),
     reveal: (X) => ({ type: 'reveal', show: X, prompt: cfg.q(X) + ' ' + say(X) + '.', model: '' }),
     askQ: (X) => ({ type: 'echo', check: 'question', show: X, prompt: cfg.q(X), model: cfg.q(X) })
@@ -411,4 +411,56 @@ const SVOR = choiceLesson({
   q: (X) => /cappuccino|acqua|gelato/.test(X) ? (regTu() ? 'Che cosa ti porto?' : 'Che cosa Le porto?') : (regTu() ? 'Che cosa desideri?' : 'Che cosa desidera?'),
   fig: vorFig,
   wrong: ['voglio', 'vorrebbe', 'vorresti', 'vuole', 'vuoi', 'desidera', 'desideri', 'porto']
+});
+
+/* ---------- Lezione 98: la casa (le stanze) ---------- */
+const CASA_CH = {
+  cucina: { the: 'in cucina', alt: ['nella cucina'] }, bagno: { the: 'in bagno', alt: ['nel bagno'] },
+  camera: { the: 'in camera da letto', alt: ['in camera', 'nella camera da letto', 'nella camera'] }, soggiorno: { the: 'in soggiorno', alias: ['salotto'], alt: ['nel soggiorno', 'in salotto', 'nel salotto'] }
+};
+// «in camera da letto»: l'ultima parola è «letto»; per capire, si cerca «camera»
+CASA_CH.camera.the = 'in camera';
+const CASA_THING = { letto: 'il letto', divano: 'il divano', frigorifero: 'il frigorifero', doccia: 'la doccia', televisore: 'il televisore', forno: 'il forno' };
+const CASA_ROOM = { letto: 'camera', divano: 'soggiorno', frigorifero: 'cucina', doccia: 'bagno', televisore: 'soggiorno', forno: 'cucina' };
+const CASA_SAY_ROOM = { cucina: 'in cucina', bagno: 'in bagno', camera: 'in camera da letto', soggiorno: 'in soggiorno' };
+const CASA_FIG = {
+  letto: '<rect x="10" y="40" width="12" height="44" rx="2" fill="#8e6741"/><rect x="10" y="62" width="80" height="16" rx="3" fill="#f3eee2"/><rect x="14" y="54" width="20" height="10" rx="4" fill="#ffffff"/>' +
+    '<rect x="30" y="58" width="60" height="12" rx="3" fill="#5b4a8b"/><rect x="12" y="78" width="4" height="10" fill="#5a4030"/><rect x="84" y="78" width="4" height="10" fill="#5a4030"/>',
+  divano: '<rect x="12" y="44" width="76" height="22" rx="8" fill="#c8323b"/><rect x="8" y="54" width="14" height="28" rx="6" fill="#a8262f"/><rect x="78" y="54" width="14" height="28" rx="6" fill="#a8262f"/>' +
+    '<rect x="20" y="62" width="60" height="16" rx="4" fill="#d9474f"/><path d="M50 62 v16" stroke="#a8262f" stroke-width="1.4"/><rect x="14" y="82" width="4" height="6" fill="#5a4030"/><rect x="82" y="82" width="4" height="6" fill="#5a4030"/>',
+  frigorifero: '<rect x="30" y="8" width="40" height="84" rx="4" fill="#e9edf2" stroke="#b9c3d2" stroke-width="1.4"/><path d="M30 38 h40" stroke="#b9c3d2" stroke-width="1.6"/>' +
+    '<rect x="62" y="16" width="3" height="14" rx="1.5" fill="#8d93a3"/><rect x="62" y="46" width="3" height="20" rx="1.5" fill="#8d93a3"/><circle cx="40" cy="20" r="2.4" fill="#e8862a"/><rect x="44" y="50" width="8" height="10" fill="#f3d36b"/>',
+  // la doccia: le piastrelle, il soffione grande, l'acqua che scende, il piatto doccia
+  doccia: '<rect x="18" y="8" width="64" height="84" fill="#f3eee2"/>' + [0, 1, 2, 3, 4, 5].map(i => '<path d="M18 ' + (8 + i * 14) + ' h64" stroke="#dfe4ea" stroke-width="1"/>').join('') +
+    [0, 1, 2, 3].map(i => '<path d="M' + (18 + i * 16) + ' 8 v84" stroke="#dfe4ea" stroke-width="1"/>').join('') +
+    '<path d="M72 12 v8 q0 4 -4 4 h-12" stroke="#8d93a3" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M42 22 h16 l-3 6 h-10z" fill="#5d6577"/>' +
+    [[44, 34], [48, 38], [52, 34], [56, 38], [46, 46], [50, 50], [54, 46], [44, 58], [52, 60], [48, 68], [56, 70], [42, 72]].map(([x, y]) => '<path d="M' + x + ' ' + y + ' l-1 6" stroke="#3f9fd6" stroke-width="2.2" stroke-linecap="round"/>').join('') +
+    '<rect x="16" y="86" width="68" height="6" rx="2" fill="#b9c3d2"/>',
+  televisore: '<rect x="12" y="18" width="76" height="48" rx="3" fill="#3a3f4a"/><rect x="16" y="22" width="68" height="40" fill="#5fb0e6"/><path d="M16 50 q20 -14 34 -2 q16 10 34 -6 V62 H16z" fill="#7cc06a"/>' +
+    '<circle cx="70" cy="32" r="5" fill="#f3d36b"/><path d="M44 66 l-6 16 h24 l-6 -16" fill="#5d6577"/>',
+  forno: '<rect x="18" y="20" width="64" height="66" rx="4" fill="#8d93a3"/><rect x="18" y="20" width="64" height="12" rx="4" fill="#5d6577"/>' +
+    [30, 42, 54, 66].map(x => '<circle cx="' + x + '" cy="26" r="2.6" fill="#dfe4ea"/>').join('') + '<rect x="26" y="40" width="48" height="36" rx="3" fill="#3a3f4a"/><rect x="30" y="44" width="40" height="28" rx="2" fill="#e8862a" opacity=".55"/>' +
+    '<rect x="34" y="36" width="32" height="3" rx="1.5" fill="#dfe4ea"/>'
+};
+// la piantina della casa: quattro stanze, quella giusta accesa
+const CASA_ICON = { camera: 'letto', soggiorno: 'divano', cucina: 'forno', bagno: 'doccia' };
+function casaPlan(room) {
+  const pos = { camera: [0, 0], soggiorno: [1, 0], cucina: [0, 1], bagno: [1, 1] };
+  return '<g transform="translate(64 4)"><path d="M0 8 l17 -8 l17 8z" fill="#c8323b"/>' + Object.keys(pos).map(r => {
+    const [cx, cy] = pos[r], on = r === room, x = cx * 17, y = 8 + cy * 15;
+    return '<rect x="' + x + '" y="' + y + '" width="17" height="15" fill="' + (on ? '#f3d36b' : '#f3eee2') + '" stroke="#5a4030" stroke-width="1"/>' +
+      '<g transform="translate(' + (x + 1.5) + ' ' + (y + 1) + ') scale(.14)" opacity="' + (on ? 1 : .45) + '">' + CASA_FIG[CASA_ICON[r]] + '</g>';
+  }).join('') + '</g>';
+}
+const SCASA = choiceLesson({
+  flag: 'casa', CH: CASA_CH,
+  items: { casa_letto: { who: null, c: 'camera' }, casa_divano: { who: null, c: 'soggiorno' }, casa_frigorifero: { who: null, c: 'cucina' },
+    casa_doccia: { who: null, c: 'bagno' }, casa_televisore: { who: null, c: 'soggiorno' }, casa_forno: { who: null, c: 'cucina' } },
+  say: (X, c, neg) => gCap(CASA_THING[X.slice(5)]) + (neg ? ' non' : '') + ' è ' + CASA_SAY_ROOM[c],
+  // la cosa (il letto…) e «da letto» non sono la risposta: si tolgono prima di capire
+  strip: / (il |la )?(letto|divano|frigorifero|frigo|doccia|televisore|tv|forno) | da letto /g,
+  the: (c) => CASA_SAY_ROOM[c],                                     // «in camera da letto» per intero nella domanda con «o»
+  q: (X) => 'Dov\'è ' + CASA_THING[X.slice(5)] + '?',
+  fig: (X) => '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><g transform="translate(0 16) scale(.84)">' + CASA_FIG[X.slice(5)] + '</g>' + casaPlan(CASA_ROOM[X.slice(5)]) + '</svg>',
+  wrong: ['sono', 'a']
 });
