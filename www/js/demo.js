@@ -19,6 +19,7 @@ function startDemo(next) {
   demoNext = next;
   const t = TEACHERS[selectedTeacherKey()];
   $('l-title').textContent = tx('demoLesson');
+  $('l-level').classList.add('hidden');
   $('l-teacher').innerHTML = avatarHtml(t, 'small') + '<span>' + t.name + '</span>';
   $('heard').textContent = '';
   applyUiWords();

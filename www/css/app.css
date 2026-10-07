@@ -255,15 +255,17 @@ html.fisso body { min-height: 0; height: 100%; }
 #stage-places .place.no { border-color: #d9534f; box-shadow: 0 0 14px rgba(217,83,79,.8); }
 
 /* ===== Colori dei livelli: fondo sobrio, oro uguale per tutti (per cambiarli basta questa parte) ===== */
-html[data-level="2"] { --bg: #0d141c; --bg2: #0d141c; --surface: #152030; --surface2: #1c2a3d; --line: #2a3c54; }   /* blu acciaio: ufficio e città */
-html[data-level="3"] { --bg: #130f1c; --bg2: #130f1c; --surface: #1d172b; --surface2: #261f38; --line: #3a3052; }   /* viola: albergo e ristorante */
-html[data-level="4"] { --bg: #1a1118; --bg2: #1a1118; --surface: #271a25; --surface2: #332230; --line: #4e3549; }   /* rosa antico: viaggio e stagioni */
+html[data-level="2"] { --bg: #0f1d2b; --bg2: #0f1d2b; --surface: #19304a; --surface2: #22415f; --line: #36597e; --lvc: #5d8fc4; }   /* blu acciaio: ufficio e città */
+html[data-level="3"] { --bg: #19112c; --bg2: #19112c; --surface: #281b47; --surface2: #34255b; --line: #4f3c80; --lvc: #9a7fd6; }   /* viola: albergo e ristorante */
+html[data-level="4"] { --bg: #221420; --bg2: #221420; --surface: #3a2034; --surface2: #4a2a43; --line: #6b4262; --lvc: #d49abd; }   /* rosa antico: viaggio e stagioni */
 html[data-level] body { background: var(--bg); }
 html[data-level] #stage { background: linear-gradient(180deg, var(--surface2), var(--surface)); }
 /* nel menu: titolo del livello e una striscia del suo colore a sinistra di ogni lezione */
+.level-tag { display: inline-block; margin-left: 10px; padding: 2px 9px; border: 1px solid var(--lvc, #5a72a8); border-radius: 999px; font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  font-size: 11px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; color: var(--lvc, #8fa6d6); vertical-align: 3px; }
 .level-head { font-size: 13px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; color: var(--accent); margin: 18px 0 8px 2px; }
 .level-head.lv1 { margin-top: 12px; }
 .lesson-btn.lv1 { border-left: 4px solid #3a5280; }
-.lesson-btn.lv2 { border-left: 4px solid #3f6a96; }
-.lesson-btn.lv3 { border-left: 4px solid #7b62b0; }
-.lesson-btn.lv4 { border-left: 4px solid #b07a9e; }
+.lesson-btn.lv2 { border-left: 4px solid #5d8fc4; }
+.lesson-btn.lv3 { border-left: 4px solid #9a7fd6; }
+.lesson-btn.lv4 { border-left: 4px solid #d49abd; }

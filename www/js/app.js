@@ -266,6 +266,8 @@ function startLesson(id) {
   Awake.keep();
   Mouth.gender = teacher.gender;
   setLevel(lesson.level || 1);
+  $('l-level').textContent = tx('level', { n: lesson.level || 1 });   // «Livello 1» accanto al titolo
+  $('l-level').classList.remove('hidden');
   setStageTeacher(teacher.look || teacher.key);
   setPose('show');
   fitLesson();
