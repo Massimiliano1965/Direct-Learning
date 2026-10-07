@@ -34,9 +34,23 @@ const apOther = (X) => pick([1, 2, 3, 4, 5, 6, 7, 8, 9, 10].filter(n => n !== AP
 
 /* ---------- Figure: l'impegno con il suo orologio piccolo ---------- */
 const APPT_ICON = {
-  a_plane: '<path d="M10 52 l30 -4 l22 -22 h8 l-10 22 l20 -2 l8 -8 h6 l-4 12 l4 12 h-6 l-8 -8 l-20 -2 l10 22 h-8 l-22 -22 l-30 -4z" fill="#d9dee8"/><path d="M40 48 l30 0" stroke="#9aa6bd" stroke-width="1.5"/>',
-  a_meeting: '<rect x="18" y="20" width="64" height="38" rx="3" fill="#ece4d2"/><path d="M26 48 l12 -12 l10 8 l14 -16 l12 10" fill="none" stroke="#2c3e66" stroke-width="3"/><rect x="47" y="58" width="6" height="10" fill="#8d93a3"/>' +
-    '<circle cx="26" cy="74" r="6" fill="#3a4f7e"/><path d="M17 90 q9 -12 18 0z" fill="#3a4f7e"/><circle cx="50" cy="74" r="6" fill="#5a6b8c"/><path d="M41 90 q9 -12 18 0z" fill="#5a6b8c"/><circle cx="74" cy="74" r="6" fill="#3a4f7e"/><path d="M65 90 q9 -12 18 0z" fill="#3a4f7e"/>',
+  // aereo di linea visto di lato: fusoliera bianca, finestrini, ala, motore, coda blu e oro
+  a_plane: '<path d="M8 50 q0 -8 10 -8 h58 q14 0 20 8 q-6 8 -20 8 h-58 q-10 0 -10 -8z" fill="#eef1f6"/>' +
+    '<path d="M8 50 h88" stroke="#2c3e66" stroke-width="2.2"/><path d="M84 44 q6 1 9 4 h-9z" fill="#2c3e66"/>' +
+    '<path d="M10 43 l-2 -24 h8 l16 23z" fill="#2c3e66"/><path d="M11 30 l-1 -8 h4 l6 9z" fill="#c9a45c"/><path d="M14 48 l-8 4 h12z" fill="#2c3e66"/>' +
+    [28, 34, 40, 46, 52, 58, 64, 70].map(x => '<rect x="' + x + '" y="45" width="3" height="3" rx="1" fill="#2c3e66"/>').join('') +
+    '<path d="M38 56 l26 0 l-22 22 h-8 l10 -22z" fill="#d6dbe5"/><path d="M38 56 l26 0" stroke="#b9c0cd" stroke-width="1"/>' +
+    '<rect x="44" y="61" width="13" height="6" rx="3" fill="#9aa6bd"/><path d="M56 62 h2 v4 h-2z" fill="#2c3e66"/>',
+  // riunione: tavolo lungo con tante persone sedute intorno e il capo in piedi a capotavola (a sinistra)
+  a_meeting: '<rect x="40" y="8" width="30" height="19" rx="1.5" fill="#ece4d2"/><path d="M44 22 l6 -6 l5 4 l7 -8 l5 5" fill="none" stroke="#2c3e66" stroke-width="1.8"/><rect x="54" y="27" width="2" height="5" fill="#8d93a3"/>' +
+    [40, 54, 68].map(x => '<path d="M' + (x - 7) + ' 60 q0 -11 7 -11 q7 0 7 11z" fill="#4a5a7a"/><circle cx="' + x + '" cy="44" r="4.6" fill="#eab892"/><path d="M' + (x - 4.6) + ' 43 q4.6 -7 9.2 0 q-4.6 -3 -9.2 0z" fill="#3a2a20"/>').join('') +
+    '<path d="M26 60 h58 l8 12 h-74z" fill="#b58a5e"/><path d="M18 72 h74 v4 h-74z" fill="#8e6741"/>' +
+    '<path d="M36 63 h9 l-2 5 h-9z M58 63 h9 l-2 5 h-9z" fill="#f3eee2"/>' +
+    [36, 56].map(x => '<path d="M' + (x - 9) + ' 92 q0 -14 9 -14 q9 0 9 14z" fill="#2b3550"/><circle cx="' + x + '" cy="74" r="5.6" fill="#3a2a20"/>').join('') +
+    // il capo, in piedi a capotavola: più alto, cravatta d'oro, una mano verso il tavolo
+    '<path d="M4 76 v-26 q0 -9 9 -9 q9 0 9 9 v26z" fill="#1d2638"/><path d="M12 43 l1.2 13 l1.2 -13z" fill="#c9a45c"/>' +
+    '<path d="M20 52 l9 8" stroke="#1d2638" stroke-width="4.5" stroke-linecap="round"/><circle cx="29.5" cy="60.5" r="2.4" fill="#e0a982"/>' +
+    '<circle cx="13" cy="34" r="6" fill="#e0a982"/><path d="M7 33 q6 -9 12 0 q-6 -3.5 -12 0z" fill="#9a9aa2"/>',
   a_dinner: '<ellipse cx="46" cy="68" rx="30" ry="12" fill="#ece4d2"/><ellipse cx="46" cy="66" rx="18" ry="7" fill="#d9cdb2"/><path d="M10 54 v24 M14 54 v10 q-2 4 -4 4 M6 54 v10 q2 4 4 4" stroke="#b9bdc8" stroke-width="2" fill="none"/>' +
     '<path d="M82 54 v24" stroke="#b9bdc8" stroke-width="2.4"/><path d="M82 54 q5 4 0 12" fill="#b9bdc8"/><rect x="64" y="24" width="6" height="24" rx="1" fill="#f3eee2"/><path d="M67 14 q4 6 0 9 q-4 -3 0 -9z" fill="#e8a33a"/>',
   a_lunch: '<ellipse cx="50" cy="66" rx="32" ry="13" fill="#ece4d2"/><ellipse cx="50" cy="64" rx="20" ry="8" fill="#e8d4a8"/><path d="M38 62 q12 -10 24 0" fill="#c96f1e"/><path d="M12 52 v24 M16 52 v10 q-2 4 -4 4 M8 52 v10 q2 4 4 4" stroke="#b9bdc8" stroke-width="2" fill="none"/>' +
