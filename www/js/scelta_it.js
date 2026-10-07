@@ -309,3 +309,48 @@ const SMON = choiceLesson({
   fig: (X) => '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">' + (X === 'mit_colosseo' ? inner(MON2.colosseo) : MON_ART[X.slice(4)]) + '</svg>',
   wrong: ['sono', 'in']
 });
+
+/* ---------- Lezione 95: il cibo italiano (ogni città il suo piatto) ---------- */
+const CIBO_CH = {
+  pizza: { the: 'la pizza', alt: ['una pizza'] }, risotto: { the: 'il risotto', alt: ['un risotto'] }, lasagne: { the: 'le lasagne', alias: ['lasagna'] },
+  bistecca: { the: 'la bistecca', alt: ['una bistecca'] }, spaghetti: { the: 'gli spaghetti', alias: ['spaghetto'] }, tiramisu: { the: 'il tiramisù', alt: ['un tiramisu'] }
+};
+const CIBO_CITY = { pizza: 'Napoli', risotto: 'Milano', lasagne: 'Bologna', bistecca: 'Firenze', spaghetti: 'Roma', tiramisu: 'Venezia' };
+const CIBO_FIG = {
+  pizza: CZ_FIG.pizza,
+  risotto: '<ellipse cx="50" cy="62" rx="34" ry="10" fill="#f3eee2"/><ellipse cx="50" cy="58" rx="22" ry="8" fill="#f2c94a"/>' +
+    [[40, 56], [46, 60], [54, 55], [60, 59], [50, 57], [44, 54], [56, 61]].map(([x, y]) => '<ellipse cx="' + x + '" cy="' + y + '" rx="2" ry="1.2" fill="#fbe08a"/>').join('') + '<path d="M50 52 l3 -3 l2 3z" fill="#5a9a46"/>',
+  lasagne: '<ellipse cx="50" cy="68" rx="34" ry="9" fill="#f3eee2"/><path d="M28 64 v-20 h44 v20z" fill="#f2c55a"/>' +
+    [48, 54, 60].map(y => '<path d="M28 ' + y + ' h44" stroke="#c8323b" stroke-width="3"/>').join('') + '<path d="M28 44 h44 v-3 h-44z" fill="#e9a24a"/><path d="M28 44 q10 -4 22 0 q12 4 22 0" fill="#c8323b"/>',
+  bistecca: CZ_FIG.carne,
+  // gli spaghetti al pomodoro: i fili gialli arrotolati, il sugo rosso, il basilico
+  spaghetti: '<ellipse cx="50" cy="64" rx="34" ry="10" fill="#f3eee2"/>' +
+    [[-14, 0], [-8, -4], [-2, 2], [4, -3], [10, 1], [16, -2], [-10, 4], [6, 4]].map(([dx, dy]) => '<path d="M' + (50 + dx - 6) + ' ' + (60 + dy) + ' q6 -6 12 0" stroke="#f2c55a" stroke-width="2.2" fill="none"/>').join('') +
+    '<ellipse cx="50" cy="55" rx="10" ry="5" fill="#c8323b"/><circle cx="46" cy="54" r="1.6" fill="#e8737c"/><path d="M52 50 q4 -4 8 -1 q-4 3 -8 1z" fill="#3f8f3f"/>',
+  tiramisu: '<ellipse cx="50" cy="70" rx="30" ry="7" fill="#f3eee2"/><path d="M32 66 v-24 h36 v24z" fill="#f3e6c8"/><path d="M32 52 h36 v6 h-36z" fill="#8a5a36"/><path d="M32 42 h36 v-3 h-36z" fill="#6b4226"/>' +
+    [[38, 40], [46, 41], [55, 40], [62, 41], [42, 39], [58, 39]].map(([x, y]) => '<circle cx="' + x + '" cy="' + y + '" r=".9" fill="#4a2c18"/>').join('')
+};
+function ciboFig(X, it) {
+  const k = p3Key(it.who), LK = (typeof LOOKS !== 'undefined' && LOOKS[TEACHERS[k] ? (TEACHERS[k].look || k) : k]) || null;
+  const city = CIBO_CITY[it.c];
+  return '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">' +
+    '<rect x="50" y="3" width="48" height="16" rx="2" fill="#2f7d4a" stroke="#f3eee2" stroke-width="1.2"/><text x="74" y="14.5" text-anchor="middle" font-family="Arial,sans-serif" font-size="8.5" font-weight="bold" fill="#f3eee2">' + city.toUpperCase() + '</text>' +
+    (LK && typeof tTorso === 'function' ? '<g transform="translate(-14 14) scale(.82)">' + V_PERSON(LK, tArm(LK, ...DOWN_L) + tArm(LK, [65, 47], [72, 64], [80, 66]), { mouth: 'open' }) + '</g>' : '') +
+    // la tovaglia a quadretti bianchi e rossi (la trattoria)
+    '<rect x="50" y="72" width="50" height="24" fill="#f3eee2"/>' + [0, 1, 2, 3, 4].map(i => '<rect x="' + (50 + i * 10) + '" y="72" width="5" height="24" fill="#c8323b" opacity=".75"/>').join('') +
+    [0, 1, 2].map(i => '<rect x="50" y="' + (72 + i * 8) + '" width="50" height="4" fill="#c8323b" opacity=".45"/>').join('') +
+    '<g transform="translate(75 60) scale(.66) translate(-50 -60)">' + CIBO_FIG[it.c] + '</g></svg>';
+}
+const SCIBO = choiceLesson({
+  flag: 'cibo', CH: CIBO_CH,
+  items: { cibo_m_pizza: { who: 'm', c: 'pizza' }, cibo_f_risotto: { who: 'f', c: 'risotto' }, cibo_m_lasagne: { who: 'm', c: 'lasagne' },
+    cibo_f_bistecca: { who: 'f', c: 'bistecca' }, cibo_m_spaghetti: { who: 'm', c: 'spaghetti' }, cibo_f_tiramisu: { who: 'f', c: 'tiramisu' } },
+  say: (X, c, neg) => vName(X.charAt(5)) + (neg ? ' non' : '') + ' mangia ' + CIBO_CH[c].the,
+  lead: (X) => 'A ' + CIBO_CITY[X.split('_')[2]],
+  proper: (w) => vNames()[gNorm(w).trim()] !== undefined,
+  // la città non è la risposta: si toglie prima di capire
+  strip: / a (napoli|milano|bologna|firenze|roma|venezia) /g,
+  q: (X) => 'Che cosa mangia ' + vName(X.charAt(5)) + ' a ' + CIBO_CITY[X.split('_')[2]] + '?',
+  fig: ciboFig,
+  wrong: ['mangio', 'mangi', 'mangiare', 'beve', 'prende']
+});

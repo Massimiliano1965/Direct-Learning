@@ -346,7 +346,10 @@ const LESSONS = [
     known: ['hot_m_reception', 'hot_f_camera', 'hot_m_ascensore', 'hot_f_ristorante', 'hot_m_piscina', 'hot_f_bar'] },
   // «Città e monumenti d'Italia» — Dov'è la Torre di Pisa? La Torre di Pisa è a Pisa. (scelta_it.js)
   { id: 'l94', title: 'Lezione 94', level: 4, mit: true, hilite: ['Dov\'è', 'a Roma', 'a Pisa', 'a Milano', 'a Venezia', 'a Firenze', 'a Napoli'],
-    known: ['mit_colosseo', 'mit_torre', 'mit_duomo', 'mit_rialto', 'mit_david', 'mit_vesuvio'] }
+    known: ['mit_colosseo', 'mit_torre', 'mit_duomo', 'mit_rialto', 'mit_david', 'mit_vesuvio'] },
+  // «Il cibo italiano» — A Napoli Mario mangia la pizza. Che cosa mangia Anna a Milano? (scelta_it.js)
+  { id: 'l95', title: 'Lezione 95', level: 4, cibo: true, hilite: ['mangia'],
+    known: ['cibo_m_pizza', 'cibo_f_risotto', 'cibo_m_lasagne', 'cibo_f_bistecca', 'cibo_m_spaghetti', 'cibo_f_tiramisu'] }
 ];
 
 // Quattro insegnanti, dal più rigido al più indulgente. gender = voce maschile o femminile.
