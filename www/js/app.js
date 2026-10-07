@@ -156,7 +156,7 @@ function showLangChoice() {
 }
 // Scritte fisse della pagina (data-t = chiave della traduzione)
 function applyStaticText() {
-  document.querySelectorAll('[data-t]').forEach(el => { el.textContent = tx(el.dataset.t); });
+  document.querySelectorAll('[data-t]').forEach(el => { el.textContent = tx(el.dataset.t, el.dataset.n ? { n: el.dataset.n } : undefined); });
 }
 
 function avatarHtml(t, size) {
@@ -998,7 +998,9 @@ function finishTest() {
   }
   document.body.classList.add('test-end');
   showScreen('end', true);
-  document.querySelector('#screen-end h2').textContent = tx('levelTest', { n: lesson.level || 1 });
+  // il titolo dice che il test (e il livello) è finito, non «Lezione finita» (Massi)
+  const h2 = document.querySelector('#screen-end h2');
+  h2.dataset.t = 'testDone'; h2.dataset.n = lesson.level || 1; h2.textContent = tx('testDone', { n: h2.dataset.n });
 }
 
 function finishLesson() {
@@ -1018,7 +1020,8 @@ function finishLesson() {
   saveDB();
   stopLesson();
   document.body.classList.remove('test-end');
-  document.querySelector('#screen-end h2').textContent = tx('lessonComplete');
+  const h2 = document.querySelector('#screen-end h2');
+  h2.dataset.t = 'lessonComplete'; delete h2.dataset.n; h2.textContent = tx('lessonComplete');
   Mouth.speak(t.done, t.rate, t.pitch, null);
   const C = 427;   // circonferenza del cerchio (raggio 68)
   $('end-body').innerHTML =

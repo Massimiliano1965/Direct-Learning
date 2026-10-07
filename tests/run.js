@@ -180,8 +180,9 @@ LESSONS.forEach(l => {
     steps.forEach((st, i) => {
       if (st.type === 'reveal' || st.type === 'ask') return;
       for (let n = 1; n <= 5; n++) {
-        const d = buildDrill(st, n, items);
+        const d = buildDrill(st, n, st.reviewItems || items);
         if (d.length !== n) check('drill lunghezza ' + n, false);
+        if (st.review) { if (!d.every(x => evaluate(x, x.model).ok)) check('ripasso: drill accettato', false); continue; }
         if (d[0].prompt !== st.model) check('drill: la prima è la risposta giusta', false);
         const F = st.type === 'neg' ? st.ask : st.show;
         const word = ITEMS[F].word;
@@ -350,7 +351,7 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
       check('lezione 5: ogni oggetto presentato 2 o 3 volte', first >= l5.known.length * 2 && first <= l5.known.length * 3 && l5.known.every(k => [2, 3].indexOf(st.slice(0, first).filter(s => s.show === k).length) !== -1));
       check('lezione 5: «rosso» non si dice prima dello sfogo', st.slice(0, st.findIndex(s => s.type === 'reveal')).every(s => !/ross/.test(s.prompt + s.model)));
       check('lezione 5: tutte le risposte modello sono giuste', st.filter(s => s.model && s.type !== 'reveal').every(s => evaluate(s, s.model).ok));
-      check('lezione 5: ripetizioni giuste', st.filter(s => s.col && s.model && s.type !== 'reveal').every(s => buildDrill(s, 5, []).every(d => evaluate(d, d.model).ok)));
+      check('lezione 5: ripetizioni giuste', st.filter(s => s.col && s.model && s.type !== 'reveal').every(s => buildDrill(s, 5, s.reviewItems || []).every(d => evaluate(d, d.model).ok)));
       check('lezione 5: domande dell\'allievo', st.filter(s => s.type === 'ask').length === 7);
     }
     check('lezione 5 (giro ' + n + '): niente domanda impossibile', st.every(s => s.type !== 'neg' || s.ask !== s.show.split('_')[1]));
@@ -394,7 +395,7 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
       if (n === 0) {
         check(l.id + ': il numero nuovo non si dice prima dello sfogo', st.slice(0, st.findIndex(s => s.type === 'reveal')).every(s => (s.prompt + ' ' + s.model).indexOf(' ' + run('NUMS')[l.fresh] + '.') === -1));
         check(l.id + ': tutte le risposte modello giuste', st.filter(s => s.model && s.type !== 'reveal').every(s => evaluate(s, s.model).ok));
-        check(l.id + ': ripetizioni giuste', st.filter(s => s.model && s.type !== 'reveal').every(s => buildDrill(s, 5, l.known.concat(l.review || [], [l.fresh])).every(d => evaluate(d, d.model).ok)));
+        check(l.id + ': ripetizioni giuste', st.filter(s => s.model && s.type !== 'reveal').every(s => buildDrill(s, 5, s.reviewItems || l.known.concat(l.review || [], [l.fresh])).every(d => evaluate(d, d.model).ok)));
         check(l.id + ': lunghezza ragionevole', st.length < 110);
       }
       if (st.some(s => s.type === 'neg' && s.ask === s.show)) { check(l.id + ': niente domanda impossibile', false); break; }
@@ -438,7 +439,7 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
       const models = st.filter(s => s.model && s.type !== 'reveal');
       if (n === 0) {
         check(l.id + ': tutte le risposte modello giuste', models.every(s => evaluate(s, s.model).ok));
-        check(l.id + ': ripetizioni giuste', models.every(s => buildDrill(s, 5, []).every(d => evaluate(d, d.model).ok)));
+        check(l.id + ': ripetizioni giuste', models.every(s => buildDrill(s, 5, s.reviewItems || []).every(d => evaluate(d, d.model).ok)));
         check(l.id + ': lunghezza ragionevole', st.length < 100);
       }
       if (l.fresh && st.slice(0, st.findIndex(s => s.type === 'reveal')).some(s => s.show === l.fresh && /Cina/.test(s.prompt + s.model))) { check(l.id + ': il paese della Muraglia non si dice prima', false); break; }
@@ -466,7 +467,7 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
     evalAsk('o_t_phone', 'È il Suo telefono?').kind === 'yes' && evalAsk('o_s_bag', 'È la mio borsa?').model === 'È la mia borsa?');
   const st = buildSteps(l10), models = st.filter(s => s.model && s.type !== 'reveal');
   check('lezione 10: risposte modello giuste', models.every(s => evaluate(s, s.model).ok));
-  check('lezione 10: ripetizioni giuste', models.every(s => buildDrill(s, 5, []).every(d => evaluate(d, d.model).ok)));
+  check('lezione 10: ripetizioni giuste', models.every(s => buildDrill(s, 5, s.reviewItems || []).every(d => evaluate(d, d.model).ok)));
   check('gesti: le sue cose → mano sul petto, quelle dello studente → lo indica', run('possPose')(SP.yes('o_t_phone')) === 'me' && run('possPose')(SP.yes('o_s_bag')) === 'you');
 }
 
@@ -491,7 +492,7 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
     evalAsk('z_small_suitcase', 'Questa valigia è piccolo?').model === 'Questa valigia è piccola?');
   const st = buildSteps(l11), models = st.filter(s => s.model && s.type !== 'reveal');
   check('lezione 11: risposte modello giuste', models.every(s => evaluate(s, s.model).ok));
-  check('lezione 11: ripetizioni giuste', models.every(s => buildDrill(s, 5, []).every(d => evaluate(d, d.model).ok)));
+  check('lezione 11: ripetizioni giuste', models.every(s => buildDrill(s, 5, s.reviewItems || []).every(d => evaluate(d, d.model).ok)));
 }
 
 // Lezione 12: «Il suo, la sua» (le cose di Max e di Isa quando insegna Pietro)
@@ -516,7 +517,7 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
     evalAsk('p3_m_bag', 'È il borsa di Max?').model === 'È la borsa di Max?');
   const st = buildSteps(l12), models = st.filter(s => s.model && s.type !== 'reveal');
   check('lezione 12: risposte modello giuste', models.every(s => evaluate(s, s.model).ok));
-  check('lezione 12: ripetizioni giuste', models.every(s => buildDrill(s, 5, []).every(d => evaluate(d, d.model).ok)));
+  check('lezione 12: ripetizioni giuste', models.every(s => buildDrill(s, 5, s.reviewItems || []).every(d => evaluate(d, d.model).ok)));
 }
 
 // Lezione 13: «Paese e nazionalità»
@@ -541,7 +542,7 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
     evalAsk('n_m_italia', 'Questo signore è italiano o inglese?').kind === 'alt');
   const st = buildSteps(l13), models = st.filter(s => s.model && s.type !== 'reveal');
   check('lezione 13: risposte modello giuste', models.every(s => evaluate(s, s.model).ok));
-  check('lezione 13: ripetizioni giuste', models.every(s => buildDrill(s, 5, []).every(d => evaluate(d, d.model).ok)));
+  check('lezione 13: ripetizioni giuste', models.every(s => buildDrill(s, 5, s.reviewItems || []).every(d => evaluate(d, d.model).ok)));
 }
 
 // Lezione 14: «Il verbo essere» (insegna Pietro: «Io sono italiano.»)
@@ -567,7 +568,7 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
     answerAsk('e_me', { kind: 'yes' }) === 'Sì, io sono italiano.');
   const st = buildSteps(l14), models = st.filter(s => s.model && s.type !== 'reveal');
   check('lezione 14: risposte modello giuste', models.every(s => evaluate(s, s.model).ok));
-  check('lezione 14: ripetizioni giuste', models.every(s => buildDrill(s, 5, []).every(d => evaluate(d, d.model).ok)));
+  check('lezione 14: ripetizioni giuste', models.every(s => buildDrill(s, 5, s.reviewItems || []).every(d => evaluate(d, d.model).ok)));
   check('gesti: io → mano sul petto, Lei → indica l\'allievo', run('possPose')(SE.yes('e_me')) === 'me' && run('possPose')(SE.key('e_you')) === 'you' && run('possPose')(SE.yes('n_m_cina')) === null);
 }
 
@@ -588,7 +589,7 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
   check('sbagliato: «altro» senza il primo', !ok(SA.key('phone_nero'), 'È un altro telefono.'));
   const st = buildSteps(l15), models = st.filter(s => s.model && s.type !== 'reveal');
   check('lezione 15: risposte modello giuste', models.every(s => evaluate(s, s.model).ok));
-  check('lezione 15: ripetizioni giuste', models.every(s => buildDrill(s, 5, []).every(d => evaluate(d, d.model).ok)));
+  check('lezione 15: ripetizioni giuste', models.every(s => buildDrill(s, 5, s.reviewItems || []).every(d => evaluate(d, d.model).ok)));
   check('lezione 15: il primo è sempre l\'altro della coppia', st.filter(s => s.prev).every(s => s.prev.split('_')[0] === s.show.split('_')[0] && s.prev !== s.show));
 }
 
@@ -617,7 +618,7 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
   check('lezione 12 non cambia', SW.yes('p3_m_bag').model === 'Sì, è la sua borsa.' && SW.present('p3_f_phone').prompt === 'È il telefono di Isa.');
   const st = buildSteps(l17), models = st.filter(s => s.model && s.type !== 'reveal');
   check('lezione 17: risposte modello giuste', models.every(s => evaluate(s, s.model).ok));
-  check('lezione 17: ripetizioni giuste', models.every(s => buildDrill(s, 5, []).every(d => evaluate(d, d.model).ok)));
+  check('lezione 17: ripetizioni giuste', models.every(s => buildDrill(s, 5, s.reviewItems || []).every(d => evaluate(d, d.model).ok)));
   check('lezione 17: risposte con il nome', st.filter(s => s.type === 'yes').every(s => / di (Max|Isa)\.$/.test(s.model)));
 }
 
@@ -641,7 +642,7 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
     evalAsk('q_bottle', 'La bottiglia è nel borsa?').model === 'La bottiglia è nella borsa?');
   const st = buildSteps(l18), models = st.filter(s => s.model && s.type !== 'reveal');
   check('lezione 18: risposte modello giuste', models.every(s => evaluate(s, s.model).ok));
-  check('lezione 18: ripetizioni giuste', models.every(s => buildDrill(s, 5, []).every(d => evaluate(d, d.model).ok)));
+  check('lezione 18: ripetizioni giuste', models.every(s => buildDrill(s, 5, s.reviewItems || []).every(d => evaluate(d, d.model).ok)));
 }
 
 // Lezione 19: «Anche — neanche»
@@ -662,7 +663,7 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
   check('sbagliato: senza «anche»', !ok(SH.keyAnche('phone_nero', 'suitcase_nero'), 'La valigia è nera.'));
   const st = buildSteps(l19), models = st.filter(s => s.model && s.type !== 'reveal');
   check('lezione 19: risposte modello giuste', models.every(s => evaluate(s, s.model).ok));
-  check('lezione 19: ripetizioni giuste', models.every(s => buildDrill(s, 5, []).every(d => evaluate(d, d.model).ok)));
+  check('lezione 19: ripetizioni giuste', models.every(s => buildDrill(s, 5, s.reviewItems || []).every(d => evaluate(d, d.model).ok)));
   check('ripetizioni: la voce alterna «neanche» e «nemmeno»', (d => d.some(x => /^Neanche /.test(x.model)) && d.some(x => /^Nemmeno /.test(x.model)))(buildDrill(kn, 5, [])));
   check('lezione 19: il primo oggetto sempre sotto', st.filter(s => s.type !== 'ask').every(s => s.prev && s.prev !== s.show));
 }
@@ -685,7 +686,7 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
     answerAsk('h3', { kind: 'no', ask: 5 }) === 'No, non sono le cinque. Sono le tre.' && evalAsk('h3', 'È le tre?').model === 'Sono le tre?');
   const st = buildSteps(l20), models = st.filter(s => s.model && s.type !== 'reveal');
   check('lezione 20: risposte modello giuste', models.every(s => evaluate(s, s.model).ok));
-  check('lezione 20: ripetizioni giuste', models.every(s => buildDrill(s, 5, []).every(d => evaluate(d, d.model).ok)));
+  check('lezione 20: ripetizioni giuste', models.every(s => buildDrill(s, 5, s.reviewItems || []).every(d => evaluate(d, d.model).ok)));
   check('mezzogiorno e mezzanotte', SO.present('h12d').prompt === 'È mezzogiorno.' && SO.present('h12n').prompt === 'È mezzanotte.' &&
     ok(SO.key('h12d'), 'È mezzogiorno.') && !ok(SO.key('h12d'), 'Sono mezzogiorno.') && !ok(SO.key('h12d'), 'È mezzanotte.') && !ok(SO.key('h12n'), 'È il mezzanotte.'));
   check('«Che ore sono?» anche dall\'insegnante', [...Array(30)].some(() => SO.key('h3').prompt === 'Che ore sono?') && SO.askQ('h3', 'Che ore sono?').model === 'Che ore sono?');
@@ -712,7 +713,7 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
     evalAsk('a_dinner', 'La cena è alle sette?').kind === 'no' && evalAsk('a_lunch', 'Il pranzo è alle una?').model === 'Il pranzo è all\'una?');
   const st = buildSteps(l21), models = st.filter(s => s.model && s.type !== 'reveal');
   check('lezione 21: risposte modello giuste', models.every(s => evaluate(s, s.model).ok));
-  check('lezione 21: ripetizioni giuste', models.every(s => buildDrill(s, 5, []).every(d => evaluate(d, d.model).ok)));
+  check('lezione 21: ripetizioni giuste', models.every(s => buildDrill(s, 5, s.reviewItems || []).every(d => evaluate(d, d.model).ok)));
 }
 
 // Lezione 22: «Il, la o l'?» (lezione dei colori con parole che vogliono l')
@@ -731,7 +732,7 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
   check('lezioni 5 e 19 non cambiano', SC.present('phone_nero').prompt === 'Il telefono è nero.' && SC.present('suitcase_nero').prompt === 'La valigia è nera.');
   const st = buildSteps(l22), models = st.filter(s => s.model && s.type !== 'reveal');
   check('lezione 22: risposte modello giuste', models.every(s => evaluate(s, s.model).ok));
-  check('lezione 22: ripetizioni giuste', models.every(s => buildDrill(s, 5, []).every(d => evaluate(d, d.model).ok)));
+  check('lezione 22: ripetizioni giuste', models.every(s => buildDrill(s, 5, s.reviewItems || []).every(d => evaluate(d, d.model).ok)));
 }
 
 // Lezione 23: «Cosa fa…?» (verbi al presente, con i due colleghi della lezione 12)
@@ -757,7 +758,7 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
   check('«il telefono» non è il verbo', run('verbStatements')(run('norm')('è il telefono')).length === 0);
   const st = buildSteps(l23), models = st.filter(s => s.model && s.type !== 'reveal');
   check('lezione 23: risposte modello giuste', models.every(s => evaluate(s, s.model).ok));
-  check('lezione 23: ripetizioni giuste', models.every(s => buildDrill(s, 5, []).every(d => evaluate(d, d.model).ok)));
+  check('lezione 23: ripetizioni giuste', models.every(s => buildDrill(s, 5, s.reviewItems || []).every(d => evaluate(d, d.model).ok)));
 }
 
 // Lezione 24: «Perché? Per…»
@@ -783,7 +784,7 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
   check('lezione 23 non cambia', run('SV').present('v_m_read').prompt === M + ' legge un libro.' && run('Object.keys(ACTS)').indexOf('write') === -1);
   const st = buildSteps(l24), models = st.filter(s => s.model && s.type !== 'reveal');
   check('lezione 24: risposte modello giuste', models.every(s => evaluate(s, s.model).ok));
-  check('lezione 24: ripetizioni giuste', models.every(s => buildDrill(s, 5, []).every(d => evaluate(d, d.model).ok)));
+  check('lezione 24: ripetizioni giuste', models.every(s => buildDrill(s, 5, s.reviewItems || []).every(d => evaluate(d, d.model).ok)));
 }
 
 // Lezione 25: «Lo prendo — la prendo», «Non la chiude!»
@@ -809,7 +810,7 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
   check('-o / -a in colore anche in «lo» e «la»', (w => ['libro', 'finestra', 'lo', 'la'].every(x => w.indexOf(x) !== -1))(run('genderWords')(l25)));
   const st = buildSteps(l25), models = st.filter(s => s.model && s.type !== 'reveal');
   check('lezione 25: risposte modello giuste', models.every(s => evaluate(s, s.model).ok));
-  check('lezione 25: ripetizioni giuste', models.every(s => buildDrill(s, 5, []).every(d => evaluate(d, d.model).ok)));
+  check('lezione 25: ripetizioni giuste', models.every(s => buildDrill(s, 5, s.reviewItems || []).every(d => evaluate(d, d.model).ok)));
 }
 
 // Lezione 28: «Quanto fa…?» con le centinaia
@@ -837,7 +838,7 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
     evalAsk('sm_300_200', 'Trecento più duecento è cinquecento?').model === 'Trecento più duecento fa cinquecento?');
   const st = buildSteps(l28), models = st.filter(s => s.model && s.type !== 'reveal');
   check('lezione 28: risposte modello giuste', models.every(s => evaluate(s, s.model).ok));
-  check('lezione 28: ripetizioni giuste', models.every(s => buildDrill(s, 5, []).every(d => evaluate(d, d.model).ok)));
+  check('lezione 28: ripetizioni giuste', models.every(s => buildDrill(s, 5, s.reviewItems || []).every(d => evaluate(d, d.model).ok)));
   check('lezione 28: lunghezza', st.length < 115);
 }
 
@@ -862,7 +863,7 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
     !evalAsk('km_roma_firenze', 'Quanti chilometri ci sono da Roma a Milano?').ok);
   const st = buildSteps(l32), models = st.filter(s => s.model && s.type !== 'reveal');
   check('lezione 29: risposte modello giuste', models.every(s => evaluate(s, s.model).ok));
-  check('lezione 29: ripetizioni giuste', models.every(s => buildDrill(s, 5, []).every(d => evaluate(d, d.model).ok)));
+  check('lezione 29: ripetizioni giuste', models.every(s => buildDrill(s, 5, s.reviewItems || []).every(d => evaluate(d, d.model).ok)));
 }
 
 // Lezione 30: «La famiglia»
@@ -882,7 +883,7 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
     evalAsk('f_madre', 'È il madre?').model === 'È la madre?' && evalAsk('f_madre', 'È la madre o la figlia?').kind === 'alt');
   const st = buildSteps(l33), models = st.filter(s => s.model && s.type !== 'reveal');
   check('lezione 30: risposte modello giuste', models.every(s => evaluate(s, s.model).ok));
-  check('lezione 30: ripetizioni giuste', models.every(s => buildDrill(s, 5, []).every(d => evaluate(d, d.model).ok)));
+  check('lezione 30: ripetizioni giuste', models.every(s => buildDrill(s, 5, s.reviewItems || []).every(d => evaluate(d, d.model).ok)));
 }
 
 // Lezione 31: «Essere o avere»
@@ -908,7 +909,7 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
     (r => r.ok && answerAsk('ea_m_coat_rosso', r) === 'Il cappotto è rosso.')(evalAsk('ea_m_coat_rosso', 'Di che colore è il cappotto?')));
   const st = buildSteps(l31), models = st.filter(s => s.model && s.type !== 'reveal');
   check('lezione 31: risposte modello giuste', models.every(s => evaluate(s, s.model).ok));
-  check('lezione 31: ripetizioni giuste', models.every(s => buildDrill(s, 5, []).every(d => evaluate(d, d.model).ok)));
+  check('lezione 31: ripetizioni giuste', models.every(s => buildDrill(s, 5, s.reviewItems || []).every(d => evaluate(d, d.model).ok)));
   check('lezione 31: lunghezza', st.length < 115);
 }
 
@@ -930,7 +931,7 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
   check('-o/-i azzurre, -a/-e rosa', (w => ['libro', 'libri', 'penna', 'penne', 'tazze'].every(x => w.indexOf(x) !== -1))(run('genderWords')(l)));
   const st = buildSteps(l), models = st.filter(s => s.model && s.type !== 'reveal');
   check('lezione 32: risposte modello giuste', models.every(s => evaluate(s, s.model).ok));
-  check('lezione 32: ripetizioni giuste', models.every(s => buildDrill(s, 5, []).every(d => evaluate(d, d.model).ok)));
+  check('lezione 32: ripetizioni giuste', models.every(s => buildDrill(s, 5, s.reviewItems || []).every(d => evaluate(d, d.model).ok)));
   check('lezione 32: domande dell\'allievo', st.filter(s => s.type === 'ask').length === 7 && st.filter(s => s.type === 'ask').every(s => s.pl));
 }
 
@@ -953,7 +954,7 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
     evalAsk('ce_cup_2', 'Sul tavolo c\'è due tazze?').model === 'Sul tavolo ci sono due tazze?');
   const st = buildSteps(l), models = st.filter(s => s.model && s.type !== 'reveal');
   check('lezione 33: risposte modello giuste', models.every(s => evaluate(s, s.model).ok));
-  check('lezione 33: ripetizioni giuste', models.every(s => buildDrill(s, 5, []).every(d => evaluate(d, d.model).ok)));
+  check('lezione 33: ripetizioni giuste', models.every(s => buildDrill(s, 5, s.reviewItems || []).every(d => evaluate(d, d.model).ok)));
 }
 
 // Lezione 34: «Quanto costa? Quanto costano?»
@@ -975,7 +976,7 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
     !evalAsk('co_cup_2', 'Quanto costa le tazze?').ok && evalAsk('co_cup_2', 'Le tazze costa otto euro?').model === 'Le tazze costano otto euro?');
   const st = buildSteps(l), models = st.filter(s => s.model && s.type !== 'reveal');
   check('lezione 34: risposte modello giuste', models.every(s => evaluate(s, s.model).ok));
-  check('lezione 34: ripetizioni giuste', models.every(s => buildDrill(s, 5, []).every(d => evaluate(d, d.model).ok)));
+  check('lezione 34: ripetizioni giuste', models.every(s => buildDrill(s, 5, s.reviewItems || []).every(d => evaluate(d, d.model).ok)));
 }
 
 // Lezioni 35, 36, 37: questo / gli, le / quel, quei, quegli (con i colori al plurale)
@@ -1006,7 +1007,7 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
   L3.forEach(l => {
     const st = buildSteps(l), models = st.filter(s => s.model && s.type !== 'reveal');
     check(l.id + ': risposte modello giuste', models.every(s => evaluate(s, s.model).ok));
-    check(l.id + ': ripetizioni giuste', models.every(s => buildDrill(s, 5, []).every(d => evaluate(d, d.model).ok)));
+    check(l.id + ': ripetizioni giuste', models.every(s => buildDrill(s, 5, s.reviewItems || []).every(d => evaluate(d, d.model).ok)));
   });
 }
 
@@ -1026,7 +1027,7 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
   check('allievo', evalAsk('pl_egg_3', 'Che cosa sono?').kind === 'what' && evalAsk('pl_egg_3', 'Sono tre uovi?').ok === false);
   const st = buildSteps(l), models = st.filter(s => s.model && s.type !== 'reveal');
   check('lezione 38: risposte modello giuste', models.every(s => evaluate(s, s.model).ok));
-  check('lezione 38: ripetizioni giuste', models.every(s => buildDrill(s, 5, []).every(d => evaluate(d, d.model).ok)));
+  check('lezione 38: ripetizioni giuste', models.every(s => buildDrill(s, 5, s.reviewItems || []).every(d => evaluate(d, d.model).ok)));
 }
 
 // Lezione 39: «Il contrario»
@@ -1043,7 +1044,7 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
   check('allievo', evalAsk('ct_bottle_vuoto', 'Com\'è la bottiglia?').kind === 'what' && evalAsk('ct_bottle_vuoto', 'La bottiglia è piena?').kind === 'no');
   const st = buildSteps(l), models = st.filter(s => s.model && s.type !== 'reveal');
   check('lezione 39: risposte modello giuste', models.every(s => evaluate(s, s.model).ok));
-  check('lezione 39: ripetizioni giuste', models.every(s => buildDrill(s, 5, []).every(d => evaluate(d, d.model).ok)));
+  check('lezione 39: ripetizioni giuste', models.every(s => buildDrill(s, 5, s.reviewItems || []).every(d => evaluate(d, d.model).ok)));
 }
 
 // Lezione 40: «Essere o stare»
@@ -1063,7 +1064,7 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
   check('allievo', evalAsk('st_m_male', 'Come sta ' + M + '?').kind === 'what' && evalAsk('st_m_male', M + ' sta bene?').kind === 'no' && evalAsk('st_m_male', M + ' è bene?').model === M + ' sta bene?');
   const st = buildSteps(l), models = st.filter(s => s.model && s.type !== 'reveal');
   check('lezione 40: risposte modello giuste', models.every(s => evaluate(s, s.model).ok));
-  check('lezione 40: ripetizioni giuste', models.every(s => buildDrill(s, 5, []).every(d => evaluate(d, d.model).ok)));
+  check('lezione 40: ripetizioni giuste', models.every(s => buildDrill(s, 5, s.reviewItems || []).every(d => evaluate(d, d.model).ok)));
 }
 
 // Lezione 41: «Ce l'ho — ce l'ha»
@@ -1083,7 +1084,7 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
     evalAsk('cl_m_phone_1', M + ' ha la borsa?').kind === 'no' && evalAsk('cl_m_phone_1', M + ' ha la telefono?').model === M + ' ha il telefono?');
   const st = buildSteps(l), models = st.filter(s => s.model && s.type !== 'reveal');
   check('lezione 41: risposte modello giuste', models.every(s => evaluate(s, s.model).ok));
-  check('lezione 41: ripetizioni giuste', models.every(s => buildDrill(s, 5, []).every(d => evaluate(d, d.model).ok)));
+  check('lezione 41: ripetizioni giuste', models.every(s => buildDrill(s, 5, s.reviewItems || []).every(d => evaluate(d, d.model).ok)));
 }
 
 // Lezione 42: «Imperativo» (con il Lei)
@@ -1105,7 +1106,7 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
     evalAsk('im_f_open', F + ' dice: apri la porta?').model === F + ' dice «Apra la porta»?');
   const st = buildSteps(l), models = st.filter(s => s.model && s.type !== 'reveal');
   check('lezione 42: risposte modello giuste', models.every(s => evaluate(s, s.model).ok));
-  check('lezione 42: ripetizioni giuste', models.every(s => buildDrill(s, 5, []).every(d => evaluate(d, d.model).ok)));
+  check('lezione 42: ripetizioni giuste', models.every(s => buildDrill(s, 5, s.reviewItems || []).every(d => evaluate(d, d.model).ok)));
 }
 
 // Dal livello 2 le lezioni sono più veloci (Massi): una sola presentazione, 4 sì/no mescolati, sempre 7 domande dell'allievo
@@ -1117,9 +1118,11 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
   check('livello 2 veloce: 7 domande dell\'allievo', b.filter(s => s.type === 'ask').length === 7);
   check('livello 2 veloce: più corta, voce normale', b.length < a.length * 0.6 && b.filter(s => s.phase === 'present').every(s => !s.speed));
   const rv = b.filter(s => s.review), ids = rv.map(s => s.review);
-  check('livello 2: 4 domande chiave di ripasso, di lezioni passate diverse', rv.length === 4 && new Set(ids).size === 4 &&
-    ids.every(id => L.findIndex(l => l.id === id) < L.indexOf(l39)) && rv.every(s => s.type === 'key' && s.phase === 'mix'));
-  check('livello 1: niente ripasso', !a.some(s => s.review));
+  check('livello 2: 7 domande chiave di ripasso, di lezioni passate diverse', rv.length === 7 && new Set(ids).size === 7 &&
+    ids.every(id => L.findIndex(l => l.id === id) < L.indexOf(l39)) && rv.every(s => s.type === 'key'));
+  const ra = a.filter(s => s.review);
+  check('livello 1: ripasso nell\'introduzione e negli esercizi', ra.length === 9 && ra.filter(s => s.phase === 'review').length === 3 && ra.filter(s => s.phase === 'mix').length === 6);
+  check('ripasso: mai prima della presentazione, mai subito prima delle domande dell\'allievo', a[0].phase === 'present' && !a.some((s, i) => s.review && a[i + 1] && a[i + 1].type === 'ask'));
   let rok = true;
   for (let k = 0; k < 10; k++) L.filter(l => l.level === 2).forEach(l => buildSteps(l).filter(s => s.review).forEach(s => {
     rok = rok && evaluate(s, s.model).ok && buildDrill(s, 5, s.reviewItems).every(d => evaluate(d, d.model).ok);
