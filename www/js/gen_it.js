@@ -64,10 +64,10 @@ function gMany(fig, n, far) {
 /* ---------- La sequenza della lezione (come nelle lezioni 23–33) ---------- */
 // SX = le frasi della lezione; ognuna riceve X (la figura). altFn/negFn possono mancare.
 // Dal livello 2 (fast) l'allievo è già pratico (deciso con Massi): ogni figura si presenta una volta, niente giri di sì e di no
-// per ogni figura (solo 4 sì/no mescolati), meno domande «o», un giro di domande chiave, 2 blocchi misti, voce un po' più veloce.
+// per ogni figura (solo 4 sì/no mescolati), meno domande «o», un giro di domande chiave, 2 blocchi misti (con il ripasso delle lezioni passate: ripasso_it.js).
 function gBuildSteps(lesson, SX, flag) {
-  const K = lesson.known.slice(), st = [], fast = (lesson.level || 1) >= 2, base = fast ? 1.08 : 1;
-  const add = (s, phase) => { s.phase = phase; if (base !== 1) s.speed = base; st.push(s); return s; };
+  const K = lesson.known.slice(), st = [], fast = (lesson.level || 1) >= 2;
+  const add = (s, phase) => { s.phase = phase; st.push(s); return s; };
   (fast ? [K.slice()] : presentRounds(K)).forEach(round => round.forEach(x => add(SX.present(x), 'present')));
   if (SX.revealFirst) { add(SX.revealFirst(K[0]), 'reveal').pause = 1200; }
   let prev = null;
@@ -89,7 +89,7 @@ function gBuildSteps(lesson, SX, flag) {
   const kinds = SX.alt ? ['yes', 'neg', 'alt', 'key'] : ['yes', 'neg', 'key'];
   for (let b = 0; b < (fast ? 2 : MIX_BLOCKS); b++) for (let i = 0; i < MIX_BLOCK_SIZE; i++) {
     const X = pick(K.filter(x => x !== prev)), t = pick(kinds);
-    const s = add(SX[t](X), 'mix'); s.speed = base + 0.06 * (b + 1); prev = X;
+    const s = add(SX[t](X), 'mix'); s.speed = 1 + 0.06 * (b + 1); prev = X;
   }
   for (let i = 0; i < ASK_TURNS; i++) { const s = add({ type: 'ask', prompt: '', model: '' }, 'ask'); s[flag] = true; if (!i) s.intro = true; }
   return st;

@@ -879,7 +879,7 @@ function onWrong() {
     coachAfter(st, false);
     L.attempts++;
     ts.items++;          // il passo conta come fatto, ma non giusto al primo colpo
-    L.drill = buildDrill(st, repeatsFor(t, L.errCount++), L.items);
+    L.drill = buildDrill(st, repeatsFor(t, L.errCount++), st.reviewItems || L.items);
     L.di = 0;
     L.repFails = 0;
   }

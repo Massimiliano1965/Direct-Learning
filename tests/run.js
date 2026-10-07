@@ -6,7 +6,7 @@ const vm = require('vm');
 
 const ctx = { console: console };
 vm.createContext(ctx);
-['course.js', 'data.js', 'logic.js', 'colors_it.js', 'numbers_it.js', 'geo_fig.js', 'geo_it.js', 'poss_it.js', 'size_it.js', 'third_it.js', 'nat_it.js', 'essere_it.js', 'altro_it.js', 'prep_it.js', 'anche_it.js', 'ora_it.js', 'appt_it.js', 'gender_it.js', 'verbs_it.js', 'perche_it.js', 'pron_it.js', 'sum_it.js', 'km_it.js', 'fam_it.js', 'avere_it.js', 'gen_it.js', 'plur_it.js', 'cece_it.js', 'costa_it.js', 'det_it.js', 'irr_it.js', 'test_it.js', 'contr_it.js', 'stare_it.js', 'celha_it.js', 'imper_it.js', 'ui_lang.js'].forEach(f => {
+['course.js', 'data.js', 'logic.js', 'colors_it.js', 'numbers_it.js', 'geo_fig.js', 'geo_it.js', 'poss_it.js', 'size_it.js', 'third_it.js', 'nat_it.js', 'essere_it.js', 'altro_it.js', 'prep_it.js', 'anche_it.js', 'ora_it.js', 'appt_it.js', 'gender_it.js', 'verbs_it.js', 'perche_it.js', 'pron_it.js', 'sum_it.js', 'km_it.js', 'fam_it.js', 'avere_it.js', 'gen_it.js', 'plur_it.js', 'cece_it.js', 'costa_it.js', 'det_it.js', 'irr_it.js', 'test_it.js', 'contr_it.js', 'stare_it.js', 'celha_it.js', 'imper_it.js', 'ripasso_it.js', 'ui_lang.js'].forEach(f => {
   vm.runInContext(fs.readFileSync(path.join(__dirname, '..', 'www', 'js', f), 'utf8'), ctx, { filename: f });
 });
 const run = (code) => vm.runInContext(code, ctx);
@@ -1115,7 +1115,16 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
   check('livello 2 veloce: una presentazione per figura', cnt(b, 'present') === l39.known.length && cnt(a, 'present') > l38.known.length);
   check('livello 2 veloce: niente giri di sì e di no', !cnt(b, 'yes') && !cnt(b, 'neg') && cnt(b, 'yesno') === 4);
   check('livello 2 veloce: 7 domande dell\'allievo', b.filter(s => s.type === 'ask').length === 7);
-  check('livello 2 veloce: più corta e voce più veloce', b.length < a.length * 0.6 && b.filter(s => s.prompt).every(s => s.speed >= 1.08));
+  check('livello 2 veloce: più corta, voce normale', b.length < a.length * 0.6 && b.filter(s => s.phase === 'present').every(s => !s.speed));
+  const rv = b.filter(s => s.review), ids = rv.map(s => s.review);
+  check('livello 2: 4 domande chiave di ripasso, di lezioni passate diverse', rv.length === 4 && new Set(ids).size === 4 &&
+    ids.every(id => L.findIndex(l => l.id === id) < L.indexOf(l39)) && rv.every(s => s.type === 'key' && s.phase === 'mix'));
+  check('livello 1: niente ripasso', !a.some(s => s.review));
+  let rok = true;
+  for (let k = 0; k < 10; k++) L.filter(l => l.level === 2).forEach(l => buildSteps(l).filter(s => s.review).forEach(s => {
+    rok = rok && evaluate(s, s.model).ok && buildDrill(s, 5, s.reviewItems).every(d => evaluate(d, d.model).ok);
+  }));
+  check('ripasso: risposte e ripetizioni giuste', rok);
 }
 
 // Test del livello 1: 8 domande che contano e 2 descrizioni libere (regole delle lezioni)

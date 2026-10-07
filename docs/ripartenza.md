@@ -20,7 +20,7 @@ Leggi questo file prima di tutto. Poi `docs/percorso.md` (l'ordine delle lezioni
 - Pulsanti di prova sotto la lezione: «Avanti ▶» e «Rispondo: sì/no» (`TEST_BUTTONS` in `course.js`; a fine progetto → false).
 
 ## Regole del corso decise da Massi
-- **Dal livello 2 le lezioni sono più veloci** (gBuildSteps, `fast` = level ≥ 2): ogni figura presentata una volta, niente giri di sì e di no per ogni figura (solo 4 sì/no mescolati), 2 domande «o», 1 rivelazione + 1 domanda da ripetere, 1 giro di domande chiave, 2 blocchi misti; voce +8%. Restano le 7 domande dell'allievo. Circa 43 passi invece di 82.
+- **Dal livello 2 meno ripetizioni + ripasso** (gBuildSteps, `fast` = level ≥ 2): ogni figura presentata una volta, niente giri di sì e di no per ogni figura (solo 4 sì/no mescolati), 2 domande «o», 1 rivelazione + 1 domanda da ripetere, 1 giro di domande chiave, 2 blocchi misti. Velocità della voce normale (Massi: conta non ripetere troppo, non la velocità). Negli esercizi misti 4 domande chiave di 4 lezioni passate diverse (ripasso_it.js; se sbaglia, le ripetizioni usano le parole di quella lezione: st.reviewItems). Restano le 7 domande dell'allievo. Circa 43 passi invece di 82.
 - L'insegnante non usa parole che l'allievo non conosce: niente «bravo/ottimo»; errore = «No.»; l'entusiasmo col corpo.
 - Parole che vanno bene tutte e due (`COURSE.synonyms`): si alternano in oro nella frase scritta, la voce ogni tanto usa la seconda, il microfono le accetta.
 - Numeri composti (lezioni 28, 29; `numParts`): la radice (venti, cinquecento) sottolineata in oro, l'unità rosa; con «uno» e «otto» la vocale della radice tolta e barrata in rosso (vent(i)otto). Idea di Massi.
