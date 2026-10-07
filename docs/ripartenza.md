@@ -26,10 +26,10 @@ Leggi questo file prima di tutto. Poi `docs/percorso.md` (l'ordine delle lezioni
 - Si dà del Lei (Suo/Sua). Bandiera del Regno Unito per «inglese».
 - Niente bordeaux né marroni nei colori dell'app; gli piacciono viola e rosa.
 
-## A che punto siamo (lezioni fatte: 1–25)
+## A che punto siamo (lezioni fatte: 1–26)
 1–4 oggetti · 5 colori · 6–7 numeri · 8–9 città e monumenti · 10 il mio/il Suo · 11 grande/piccolo · 12 il suo/la sua · 13 nazionalità ·
 14 essere · 15 un altro · 16 un/una/un'/uno · 17 il/la/l'/lo · 18 sul/nel… (a e di più avanti) · 19 anche/neanche · 20 che ora è ·
-21 a che ora (aereo, riunione…) · 22 il, la o l'? (-o/-a in colore) · 23 cosa fa? (Max legge un libro, Isa telefona…) · 24 perché? per… (Max prende il libro per leggere; nuvoletta con la scena della 23) · 25 lo/la (Max legge il libro? Sì, lo legge.; *da approvare*).
+21 a che ora (aereo, riunione…) · 22 il, la o l'? (-o/-a in colore) · 23 cosa fa? (Max legge un libro, Isa telefona…) · 24 perché? per… (Max prende il libro per leggere; nuvoletta con la scena della 23) · 25 lo/la (Max legge il libro? Sì, lo legge.) · 26 numeri 11–16 (*da approvare*).
 
 ## Da ricordare
 - Ogni lezione ha le **domande dello studente** (tocca una figura e chiede): 7 per lezione. Mantenerle nelle lezioni nuove.
@@ -37,6 +37,7 @@ Leggi questo file prima di tutto. Poi `docs/percorso.md` (l'ordine delle lezioni
   (anche con un avviso nelle lezioni dopo se gli errori continuano). Dettagli in `docs/percorso.md`.
 
 ## Prossimi passi
-- Lezioni 1–24 caricate su `main`. Lezione 25 fatta, salvata nel ramo `lezione-25`: aspetta il sì di Massi sulle foto. Poi il capitolo 5 (numeri fino a 1000, famiglia, essere o avere, plurali…) e il test del livello 1.
+- Lezioni 1–25 caricate su `main`. Lezione 26 fatta, salvata nel ramo `lezione-26`: aspetta il sì di Massi.
+- Numeri fino a 1000, proposta: 27 = 17–20; 28 = decine (30…100) e «Quanto fa…?»; 29 = centinaia, mille e «Quanti chilometri ci sono…?». Poi famiglia, essere o avere, plurali… e il test del livello 1.
 - Più avanti: preposizioni «a» e «di»; il test di fine livello; CIAO English quando le lezioni italiane sono strutturate.
-- Stima: circa 100 lezioni in tutto (ne mancano circa 75), in 4 livelli, più i 4 test.
+- Stima: circa 100 lezioni in tutto (ne mancano circa 74), in 4 livelli, più i 4 test.

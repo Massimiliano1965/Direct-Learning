@@ -209,8 +209,8 @@ FIG.suitcase = CFIG.suitcase(['#3a4258', '#2a3040']);
 FIG.flask = CFIG.flask(['#8fb0c4', '#6f8fa8']);
 Object.keys(CFIG).forEach(k => Object.keys(COL_SHADE).forEach(c => { FIG[k + '_' + c] = CFIG[k](COL_SHADE[c]); }));
 
-// Cartellini dei numeri (lezioni 6 e 7): cifra elegante d'oro su blu
-['uno', 'due', 'tre', 'quattro', 'cinque', 'sei', 'sette', 'otto', 'nove', 'dieci'].forEach((w, i) => {
+// Cartellini dei numeri (lezioni 6, 7 e 26): cifra elegante d'oro su blu
+for (let i = 0; i < 20; i++) {
   FIG['n' + (i + 1)] = FLAT(`<rect x="18" y="10" width="64" height="78" rx="8" fill="#2c3e66"/><rect x="22" y="14" width="56" height="70" rx="5" fill="none" stroke="#c9a45c" stroke-width="1.5"/>
-    <text x="50" y="${i === 9 ? 66 : 68}" font-size="${i === 9 ? 40 : 50}" font-family="Georgia, 'Times New Roman', serif" fill="#e0c287" text-anchor="middle">${i + 1}</text>`, 30);
-});
+    <text x="50" y="${i >= 9 ? 66 : 68}" font-size="${i >= 9 ? 40 : 50}" font-family="Georgia, 'Times New Roman', serif" fill="#e0c287" text-anchor="middle">${i + 1}</text>`, 30);
+}

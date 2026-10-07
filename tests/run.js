@@ -361,8 +361,11 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
 {
   const S = run('S'), evalAsk = run('evalAsk'), answerAsk = run('answerAsk'), buildDrill = run('buildDrill'), isEcho = run('isEcho');
   const ok = (st, t) => evaluate(st, t).ok;
-  check('lezioni 6 e 7 ci sono', NUM_LESSONS.map(l => l.id).join() === 'l6,l7');
-  check('cartellini 1–10', [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].every(i => FIG['n' + i]));
+  check('lezioni 6, 7 e 26 ci sono', NUM_LESSONS.map(l => l.id).join() === 'l6,l7,l26');
+  check('cartellini 1–20', [...Array(20)].every((x, i) => FIG['n' + (i + 1)]));
+  check('lezione 26: undici… sedici', S.present('n11').prompt === 'È il numero undici.' && S.reveal('n16').prompt === 'Che numero è? È il numero sedici.');
+  check('lezione 26: cifre del microfono e forme corte', ok(S.key('n14'), 'è il numero 14') && ok(S.key('n11'), 'È l\'undici.') && ok(S.key('n13'), 'È il tredici.') &&
+    !ok(S.key('n13'), 'È il numero tre.') && !ok(S.key('n16'), 'è il 6') && ok(S.yes('n15'), 'sì è il 15'));
   check('frasi', S.present('n3').prompt === 'È il numero tre.' && S.yes('n3').model === 'Sì, è il numero tre.' &&
     S.neg('n3', 'n2').prompt === 'È il numero due?' && S.neg('n3', 'n2').model === 'No, non è il numero due.' &&
     S.key('n3').prompt === 'Che numero è?' && S.reveal('n6').prompt === 'Che numero è? È il numero sei.');

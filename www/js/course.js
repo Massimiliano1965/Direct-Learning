@@ -131,7 +131,9 @@ const LESSONS = [
   // capitolo 4: «Lo prendo — la prendo», «Non la chiude!» — «Max legge il libro? Sì, lo legge.» (pron_it.js)
   // gender: come nella lezione 22, -o azzurra e -a rosa nelle cose e in «lo» / «la»
   { id: 'l25', title: 'Lezione 25', pron: true, gender: true,
-    known: ['ld_m_book', 'ld_f_phone', 'ld_m_notebook', 'ld_m_orange', 'ld_f_soda', 'ld_f_window'] }
+    known: ['ld_m_book', 'ld_f_phone', 'ld_m_notebook', 'ld_m_orange', 'ld_f_soda', 'ld_f_window'] },
+  // capitolo 5: «I numeri da 1 a 1000» — si comincia da undici a quindici (ripasso 1–10), poi il sedici da scoprire
+  { id: 'l26', title: 'Lezione 26', numbers: true, known: ['n11', 'n12', 'n13', 'n14', 'n15'], review: ['n1', 'n2', 'n3', 'n5', 'n6', 'n10'], fresh: 'n16' }
 ];
 
 // Quattro insegnanti, dal più rigido al più indulgente. gender = voce maschile o femminile.
