@@ -184,7 +184,10 @@ const LESSONS = [
     known: ['cl_m_phone_1', 'cl_f_suitcase_0', 'cl_m_umbrella_0', 'cl_f_key_1', 'cl_m_book_1', 'cl_f_bag_0'] },
   // capitolo 6: «Imperativo» con il Lei — Isa dice: «Apra la porta!» (imper_it.js); il verbo sottolineato
   { id: 'l42', title: 'Lezione 42', level: 2, imp: true, hilite: ['apra', 'chiuda', 'legga', 'beva', 'mangi', 'telefoni'],
-    known: ['im_f_open', 'im_m_close', 'im_f_read', 'im_m_drink', 'im_f_eat', 'im_m_phone'] }
+    known: ['im_f_open', 'im_m_close', 'im_f_read', 'im_m_drink', 'im_f_eat', 'im_m_phone'] },
+  // capitolo 7: «Qual è la domanda?» — l'insegnante dice la risposta, l'allievo trova la domanda già imparata (qual_it.js)
+  { id: 'l43', title: 'Lezione 43', level: 2, qd: true, hilite: ['domanda'],
+    known: ['qd_ora', 'qd_fa', 'qd_costa', 'qd_sta', 'qd_chi', 'qd_perche'] }
 ];
 
 // Quattro insegnanti, dal più rigido al più indulgente. gender = voce maschile o femminile.
