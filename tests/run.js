@@ -488,7 +488,7 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
   check('lezione 11: ripetizioni giuste', models.every(s => buildDrill(s, 5, []).every(d => evaluate(d, d.model).ok)));
 }
 
-// Lezione 12: «Il suo, la sua» (le cose di Max e di Giulia quando insegna Luca)
+// Lezione 12: «Il suo, la sua» (le cose di Max e di Giulia quando insegna Pietro)
 {
   const SW = run('SW'), evalAsk = run('evalAsk'), answerAsk = run('answerAsk'), buildDrill = run('buildDrill');
   const ok = (st, t) => evaluate(st, t).ok;
@@ -538,7 +538,7 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
   check('lezione 13: ripetizioni giuste', models.every(s => buildDrill(s, 5, []).every(d => evaluate(d, d.model).ok)));
 }
 
-// Lezione 14: «Il verbo essere» (insegna Luca: «Io sono italiano.»)
+// Lezione 14: «Il verbo essere» (insegna Pietro: «Io sono italiano.»)
 {
   const SE = run('SE'), evalAsk = run('evalAsk'), answerAsk = run('answerAsk'), buildDrill = run('buildDrill');
   const ok = (st, t) => evaluate(st, t).ok;

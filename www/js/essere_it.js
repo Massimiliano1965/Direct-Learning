@@ -28,7 +28,7 @@ const NAT_ALL = Object.assign({}, NAT_WORD);
 ].forEach(([m, f, c]) => { NAT_ALL[m] = NAT_ALL[m] || { c: c, g: {} }; NAT_ALL[m].g.m = true; NAT_ALL[f] = NAT_ALL[f] || { c: c, g: {} }; NAT_ALL[f].g.f = true; });
 NAT_ALL.americano.g.m = true;
 
-// L'insegnante di oggi (in prova: Luca)
+// L'insegnante di oggi (in prova: Pietro)
 const eTeacher = () => TEACHERS[typeof selectedTeacherKey === 'function' ? selectedTeacherKey() : 'luca'] || TEACHERS.luca;
 const eTG = () => eTeacher().gender === 'f' ? 'f' : 'm';
 const eIt = () => nAdj('italia', eTG());                                   // «italiano» / «italiana»

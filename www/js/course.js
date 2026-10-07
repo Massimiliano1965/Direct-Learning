@@ -110,7 +110,7 @@ const TEACHERS = {
     done: ''
   },
   luca: {
-    key: 'luca', name: 'Luca', gender: 'm', style: 'Normal', mark: 'mistake',
+    key: 'luca', name: 'Pietro', gender: 'm', style: 'Normal', mark: 'mistake',
     rate: 1.0, pitch: 0.92, modelRate: 0.9, praiseEvery: 3, repeats: [2, 3, 4, 2, 3],
     praise: [],
     wrong: 'No.',
