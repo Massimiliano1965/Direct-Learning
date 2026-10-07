@@ -232,7 +232,10 @@ const LESSONS = [
     known: ['bv_1_nome', 'bv_1_citta', 'bv_1_lavoro', 'bv_2_nome', 'bv_2_citta', 'bv_2_lavoro'] },
   // capitolo 10: «Lo, la, li, le» — Max prende i libri? Sì, li prende. Isa prende le chiavi? Sì, le prende. (lile_it.js)
   { id: 'l58', title: 'Lezione 58', level: 2, lp: true, hilite: ['li', 'le'],
-    known: ['lp_m_book', 'lp_f_key', 'lp_m_orange', 'lp_f_pen', 'lp_m_cup', 'lp_f_umbrella'] }
+    known: ['lp_m_book', 'lp_f_key', 'lp_m_orange', 'lp_f_pen', 'lp_m_cup', 'lp_f_umbrella'] },
+  // capitolo 10: «Il verbo chiamarsi» — Io mi chiamo Pietro. Come si chiama lui? Si chiama Max. (chiama_it.js)
+  { id: 'l59', title: 'Lezione 59', level: 2, cm: true, hilite: ['mi chiamo', 'si chiama'],
+    known: ['cm_me', 'cm_m', 'cm_f', 'cm_c1', 'cm_c2'] }
 ];
 
 // Quattro insegnanti, dal più rigido al più indulgente. gender = voce maschile o femminile.
