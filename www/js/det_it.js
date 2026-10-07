@@ -2,9 +2,10 @@
 /* =====================================================================
    CAPITOLO 5: le parole davanti al nome, al singolare e al plurale, con i colori (lezioni 35, 36, 37).
    Si carica dopo gen_it.js. Tre modi (la prima lettera della figura dopo «d»):
-     dq_…  lezione 35  «Questo, questa, questi, queste»:   Questo telefono è nero.  Queste tazze sono bianche.
-     dd_…  lezione 36  «Il plurale degli articoli» (l' → gli, l' → le; e → i):  Gli ombrelli sono neri.  I portatili sono bianchi.  Le chiavi sono gialle.
+     dq_…  lezione 35  «Questo, questa, questi, queste»:   Questo telefono è giallo.  Queste tazze sono bianche.
+     dd_…  lezione 36  «Il plurale degli articoli» (l' → gli, l' → le; e → i):  Gli ombrelli sono gialli.  I portatili sono bianchi.  Le chiavi sono gialle.
      dl_…  lezione 37  «Quel, quella, quei, quegli, quelle» (le cose lontane):  Quegli zaini sono rossi.  Quella valigia è rossa.
+   Niente cose nere (sul fondo blu notte non si vedono): giallo, bianco e rosso.
    Domande: «Di che colore sono queste tazze?» → «Queste tazze sono bianche.»; sì, no, «o», come nella lezione 5.
    Come nella lezione 22, -o / -i azzurre e -a / -e rosse nelle parole che le hanno (nome, colore, questo / quello).
    Errori: la parola davanti sbagliata («questo tazze», «i ombrelli», «quei zaini»), il nome non al plurale,
@@ -13,12 +14,16 @@
 
 // figura: dq_cup_bianco_2 → modo q, cosa cup, colore bianco, due
 const DET = {
-  dq_phone_nero_1: 1, dq_phone_nero_2: 1, dq_cup_bianco_1: 1, dq_cup_bianco_2: 1, dq_suitcase_rosso_2: 1, dq_coat_rosso_1: 1,
-  dd_umbrella_nero_2: 1, dd_backpack_rosso_2: 1, dd_agenda_nero_2: 1, dd_label_rosso_2: 1, dd_laptop_bianco_2: 1, dd_key_giallo_2: 1,
-  dl_umbrella_nero_1: 1, dl_phone_nero_2: 1, dl_backpack_rosso_2: 1, dl_suitcase_rosso_1: 1, dl_cup_bianco_2: 1, dl_coat_rosso_1: 1
+  dq_phone_giallo_1: 1, dq_phone_giallo_2: 1, dq_cup_bianco_1: 1, dq_cup_bianco_2: 1, dq_suitcase_rosso_2: 1, dq_coat_rosso_1: 1,
+  dd_umbrella_giallo_2: 1, dd_backpack_rosso_2: 1, dd_agenda_bianco_2: 1, dd_label_rosso_2: 1, dd_laptop_bianco_2: 1, dd_key_giallo_2: 1,
+  dl_umbrella_giallo_1: 1, dl_phone_bianco_2: 1, dl_backpack_rosso_2: 1, dl_suitcase_rosso_1: 1, dl_cup_bianco_2: 1, dl_coat_rosso_1: 1
 };
 // le figure colorate che mancano
 FIG.backpack_rosso = recolor(FIG.backpack, { '#3a4f7e': '#b3262f', '#2c3e66': '#861b22', '#24345a': '#6e1219' });
+// colori chiari al posto del nero (Massi: le cose nere sul fondo blu notte non si vedono)
+FIG.phone_giallo = CFIG.phone(['#f2c81e', '#c9a21a']);
+FIG.umbrella_giallo = recolor(FIG.umbrella, { '#2c3e66': '#e8b81e', '#3a4f7e': '#f6d04a' });
+FIG.agenda_bianco = recolor(FIG.agenda, { '#2e2f37': '#eceef2', '#24252c': '#c4cad4' });
 // le chiavi gialle (lezione 36): quelle nere sul fondo blu notte non si vedevano (Massi)
 FIG.key_giallo = recolor(FIG.key, { '#c9a45c': '#f2c81e', '#b8923f': '#d1a50f', '#e0c287': '#fbe57a' });
 FIG.suitcase_rosso = FIG.suitcase_rosso || CFIG.suitcase(COL_SHADE.rosso);

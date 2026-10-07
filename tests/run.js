@@ -984,25 +984,25 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
   const L3 = ['l35', 'l36', 'l37'].map(id => run('LESSONS').find(l => l.id === id));
   check('lezioni 35, 36, 37 ci sono', L3.every(l => l && l.dt));
   check('figure', L3.every(l => l.known.every(k => FIG[k] && FIG[k].indexOf('<svg') === 0 && FIG[k].indexOf(' id=') === -1)));
-  check('frasi 35', SX.present('dq_phone_nero_1').prompt === 'Questo telefono è nero.' && SX.present('dq_cup_bianco_2').prompt === 'Queste tazze sono bianche.' &&
-    SX.present('dq_phone_nero_2').prompt === 'Questi telefoni sono neri.' && SX.key('dq_suitcase_rosso_2').prompt === 'Di che colore sono queste valigie?');
-  check('frasi 36', SX.present('dd_umbrella_nero_2').prompt === 'Gli ombrelli sono neri.' && SX.present('dd_backpack_rosso_2').prompt === 'Gli zaini sono rossi.' &&
-    SX.present('dd_agenda_nero_2').prompt === 'Le agende sono nere.' && SX.present('dd_laptop_bianco_2').prompt === 'I portatili sono bianchi.' && SX.present('dd_key_giallo_2').prompt === 'Le chiavi sono gialle.' && ok(SX.key('dd_key_giallo_2'), 'Le chiavi sono gialle.') && !ok(SX.key('dd_key_giallo_2'), 'Le chiavi sono gialli.') && run('Object.keys(COLORS)').join() === 'nero,bianco,rosso');
-  check('frasi 37', SX.present('dl_umbrella_nero_1').prompt === 'Quell\'ombrello è nero.' && SX.present('dl_phone_nero_2').prompt === 'Quei telefoni sono neri.' &&
+  check('frasi 35', SX.present('dq_phone_giallo_1').prompt === 'Questo telefono è giallo.' && SX.present('dq_cup_bianco_2').prompt === 'Queste tazze sono bianche.' &&
+    SX.present('dq_phone_giallo_2').prompt === 'Questi telefoni sono gialli.' && SX.key('dq_suitcase_rosso_2').prompt === 'Di che colore sono queste valigie?');
+  check('frasi 36', SX.present('dd_umbrella_giallo_2').prompt === 'Gli ombrelli sono gialli.' && SX.present('dd_backpack_rosso_2').prompt === 'Gli zaini sono rossi.' &&
+    SX.present('dd_agenda_bianco_2').prompt === 'Le agende sono bianche.' && SX.present('dd_laptop_bianco_2').prompt === 'I portatili sono bianchi.' && SX.present('dd_key_giallo_2').prompt === 'Le chiavi sono gialle.' && ok(SX.key('dd_key_giallo_2'), 'Le chiavi sono gialle.') && !ok(SX.key('dd_key_giallo_2'), 'Le chiavi sono gialli.') && run('Object.keys(COLORS)').join() === 'nero,bianco,rosso');
+  check('frasi 37', SX.present('dl_umbrella_giallo_1').prompt === 'Quell\'ombrello è giallo.' && SX.present('dl_phone_bianco_2').prompt === 'Quei telefoni sono bianchi.' &&
     SX.present('dl_backpack_rosso_2').prompt === 'Quegli zaini sono rossi.' && SX.present('dl_suitcase_rosso_1').prompt === 'Quella valigia è rossa.' &&
     SX.present('dl_cup_bianco_2').prompt === 'Quelle tazze sono bianche.' && SX.present('dl_coat_rosso_1').prompt === 'Quel cappotto è rosso.');
-  check('giusto', ok(SX.key('dq_cup_bianco_2'), 'Queste tazze sono bianche.') && ok(SX.key('dd_umbrella_nero_2'), 'Gli ombrelli sono neri.') &&
-    ok(SX.key('dl_umbrella_nero_1'), 'Quell\'ombrello è nero.') && ok(SX.yes('dl_backpack_rosso_2'), 'Sì, quegli zaini sono rossi.'));
+  check('giusto', ok(SX.key('dq_cup_bianco_2'), 'Queste tazze sono bianche.') && ok(SX.key('dd_umbrella_giallo_2'), 'Gli ombrelli sono gialli.') &&
+    ok(SX.key('dl_umbrella_giallo_1'), 'Quell\'ombrello è giallo.') && ok(SX.yes('dl_backpack_rosso_2'), 'Sì, quegli zaini sono rossi.'));
   const n = SX.neg('dd_label_rosso_2');
   check('giusto: il no', ok(n, n.model));
   check('sbagliato: parola davanti, plurale, verbo, accordo', !ok(SX.key('dq_cup_bianco_2'), 'Questo tazze sono bianche.') && !ok(SX.key('dq_cup_bianco_2'), 'Queste tazza sono bianche.') &&
-    !ok(SX.key('dq_cup_bianco_2'), 'Queste tazze sono bianchi.') && !ok(SX.key('dq_cup_bianco_2'), 'Queste tazze è bianche.') && !ok(SX.key('dd_umbrella_nero_2'), 'I ombrelli sono neri.') &&
-    !ok(SX.key('dd_backpack_rosso_2'), 'I zaini sono rossi.') && !ok(SX.key('dl_backpack_rosso_2'), 'Quei zaini sono rossi.') && !ok(SX.key('dl_phone_nero_2'), 'Quegli telefoni sono neri.') &&
-    !ok(SX.key('dd_laptop_bianco_2'), 'I portatile sono bianchi.') && !ok(SX.key('dq_phone_nero_1'), 'Questo telefono è nera.'));
+    !ok(SX.key('dq_cup_bianco_2'), 'Queste tazze sono bianchi.') && !ok(SX.key('dq_cup_bianco_2'), 'Queste tazze è bianche.') && !ok(SX.key('dd_umbrella_giallo_2'), 'I ombrelli sono gialli.') &&
+    !ok(SX.key('dd_backpack_rosso_2'), 'I zaini sono rossi.') && !ok(SX.key('dl_backpack_rosso_2'), 'Quei zaini sono rossi.') && !ok(SX.key('dl_phone_bianco_2'), 'Quegli telefoni sono bianchi.') &&
+    !ok(SX.key('dd_laptop_bianco_2'), 'I portatile sono bianchi.') && !ok(SX.key('dq_phone_giallo_1'), 'Questo telefono è gialla.'));
   check('allievo', evalAsk('dq_cup_bianco_2', 'Di che colore sono queste tazze?').kind === 'what' && answerAsk('dq_cup_bianco_2', { kind: 'what' }) === 'Queste tazze sono bianche.' &&
     evalAsk('dq_cup_bianco_2', 'Queste tazze sono rosse?').kind === 'no' && answerAsk('dq_cup_bianco_2', { kind: 'no', ask: 'rosso' }) === 'No, queste tazze non sono rosse. Queste tazze sono bianche.' &&
     evalAsk('dq_cup_bianco_2', 'Questi tazze sono rosse?').model === 'Queste tazze sono rosse?');
-  check('-i azzurre e -e rosa anche nei colori e in questi/quelle', (w => ['tazze', 'bianche', 'neri', 'queste', 'quegli'].every(x => w.indexOf(x) !== -1))(run('genderWords')(L3[0])));
+  check('-i azzurre e -e rosa anche nei colori e in questi/quelle', (w => ['tazze', 'bianche', 'gialli', 'queste', 'quegli'].every(x => w.indexOf(x) !== -1))(run('genderWords')(L3[0])));
   L3.forEach(l => {
     const st = buildSteps(l), models = st.filter(s => s.model && s.type !== 'reveal');
     check(l.id + ': risposte modello giuste', models.every(s => evaluate(s, s.model).ok));
