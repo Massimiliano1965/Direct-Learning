@@ -289,7 +289,10 @@ const LESSONS = [
     known: ['dvp_suitcase_sotto', 'dvp_book_sul', 'dvp_suitcase_davanti', 'dvp_book_accanto', 'dvp_suitcase_dietro', 'dvp_book_sotto'] },
   // capitolo 12: «Mi, Le, ci» — Che cosa mi dà Max? Le dà il libro. Che cosa ci dà Isa? Ci dà la tazza. (mici_it.js)
   { id: 'l76', title: 'Lezione 76', level: 3, mc: true, hilite: ['mi', 'Le', 'ci'],
-    known: ['mc_m_me_book', 'mc_f_us_cup', 'mc_f_me_key', 'mc_m_us_phone', 'mc_m_me_pen', 'mc_f_us_umbrella'] }
+    known: ['mc_m_me_book', 'mc_f_us_cup', 'mc_f_me_key', 'mc_m_us_phone', 'mc_m_me_pen', 'mc_f_us_umbrella'] },
+  // capitolo 15: «Il passato con essere» — Dove è andato Max? Max è andato a Roma. Isa è andata a Parigi. (essere2_it.js)
+  { id: 'l77', title: 'Lezione 77', level: 3, pe: true, gender: true, hilite: ['è andato', 'è andata'],
+    known: ['pe_m_roma', 'pe_f_parigi', 'pe_m_londra', 'pe_f_roma', 'pe_m_newyork', 'pe_f_londra'] }
 ];
 
 // Quattro insegnanti, dal più rigido al più indulgente. gender = voce maschile o femminile.
