@@ -226,7 +226,10 @@ const LESSONS = [
     known: ['da_m_book', 'da_f_pen', 'da_m_key', 'da_f_cup', 'da_m_phone', 'da_f_umbrella'] },
   // capitolo 9: «Qualcuno / nessuno, qualche cosa / niente» — Chi c'è nella stanza? Non c'è nessuno. (qualc_it.js)
   { id: 'l56', title: 'Lezione 56', level: 2, qn: true, hilite: ['qualcuno', 'nessuno', 'qualche cosa', 'niente'],
-    known: ['qn_p_m', 'qn_t_book', 'qn_p_0', 'qn_t_0', 'qn_p_f', 'qn_t_cup'] }
+    known: ['qn_p_m', 'qn_t_book', 'qn_p_0', 'qn_t_0', 'qn_p_f', 'qn_t_cup'] },
+  // capitolo 9: «Biglietto da visita» — Come si chiama? Dove abita? Che lavoro fa? (bigl_it.js)
+  { id: 'l57', title: 'Lezione 57', level: 2, bv: true, gender: true, hilite: ['si chiama', 'abita'],
+    known: ['bv_1_nome', 'bv_1_citta', 'bv_1_lavoro', 'bv_2_nome', 'bv_2_citta', 'bv_2_lavoro'] }
 ];
 
 // Quattro insegnanti, dal più rigido al più indulgente. gender = voce maschile o femminile.
