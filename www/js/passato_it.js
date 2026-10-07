@@ -28,9 +28,9 @@ const psQ = (X) => 'Che cosa ha fatto ' + psName(X) + '?';
 const psOther = (X) => pick(Object.keys(PS_PART).filter(a => a !== psAct(X)));
 
 /* ---------- Figura: la persona, ferma, e nella nuvoletta il ricordo (la scena della lezione 23) con la freccia indietro ---------- */
-// who = 'm' / 'f'; scene(LK) = il disegno del ricordo (anche la lezione 46 la usa)
-function psMemFig(who, scene) {
-  const k = p3Key(who), LK = (typeof LOOKS !== 'undefined' && LOOKS[TEACHERS[k] ? (TEACHERS[k].look || k) : 'luca']) || null;
+// who = 'm' / 'f'; scene(LK) = il disegno del ricordo (anche le lezioni 46 e 60 la usano); look = una faccia già scelta (l'insegnante)
+function psMemFig(who, scene, look) {
+  const k = who && p3Key(who), LK = look || (typeof LOOKS !== 'undefined' && LOOKS[TEACHERS[k] ? (TEACHERS[k].look || k) : 'luca']) || null;
   if (!LK || typeof tTorso !== 'function') return '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"></svg>';
   return '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><ellipse cx="30" cy="97" rx="26" ry="3" fill="#000" opacity=".25"/>' +
     V_PERSON(LK, tArm(LK, ...DOWN_L) + tArm(LK, ...DOWN_R), { mouth: 'smile' }, -20) +

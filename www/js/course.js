@@ -235,7 +235,10 @@ const LESSONS = [
     known: ['lp_m_book', 'lp_f_key', 'lp_m_orange', 'lp_f_pen', 'lp_m_cup', 'lp_f_umbrella'] },
   // capitolo 10: «Il verbo chiamarsi» — Io mi chiamo Pietro. Come si chiama lui? Si chiama Max. (chiama_it.js)
   { id: 'l59', title: 'Lezione 59', level: 2, cm: true, hilite: ['mi chiamo', 'si chiama'],
-    known: ['cm_me', 'cm_m', 'cm_f', 'cm_c1', 'cm_c2'] }
+    known: ['cm_me', 'cm_m', 'cm_f', 'cm_c1', 'cm_c2'] },
+  // capitolo 10: «Verbi al presente e al passato» — Che cosa faccio io? Lei legge un libro. Che cosa ho fatto io? Lei ha letto un libro. (tempi_it.js)
+  { id: 'l60', title: 'Lezione 60', level: 2, tv: true, hilite: ['leggo', 'legge', 'mangio', 'mangia', 'telefono', 'telefona', 'ho letto', 'ha letto', 'ho mangiato', 'ha mangiato', 'ho telefonato', 'ha telefonato'],
+    known: ['tv_now_read', 'tv_past_read', 'tv_now_eat', 'tv_past_eat', 'tv_now_phone', 'tv_past_phone'] }
 ];
 
 // Quattro insegnanti, dal più rigido al più indulgente. gender = voce maschile o femminile.
