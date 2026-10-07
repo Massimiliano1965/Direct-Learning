@@ -250,7 +250,10 @@ const LESSONS = [
     known: ['ct_cup_caldo', 'ct_cup_freddo', 'ct_book_nuovo', 'ct_book_vecchio', 'ct_chair_alto', 'ct_chair_basso'] },
   // capitolo 12: «La colazione» — Che cosa mangia Max a colazione? Max mangia un cornetto. (colaz_it.js)
   { id: 'l63', title: 'Lezione 63', level: 3, cz: true, hilite: ['mangia', 'beve'],
-    known: ['cz_m_cornetto', 'cz_f_pane', 'cz_m_mela', 'cz_f_latte', 'cz_m_caffe', 'cz_f_succo'] }
+    known: ['cz_m_cornetto', 'cz_f_pane', 'cz_m_mela', 'cz_f_latte', 'cz_m_caffe', 'cz_f_succo'] },
+  // capitolo 12: «Questo / quello; quale?» — Quale tazza è rossa? Questa tazza. Quale telefono è rosso? Quel telefono. (quale_it.js)
+  { id: 'l64', title: 'Lezione 64', level: 3, qu: true, gender: true, hilite: ['quale'],
+    known: ['qu_cup_rosso_bianco_n', 'qu_phone_bianco_rosso_f', 'qu_suitcase_bianco_rosso_n', 'qu_umbrella_nero_giallo_f', 'qu_laptop_rosso_bianco_n', 'qu_coat_bianco_rosso_f'] }
 ];
 
 // Quattro insegnanti, dal più rigido al più indulgente. gender = voce maschile o femminile.

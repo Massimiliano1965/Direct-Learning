@@ -108,14 +108,14 @@ Durante il test l'insegnante non corregge; contano solo gli errori, mostrati all
 
 ## Capitolo 11
 
-55. **L'ho, li ho, le ho**
-56. **Il contrario**
+55. **L'ho, li ho, le ho** — *fatto: Lezione 61 (li ha presi, le ha prese), livello 3*
+56. **Il contrario** — *fatto: Lezione 62 (calda/fredda, nuovo/vecchio, alta/bassa)*
 57. **Preposizioni**
 
 ## Capitolo 12
 
-58. **Cibi della colazione**: pane, frutta, contorni
-59. **Questo/quel, questa/quella; quale?**
+58. **Cibi della colazione**: pane, frutta, contorni — *fatto: Lezione 63 (cornetto, pane con la marmellata, mela, latte, caffè, succo d'arancia)*
+59. **Questo/quel, questa/quella; quale?** — *fatto: Lezione 64 (Quale tazza è rossa? Questa tazza.)*
 60. **Quello studente, ecc.**
 61. **Gli, le, loro; le, mi, ci** (complemento indiretto)
 62. **I fiori**
