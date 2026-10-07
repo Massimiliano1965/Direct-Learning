@@ -240,7 +240,11 @@ const LESSONS = [
   { id: 'l60', title: 'Lezione 60', level: 2, tv: true, hilite: ['leggo', 'legge', 'mangio', 'mangia', 'telefono', 'telefona', 'ho letto', 'ha letto', 'ho mangiato', 'ha mangiato', 'ho telefonato', 'ha telefonato'],
     known: ['tv_now_read', 'tv_past_read', 'tv_now_eat', 'tv_past_eat', 'tv_now_phone', 'tv_past_phone'] },
   // TEST DI FINE LIVELLO 2 (test_it.js): 8 domande che contano e 2 descrizioni libere; non blocca il livello 3
-  { id: 't2', title: 'Test del livello 2', test: 2, level: 2, known: [] }
+  { id: 't2', title: 'Test del livello 2', test: 2, level: 2, known: [] },
+  // ===== LIVELLO 3 (capitoli 11–15) =====
+  // capitolo 11: «L'ho, li ho, le ho» — Max ha preso i libri? Sì, li ha presi. Isa ha preso le chiavi? Sì, le ha prese. (liha_it.js)
+  { id: 'l61', title: 'Lezione 61', level: 3, lq: true, hilite: ['li ha', 'le ha'],
+    known: ['lq_m_book', 'lq_f_key', 'lq_m_orange', 'lq_f_pen', 'lq_m_cup', 'lq_f_umbrella'] }
 ];
 
 // Quattro insegnanti, dal più rigido al più indulgente. gender = voce maschile o femminile.
