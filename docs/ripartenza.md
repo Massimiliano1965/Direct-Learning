@@ -5,7 +5,7 @@ Leggi questo file prima di tutto. Poi `docs/percorso.md` (l'ordine delle lezioni
 ## Chi è Massi e come lavorare
 - Massi non è un programmatore. Rispondi in **italiano semplice**, **un pezzo alla volta**, dandogli del **tu**.
 - **Prima mostrami, poi pusha**: ogni modifica visiva → foto dall'app vera (playwright, telefono Moto g05 = 360×725), poi il push **solo quando scrive «pusha»**.
-  Accordo: si carica **ogni 4 lezioni** (o quando dice «pusha»).
+  Accordo: Massi dice quali lezioni fare; si fanno **tutte**, e **solo alla fine** si fa un unico push (non uno per lezione).
 - Niente mail al suo posto. Controllo sintassi con `node --check` su ogni file js toccato.
 - Prove automatiche: `node tests/run.js` (italiano), `node tests/run_en.js`, `node tests/run_voice.js`: devono passare tutte.
 - Non fare cose non chieste: proporre prima, con esempi (foto), e fare dopo il suo sì.
@@ -30,7 +30,7 @@ Leggi questo file prima di tutto. Poi `docs/percorso.md` (l'ordine delle lezioni
 ## A che punto siamo (lezioni fatte: 1–37)
 1–4 oggetti · 5 colori · 6–7 numeri · 8–9 città e monumenti · 10 il mio/il Suo · 11 grande/piccolo · 12 il suo/la sua · 13 nazionalità ·
 14 essere · 15 un altro · 16 un/una/un'/uno · 17 il/la/l'/lo · 18 sul/nel… (a e di più avanti) · 19 anche/neanche · 20 che ora è ·
-21 a che ora (aereo, riunione…) · 22 il, la o l'? (-o/-a in colore) · 23 cosa fa? (Max legge un libro, Isa telefona…) · 24 perché? per… (Max prende il libro per leggere; nuvoletta con la scena della 23) · 25 lo/la (Max legge il libro? Sì, lo legge.) · 26 numeri 11–20 · 27 decine 30–100 · 28 quanto fa? (20 + 8 = ventotto: la radice e l'unità; 100 + 100… fino a mille; `numWord` scrive tutti i numeri 1–1000) · 29 quanti chilometri? (cartello verde dell'autostrada) · 30 la famiglia (Chi è? È la nonna.) · 31 essere o avere (Max ha un telefono. Il telefono è nero.) · 32 plurale o→i, a→e (Sono due libri.) · 33 c'è / ci sono (sul tavolo) · 34 quanto costa / costano (cartellino in euro) · 35 questo/questi… (Queste tazze sono bianche.) · 36 gli/le, e→i (Gli ombrelli sono neri. I portatili sono bianchi.) · 37 quel/quei/quegli (le cose lontane).
+21 a che ora (aereo, riunione…) · 22 il, la o l'? (-o/-a in colore) · 23 cosa fa? (Max legge un libro, Isa telefona…) · 24 perché? per… (Max prende il libro per leggere; nuvoletta con la scena della 23) · 25 lo/la (Max legge il libro? Sì, lo legge.) · 26 numeri 11–20 · 27 decine 30–100 · 28 quanto fa? (20 + 8 = ventotto: la radice e l'unità; 100 + 100… fino a mille; `numWord` scrive tutti i numeri 1–1000) · 29 quanti chilometri? (cartello verde dell'autostrada) · 30 la famiglia (Chi è? È la nonna.) · 31 essere o avere (Max ha un telefono. Il telefono è nero.) · 32 plurale o→i, a→e (Sono due libri.) · 33 c'è / ci sono (sul tavolo) · 34 quanto costa / costano (cartellino in euro) · 35 questo/questi… (Queste tazze sono bianche.) · 36 gli/le, e→i (Gli ombrelli sono neri. I portatili sono bianchi. Le chiavi sono gialle: «giallo» solo dalla 36, non nella lezione 5) · 37 quel/quei/quegli (le cose lontane).
 
 ## Da ricordare
 - Ogni lezione ha le **domande dello studente** (tocca una figura e chiede): 7 per lezione. Mantenerle nelle lezioni nuove.

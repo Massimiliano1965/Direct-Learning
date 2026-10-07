@@ -34,12 +34,14 @@ const gNumW = (n) => ['', 'un', 'due', 'tre', 'quattro'][n];
 // «un libro», «due libri»
 const gCount = (obj, n) => n === 1 ? np(obj) : gNumW(n) + ' ' + PLURAL[obj];
 const gCap = (t) => t.charAt(0).toUpperCase() + t.slice(1);
-// colore accordato: nero / nera / neri / nere (bianco → bianchi, bianche)
-const COLORS_PL = { nero: { m: 'neri', f: 'nere' }, bianco: { m: 'bianchi', f: 'bianche' }, rosso: { m: 'rossi', f: 'rosse' } };
-const gCol = (col, obj, n) => (n === 1 ? COLORS : COLORS_PL)[col][gFem(obj) ? 'f' : 'm'];
+// colore accordato: nero / nera / neri / nere (bianco → bianchi, bianche). Dalla lezione 36 anche giallo (le chiavi gialle,
+// Massi: quelle nere non si vedono); non è in COLORS, così la lezione 5 resta con nero, bianco e rosso.
+const G_COLORS = Object.assign({}, COLORS, { giallo: { m: 'giallo', f: 'gialla' } });
+const COLORS_PL = { nero: { m: 'neri', f: 'nere' }, bianco: { m: 'bianchi', f: 'bianche' }, rosso: { m: 'rossi', f: 'rosse' }, giallo: { m: 'gialli', f: 'gialle' } };
+const gCol = (col, obj, n) => (n === 1 ? G_COLORS : COLORS_PL)[col][gFem(obj) ? 'f' : 'm'];
 const G_COLOR_WORD = {};
-Object.keys(COLORS).forEach(c => ['m', 'f'].forEach(g => {
-  G_COLOR_WORD[COLORS[c][g]] = { col: c, g: g, plural: false };
+Object.keys(G_COLORS).forEach(c => ['m', 'f'].forEach(g => {
+  G_COLOR_WORD[G_COLORS[c][g]] = { col: c, g: g, plural: false };
   G_COLOR_WORD[COLORS_PL[c][g]] = { col: c, g: g, plural: true };
 }));
 

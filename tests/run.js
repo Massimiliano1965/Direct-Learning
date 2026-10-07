@@ -987,7 +987,7 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
   check('frasi 35', SX.present('dq_phone_nero_1').prompt === 'Questo telefono è nero.' && SX.present('dq_cup_bianco_2').prompt === 'Queste tazze sono bianche.' &&
     SX.present('dq_phone_nero_2').prompt === 'Questi telefoni sono neri.' && SX.key('dq_suitcase_rosso_2').prompt === 'Di che colore sono queste valigie?');
   check('frasi 36', SX.present('dd_umbrella_nero_2').prompt === 'Gli ombrelli sono neri.' && SX.present('dd_backpack_rosso_2').prompt === 'Gli zaini sono rossi.' &&
-    SX.present('dd_agenda_nero_2').prompt === 'Le agende sono nere.' && SX.present('dd_laptop_bianco_2').prompt === 'I portatili sono bianchi.' && SX.present('dd_key_nero_2').prompt === 'Le chiavi sono nere.');
+    SX.present('dd_agenda_nero_2').prompt === 'Le agende sono nere.' && SX.present('dd_laptop_bianco_2').prompt === 'I portatili sono bianchi.' && SX.present('dd_key_giallo_2').prompt === 'Le chiavi sono gialle.' && ok(SX.key('dd_key_giallo_2'), 'Le chiavi sono gialle.') && !ok(SX.key('dd_key_giallo_2'), 'Le chiavi sono gialli.') && run('Object.keys(COLORS)').join() === 'nero,bianco,rosso');
   check('frasi 37', SX.present('dl_umbrella_nero_1').prompt === 'Quell\'ombrello è nero.' && SX.present('dl_phone_nero_2').prompt === 'Quei telefoni sono neri.' &&
     SX.present('dl_backpack_rosso_2').prompt === 'Quegli zaini sono rossi.' && SX.present('dl_suitcase_rosso_1').prompt === 'Quella valigia è rossa.' &&
     SX.present('dl_cup_bianco_2').prompt === 'Quelle tazze sono bianche.' && SX.present('dl_coat_rosso_1').prompt === 'Quel cappotto è rosso.');
