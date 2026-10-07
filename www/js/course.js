@@ -190,7 +190,10 @@ const LESSONS = [
     known: ['qd_ora', 'qd_fa', 'qd_costa', 'qd_sta', 'qd_chi', 'qd_perche'] },
   // capitolo 7: «Né… né…» — Il telefono è rosso o bianco? Il telefono non è né rosso né bianco. È giallo. (ne_it.js)
   { id: 'l44', title: 'Lezione 44', level: 2, ne: true, gender: true, hilite: ['né'],
-    known: ['ne_phone_giallo', 'ne_suitcase_rosso', 'ne_cup_bianco', 'ne_coat_nero', 'ne_umbrella_giallo', 'ne_agenda_bianco'] }
+    known: ['ne_phone_giallo', 'ne_suitcase_rosso', 'ne_cup_bianco', 'ne_coat_nero', 'ne_umbrella_giallo', 'ne_agenda_bianco'] },
+  // capitolo 7: «Passato prossimo» — Che cosa ha fatto Max? Max ha letto un libro. (passato_it.js); «ha» e il participio sottolineati
+  { id: 'l45', title: 'Lezione 45', level: 2, ps: true, hilite: ['ha letto', 'ha aperto', 'ha mangiato', 'ha bevuto', 'ha chiuso', 'ha telefonato', 'ha fatto'],
+    known: ['ps_m_read', 'ps_f_open', 'ps_m_eat', 'ps_f_drink', 'ps_m_close', 'ps_f_phone'] }
 ];
 
 // Quattro insegnanti, dal più rigido al più indulgente. gender = voce maschile o femminile.
