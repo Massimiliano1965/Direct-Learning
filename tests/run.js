@@ -2131,10 +2131,10 @@ check('88: prima e ora', run("SIMPF.present('ipf_m_read').prompt") === 'Prima ' 
   const evalAsk = run('evalAsk'), buildDrill = run('buildDrill'), ok = (st, t) => evaluate(st, t).ok, SX = run('SVOR');
   const l = run('LESSONS').find(l => l.id === 'l96');
   check('lezione 96 c\'è, livello 4', !!l && l.vor && l.level === 4);
-  check('96: frasi', SX.key('vor_conto').prompt === 'Che cosa vorrebbe?' && SX.key('vor_conto').model === 'Vorrei il conto.' && SX.yes('vor_gelato').prompt === 'Vorrebbe un gelato?');
+  check('96: frasi', SX.key('vor_conto').prompt === 'Che cosa desidera?' && SX.key('vor_gelato').prompt === 'Che cosa Le porto?' && SX.key('vor_conto').model === 'Vorrei il conto.' && SX.yes('vor_gelato').prompt === 'Desidera un gelato?');
   check('96: giusto e sbagliato', ok(SX.key('vor_conto'), 'Il conto.') && ok(SX.key('vor_conto'), 'Vorrei il conto, per favore.') && !ok(SX.key('vor_conto'), 'Voglio il conto.') && !ok(SX.key('vor_conto'), 'Vorrei un caffè.'));
   run("REG_TEST = 'tu'");
-  check('96 tu: vorresti', SX.key('vor_conto').prompt === 'Che cosa vorresti?' && SX.yes('vor_gelato').prompt === 'Vorresti un gelato?' && ok(SX.yes('vor_gelato'), 'Sì, vorrei un gelato.'));
+  check('96 tu: desideri, ti porto', SX.key('vor_conto').prompt === 'Che cosa desideri?' && SX.key('vor_gelato').prompt === 'Che cosa ti porto?' && SX.yes('vor_gelato').prompt === 'Desideri un gelato?' && ok(SX.yes('vor_gelato'), 'Sì, vorrei un gelato.'));
   run("REG_TEST = null");
   const st = buildSteps(l), models = st.filter(s => s.model && s.type !== 'reveal');
   check('96: risposte modello giuste', models.every(s => evaluate(s, s.model).ok));

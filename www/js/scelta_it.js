@@ -377,7 +377,7 @@ const SCIBO = choiceLesson({
 });
 
 /* ---------- Lezione 96: «Vorrei…» (l'insegnante fa il cameriere; l'allievo chiede con gentilezza) ---------- */
-// «Che cosa vorrebbe?» (Lei) / «Che cosa vorresti?» (tu) → «Vorrei un cappuccino.»; «voglio» è sgarbato: qui è un errore
+// «Che cosa desidera? / Che cosa Le porto?» (Lei) — «Che cosa desideri? / Che cosa ti porto?» (tu) → «Vorrei un cappuccino.»; «voglio» è sgarbato: qui è un errore
 const VOR_CH = {
   cappuccino: { the: 'un cappuccino' }, acqua: { the: 'una bottiglia d\'acqua', alias: [], alt: ['dell acqua', 'un acqua'] }, conto: { the: 'il conto' },
   biglietto: { the: 'un biglietto', alias: ['biglietti'] }, camera: { the: 'una camera', alias: ['camere', 'stanza'] }, gelato: { the: 'un gelato' }
@@ -406,8 +406,9 @@ const SVOR = choiceLesson({
   items: { vor_cappuccino: { who: null, c: 'cappuccino' }, vor_conto: { who: null, c: 'conto' }, vor_acqua: { who: null, c: 'acqua' },
     vor_biglietto: { who: null, c: 'biglietto' }, vor_camera: { who: null, c: 'camera' }, vor_gelato: { who: null, c: 'gelato' } },
   say: (X, c, neg) => (neg ? 'Non vorrei ' : 'Vorrei ') + VOR_CH[c].the,
-  ask: (X, c) => (regTu() ? 'Vorresti ' : 'Vorrebbe ') + VOR_CH[c].the,
-  q: () => regTu() ? 'Che cosa vorresti?' : 'Che cosa vorrebbe?',
+  // Massi: il cameriere dice «Che cosa desidera?» o «Che cosa Le porto?» («Che cosa vorrebbe?» si sente poco)
+  ask: (X, c) => (regTu() ? 'Desideri ' : 'Desidera ') + VOR_CH[c].the,
+  q: (X) => /cappuccino|acqua|gelato/.test(X) ? (regTu() ? 'Che cosa ti porto?' : 'Che cosa Le porto?') : (regTu() ? 'Che cosa desideri?' : 'Che cosa desidera?'),
   fig: vorFig,
-  wrong: ['voglio', 'vorrebbe', 'vorresti', 'vuole', 'vuoi']
+  wrong: ['voglio', 'vorrebbe', 'vorresti', 'vuole', 'vuoi', 'desidera', 'desideri', 'porto']
 });
