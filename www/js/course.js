@@ -297,7 +297,14 @@ const LESSONS = [
   { id: 'l78', title: 'Lezione 78', level: 3, vi: true, gender: true, hilite: ['l\'ha'],
     known: ['vi_m_colosseo', 'vi_f_eiffel', 'vi_m_bigben', 'vi_f_liberta', 'vi_m_eiffel', 'vi_f_colosseo'] },
   // TEST DI FINE LIVELLO 3 (test_it.js): 8 domande che contano e 2 descrizioni libere
-  { id: 't3', title: 'Test del livello 3', test: 3, level: 3, known: [] }
+  { id: 't3', title: 'Test del livello 3', test: 3, level: 3, known: [] },
+  // LIVELLO 4
+  // capitolo 17: «Il futuro» — Che cosa farà Max domani? Domani Max leggerà un libro. (forme_it.js)
+  { id: 'l79', title: 'Lezione 79', level: 4, fu: true, hilite: ['leggerà', 'mangerà', 'berrà', 'telefonerà', 'aprirà', 'chiuderà'],
+    known: ['fu_m_read', 'fu_f_drink', 'fu_m_phone', 'fu_f_open', 'fu_m_eat', 'fu_f_close'] },
+  // capitolo 19: «Il gerundio» — Che cosa sta facendo Max? Max sta leggendo un libro. (forme_it.js)
+  { id: 'l80', title: 'Lezione 80', level: 4, ge: true, hilite: ['sta leggendo', 'sta mangiando', 'sta bevendo', 'sta telefonando', 'sta aprendo', 'sta chiudendo'],
+    known: ['ge_m_read', 'ge_f_drink', 'ge_m_phone', 'ge_f_open', 'ge_m_eat', 'ge_f_close'] }
 ];
 
 // Quattro insegnanti, dal più rigido al più indulgente. gender = voce maschile o femminile.

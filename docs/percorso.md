@@ -148,7 +148,7 @@ Durante il test l'insegnante non corregge; contano solo gli errori, mostrati all
 ## Capitolo 17
 
 76. **La casa**: luce, lampada…
-77. **Futuro**
+77. **Futuro** — *fatto: Lezione 79 (Domani Max leggerà un libro; nuvoletta con la freccia azzurra in avanti)*
 78. **Verbi riflessivi** (ripasso)
 
 ## Capitolo 18
@@ -162,7 +162,7 @@ Durante il test l'insegnante non corregge; contano solo gli errori, mostrati all
 
 83. **Il tempo che fa**: termometro, parole del tempo
 84. **Presente, passato, futuro**
-85. **Gerundio**: sto parlando, sto leggendo…
+85. **Gerundio**: sto parlando, sto leggendo… — *fatto: Lezione 80 (Che cosa sta facendo Max? Max sta leggendo un libro.)*
 
 ## Capitolo 20
 
