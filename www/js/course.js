@@ -319,7 +319,10 @@ const LESSONS = [
     known: ['cu_porta', 'cu_leggere', 'cu_telefono', 'cu_colazione', 'cu_newyork', 'cu_ora'] },
   // capitolo 18: «Piace — piacciono» — A Max piace il caffè. A Isa piacciono i fiori. (piace_it.js)
   { id: 'l85', title: 'Lezione 85', level: 4, pi: true, hilite: ['piace', 'piacciono'],
-    known: ['pi_m_caffe', 'pi_f_fiori', 'pi_m_libri', 'pi_f_pizza', 'pi_m_mele', 'pi_f_vino'] }
+    known: ['pi_m_caffe', 'pi_f_fiori', 'pi_m_libri', 'pi_f_pizza', 'pi_m_mele', 'pi_f_vino'] },
+  // capitolo 18: «Le quattro stagioni» — È aprile. È primavera. Che stagione è? (stagioni_it.js)
+  { id: 'l86', title: 'Lezione 86', level: 4, sg: true, hilite: ['primavera', 'estate', 'autunno', 'inverno', 'stagione'],
+    known: ['sg_apr', 'sg_lug', 'sg_ott', 'sg_gen', 'sg_mag', 'sg_ago', 'sg_nov', 'sg_feb'] }
 ];
 
 // Quattro insegnanti, dal più rigido al più indulgente. gender = voce maschile o femminile.
