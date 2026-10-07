@@ -29,9 +29,9 @@ const psOther = (X) => pick(Object.keys(PS_PART).filter(a => a !== psAct(X)));
 
 /* ---------- Figura: la persona, ferma, e nella nuvoletta il ricordo (la scena della lezione 23) con la freccia indietro ---------- */
 // who = 'm' / 'f'; scene(LK) = il disegno nella nuvoletta (anche le lezioni 46, 60, 69, 70); look = una faccia già scelta (l'insegnante);
-// mode: niente = il ricordo (↺), 'wait' (o true) = non ancora (clessidra), 'want' = il desiderio (cuore rosa)
+// mode: niente = il ricordo (↺), 'wait' (o true) = non ancora (clessidra), 'want' = il desiderio (cuore rosa), 'must' = il dovere (punto esclamativo arancione)
 function psMemFig(who, scene, look, mode) {
-  const wait = mode === true || mode === 'wait', want = mode === 'want';
+  const wait = mode === true || mode === 'wait', want = mode === 'want', must = mode === 'must';
   const k = who && p3Key(who), LK = look || (typeof LOOKS !== 'undefined' && LOOKS[TEACHERS[k] ? (TEACHERS[k].look || k) : 'luca']) || null;
   if (!LK || typeof tTorso !== 'function') return '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"></svg>';
   return '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><ellipse cx="30" cy="97" rx="26" ry="3" fill="#000" opacity=".25"/>' +
@@ -40,7 +40,10 @@ function psMemFig(who, scene, look, mode) {
     '<rect x="50" y="1" width="49" height="49" rx="16" fill="#f3eee2"/><rect x="52.5" y="3.5" width="44" height="44" rx="13" fill="#2a3346"/>' +
     '<g transform="translate(53 4) scale(.43)"><g opacity="' + (wait ? '.45' : '.92') + '">' + scene(LK) + '</g></g>' +
     // la freccia d'oro che gira indietro: il passato
-    (want
+    (must
+      // deve (lezione 72): il punto esclamativo arancione
+      ? '<g transform="translate(91 44) scale(1.15)"><circle r="7.5" fill="#1d2638" stroke="#e8862a" stroke-width="1.4"/><path d="M0 -4.6 v5" stroke="#e8862a" stroke-width="2.2" stroke-linecap="round"/><circle cy="3.6" r="1.3" fill="#e8862a"/></g></svg>'
+      : want
       // vuole (lezione 70): il cuore rosa al posto della freccia
       ? '<g transform="translate(91 44) scale(1.15)"><circle r="7.5" fill="#1d2638" stroke="#e98bb6" stroke-width="1.4"/><path d="M0 4 q-6 -4 -5 -7.5 q1.5 -3 5 -0.5 q3.5 -2.5 5 0.5 q1 3.5 -5 7.5z" fill="#e98bb6"/></g></svg>'
       : wait

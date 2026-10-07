@@ -274,7 +274,10 @@ const LESSONS = [
     known: ['vo_m_eat', 'vo_f_drink', 'vo_m_read', 'vo_f_phone', 'vo_m_open', 'vo_f_close'] },
   // capitolo 14: «Potere» — Max ha la chiave: può aprire la porta. Isa non ha la chiave: non può aprire la porta. (potere_it.js)
   { id: 'l71', title: 'Lezione 71', level: 3, po: true, hilite: ['può'],
-    known: ['po_m_key_1', 'po_f_key_0', 'po_m_phone_1', 'po_f_phone_0', 'po_m_book_1', 'po_f_book_0'] }
+    known: ['po_m_key_1', 'po_f_key_0', 'po_m_phone_1', 'po_f_phone_0', 'po_m_book_1', 'po_f_book_0'] },
+  // capitolo 14: «Dovere» — Che cosa deve fare Isa? Isa deve aprire la porta. (volere_it.js: il punto esclamativo arancione)
+  { id: 'l72', title: 'Lezione 72', level: 3, dv: true, hilite: ['deve'],
+    known: ['dv_f_open', 'dv_m_close', 'dv_f_phone', 'dv_m_read', 'dv_f_eat', 'dv_m_drink'] }
 ];
 
 // Quattro insegnanti, dal più rigido al più indulgente. gender = voce maschile o femminile.
