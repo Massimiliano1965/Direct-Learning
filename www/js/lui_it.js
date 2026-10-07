@@ -45,7 +45,7 @@ function lmFig(X) {
     Object.assign(LK, { suit: '#1f2430', suit2: '#171b25', shirt: '#f4f4f6', tie: '#f4f4f6' });
     arms = tArm(LK, ...DOWN_L) + tArm(LK, [65, 47], [78, 50], [80, 38]);
     extra = '<path d="M44.5 40 l5.5 2.6 l5.5 -2.6 v5.2 l-5.5 -2.6 l-5.5 2.6z" fill="#1f2430"/><circle cx="50" cy="42.6" r="1.2" fill="#2c3346"/>' +
-      '<path d="M37 64 h26 l1.5 30 h-29z" fill="#f7f8fa" stroke="#cfd4dc" stroke-width=".8"/><path d="M36 64 h28" stroke="#cfd4dc" stroke-width="1.6"/>' +
+      '<path d="M37.5 75 h25 l1.5 20 h-28z" fill="#f7f8fa" stroke="#cfd4dc" stroke-width=".8"/><path d="M35.5 75 h29" stroke="#cfd4dc" stroke-width="1.8"/>' +
       '<ellipse cx="81" cy="36" rx="13" ry="2.6" fill="#c9ccd4" stroke="#8d93a3" stroke-width=".8"/>' +
       '<path d="M76 27 h8 l-1 7 h-6z" fill="#f3eee2"/><path d="M84 29 q3 0 3 2 q0 2 -3 2" fill="none" stroke="#f3eee2" stroke-width="1.2"/><ellipse cx="80" cy="34.3" rx="6" ry="1.2" fill="#f3eee2"/>';
   } else {                    // la lavagna verde con «a b c» e la mano che la indica
