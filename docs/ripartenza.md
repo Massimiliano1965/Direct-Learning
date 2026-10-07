@@ -15,7 +15,7 @@ Leggi questo file prima di tutto. Poi `docs/percorso.md` (l'ordine delle lezioni
 - Corso italiano: `www/js/course.js` (oggetti, lezioni, insegnanti), `logic.js` (motore), un file per tipo di lezione
   (`colors_it`, `numbers_it`, `geo_it`, `poss_it`, `size_it`, `third_it`, `nat_it`, `essere_it`, `altro_it`, `prep_it`, `anche_it`, `ora_it`, `appt_it`, `gender_it`, `verbs_it`, `perche_it`, `pron_it`, `sum_it`, `km_it`, `fam_it`, `avere_it`, `gen_it` (pezzi comuni dalla 32), `plur_it`, `cece_it`, `costa_it`, `det_it`),
   caricati in ordine da `www/index.html`. Ogni file ha in cima la spiegazione della lezione.
-- Insegnanti: Max (molto severo, approva col pollice ogni tanto), Isa (chiave `giulia`: era Giulia; bionda, capelli sciolti fino alle spalle (stile «bob»), senza occhiali; Max: occhiali, pelle chiara), Pietro (chiave `luca`), Sara. Il tailleur di Isa è viola (il color vino non gli piaceva). Stile sobrio blu notte e oro.
+- Insegnanti: Max (molto severo, approva col pollice ogni tanto), Isa (chiave `giulia`: era Giulia; bionda, capelli sciolti fino alle spalle (stile «bob»), senza occhiali; Max: occhiali, pelle chiara), Pietro (chiave `luca`), Sara. Voci diverse: Max e Isa la prima voce del telefono del loro genere, Pietro e Sara la seconda (`voice` in TEACHERS), e toni distanti (Max 0,78, Pietro 1,05, Isa 1,02, Sara 1,3). Il tailleur di Isa è viola (il color vino non gli piaceva). Stile sobrio blu notte e oro.
 - 4 livelli (blu notte, blu acciaio, viola, rosa antico), «Livello N» accanto al titolo. Tutte le lezioni fatte sono livello 1; il livello 2 parte dal capitolo 6.
 - Pulsanti di prova sotto la lezione: «Avanti ▶» e «Rispondo: sì/no» (`TEST_BUTTONS` in `course.js`; a fine progetto → false).
 

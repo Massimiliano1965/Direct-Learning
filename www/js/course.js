@@ -173,33 +173,34 @@ const LESSONS = [
 // wrong = solo «No.» quando l'allievo sbaglia (con la sua icona, mark in data.js); praise vuoto: quando è giusto
 // l'insegnante esulta col corpo, senza parole nuove; praiseEvery = ogni quante risposte giuste esulta;
 // praiseChance = invece di un ritmo fisso, approva ogni tanto a caso (Max: sobrio, pollice in su, praisePose 'nod');
-// repeats = quante ripetizioni dopo ogni errore, una voce per errore e poi da capo
+// voice = quale voce del telefono (0 o 1, se ne ha due dello stesso genere) e pitch = tono: i due uomini e le due donne
+// devono sentirsi diversi (Massi). repeats = quante ripetizioni dopo ogni errore, una voce per errore e poi da capo
 // (massimo 5, mai sempre uguali). style serve solo a noi: l'allievo non lo vede.
 const TEACHERS = {
   mass: {
     key: 'mass', name: 'Max', gender: 'm', style: 'Very strict', mark: 'wrong',
-    rate: 1.1, pitch: 0.85, modelRate: 1.0, praiseEvery: 0, praiseChance: 0.25, praisePose: 'nod', repeats: [3, 5, 4, 5, 4],
+    rate: 1.1, pitch: 0.78, voice: 0, modelRate: 1.0, praiseEvery: 0, praiseChance: 0.25, praisePose: 'nod', repeats: [3, 5, 4, 5, 4],
     praise: [],
     wrong: 'No.',
     done: ''
   },
   giulia: {
     key: 'giulia', name: 'Isa', gender: 'f', style: 'Strict', mark: 'notcorrect',
-    rate: 1.05, pitch: 1.15, modelRate: 0.95, praiseEvery: 5, repeats: [3, 4, 3, 5, 3],
+    rate: 1.05, pitch: 1.02, voice: 0, modelRate: 0.95, praiseEvery: 5, repeats: [3, 4, 3, 5, 3],
     praise: [],
     wrong: 'No.',
     done: ''
   },
   luca: {
     key: 'luca', name: 'Pietro', gender: 'm', style: 'Normal', mark: 'mistake',
-    rate: 1.0, pitch: 0.92, modelRate: 0.9, praiseEvery: 3, repeats: [2, 3, 4, 2, 3],
+    rate: 1.0, pitch: 1.05, voice: 1, modelRate: 0.9, praiseEvery: 3, repeats: [2, 3, 4, 2, 3],
     praise: [],
     wrong: 'No.',
     done: ''
   },
   sara: {
     key: 'sara', name: 'Sara', gender: 'f', style: 'Easygoing', mark: 'pity',
-    rate: 0.95, pitch: 1.2, modelRate: 0.85, praiseEvery: 2, repeats: [1, 2, 1, 3, 2],
+    rate: 0.95, pitch: 1.3, voice: 1, modelRate: 0.85, praiseEvery: 2, repeats: [1, 2, 1, 3, 2],
     praise: [],
     wrong: 'No.',
     done: ''

@@ -189,7 +189,7 @@ function saySpeedSample() {
   if (!t || !ex.length) return;
   clearTimeout(speedDemo);
   Mouth.cancel();
-  Mouth.gender = t.gender;
+  Mouth.gender = t.gender; Mouth.voiceIdx = t.voice || 0;
   Mouth.speak(ex[0], t.rate, t.pitch, () => {
     speedDemo = setTimeout(() => { if (currentScreen === 'home') Mouth.speak(ex[1], t.modelRate, t.pitch, null); }, 700 * speed().pace);
   });
@@ -264,7 +264,7 @@ function startLesson(id) {
   applyUiWords();
   showScreen('lesson', currentScreen !== 'home');
   Awake.keep();
-  Mouth.gender = teacher.gender;
+  Mouth.gender = teacher.gender; Mouth.voiceIdx = teacher.voice || 0;
   setLevel(lesson.level || 1);
   $('l-level').textContent = tx('level', { n: lesson.level || 1 });   // «Livello 1» accanto al titolo
   $('l-level').classList.remove('hidden');

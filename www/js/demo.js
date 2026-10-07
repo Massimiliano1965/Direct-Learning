@@ -31,7 +31,7 @@ function startDemo(next) {
   buildGrid(['book', 'table', 'chair', 'pen']);
   showScreen('lesson', currentScreen !== 'home');
   Awake.keep();
-  Mouth.gender = t.gender;
+  Mouth.gender = t.gender; Mouth.voiceIdx = t.voice || 0;
   setStageTeacher(t.look || t.key);
   setPose('show');
   demoScript(t, run).then(() => endDemo(run), () => {});

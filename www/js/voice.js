@@ -16,14 +16,16 @@ function voiceGender(name) {
 }
 
 const cachedVoice = {};
-function pickVoice(gender) {
-  const key = gender || '-';
+// idx: quale voce di quel genere (0 = la prima, 1 = la seconda se il telefono ne ha due):
+// così i due insegnanti uomini, e le due donne, non hanno la stessa voce
+function pickVoice(gender, idx) {
+  const key = (gender || '-') + (idx || 0);
   if (cachedVoice[key] || !window.speechSynthesis) return cachedVoice[key] || null;
   const vs = window.speechSynthesis.getVoices() || [];
   const L = COURSE.lang, base = L.slice(0, 2);
   const pool = vs.filter(v => v.lang === L).concat(vs.filter(v => v.lang !== L && v.lang && v.lang.slice(0, 2).toLowerCase() === base));
-  cachedVoice[key] = (gender && pool.find(v => voiceGender(v.name) === gender)) ||
-                     pool.find(v => v.localService) || pool[0] || null;
+  const same = gender ? pool.filter(v => voiceGender(v.name) === gender) : [];
+  cachedVoice[key] = same[(idx || 0) % (same.length || 1)] || pool.find(v => v.localService) || pool[0] || null;
   return cachedVoice[key];
 }
 if (window.speechSynthesis) {
@@ -51,15 +53,16 @@ function ttsLoadVoices() {
   }
   return ttsVoicesP;
 }
-function ttsPickVoice(gender) {
-  const key = gender || '-';
+function ttsPickVoice(gender, idx) {
+  const key = (gender || '-') + (idx || 0);
   if (key in ttsVoiceIds) return Promise.resolve(ttsVoiceIds[key]);
   return ttsLoadVoices().then(list => {
     const tags = (COURSE.voiceTags || [COURSE.lang]).map(x => x.toLowerCase());
     const names = list.map(v => String((v && (v.identifier || v.name)) || '')).filter(n => tags.some(x => n.toLowerCase().indexOf(x) !== -1));
     const local = names.filter(n => /local/i.test(n));
     const pool = local.length ? local : names.filter(n => !/network/i.test(n));
-    const best = (gender && pool.find(n => voiceGender(n) === gender)) || pool[0] || '';
+    const same = gender ? pool.filter(n => voiceGender(n) === gender) : [];
+    const best = same[(idx || 0) % (same.length || 1)] || pool[0] || '';
     if (list.length) ttsVoiceIds[key] = best;
     return best;
   });
@@ -98,11 +101,12 @@ function lipsTalking(on) { if (typeof onTeacherTalk === 'function') onTeacherTal
 const Mouth = {
   token: 0,
   gender: '',   // 'm' o 'f': voce dell'insegnante di turno
+  voiceIdx: 0,  // quale voce di quel genere (TEACHERS[…].voice)
   timers: [],   // timer della frase in corso: si cancellano tutti con cancel()
   later(fn, ms) { const id = setTimeout(() => { this.timers = this.timers.filter(x => x !== id); fn(); }, ms); this.timers.push(id); return id; },
   clearTimers() { this.timers.forEach(clearTimeout); this.timers = []; },
   speak(text, rate, pitch, cb, gender) {
-    const g = gender || this.gender;
+    const g = gender || this.gender, vi = gender ? 0 : this.voiceIdx;   // lo studente finto (demo) ha sempre la prima voce
     this.clearTimers();
     const tok = ++this.token;
     let done = false;
@@ -126,7 +130,7 @@ const Mouth = {
       const wait = ms => new Promise(r => this.later(r, ms));
       const PER_TRY = estimate + 3000;   // un tentativo che non finisce mai = fine frase persa
       (async () => {
-        const vid = await withTimeout(ttsPickVoice(g), TTS_VOICES_WAIT + 500, '');
+        const vid = await withTimeout(ttsPickVoice(g, vi), TTS_VOICES_WAIT + 500, '');
         if (tok !== this.token) return;
         const opts = { text: text, locale: COURSE.lang, rate: (rate || 1) * 1.15, pitch: pitch || 1 };
         if (vid) opts.identifier = vid;
@@ -154,7 +158,7 @@ const Mouth = {
       try { window.speechSynthesis.cancel(); } catch (e) {}
       const u = new SpeechSynthesisUtterance(text);
       u.lang = COURSE.lang;
-      const v = pickVoice(g);
+      const v = pickVoice(g, vi);
       if (v) u.voice = v;
       u.rate = rate || 1;
       u.pitch = pitch || 1;
