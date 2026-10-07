@@ -432,15 +432,16 @@ function synWrap() {
   if ((!pairs.length && !hil.length) || !el.textContent) return;
   const esc = (t) => t.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
   const escRe = (t) => t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  const other = {};
-  pairs.forEach(([a, b]) => { other[a] = b; other[b] = a; });
+  const other = {}, notAfter = {};
+  pairs.forEach(([a, b, na]) => { other[a] = b; other[b] = a; if (na) notAfter[a] = notAfter[b] = na; });
   const keys = Object.keys(other).sort((a, b) => b.length - a.length).concat(hil);
   const re = new RegExp('(^|[^\\p{L}])(' + keys.map(escRe).join('|') + ')(?![\\p{L}])', 'giu');
   const txt = el.textContent;
   if (!re.test(txt)) return;
   re.lastIndex = 0;
-  el.innerHTML = esc(txt).replace(re, (m, pre, w) => {
-    const alt = other[w.toLowerCase()];
+  el.innerHTML = esc(txt).replace(re, (m, pre, w, off, all) => {
+    const alt = other[w.toLowerCase()], na = notAfter[w.toLowerCase()];
+    if (na && new RegExp('(^|\\s)' + na + '\\s*$', 'i').test(all.slice(0, off + pre.length))) return m;   // «A che ora è…»: non si scambia
     if (!alt) return pre + '<span class="hl">' + w + '</span>';
     const cap = w.charAt(0) !== w.charAt(0).toLowerCase();
     const b = cap ? alt.charAt(0).toUpperCase() + alt.slice(1) : alt;
@@ -457,9 +458,12 @@ function synWrap() {
 // La voce, nelle domande, ogni tanto usa l'altra parola (una volta su tre): l'allievo le sente tutte e due
 function synVoice(text) {
   let t = String(text || '');
-  (COURSE.synonyms || []).forEach(([a, b]) => {
+  (COURSE.synonyms || []).forEach(([a, b, na]) => {
     const re = new RegExp('(^|[^\\p{L}])(' + a.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')(?![\\p{L}])', 'giu');
-    t = t.replace(re, (m, pre, w) => Math.random() < 0.33 ? pre + (w.charAt(0) !== w.charAt(0).toLowerCase() ? b.charAt(0).toUpperCase() + b.slice(1) : b) : m);
+    t = t.replace(re, (m, pre, w, off, all) => {
+      if (na && new RegExp('(^|\\s)' + na + '\\s*$', 'i').test(all.slice(0, off + pre.length))) return m;
+      return Math.random() < 0.33 ? pre + (w.charAt(0) !== w.charAt(0).toLowerCase() ? b.charAt(0).toUpperCase() + b.slice(1) : b) : m;
+    });
   });
   return t;
 }

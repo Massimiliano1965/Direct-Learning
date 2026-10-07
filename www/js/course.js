@@ -16,9 +16,10 @@ const COURSE = {
   nowYou: '',
   demoWrong: 'Sì, è un sedia.',         // l'errore della lezione di prova
   speedSample: ['Ciao, sono {name}.', 'Parliamo italiano insieme.'],   // la frase d'esempio quando si sceglie la velocità
-  // parole che vanno bene tutte e due: nella frase scritta si alternano (la prima è quella principale)
+  // parole che vanno bene tutte e due: nella frase scritta si alternano (la prima è quella principale).
+  // Terzo elemento (se c'è): la parola davanti alla quale NON si scambiano («A che ora è l'aereo?» resta così)
   // (la voce dell'insegnante, nelle domande, ogni tanto usa la seconda; il microfono le accetta tutte e due)
-  synonyms: [['neanche', 'nemmeno'], ['che ora è', 'che ore sono'], ['che cos\'è', 'cos\'è'], ['o', 'oppure']]
+  synonyms: [['neanche', 'nemmeno'], ['che ora è', 'che ore sono', 'a'], ['che cos\'è', 'cos\'è'], ['o', 'oppure']]
 };
 
 // Oggetti: chiave = figura in data.js. art = articolo indeterminativo.
@@ -109,7 +110,9 @@ const LESSONS = [
   { id: 'l19', title: 'Lezione 19', anche: true, known: ['phone_nero', 'suitcase_nero', 'laptop_bianco', 'cup_bianco', 'coat_rosso', 'flask_rosso'] },
   // capitolo 4: «Che ora è?» — orologi con le ore intere: «È l'una.» / «Sono le tre.» (ora_it.js)
   // «è» (l'una, mezzogiorno, mezzanotte) e «sono» (le due, le tre…) in evidenza nella frase scritta
-  { id: 'l20', title: 'Lezione 20', ora: true, hilite: ['è', 'sono'], known: ['h1', 'h2', 'h3', 'h5', 'h8', 'h10', 'h12d', 'h12n'] }
+  { id: 'l20', title: 'Lezione 20', ora: true, hilite: ['è', 'sono'], known: ['h1', 'h2', 'h3', 'h5', 'h8', 'h10', 'h12d', 'h12n'] },
+  // capitolo 4: «A che ora?» — gli impegni (l'aereo, la riunione, la cena…) con il loro orologio: «alle tre», «all'una» (appt_it.js)
+  { id: 'l21', title: 'Lezione 21', appt: true, known: ['a_plane', 'a_meeting', 'a_dinner', 'a_lunch', 'a_taxi', 'a_breakfast'] }
 ];
 
 // Quattro insegnanti, dal più rigido al più indulgente. gender = voce maschile o femminile.

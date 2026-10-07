@@ -6,7 +6,7 @@ const vm = require('vm');
 
 const ctx = { console: console };
 vm.createContext(ctx);
-['course.js', 'data.js', 'logic.js', 'colors_it.js', 'numbers_it.js', 'geo_fig.js', 'geo_it.js', 'poss_it.js', 'size_it.js', 'third_it.js', 'nat_it.js', 'essere_it.js', 'altro_it.js', 'prep_it.js', 'anche_it.js', 'ora_it.js', 'ui_lang.js'].forEach(f => {
+['course.js', 'data.js', 'logic.js', 'colors_it.js', 'numbers_it.js', 'geo_fig.js', 'geo_it.js', 'poss_it.js', 'size_it.js', 'third_it.js', 'nat_it.js', 'essere_it.js', 'altro_it.js', 'prep_it.js', 'anche_it.js', 'ora_it.js', 'appt_it.js', 'ui_lang.js'].forEach(f => {
   vm.runInContext(fs.readFileSync(path.join(__dirname, '..', 'www', 'js', f), 'utf8'), ctx, { filename: f });
 });
 const run = (code) => vm.runInContext(code, ctx);
@@ -14,7 +14,7 @@ const evaluate = run('evaluate');
 const evaluateAll = run('evaluateAll');
 const buildSteps = run('buildSteps');
 const answerSteps = run('answerSteps');
-const LESSONS = run('LESSONS').filter(l => !l.colors && !l.numbers && !l.geo && !l.poss && !l.size && !l.third && !l.nat && !l.ess && !l.altro && !l.prep && !l.anche && !l.ora);   // lezioni con gli oggetti (colori e numeri hanno i loro test)
+const LESSONS = run('LESSONS').filter(l => !l.colors && !l.numbers && !l.geo && !l.poss && !l.size && !l.third && !l.nat && !l.ess && !l.altro && !l.prep && !l.anche && !l.ora && !l.appt);   // lezioni con gli oggetti (colori e numeri hanno i loro test)
 const NUM_LESSONS = run('LESSONS').filter(l => l.numbers);
 const COLOR_LESSONS = run('LESSONS').filter(l => l.colors);
 const ITEMS = run('ITEMS');
@@ -687,13 +687,35 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
   check('lezione 20: domanda «o» con l\'una detta bene', [1, 2, 3, 4, 5, 6, 7, 8].map(() => SO.alt('h1').prompt).every(p => /^È l'una o (sono le [a-z]+|mezzogiorno|mezzanotte)\?$|^Sono le [a-z]+ o è l'una\?$|^È (mezzogiorno|mezzanotte) o l'una\?$/.test(p)));
 }
 
+// Lezione 21: «A che ora?»
+{
+  const SA2 = run('SA2'), evalAsk = run('evalAsk'), answerAsk = run('answerAsk'), buildDrill = run('buildDrill'), ok = (st, t) => evaluate(st, t).ok;
+  const l21 = run('LESSONS').find(l => l.id === 'l21');
+  check('lezione 21 c\'è', !!l21 && l21.appt);
+  check('figure', l21.known.every(k => FIG[k] && FIG[k].indexOf('<svg') === 0 && FIG[k].indexOf(' id=') === -1));
+  check('frasi', SA2.present('a_plane').prompt === 'L\'aereo è alle tre.' && SA2.present('a_lunch').prompt === 'Il pranzo è all\'una.' &&
+    SA2.key('a_dinner').prompt === 'A che ora è la cena?' && SA2.yes('a_meeting').model === 'Sì, la riunione è alle nove.');
+  check('giusto (anche breve e con le cifre)', ok(SA2.key('a_dinner'), 'La cena è alle otto.') && ok(SA2.key('a_dinner'), 'Alle otto.') && ok(SA2.key('a_dinner'), 'Alle 8.') &&
+    ok(SA2.key('a_lunch'), 'Il pranzo è all\'una.') && ok(SA2.key('a_plane'), 'L\'aereo è alle tre.'));
+  const n = SA2.neg('a_taxi');
+  check('giusto: il no', ok(n, n.model));
+  check('sbagliato: «alla tre», «alle una», «a le tre», ora sbagliata', !ok(SA2.key('a_plane'), 'L\'aereo è alla tre.') && !ok(SA2.key('a_lunch'), 'Il pranzo è alle una.') &&
+    !ok(SA2.key('a_plane'), 'È a le tre.') && !ok(SA2.key('a_plane'), 'L\'aereo è alle cinque.') && !ok(SA2.key('a_dinner'), 'Il cena è alle otto.'));
+  check('ripete «A che ora è?»', ok(SA2.askQ('a_plane'), 'A che ora è?'));
+  check('allievo', evalAsk('a_dinner', 'A che ora è la cena?').kind === 'what' && answerAsk('a_dinner', { kind: 'what' }) === 'La cena è alle otto.' &&
+    evalAsk('a_dinner', 'La cena è alle sette?').kind === 'no' && evalAsk('a_lunch', 'Il pranzo è alle una?').model === 'Il pranzo è all\'una?');
+  const st = buildSteps(l21), models = st.filter(s => s.model && s.type !== 'reveal');
+  check('lezione 21: risposte modello giuste', models.every(s => evaluate(s, s.model).ok));
+  check('lezione 21: ripetizioni giuste', models.every(s => buildDrill(s, 5, []).every(d => evaluate(d, d.model).ok)));
+}
+
 // Parole che vanno bene tutte e due (COURSE.synonyms): il microfono le accetta tutte e due
 {
   const norm = run('norm'), S_ = run('S'), evalAsk = run('evalAsk');
   check('«Cos\'è?» = «Che cos\'è?», «oppure» = «o»', norm('Cos\'è?') === norm('Che cos\'è?') && norm('Cosa è?') === norm('Che cosa è?') && norm('un libro oppure un tavolo') === norm('un libro o un tavolo'));
   check('l\'allievo può chiedere «Cos\'è?» e «… oppure …?»', evalAsk('chair', 'Cos\'è?').ok && evalAsk('chair', 'È un tavolo oppure una sedia?').ok);
   check('ripetere «Cos\'è?» va bene', evaluate(S_.askQ('pen'), 'Cos\'è?').ok);
-  check('elenco delle coppie', run('COURSE').synonyms.length >= 4 && run('COURSE').synonyms.every(p => p.length === 2));
+  check('elenco delle coppie', run('COURSE').synonyms.length >= 4 && run('COURSE').synonyms.every(p => p.length === 2 || p.length === 3));
 }
 
 // Lingua dello studente: ogni scritta c'è in tutte le lingue, con gli stessi segnaposto {…}
