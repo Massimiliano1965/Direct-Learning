@@ -39,28 +39,40 @@ const vOther = (X) => pick(Object.keys(ACTS).filter(a => a !== vAct(X)));
 
 /* ---------- Figure: il collega o la collega che fa la cosa ---------- */
 const V_PERSON = (LK, arms, face, dx) => '<g transform="translate(' + (dx || 0) + ' 6)">' + tTorso(LK) + tHeadStill(LK, face || { mouth: 'smile' }) + arms + '</g>';
+// freccia verde curva (da a, curva su c, fino a b): dice se la porta si apre o la finestra si chiude
+function vArrow(a, c, b) {
+  const dx = b[0] - c[0], dy = b[1] - c[1], n = Math.hypot(dx, dy) || 1, ux = dx / n, uy = dy / n, L = 6, W = 4.5;
+  const tip = [b[0] + ux * 3, b[1] + uy * 3], l = [b[0] - uy * W, b[1] + ux * W], r = [b[0] + uy * W, b[1] - ux * W];
+  const d = 'M' + a.join(' ') + ' Q' + c.join(' ') + ' ' + b.join(' ');
+  return '<path d="' + d + '" fill="none" stroke="#141a27" stroke-width="5.5" stroke-linecap="round" opacity=".5"/>' +
+    '<path d="' + d + '" fill="none" stroke="#3fb35f" stroke-width="3.2" stroke-linecap="round"/>' +
+    '<path d="M' + tip.join(' ') + ' L' + l.join(' ') + ' L' + r.join(' ') + 'z" fill="#3fb35f" stroke="#141a27" stroke-width=".8" stroke-opacity=".5"/>';
+}
 const V_SCENE = {
   // legge: il libro aperto tra le mani, davanti al petto
   read: (LK) => V_PERSON(LK, tArm(LK, [35, 47], [33, 68], [40, 62]) + tArm(LK, [65, 47], [67, 68], [60, 62]) +
     '<path d="M50 56 q-7 -4 -16 -2 v13 q9 -2 16 2z" fill="#f3eee2"/><path d="M50 56 q7 -4 16 -2 v13 q-9 -2 -16 2z" fill="#ece4d2"/>' +
     '<path d="M50 56 v13" stroke="#c9b994" stroke-width="1"/><path d="M38 59 h8 M38 62 h8 M54 59 h8 M54 62 h8" stroke="#a9a089" stroke-width="1"/>' +
     '<path d="M34 67 q8 -2 16 2 q8 -4 16 -2 v2.5 q-8 -2 -16 2 q-8 -4 -16 -2z" fill="#2c3e66"/>', { mouth: 'flat' }),
-  // apre la porta: la porta (a destra) si apre verso di lui, si vede la luce
+  // apre la porta: la porta (a destra) si apre verso di lui (freccia verso sinistra), si vede la luce
   open: (LK) => '<rect x="60" y="6" width="34" height="86" fill="#4a3628"/><rect x="63" y="9" width="28" height="83" fill="#f3dfa8"/>' +
     '<path d="M63 9 l20 -4 v90 l-20 -3z" fill="#8e6741"/><path d="M67 16 l12 -2 v20 l-12 2z M67 44 l12 -2 v32 l-12 2z" fill="#7a5735"/>' +
-    '<circle cx="80" cy="50" r="2.6" fill="#c9a45c"/>' + V_PERSON(LK, tArm(LK, ...DOWN_L) + tArm(LK, [65, 47], [76, 54], [86, 46]), null, -16),
+    '<circle cx="80" cy="50" r="2.6" fill="#c9a45c"/>' + V_PERSON(LK, tArm(LK, ...DOWN_L) + tArm(LK, [65, 47], [76, 54], [86, 46]), null, -16) +
+    vArrow([90, 28], [90, 16], [74, 18]),
   // mangia un'arancia: l'arancia alla bocca
   eat: (LK) => V_PERSON(LK, tArm(LK, ...DOWN_L) + tArm(LK, [65, 47], [72, 62], [60, 38]) +
     '<circle cx="58" cy="32" r="6.5" fill="#e8862a"/><circle cx="56" cy="30" r="2" fill="#f2a54a" opacity=".7"/><path d="M58 25.5 q4 -4 8 -1 q-4 3 -8 1z" fill="#5a9a46"/>', { mouth: 'open' }),
   // beve un'aranciata: la lattina rossa alla bocca
-  drink: (LK) => V_PERSON(LK, tArm(LK, ...DOWN_L) + tArm(LK, [65, 47], [72, 62], [62, 40]) +
-    '<g transform="rotate(-40 60 32)"><rect x="55" y="22" width="10" height="17" rx="1.5" fill="#c8262f"/><rect x="55" y="22" width="10" height="2.4" fill="#c9ccd4"/>' +
-    '<rect x="55" y="28" width="10" height="6" fill="#f3eee2"/><circle cx="60" cy="31" r="2" fill="#e8862a"/></g>', { mouth: 'o' }),
-  // chiude la finestra: la finestra (a destra) con un'anta ancora aperta, la mano la spinge
-  close: (LK) => '<rect x="60" y="10" width="36" height="52" rx="1.5" fill="#dfe4ea"/><rect x="63" y="13" width="14" height="46" fill="#5d7f99"/>' +
-    '<path d="M63 13 h14 v14 l-14 12z" fill="#7d9bb3"/><rect x="79" y="13" width="14" height="46" fill="#9fbcd0" opacity=".5"/>' +
-    '<path d="M79 13 l11 4 v40 l-11 2z" fill="#5d7f99" stroke="#dfe4ea" stroke-width="1.6"/><rect x="58" y="62" width="40" height="4" fill="#c8ced6"/>' +
-    V_PERSON(LK, tArm(LK, ...DOWN_L) + tArm(LK, [65, 47], [76, 50], [88, 38]), null, -16),
+  drink: (LK) => V_PERSON(LK, tArm(LK, ...DOWN_L) + tArm(LK, [65, 47], [72, 62], [61, 42]) +
+    '<g transform="translate(61 36) rotate(-55) scale(.72) translate(-61 -28)"><path d="M57 14 h8 l1.2 2.4 v24 l-1.2 2.4 h-8 l-1.2 -2.4 v-24z" fill="#c8262f"/>' +
+    '<path d="M57 14 h8 l1.2 2.4 h-10.4z M55.8 40.4 h10.4 l-1.2 2.4 h-8z" fill="#c9ccd4"/><rect x="58.8" y="12.6" width="4.4" height="1.6" rx=".8" fill="#9aa1ae"/>' +
+    '<path d="M55.8 24 h10.4 v9 h-10.4z" fill="#f3eee2"/><circle cx="61" cy="28.5" r="2.8" fill="#e8862a"/><path d="M58 18 v20" stroke="#e26a6f" stroke-width="1.4" opacity=".6"/></g>', { mouth: 'o' }),
+  // chiude la finestra: l'anta di sinistra è ancora aperta, la mano la spinge dentro (freccia verso destra)
+  close: (LK) => '<rect x="60" y="10" width="36" height="52" rx="1.5" fill="#dfe4ea"/><rect x="63" y="13" width="14" height="46" fill="#cfe0ec"/>' +
+    '<rect x="79" y="13" width="14" height="46" fill="#5d7f99"/><path d="M79 13 h14 v12 l-14 16z" fill="#7d9bb3"/><rect x="58" y="62" width="40" height="4" fill="#c8ced6"/>' +
+    '<path d="M63 13 l9 -4 v58 l-9 -4z" fill="#5d7f99" stroke="#dfe4ea" stroke-width="1.6"/><path d="M63.8 14 l7.4 -3.2 v14 l-7.4 8z" fill="#7d9bb3"/>' +
+    V_PERSON(LK, tArm(LK, ...DOWN_L) + tArm(LK, [65, 47], [72, 54], [86, 40]), null, -16) +
+    vArrow([74, 22], [82, 12], [88, 22]),
   // telefona: il telefono all'orecchio, parla
   phone: (LK) => V_PERSON(LK, tArm(LK, ...DOWN_L) + tArm(LK, [65, 47], [74, 58], [62, 30]) +
     '<g transform="rotate(14 62 24)"><rect x="58" y="13" width="9" height="20" rx="2" fill="#2c3e66" stroke="#b9bdc8" stroke-width="1.2"/><rect x="59.6" y="16" width="5.8" height="13" fill="#3a4f7e"/></g>' +
