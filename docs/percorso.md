@@ -136,7 +136,7 @@ Durante il test l'insegnante non corregge; contano solo gli errori, mostrati all
 ## Capitolo 15
 
 70. **Passato con «essere»**, anche con i verbi riflessivi — *fatto in parte: Lezione 77 (è andato / è andata)*
-71. **L'ho visto**
+71. **L'ho visto** — *fatto: Lezione 78 (l'ha visto / l'ha vista, i monumenti)*
 72. **Lo, la, li, le, ne; mi, Le, gli, le, ci, loro**
 
 ## Capitolo 16

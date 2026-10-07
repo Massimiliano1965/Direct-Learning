@@ -292,7 +292,12 @@ const LESSONS = [
     known: ['mc_m_me_book', 'mc_f_us_cup', 'mc_f_me_key', 'mc_m_us_phone', 'mc_m_me_pen', 'mc_f_us_umbrella'] },
   // capitolo 15: «Il passato con essere» — Dove è andato Max? Max è andato a Roma. Isa è andata a Parigi. (essere2_it.js)
   { id: 'l77', title: 'Lezione 77', level: 3, pe: true, gender: true, hilite: ['è andato', 'è andata'],
-    known: ['pe_m_roma', 'pe_f_parigi', 'pe_m_londra', 'pe_f_roma', 'pe_m_newyork', 'pe_f_londra'] }
+    known: ['pe_m_roma', 'pe_f_parigi', 'pe_m_londra', 'pe_f_roma', 'pe_m_newyork', 'pe_f_londra'] },
+  // capitolo 15: «L'ho visto» — Max ha visto il Colosseo? Sì, l'ha visto. Isa ha visto la Torre Eiffel? Sì, l'ha vista. (visto_it.js)
+  { id: 'l78', title: 'Lezione 78', level: 3, vi: true, gender: true, hilite: ['l\'ha'],
+    known: ['vi_m_colosseo', 'vi_f_eiffel', 'vi_m_bigben', 'vi_f_liberta', 'vi_m_eiffel', 'vi_f_colosseo'] },
+  // TEST DI FINE LIVELLO 3 (test_it.js): 8 domande che contano e 2 descrizioni libere
+  { id: 't3', title: 'Test del livello 3', test: 3, level: 3, known: [] }
 ];
 
 // Quattro insegnanti, dal più rigido al più indulgente. gender = voce maschile o femminile.

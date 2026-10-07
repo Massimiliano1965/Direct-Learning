@@ -42,7 +42,22 @@ const TEST2_FREE = [
   { fig: 'sa_m_giorno', example: () => SSA.present('sa_m_giorno').model },   // Max dice: «Buongiorno!»
   { fig: 'lp_f_key', example: () => SLP.present('lp_f_key').model }          // Isa prende le chiavi. Le prende.
 ];
-const TESTS = { 1: { scenes: TEST1, free: TEST1_FREE }, 2: { scenes: TEST2, free: TEST2_FREE } };
+// TEST DI FINE LIVELLO 3 (capitoli 11–15): dopo la lezione 78
+const TEST3 = [
+  { lesson: 'l61', step: () => SLQ.key('lq_f_key') },                    // Che cosa ha fatto Isa con le chiavi? Le ha prese.
+  { lesson: 'l63', step: () => SCZ.key('cz_m_cornetto') },               // Che cosa mangia Max a colazione? Max mangia un cornetto.
+  { lesson: 'l64', step: () => SQU.key('qu_phone_bianco_rosso_f') },     // Quale telefono è rosso? Quel telefono.
+  { lesson: 'l65', ask: 'fi_rosa_rosso', q: () => SFI.key('fi_rosa_rosso').prompt },   // l'allievo fa la domanda («Che fiore è?»)
+  { lesson: 'l67', step: () => SNH.key('nh_m_book_3') },                 // Quanti libri ha Max? Ne ha tre.
+  { lesson: 'l68', step: () => SRF.key('rf_m_alza') },                   // Che cosa fa Max? Max si alza.
+  { lesson: 'l70', step: () => SVO.key('vo_f_drink') },                  // Che cosa vuole fare Isa? Isa vuole bere un'aranciata.
+  { lesson: 'l75', step: () => SDVP.key('dvp_suitcase_sotto') }          // Dov'è la valigia? La valigia è sotto il tavolo.
+];
+const TEST3_FREE = [
+  { fig: 'pe_f_parigi', example: () => SPE.present('pe_f_parigi').model },   // Isa è andata a Parigi.
+  { fig: 'an_m_read_1', example: () => SAN.present('an_m_read_1').model }    // Max legge ancora.
+];
+const TESTS = { 1: { scenes: TEST1, free: TEST1_FREE }, 2: { scenes: TEST2, free: TEST2_FREE }, 3: { scenes: TEST3, free: TEST3_FREE } };
 
 // I passi del test: le domande delle lezioni (con le loro regole), il turno dell'allievo, le descrizioni libere
 function buildTestSteps(lesson) {
