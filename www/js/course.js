@@ -169,7 +169,11 @@ const LESSONS = [
     known: ['dl_umbrella_giallo_1', 'dl_phone_bianco_2', 'dl_backpack_rosso_2', 'dl_suitcase_rosso_1', 'dl_cup_bianco_2', 'dl_coat_rosso_1'] },
   // capitolo 5: «Plurali irregolari» — un uomo / due uomini, una mano / due mani, tre uova, due caffè, due computer (irr_it.js)
   { id: 'l38', title: 'Lezione 38', pl: true, hilite: ['è', 'sono'],
-    known: ['pl_man_1', 'pl_man_2', 'pl_hand_2', 'pl_egg_3', 'pl_coffee_2', 'pl_computer_2'] }
+    known: ['pl_man_1', 'pl_man_2', 'pl_hand_2', 'pl_egg_3', 'pl_coffee_2', 'pl_computer_2'] },
+  // ===== LIVELLO 2 (capitoli 6–10) =====
+  // capitolo 6: «Il contrario» — aperto / chiuso, pieno / vuoto, lungo / corto: «Com'è il libro? Il libro è aperto.» (contr_it.js)
+  { id: 'l39', title: 'Lezione 39', level: 2, ct: true, gender: true,
+    known: ['ct_book_aperto', 'ct_book_chiuso', 'ct_bottle_pieno', 'ct_bottle_vuoto', 'ct_pencil_lungo', 'ct_pencil_corto'] }
 ];
 
 // Quattro insegnanti, dal più rigido al più indulgente. gender = voce maschile o femminile.
