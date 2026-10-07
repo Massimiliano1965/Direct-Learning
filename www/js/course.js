@@ -310,7 +310,10 @@ const LESSONS = [
     known: ['lg_m_italia', 'lg_f_america', 'lg_m_giappone', 'lg_f_germania', 'lg_m_inghilterra', 'lg_f_francia', 'lg_m_cina'] },
   // «Parla con…» — Con chi parla Isa? Isa parla con Max. (parlacon_it.js; le persone della lezione 74, una davanti all'altra)
   { id: 'l82', title: 'Lezione 82', level: 4, pc: true, hilite: ['parla con', 'Con chi'],
-    known: ['pc_f_m', 'pc_m_nonna', 'pc_marco_f', 'pc_anna_nonno', 'pc_nonno_marco', 'pc_nonna_anna'] }
+    known: ['pc_f_m', 'pc_m_nonna', 'pc_marco_f', 'pc_anna_nonno', 'pc_nonno_marco', 'pc_nonna_anna'] },
+  // capitolo 16: «Di che cosa è fatto?» — Il tavolo è di legno. La bottiglia è di vetro. (fatto_it.js)
+  { id: 'l83', title: 'Lezione 83', level: 4, md: true, hilite: ['di', 'fatto', 'fatta'],
+    known: ['md_table_legno', 'md_bottle_vetro', 'md_chair_plastica', 'md_coat_lana', 'md_key_metallo', 'md_bag_pelle'] }
 ];
 
 // Quattro insegnanti, dal più rigido al più indulgente. gender = voce maschile o femminile.
