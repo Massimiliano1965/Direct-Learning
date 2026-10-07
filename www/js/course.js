@@ -349,7 +349,10 @@ const LESSONS = [
     known: ['mit_colosseo', 'mit_torre', 'mit_duomo', 'mit_rialto', 'mit_david', 'mit_vesuvio'] },
   // «Il cibo italiano» — A Napoli Mario mangia la pizza. Che cosa mangia Anna a Milano? (scelta_it.js)
   { id: 'l95', title: 'Lezione 95', level: 4, cibo: true, hilite: ['mangia'],
-    known: ['cibo_m_pizza', 'cibo_f_risotto', 'cibo_m_lasagne', 'cibo_f_bistecca', 'cibo_m_spaghetti', 'cibo_f_tiramisu'] }
+    known: ['cibo_m_pizza', 'cibo_f_risotto', 'cibo_m_lasagne', 'cibo_f_bistecca', 'cibo_m_spaghetti', 'cibo_f_tiramisu'] },
+  // capitolo 20: «Vorrei…» — Che cosa vorrebbe? (vorresti?) Vorrei un cappuccino / il conto / un biglietto… (scelta_it.js)
+  { id: 'l96', title: 'Lezione 96', level: 4, vor: true, hilite: ['Vorrei', 'vorrei', 'Vorrebbe', 'vorrebbe', 'Vorresti', 'vorresti'],
+    known: ['vor_cappuccino', 'vor_conto', 'vor_acqua', 'vor_biglietto', 'vor_camera', 'vor_gelato'] }
 ];
 
 // Quattro insegnanti, dal più rigido al più indulgente. gender = voce maschile o femminile.

@@ -17,13 +17,14 @@ function choiceLesson(cfg) {
   const others = (X) => Object.keys(CH).filter(c => c !== ch(X) && (!cfg.same || cfg.same(c, ch(X))));
   const other = (X) => pick(others(X));
   const say = (X, c, neg) => cfg.say(X, c || ch(X), !!neg);
+  const ask = (X, c) => cfg.ask ? cfg.ask(X, c || ch(X)) : say(X, c);          // la domanda dell'insegnante, se è diversa dalla risposta
   Object.keys(IT).forEach(X => { Object.defineProperty(FIG, X, { enumerable: true, get: () => cfg.fig(X, IT[X]) }); });
   const SX = gTag(cfg.flag, {
     present: (X) => { const p = (cfg.lead ? cfg.lead(X) + ' ' + lc(say(X)) : say(X)) + '.'; return { type: 'echo', check: 'claim', show: X, prompt: p, model: p }; },
-    yes: (X) => ({ type: 'yes', show: X, prompt: say(X) + '?', model: 'Sì, ' + lc(say(X)) + '.' }),
-    neg: (X) => { const o = other(X); return { type: 'neg', show: X, ask: o, prompt: say(X, o) + '?', model: 'No, ' + lc(say(X, o, true)) + '.', complete: say(X) + '.' }; },
+    yes: (X) => ({ type: 'yes', show: X, prompt: ask(X) + '?', model: 'Sì, ' + lc(say(X)) + '.' }),
+    neg: (X) => { const o = other(X); return { type: 'neg', show: X, ask: o, prompt: ask(X, o) + '?', model: 'No, ' + lc(say(X, o, true)) + '.', complete: say(X) + '.' }; },
     alt: (X) => { const o = other(X), ord = Math.random() < 0.5 ? [ch(X), o] : [o, ch(X)];
-      return { type: 'alt', show: X, prompt: say(X, ord[0]) + ' o ' + CH[ord[1]].the + '?', model: say(X) + '.' }; },
+      return { type: 'alt', show: X, prompt: ask(X, ord[0]) + ' o ' + CH[ord[1]].the + '?', model: say(X) + '.' }; },
     key: (X) => ({ type: 'key', show: X, prompt: cfg.q(X), model: say(X) + '.' }),
     reveal: (X) => ({ type: 'reveal', show: X, prompt: cfg.q(X) + ' ' + say(X) + '.', model: '' }),
     askQ: (X) => ({ type: 'echo', check: 'question', show: X, prompt: cfg.q(X), model: cfg.q(X) })
@@ -76,7 +77,7 @@ function choiceLesson(cfg) {
     if (has(s, qN(X))) return { ok: true, kind: 'what' };
     const st = statements(s, X);
     if (st.length === 1 && st[0].ok && (st[0].who === null || !IT[X].who || st[0].who === IT[X].who)) return { ok: true, kind: st[0].c === ch(X) ? 'yes' : 'no', ask: st[0].c };
-    if (st.length === 1) return bad(say(X, st[0].c) + '?');
+    if (st.length === 1) return bad(ask(X, st[0].c) + '?');
     return bad();
   }
   function answerAskX(X, r) {
@@ -373,4 +374,40 @@ const SCIBO = choiceLesson({
   q: (X) => 'Che cosa mangia ' + vName(X.charAt(5)) + ' a ' + CIBO_CITY[X.split('_')[2]] + '?',
   fig: ciboFig,
   wrong: ['mangio', 'mangi', 'mangiare', 'beve', 'prende']
+});
+
+/* ---------- Lezione 96: «Vorrei…» (l'insegnante fa il cameriere; l'allievo chiede con gentilezza) ---------- */
+// «Che cosa vorrebbe?» (Lei) / «Che cosa vorresti?» (tu) → «Vorrei un cappuccino.»; «voglio» è sgarbato: qui è un errore
+const VOR_CH = {
+  cappuccino: { the: 'un cappuccino' }, acqua: { the: 'una bottiglia d\'acqua', alias: [], alt: ['dell acqua', 'un acqua'] }, conto: { the: 'il conto' },
+  biglietto: { the: 'un biglietto', alias: ['biglietti'] }, camera: { the: 'una camera', alias: ['camere', 'stanza'] }, gelato: { the: 'un gelato' }
+};
+const VOR_FIG = {
+  cappuccino: BAR_FIG.cappuccino, gelato: BAR_FIG.gelato, acqua: null,
+  conto: '<path d="M30 14 h40 v70 l-5 -4 l-5 4 l-5 -4 l-5 4 l-5 -4 l-5 4 l-5 -4 l-5 4z" fill="#f3eee2" stroke="#c9c1ad" stroke-width="1"/>' +
+    '<path d="M36 26 h28 M36 34 h22 M36 42 h26 M36 50 h18" stroke="#a9a089" stroke-width="1.6"/><path d="M36 62 h28" stroke="#2a3346" stroke-width="1.2"/>' +
+    '<text x="64" y="74" text-anchor="end" font-family="Georgia,serif" font-size="10" font-weight="bold" fill="#2a3346">€ 24</text>',
+  biglietto: '<rect x="12" y="34" width="76" height="34" rx="3" fill="#f3eee2" stroke="#c9c1ad" stroke-width="1"/><path d="M64 34 v34" stroke="#c9c1ad" stroke-width="1.2" stroke-dasharray="2 2"/>' +
+    '<rect x="12" y="34" width="76" height="8" rx="3" fill="#c8323b"/><path d="M20 52 h30 M20 58 h22" stroke="#a9a089" stroke-width="1.6"/>' +
+    '<path d="M70 50 h12 l-3 -3 M82 50 l-3 3" stroke="#2a3346" stroke-width="1.4" fill="none"/><text x="76" y="62" text-anchor="middle" font-family="Arial,sans-serif" font-size="6" fill="#2a3346">ROMA</text>',
+  camera: null
+};
+function vorFig(X, it) {
+  const thing = it.c === 'camera' ? HOT_FIG.camera : it.c === 'acqua' ? inner(FIG.bottle) : VOR_FIG[it.c];
+  // l'allievo (la sagoma d'oro) e nella nuvoletta quello che vorrebbe, con il nome
+  return '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">' +
+    '<g transform="translate(-8 34) scale(.66)"><circle cx="50" cy="34" r="17" fill="#c9a45c"/><path d="M18 98 q0 -40 32 -40 q32 0 32 40z" fill="#c9a45c"/></g>' +
+    '<circle cx="34" cy="40" r="2" fill="#f3eee2"/><circle cx="39" cy="33" r="3" fill="#f3eee2"/>' +
+    '<rect x="40" y="3" width="58" height="62" rx="16" fill="#f3eee2"/><rect x="43" y="6" width="52" height="56" rx="13" fill="#2a3346"/>' +
+    '<g transform="translate(69 30) scale(.46) translate(-50 -50)">' + thing + '</g>' + foodTag(it.c === 'acqua' ? 'acqua' : VOR_CH[it.c].the.replace(/^(un|una|il|lo|la) /, ''), 69, 49) + '</svg>';
+}
+const SVOR = choiceLesson({
+  flag: 'vor', CH: VOR_CH,
+  items: { vor_cappuccino: { who: null, c: 'cappuccino' }, vor_conto: { who: null, c: 'conto' }, vor_acqua: { who: null, c: 'acqua' },
+    vor_biglietto: { who: null, c: 'biglietto' }, vor_camera: { who: null, c: 'camera' }, vor_gelato: { who: null, c: 'gelato' } },
+  say: (X, c, neg) => (neg ? 'Non vorrei ' : 'Vorrei ') + VOR_CH[c].the,
+  ask: (X, c) => (regTu() ? 'Vorresti ' : 'Vorrebbe ') + VOR_CH[c].the,
+  q: () => regTu() ? 'Che cosa vorresti?' : 'Che cosa vorrebbe?',
+  fig: vorFig,
+  wrong: ['voglio', 'vorrebbe', 'vorresti', 'vuole', 'vuoi']
 });
