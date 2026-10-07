@@ -129,7 +129,7 @@ Durante il test l'insegnante non corregge; contano solo gli errori, mostrati all
 
 ## Capitolo 14
 
-67. **Volere, potere, dovere**
+67. **Volere, potere, dovere** — *fatto: Lezioni 70 (vuole + cuore rosa) e 71 (può / non può); dovere ancora da fare*
 68. **Ancora — non più**
 69. **Al telefono**
 

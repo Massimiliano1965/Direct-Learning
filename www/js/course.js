@@ -271,7 +271,10 @@ const LESSONS = [
     known: ['gn_m_eat_1', 'gn_f_read_0', 'gn_m_phone_0', 'gn_f_drink_1', 'gn_m_read_1', 'gn_f_eat_0'] },
   // capitolo 14: «Volere» — Che cosa vuole fare Max? Max vuole mangiare un'arancia. (volere_it.js: la nuvoletta con il cuore rosa)
   { id: 'l70', title: 'Lezione 70', level: 3, vo: true, hilite: ['vuole'],
-    known: ['vo_m_eat', 'vo_f_drink', 'vo_m_read', 'vo_f_phone', 'vo_m_open', 'vo_f_close'] }
+    known: ['vo_m_eat', 'vo_f_drink', 'vo_m_read', 'vo_f_phone', 'vo_m_open', 'vo_f_close'] },
+  // capitolo 14: «Potere» — Max ha la chiave: può aprire la porta. Isa non ha la chiave: non può aprire la porta. (potere_it.js)
+  { id: 'l71', title: 'Lezione 71', level: 3, po: true, hilite: ['può'],
+    known: ['po_m_key_1', 'po_f_key_0', 'po_m_phone_1', 'po_f_phone_0', 'po_m_book_1', 'po_f_book_0'] }
 ];
 
 // Quattro insegnanti, dal più rigido al più indulgente. gender = voce maschile o femminile.

@@ -26,7 +26,7 @@ FIG.key_giallo = FIG.key_giallo || FIG.key;
 function clFig(X) {
   const k = p3Key(clWho(X)), LK = (typeof LOOKS !== 'undefined' && LOOKS[TEACHERS[k] ? (TEACHERS[k].look || k) : 'luca']) || null;
   if (!LK || typeof tTorso !== 'function') return '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"></svg>';
-  const o = clObj(X), f = o === 'key' ? FIG.key_giallo : FIG[o];
+  const o = clObj(X), f = o === 'key' ? FIG.key_giallo : o === 'phone' ? (FIG.phone_giallo || FIG.phone) : FIG[o];   // chiave e telefono gialli: si vedono
   const thing = inner(f).replace(/<ellipse[^>]*opacity="\.2[58]"[^>]*\/>/, '');
   const base = '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><ellipse cx="44" cy="97" rx="30" ry="3" fill="#000" opacity=".25"/>';
   if (clHas(X)) return base + V_PERSON(LK, tArm(LK, ...DOWN_L) + tArm(LK, [65, 47], [76, 64], [84, 54]), { mouth: 'smile' }, -8) +
