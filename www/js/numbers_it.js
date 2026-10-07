@@ -1,7 +1,7 @@
 'use strict';
 /* =====================================================================
    LEZIONI DEI NUMERI (italiano): «Che numero è?»
-   Si carica dopo logic.js (e colors_it.js). Le figure sono cartellini n1…n20 (lezioni 6, 7 e 26).
+   Si carica dopo logic.js (e colors_it.js). Le figure sono cartellini n1…n20 e le decine fino a n100 (lezioni 6, 7, 26–28).
    Stessa sequenza delle lezioni con gli oggetti: cambiano solo le frasi.
      È il numero tre.                 → ripete
      È il numero tre?                 → Sì, è il numero tre.
@@ -13,8 +13,10 @@
 
 const NUMS = { n1: 'uno', n2: 'due', n3: 'tre', n4: 'quattro', n5: 'cinque', n6: 'sei', n7: 'sette', n8: 'otto', n9: 'nove', n10: 'dieci',
   // lezione 26 (capitolo 5): da undici a venti
-  n11: 'undici', n12: 'dodici', n13: 'tredici', n14: 'quattordici', n15: 'quindici', n16: 'sedici', n17: 'diciassette', n18: 'diciotto', n19: 'diciannove', n20: 'venti' };
-const NUM_ALIAS = { quatro: 'quattro', cinqu: 'cinque', sete: 'sette', diece: 'dieci', dice: 'dieci', quatordici: 'quattordici', quattordic: 'quattordici', diciasette: 'diciassette', dicianove: 'diciannove', dicinove: 'diciannove', sedic: 'sedici' };
+  n11: 'undici', n12: 'dodici', n13: 'tredici', n14: 'quattordici', n15: 'quindici', n16: 'sedici', n17: 'diciassette', n18: 'diciotto', n19: 'diciannove', n20: 'venti',
+  // lezione 28: le decine
+  n30: 'trenta', n40: 'quaranta', n50: 'cinquanta', n60: 'sessanta', n70: 'settanta', n80: 'ottanta', n90: 'novanta', n100: 'cento' };
+const NUM_ALIAS = { quatro: 'quattro', cinqu: 'cinque', sete: 'sette', diece: 'dieci', dice: 'dieci', quatordici: 'quattordici', quattordic: 'quattordici', diciasette: 'diciassette', dicianove: 'diciannove', dicinove: 'diciannove', sedic: 'sedici', quarant: 'quaranta', cinquant: 'cinquanta', sesanta: 'sessanta', setanta: 'settanta' };
 const NUM_KEY = {};
 Object.keys(NUMS).forEach(k => { NUM_KEY[NUMS[k]] = k; });
 const isNum = (k) => typeof k === 'string' && !!NUMS[k];
@@ -35,7 +37,7 @@ const SN = {
 };
 
 // Cifre → parole («3» → «tre»), poi la solita pulizia; alias del microfono
-const numDigits = (text) => String(text || '').replace(/\b(1[0-9]|20|[1-9])\b/g, (d) => ' ' + NUMS['n' + d] + ' ');
+const numDigits = (text) => String(text || '').replace(/\b(100|[2-9]0|1[0-9]|[1-9])\b/g, (d) => ' ' + NUMS['n' + d] + ' ');
 function numNorm(text) {
   let s = norm(numDigits(text));
   Object.keys(NUM_ALIAS).forEach(a => { s = s.replace(new RegExp(' ' + a + '(?= )', 'g'), ' ' + NUM_ALIAS[a]); });
