@@ -259,7 +259,10 @@ const LESSONS = [
     known: ['fi_rosa_rosso', 'fi_tulipano_giallo', 'fi_margherita_bianco', 'fi_girasole_giallo', 'fi_rosa_bianco', 'fi_tulipano_rosso'] },
   // capitolo 13: «Il pranzo e la cena» — Che cosa mangia Max a pranzo? Max mangia la pasta. (colaz_it.js: il sole alto o la luna)
   { id: 'l66', title: 'Lezione 66', level: 3, cz: true, hilite: ['mangia', 'beve'],
-    known: ['cz_m_pasta_pranzo', 'cz_f_pesce_cena', 'cz_m_carne_cena', 'cz_f_insalata_pranzo', 'cz_m_pizza_cena', 'cz_f_vino_cena'] }
+    known: ['cz_m_pasta_pranzo', 'cz_f_pesce_cena', 'cz_m_carne_cena', 'cz_f_insalata_pranzo', 'cz_m_pizza_cena', 'cz_f_vino_cena'] },
+  // capitolo 13: «Ne» — Quanti libri ha Max? Ne ha tre. Quante arance ha Max? Ne ha una. (nehai_it.js)
+  { id: 'l67', title: 'Lezione 67', level: 3, nh: true, hilite: ['ne'],
+    known: ['nh_m_book_3', 'nh_f_key_2', 'nh_m_orange_1', 'nh_f_bottle_3', 'nh_m_cup_2', 'nh_f_umbrella_1'] }
 ];
 
 // Quattro insegnanti, dal più rigido al più indulgente. gender = voce maschile o femminile.
