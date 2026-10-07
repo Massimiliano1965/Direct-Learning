@@ -358,7 +358,10 @@ const LESSONS = [
     known: ['cal_m_swim_past_2', 'cal_f_cook_pres_4', 'cal_m_dance_fut_3', 'cal_f_sing_past_1', 'cal_m_tennis_pres_3', 'cal_f_sleep_fut_0'] },
   // capitolo 17: «La casa» — Dov'è il divano? Il divano è in soggiorno. (scelta_it.js; la piantina con la stanza accesa)
   { id: 'l98', title: 'Lezione 98', level: 4, casa: true, hilite: ['in cucina', 'in bagno', 'in camera da letto', 'in soggiorno'],
-    known: ['casa_letto', 'casa_divano', 'casa_frigorifero', 'casa_doccia', 'casa_televisore', 'casa_forno'] }
+    known: ['casa_letto', 'casa_divano', 'casa_frigorifero', 'casa_doccia', 'casa_televisore', 'casa_forno'] },
+  // capitolo 16: «Il congiuntivo» — Che cosa vuole Mario? Mario vuole che Anna cucini. (congiuntivo_it.js; la nuvoletta con il cuore)
+  { id: 'l99', title: 'Lezione 99', level: 4, cg: true, hilite: ['vuole che', 'cucini', 'balli', 'canti', 'nuoti', 'giochi', 'dorma'],
+    known: ['cg_m_cook', 'cg_f_dance', 'cg_m_sing', 'cg_f_tennis', 'cg_m_swim', 'cg_f_sleep'] }
 ];
 
 // Quattro insegnanti, dal più rigido al più indulgente. gender = voce maschile o femminile.

@@ -141,7 +141,7 @@ Durante il test l'insegnante non corregge; contano solo gli errori, mostrati all
 
 ## Capitolo 16
 
-73. **Congiuntivo**: «Io voglio che Lei…»
+73. **Congiuntivo**: «Io voglio che Lei…» — *fatto: Lezione 99 (Mario vuole che Anna cucini)*
 74. **Di che cosa è fatto…?** — *fatto: Lezione 83 (legno, plastica, vetro, metallo, pelle, lana)*
 75. **Ci vuole — ci vogliono** — *fatto: Lezione 84*
 
