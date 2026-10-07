@@ -1008,6 +1008,11 @@ function finishLesson() {
   const id = L.lesson.id;
   const t = L.teacher;
   if (DB.lessons[id] == null || pct > DB.lessons[id]) DB.lessons[id] = pct;
+  // dopo un test: la lezione da ripassare rifatta bene (80% o più) esce dalla lista del ripasso
+  const tests = DB.settings.tests || {};
+  Object.keys(tests).forEach(k => { if (pct >= 80) tests[k].review = (tests[k].review || []).filter(x => x !== id); });
+  // ripasso saltato e la lezione è andata male: l'avviso «Ripasso consigliato» con le lezioni da ripassare
+  const toReview = Object.keys(tests).filter(k => tests[k].skipped).reduce((a, k) => a.concat(tests[k].review || []), []).filter((x, i, a) => a.indexOf(x) === i && x !== id);
   // Lezione dei pulsanti finita: da qui partono i giorni per passare all'inglese
   if (id === MENU_LESSON && !DB.settings.menuDay) DB.settings.menuDay = todayKey();
   saveDB();
@@ -1020,7 +1025,10 @@ function finishLesson() {
     '<div class="ring"><svg viewBox="0 0 160 160"><circle class="track" cx="80" cy="80" r="68"/>' +
     '<circle class="val" cx="80" cy="80" r="68" stroke-dasharray="' + C + '" stroke-dashoffset="' + Math.round(C * (1 - pct / 100)) + '"/></svg>' +
     '<div class="num">' + pct + '%</div></div>' +
-    '<p>' + tx('rightFirst') + '</p><p class="muted">' + tx('teacherIs', { t: t.name }) + '</p>';
+    '<p>' + tx('rightFirst') + '</p><p class="muted">' + tx('teacherIs', { t: t.name }) + '</p>' +
+    (pct < 70 && toReview.length ? '<div class="t-notice"><h3 class="t-head">' + tx('testReview') + '</h3><div class="t-review">' +
+      toReview.map(rid => '<button class="lesson-btn t-go" data-id="' + rid + '">' + tx('lesson', { n: lessonNumber(LESSONS.find(x => x.id === rid)) }) + '</button>').join('') + '</div></div>' : '');
+  $('end-body').querySelectorAll('.t-go').forEach(b => { b.onclick = () => startLesson(b.dataset.id); });
   showScreen('end', true);
 }
 

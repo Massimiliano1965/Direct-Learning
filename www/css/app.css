@@ -307,5 +307,7 @@ body.test-end #btn-again { display: none; }
 #end-body .t-you { color: #e7a3c4; }
 #end-body .t-right { color: #8fd19e; }
 #end-body .t-all { color: #8fd19e; font-weight: 700; }
-#end-body .t-review { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
+#end-body .t-review { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; align-items: stretch; }
+#end-body .t-review .lesson-btn { margin: 0; min-height: 0; }
 #end-body .t-review .lesson-btn { width: auto; padding: 8px 14px; }
+#end-body .t-notice { margin-top: 14px; padding-top: 6px; border-top: 1px solid var(--line); }
