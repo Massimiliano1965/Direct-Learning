@@ -238,7 +238,9 @@ const LESSONS = [
     known: ['cm_me', 'cm_m', 'cm_f', 'cm_c1', 'cm_c2'] },
   // capitolo 10: «Verbi al presente e al passato» — Che cosa faccio io? Lei legge un libro. Che cosa ho fatto io? Lei ha letto un libro. (tempi_it.js)
   { id: 'l60', title: 'Lezione 60', level: 2, tv: true, hilite: ['leggo', 'legge', 'mangio', 'mangia', 'telefono', 'telefona', 'ho letto', 'ha letto', 'ho mangiato', 'ha mangiato', 'ho telefonato', 'ha telefonato'],
-    known: ['tv_now_read', 'tv_past_read', 'tv_now_eat', 'tv_past_eat', 'tv_now_phone', 'tv_past_phone'] }
+    known: ['tv_now_read', 'tv_past_read', 'tv_now_eat', 'tv_past_eat', 'tv_now_phone', 'tv_past_phone'] },
+  // TEST DI FINE LIVELLO 2 (test_it.js): 8 domande che contano e 2 descrizioni libere; non blocca il livello 3
+  { id: 't2', title: 'Test del livello 2', test: 2, level: 2, known: [] }
 ];
 
 // Quattro insegnanti, dal più rigido al più indulgente. gender = voce maschile o femminile.

@@ -27,15 +27,32 @@ const TEST1_FREE = [
 ];
 const TEST_FREE_Q = 'Che cosa vede?';
 
+// TEST DI FINE LIVELLO 2 (capitoli 6–10): stessa regola, 8 scene che contano e 2 figure libere (dopo la lezione 60)
+const TEST2 = [
+  { lesson: 'l45', step: () => SPS.key('ps_m_read') },               // Che cosa ha fatto Max? Max ha letto un libro.
+  { lesson: 'l40', step: () => SST.key('st_f_male') },               // Come sta Isa? Isa sta male.
+  { lesson: 'l41', step: () => SCL.key('cl_m_phone_1') },            // Max ha il telefono? Sì, ce l'ha.
+  { lesson: 'l53', ask: 'lo_read', q: () => SLO.key('lo_read').prompt },   // l'allievo fa la domanda («Che cosa fanno Max e Isa?»)
+  { lesson: 'l44', step: () => SNE.key('ne_phone_giallo') },         // Il telefono è … o …? Non è né … né …. È giallo.
+  { lesson: 'l55', step: () => SDA.key('da_m_book') },               // Che cosa dà Max a Isa? Le dà il libro.
+  { lesson: 'l46', step: () => SLH.key('lh_f_window') },             // Che cosa ha fatto Isa con la finestra? L'ha chiusa.
+  { lesson: 'l50', step: () => SGD.key('gd_mar') }                   // Che giorno è oggi? Oggi è martedì.
+];
+const TEST2_FREE = [
+  { fig: 'sa_m_giorno', example: () => SSA.present('sa_m_giorno').model },   // Max dice: «Buongiorno!»
+  { fig: 'lp_f_key', example: () => SLP.present('lp_f_key').model }          // Isa prende le chiavi. Le prende.
+];
+const TESTS = { 1: { scenes: TEST1, free: TEST1_FREE }, 2: { scenes: TEST2, free: TEST2_FREE } };
+
 // I passi del test: le domande delle lezioni (con le loro regole), il turno dell'allievo, le descrizioni libere
 function buildTestSteps(lesson) {
-  const st = [];
-  TEST1.forEach(s => {
+  const st = [], T = TESTS[lesson.test] || TESTS[1];
+  T.scenes.forEach(s => {
     if (s.step) { const x = s.step(); x.test = true; x.tlesson = s.lesson; st.push(x); return; }
     // l'allievo fa la domanda sulla figura (già scelta): va bene una domanda giusta qualsiasi su quella figura
     st.push({ type: 'ask', test: true, askFig: s.ask, show: s.ask, tlesson: s.lesson, prompt: '', model: s.q() });
   });
-  TEST1_FREE.forEach(f => st.push({ type: 'free', test: true, free: true, show: f.fig, prompt: TEST_FREE_Q, model: '', example: f.example() }));
+  T.free.forEach(f => st.push({ type: 'free', test: true, free: true, show: f.fig, prompt: TEST_FREE_Q, model: '', example: f.example() }));
   return st;
 }
 // Le lezioni da ripassare dopo il test: quelle delle risposte sbagliate (senza doppioni, nell'ordine del corso)

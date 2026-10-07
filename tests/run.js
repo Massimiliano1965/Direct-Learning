@@ -1496,6 +1496,18 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
   check('lezione 60: ripetizioni giuste', models.every(s => buildDrill(s, 5, s.reviewItems || []).every(d => evaluate(d, d.model).ok)));
 }
 
+// Test del livello 2: 8 che contano e 2 libere, dopo la lezione 60
+{
+  const t2 = run('LESSONS').find(l => l.id === 't2'), st = buildSteps(t2);
+  check('test 2 c\'è, dopo la lezione 60', !!t2 && t2.test === 2 && t2.level === 2 && run('LESSONS').indexOf(t2) === run('LESSONS').findIndex(l => l.id === 'l60') + 1);
+  check('test 2: 8 che contano + 2 libere', st.filter(s => s.type !== 'free').length === 8 && st.filter(s => s.type === 'free').length === 2 && st.every(s => s.test));
+  check('test 2: le risposte giuste sono giuste', st.filter(s => s.type !== 'free' && s.type !== 'ask').every(s => evaluate(s, s.model).ok));
+  check('test 2: la domanda dell\'allievo', (s => run('evalAsk')(s.askFig, s.model).ok)(st.find(s => s.type === 'ask')));
+  check('test 2: figure', st.every(s => FIG[s.show] && FIG[s.show].indexOf('<svg') === 0));
+  check('test 2: lezioni da ripassare (livello 2)', st.filter(s => s.tlesson).every(s => run('LESSONS').find(l => l.id === s.tlesson).level === 2));
+  check('test 2: numeri delle lezioni dopo il test', run('lessonNumber')(run('LESSONS').find(l => l.id === 'l60')) === 60);
+}
+
 // Dal livello 2 le lezioni sono più veloci (Massi): una sola presentazione, 4 sì/no mescolati, sempre 7 domande dell'allievo
 {
   const L = run('LESSONS'), l38 = L.find(l => l.id === 'l38'), l39 = L.find(l => l.id === 'l39');

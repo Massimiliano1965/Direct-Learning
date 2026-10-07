@@ -102,8 +102,8 @@ Durante il test l'insegnante non corregge; contano solo gli errori, mostrati all
 
 ## Capitolo 10
 
-52. **Verbi al presente e al passato** (tabella completa)
-53. **Il verbo «chiamarsi»** — *in parte: «si chiama» nella Lezione 57*
+52. **Verbi al presente e al passato** (tabella completa) — *fatto: Lezioni 53, 54 e 60 (io / Lei, adesso e prima)*
+53. **Il verbo «chiamarsi»** — *fatto: Lezione 59 (io mi chiamo, Lei / lui / lei si chiama)*
 54. **Lo, la, li, le** (complemento diretto) — *fatto: Lezione 58 (li prende, le prende)*
 
 ## Capitolo 11
