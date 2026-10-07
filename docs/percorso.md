@@ -46,7 +46,7 @@ Durante il test l'insegnante non corregge; contano solo gli errori, mostrati all
 
 15. **Un, una, un', uno**
 16. **Il, la, l', lo**
-17. **Preposizioni articolate**: a, su, in, di
+17. **Preposizioni articolate**: a, su, in, di — *fatto: Lezione 18 con «su» e «in»; «a» e «di» più avanti (decisione di Massi)*
 18. **Anche — nemmeno**
 
 ## Capitolo 4
