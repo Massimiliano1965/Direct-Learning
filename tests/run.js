@@ -6,7 +6,7 @@ const vm = require('vm');
 
 const ctx = { console: console };
 vm.createContext(ctx);
-['course.js', 'data.js', 'logic.js', 'colors_it.js', 'numbers_it.js', 'geo_fig.js', 'geo_it.js', 'poss_it.js', 'size_it.js', 'third_it.js', 'nat_it.js', 'essere_it.js', 'altro_it.js', 'prep_it.js', 'ui_lang.js'].forEach(f => {
+['course.js', 'data.js', 'logic.js', 'colors_it.js', 'numbers_it.js', 'geo_fig.js', 'geo_it.js', 'poss_it.js', 'size_it.js', 'third_it.js', 'nat_it.js', 'essere_it.js', 'altro_it.js', 'prep_it.js', 'anche_it.js', 'ui_lang.js'].forEach(f => {
   vm.runInContext(fs.readFileSync(path.join(__dirname, '..', 'www', 'js', f), 'utf8'), ctx, { filename: f });
 });
 const run = (code) => vm.runInContext(code, ctx);
@@ -14,7 +14,7 @@ const evaluate = run('evaluate');
 const evaluateAll = run('evaluateAll');
 const buildSteps = run('buildSteps');
 const answerSteps = run('answerSteps');
-const LESSONS = run('LESSONS').filter(l => !l.colors && !l.numbers && !l.geo && !l.poss && !l.size && !l.third && !l.nat && !l.ess && !l.altro && !l.prep);   // lezioni con gli oggetti (colori e numeri hanno i loro test)
+const LESSONS = run('LESSONS').filter(l => !l.colors && !l.numbers && !l.geo && !l.poss && !l.size && !l.third && !l.nat && !l.ess && !l.altro && !l.prep && !l.anche);   // lezioni con gli oggetti (colori e numeri hanno i loro test)
 const NUM_LESSONS = run('LESSONS').filter(l => l.numbers);
 const COLOR_LESSONS = run('LESSONS').filter(l => l.colors);
 const ITEMS = run('ITEMS');
@@ -636,6 +636,28 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
   const st = buildSteps(l18), models = st.filter(s => s.model && s.type !== 'reveal');
   check('lezione 18: risposte modello giuste', models.every(s => evaluate(s, s.model).ok));
   check('lezione 18: ripetizioni giuste', models.every(s => buildDrill(s, 5, []).every(d => evaluate(d, d.model).ok)));
+}
+
+// Lezione 19: «Anche — neanche»
+{
+  const SH = run('SH'), buildDrill = run('buildDrill'), ok = (st, t) => evaluate(st, t).ok;
+  const l19 = run('LESSONS').find(l => l.id === 'l19');
+  check('lezione 19 c\'è', !!l19 && l19.anche);
+  check('frasi', SH.presentAnche('phone_nero', 'suitcase_nero').prompt === 'Il telefono è nero. Anche la valigia è nera.' &&
+    SH.presentNeanche('phone_nero', 'suitcase_nero', 'rosso').prompt === 'Il telefono non è rosso. Neanche la valigia è rossa.' &&
+    SH.yes('phone_nero', 'suitcase_nero').model === 'Sì, anche la valigia è nera.' && SH.neg('phone_nero', 'cup_bianco').model === 'No, la tazza non è nera.' &&
+    SH.keyAnche('laptop_bianco', 'cup_bianco').prompt === 'Il portatile è bianco. E la tazza?' && SH.keyNeanche('coat_rosso', 'flask_rosso', 'nero').model === 'Neanche la borraccia è nera.');
+  const kn = SH.keyNeanche('phone_nero', 'suitcase_nero', 'bianco');
+  check('giusto: neanche, nemmeno, neppure', ok(kn, 'Neanche la valigia è bianca.') && ok(kn, 'Nemmeno la valigia è bianca.') && ok(kn, 'Neppure la valigia è bianca.'));
+  check('giusto: anche', ok(SH.keyAnche('phone_nero', 'suitcase_nero'), 'Anche la valigia è nera.') && ok(SH.yes('phone_nero', 'suitcase_nero'), 'Sì, anche la valigia è nera.') &&
+    ok(SH.neg('phone_nero', 'cup_bianco'), 'No, la tazza non è nera.') && ok(SH.keyDiff('phone_nero', 'cup_bianco'), 'La tazza è bianca.'));
+  check('sbagliato: «anche… non è» al posto di «neanche»', !ok(kn, 'Anche la valigia non è bianca.') && !ok(kn, 'Neanche la valigia non è bianca.'));
+  check('sbagliato: «anche» con un colore diverso, accordo', !ok(SH.keyDiff('phone_nero', 'cup_bianco'), 'Anche la tazza è nera.') && !ok(SH.keyAnche('phone_nero', 'suitcase_nero'), 'Anche la valigia è nero.'));
+  check('sbagliato: senza «anche»', !ok(SH.keyAnche('phone_nero', 'suitcase_nero'), 'La valigia è nera.'));
+  const st = buildSteps(l19), models = st.filter(s => s.model && s.type !== 'reveal');
+  check('lezione 19: risposte modello giuste', models.every(s => evaluate(s, s.model).ok));
+  check('lezione 19: ripetizioni giuste', models.every(s => buildDrill(s, 5, []).every(d => evaluate(d, d.model).ok)));
+  check('lezione 19: il primo oggetto sempre sotto', st.filter(s => s.type !== 'ask').every(s => s.prev && s.prev !== s.show));
 }
 
 // Lingua dello studente: ogni scritta c'è in tutte le lingue, con gli stessi segnaposto {…}

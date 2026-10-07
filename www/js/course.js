@@ -101,7 +101,9 @@ const LESSONS = [
   { id: 'l17', title: 'Lezione 17', third: true, def: true,
     known: ['p3_m_backpack', 'p3_f_mirror', 'p3_m_agenda', 'p3_f_umbrella', 'p3_m_key', 'p3_f_book'] },
   // capitolo 3: «Preposizioni articolate» — su e in: sul tavolo, sulla sedia, sull'agenda, nel cappotto, nello zaino, nella borsa (prep_it.js)
-  { id: 'l18', title: 'Lezione 18', prep: true, known: ['q_book', 'q_phone', 'q_orange', 'q_key', 'q_pen', 'q_bottle'] }
+  { id: 'l18', title: 'Lezione 18', prep: true, known: ['q_book', 'q_phone', 'q_orange', 'q_key', 'q_pen', 'q_bottle'] },
+  // capitolo 3: «Anche — neanche» (neanche è il più usato; nemmeno e neppure vanno bene) con gli oggetti colorati (anche_it.js)
+  { id: 'l19', title: 'Lezione 19', anche: true, known: ['phone_nero', 'suitcase_nero', 'laptop_bianco', 'cup_bianco', 'coat_rosso', 'flask_rosso'] }
 ];
 
 // Quattro insegnanti, dal più rigido al più indulgente. gender = voce maschile o femminile.

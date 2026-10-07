@@ -327,7 +327,7 @@ function fitLesson() {
   delete pr.dataset.room;
   pl.querySelectorAll('.place').forEach(el => el.removeAttribute('style'));
   const over = () => Math.ceil($('screen-lesson').getBoundingClientRect().bottom + window.scrollY - window.innerHeight);
-  const placeSize = (px) => { if (L && (L.lesson.placeHints || L.lesson.altro)) { pl.style.display = 'flex'; pl.style.minHeight = px + 'px'; pl.style.setProperty('--place', px + 'px'); } };
+  const placeSize = (px) => { if (L && (L.lesson.placeHints || L.lesson.altro || L.lesson.anche)) { pl.style.display = 'flex'; pl.style.minHeight = px + 'px'; pl.style.setProperty('--place', px + 'px'); } };
   // posto per la frase: quanto la più lunga, ma al massimo due righe (le più lunghe si scrivono più piccole)
   const promptRoom = () => {
     if (!L || !DB.settings.showText) return;
