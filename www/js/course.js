@@ -137,7 +137,9 @@ const LESSONS = [
   // diciassette, diciotto, diciannove (ripasso 11–16 e qualcuno di prima), poi il venti da scoprire
   { id: 'l27', title: 'Lezione 27', numbers: true, known: ['n17', 'n18', 'n19'], review: ['n11', 'n12', 'n13', 'n14', 'n15', 'n16', 'n7', 'n8', 'n9'], fresh: 'n20' },
   // le decine: trenta… sessanta, in ripasso i numeri che si confondono (tredici/trenta, quattordici/quaranta…), poi il settanta da scoprire
-  { id: 'l28', title: 'Lezione 28', numbers: true, known: ['n30', 'n40', 'n50', 'n60'], review: ['n10', 'n20', 'n13', 'n14', 'n15', 'n16', 'n17'], fresh: 'n70' }
+  { id: 'l28', title: 'Lezione 28', numbers: true, known: ['n30', 'n40', 'n50', 'n60'], review: ['n10', 'n20', 'n13', 'n14', 'n15', 'n16', 'n17'], fresh: 'n70' },
+  // ottanta e novanta (ripasso delle decine e di diciotto/diciannove), poi il cento da scoprire
+  { id: 'l29', title: 'Lezione 29', numbers: true, known: ['n80', 'n90'], review: ['n30', 'n40', 'n50', 'n60', 'n70', 'n18', 'n19', 'n8', 'n9'], fresh: 'n100' }
 ];
 
 // Quattro insegnanti, dal più rigido al più indulgente. gender = voce maschile o femminile.
