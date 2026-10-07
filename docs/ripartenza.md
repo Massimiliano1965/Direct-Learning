@@ -20,6 +20,7 @@ Leggi questo file prima di tutto. Poi `docs/percorso.md` (l'ordine delle lezioni
 - Pulsanti di prova sotto la lezione: «Avanti ▶» e «Rispondo: sì/no» (`TEST_BUTTONS` in `course.js`; a fine progetto → false).
 
 ## Regole del corso decise da Massi
+- **Build**: a ogni push su main GitHub costruisce solo CIAO-Italiano; CIAO-English solo con «Run workflow» (a mano), perché non cambia.
 - **Dal livello 2 meno ripetizioni** (gBuildSteps, `fast` = level ≥ 2): ogni figura presentata una volta, solo 4 sì/no mescolati, 2 domande «o», 1 rivelazione + 1 domanda da ripetere, 1 giro di domande chiave, 2 blocchi misti. Velocità della voce normale (Massi: conta non ripetere troppo, non la velocità).
 - **Ripasso in tutte le lezioni** (ripasso_it.js, Massi: «prima cosa, la ripetizione»): le domande chiave delle lezioni passate tornano dentro la lezione: 1 dopo la presentazione, 1 dopo i sì/no, 1 prima delle domande chiave, e 2 per ogni blocco misto (livello 1: 9 in tutto, livello 2: 7). Lezioni passate diverse, a caso; mai la parola nuova; mai la stessa figura due volte di fila. Escluse le lezioni con un palco speciale (placeHints, altro, anche, ess). Lezioni `big`: solo negli esercizi misti. Se l'allievo sbaglia, le ripetizioni usano le parole di quella lezione (st.reviewItems).
 - Schermata finale del test: titolo «Livello 1: test finito» (testDone), non «Lezione finita».

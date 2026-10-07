@@ -8,11 +8,12 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    # Un APK per ogni lingua da imparare: «CIAO» (italiano) e «CIAO English»
+    # Un APK per ogni lingua da imparare: «CIAO» (italiano) e «CIAO English».
+    # Decisione di Massi: a ogni push solo l'italiano (l'inglese non cambia); tutti e due quando si preme «Run workflow».
     strategy:
       fail-fast: false
       matrix:
-        course: [it, en]
+        course: ${{ fromJSON(github.event_name == 'workflow_dispatch' && '["it","en"]' || '["it"]') }}
     steps:
       - uses: actions/checkout@v4
 
