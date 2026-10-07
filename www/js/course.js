@@ -245,9 +245,9 @@ const LESSONS = [
   // capitolo 11: «L'ho, li ho, le ho» — Max ha preso i libri? Sì, li ha presi. Isa ha preso le chiavi? Sì, le ha prese. (liha_it.js)
   { id: 'l61', title: 'Lezione 61', level: 3, lq: true, hilite: ['li ha', 'le ha'],
     known: ['lq_m_book', 'lq_f_key', 'lq_m_orange', 'lq_f_pen', 'lq_m_cup', 'lq_f_umbrella'] },
-  // capitolo 11: «Il contrario» — la tazza calda / fredda, il libro nuovo / vecchio, la sedia alta / bassa (contr2_it.js, regole della lezione 39)
+  // capitolo 11: «Il contrario» — la tazza calda / fredda, il libro e il telefono nuovo / vecchio, la sedia alta / bassa (contr2_it.js, regole della lezione 39)
   { id: 'l62', title: 'Lezione 62', level: 3, ct: true, gender: true,
-    known: ['ct_cup_caldo', 'ct_cup_freddo', 'ct_book_nuovo', 'ct_book_vecchio', 'ct_chair_alto', 'ct_chair_basso'] },
+    known: ['ct_cup_caldo', 'ct_cup_freddo', 'ct_book_nuovo', 'ct_book_vecchio', 'ct_phone_nuovo', 'ct_phone_vecchio', 'ct_chair_alto', 'ct_chair_basso'] },
   // capitolo 12: «La colazione» — Che cosa mangia Max a colazione? Max mangia un cornetto. (colaz_it.js)
   { id: 'l63', title: 'Lezione 63', level: 3, cz: true, hilite: ['mangia', 'beve'],
     known: ['cz_m_cornetto', 'cz_f_pane', 'cz_m_mela', 'cz_f_latte', 'cz_m_caffe', 'cz_f_succo'] },

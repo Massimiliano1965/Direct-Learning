@@ -1535,7 +1535,8 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
   const l = run('LESSONS').find(l => l.id === 'l62');
   check('lezione 62 c\'è', !!l && l.ct && l.level === 3);
   check('figure', l.known.every(k => FIG[k] && FIG[k].indexOf('<svg') === 0 && FIG[k].indexOf(' id=') === -1));
-  check('frasi', SX.key('ct_cup_caldo').model === 'La tazza è calda.' && SX.key('ct_book_vecchio').model === 'Il libro è vecchio.' && SX.neg('ct_chair_alto').model === 'No, la sedia non è bassa.');
+  check('frasi', SX.key('ct_cup_caldo').model === 'La tazza è calda.' && SX.key('ct_book_vecchio').model === 'Il libro è vecchio.' && SX.neg('ct_chair_alto').model === 'No, la sedia non è bassa.' &&
+    SX.key('ct_phone_vecchio').model === 'Il telefono è vecchio.' && l.known.length === 8);
   check('giusto e sbagliato', ok(SX.key('ct_chair_basso'), 'È bassa.') && !ok(SX.key('ct_chair_basso'), 'La sedia è basso.') && !ok(SX.key('ct_cup_freddo'), 'La tazza è calda.'));
   const st = buildSteps(l), models = st.filter(s => s.model && s.type !== 'reveal');
   check('lezione 62: risposte modello giuste', models.every(s => evaluate(s, s.model).ok));
