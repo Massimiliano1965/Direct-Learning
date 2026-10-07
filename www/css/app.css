@@ -278,6 +278,10 @@ html[data-level] #stage { background: linear-gradient(180deg, var(--surface2), v
 #prompt-text .hl { text-decoration: underline; text-decoration-color: #c9a45c; text-decoration-thickness: 2px; text-underline-offset: 5px; }
 /* lezione 22: -o maschile azzurra, -a femminile rosa (metodo di Massi) */
 #prompt-text .go { color: #8fb4ff; border-bottom: 2px solid #8fb4ff; font-weight: 700; }
+/* lezioni 28 e 29: i numeri composti (venti|due, vent(i)|otto) */
+#prompt-text .nr { text-decoration: underline; text-decoration-color: #c9a45c; text-decoration-thickness: 2px; text-underline-offset: 5px; }
+#prompt-text .nu { color: #e7a3c4; }
+#prompt-text .ncut { color: #aab2c2; text-decoration: line-through; text-decoration-color: #e06a6a; text-decoration-thickness: 3px; font-size: .95em; margin: 0 1px; }
 #prompt-text .ga { color: #e7a3c4; border-bottom: 2px solid #e7a3c4; font-weight: 700; }
 /* pulsanti di prova (solo per Massi) */
 .test-row { margin-top: 8px; }

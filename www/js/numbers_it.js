@@ -50,6 +50,29 @@ const NUM_VAL = {};
 for (let n = 1; n <= 1000; n++) NUM_VAL[numWord(n).replace('é', 'e')] = n;
 NUM_VAL.centotto = 108;
 
+// I pezzi di un numero composto, per mostrarli nella frase scritta (lezioni 28 e 29, idea di Massi):
+// la radice (venti, trenta… e duecento…) e l'unità; con «uno» e «otto», che cominciano con una vocale,
+// la radice perde l'ultima lettera: vent(i)uno → ventuno, trent(a)otto → trentotto.
+// Ritorna [[testo, tipo], …] con tipo 'r' (radice), 'u' (unità), 'cut' (la lettera tolta); null se non è composto.
+function numParts(word) {
+  const w = String(word || '').toLowerCase();
+  const out = [];
+  let rest = w;
+  const h = /^(.*cento|mille)(.+)$/.exec(w);
+  if (h) { out.push([h[1], 'r']); rest = h[2]; }
+  const units = NUM_U.slice(1, 10).concat(['tré']);
+  for (let t = 2; t < 10; t++) {
+    const T = NUM_T[t];
+    if (rest === T) return h ? out.concat([[T, 'u']]) : null;
+    const u = rest.slice(T.length);
+    if (rest.indexOf(T) === 0 && units.indexOf(u) !== -1) return out.concat([[T, 'r'], [u, 'u']]);
+    const v = rest.slice(T.length - 1);
+    if (rest.indexOf(T.slice(0, -1)) === 0 && (v === 'uno' || v === 'otto')) return out.concat([[T.slice(0, -1), 'r'], [T.slice(-1), 'cut'], [v, 'u']]);
+  }
+  if (h && units.concat(NUM_U.slice(10)).indexOf(rest) !== -1) return out.concat([[rest, 'u']]);   // centotre, duecentodieci
+  return null;
+}
+
 // Cifre → parole («3» → «tre»), poi la solita pulizia; alias del microfono
 const numDigits = (text) => String(text || '').replace(/(\d)\s*\+\s*(\d)/g, '$1 più $2').replace(/\b(\d{1,4})\b/g, (d) => +d >= 1 && +d <= 1000 ? ' ' + numWord(+d) + ' ' : d);
 function numNorm(text) {

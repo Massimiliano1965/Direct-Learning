@@ -137,10 +137,12 @@ const LESSONS = [
   { id: 'l26', title: 'Lezione 26', numbers: true, big: true, known: ['n11', 'n12', 'n13', 'n14', 'n15', 'n16', 'n17', 'n18', 'n19'], review: ['n10'], fresh: 'n20' },
   // 27: le decine da trenta a novanta, in ripasso venti e i numeri che si confondono (tredici/trenta, quattordici/quaranta), poi il cento da scoprire
   { id: 'l27', title: 'Lezione 27', numbers: true, big: true, known: ['n30', 'n40', 'n50', 'n60', 'n70', 'n80', 'n90'], review: ['n20', 'n13', 'n14'], fresh: 'n100' },
-  // 28: «Quanto fa…?» con le centinaia: «Quanto fa cento più cento? Fa duecento.» (sum_it.js) — si imparano duecento… mille
-  { id: 'l28', title: 'Lezione 28', sum: true, hilite: ['più', 'fa'], known: ['sm_50_50', 'sm_100_100', 'sm_200_100', 'sm_200_200', 'sm_300_200', 'sm_500_500'] },
+  // 28: «Quanto fa…?»: i numeri dopo il venti (venti più otto fa ventotto) e le centinaia fino a mille (sum_it.js)
+  // numParts: nella frase scritta la radice (venti) sottolineata, l'unità rosa, la vocale tolta barrata (vent(i)otto)
+  { id: 'l28', title: 'Lezione 28', sum: true, numParts: true, hilite: ['più', 'fa'],
+    known: ['sm_20_2', 'sm_20_3', 'sm_20_1', 'sm_20_8', 'sm_30_8', 'sm_40_5', 'sm_100_100', 'sm_300_200', 'sm_500_500'] },
   // 29: «Quanti chilometri ci sono…?» — il cartello verde dell'autostrada: «Da Roma a Milano ci sono cinquecentosettanta chilometri.» (km_it.js)
-  { id: 'l29', title: 'Lezione 29', km: true, hilite: ['ci sono'],
+  { id: 'l29', title: 'Lezione 29', km: true, numParts: true, hilite: ['ci sono'],
     known: ['km_roma_milano', 'km_roma_napoli', 'km_roma_firenze', 'km_milano_torino', 'km_firenze_bologna', 'km_roma_venezia'] },
   // capitolo 5: «La famiglia» — una famiglia di sei; la freccia d'oro dice di chi si parla: «Chi è? È la nonna.» (fam_it.js)
   { id: 'l30', title: 'Lezione 30', fam: true, known: ['f_padre', 'f_madre', 'f_figlio', 'f_figlia', 'f_nonno', 'f_nonna'] },

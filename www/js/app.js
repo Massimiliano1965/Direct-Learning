@@ -432,12 +432,15 @@ function synWrap() {
   const hil = (L && L.lesson && L.lesson.hilite) || [];
   // lezione 22: la -o finale (maschile) azzurra, la -a finale (femminile) rosa, nei nomi e nei colori
   const gw = (L && L.lesson && L.lesson.gender && typeof genderWords === 'function') ? genderWords(L.lesson) : [];
-  if ((!pairs.length && !hil.length && !gw.length) || !el.textContent) return;
+  // lezioni 28 e 29: nei numeri composti la radice sottolineata in oro, l'unità rosa, la lettera tolta barrata (vent(i)otto)
+  const nw = (L && L.lesson && L.lesson.numParts && typeof numParts === 'function')
+    ? (el.textContent.match(/\p{L}+/gu) || []).filter(w => numParts(w)) : [];
+  if ((!pairs.length && !hil.length && !gw.length && !nw.length) || !el.textContent) return;
   const esc = (t) => t.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
   const escRe = (t) => t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   const other = {}, notAfter = {};
   pairs.forEach(([a, b, na]) => { other[a] = b; other[b] = a; if (na) notAfter[a] = notAfter[b] = na; });
-  const keys = Object.keys(other).sort((a, b) => b.length - a.length).concat(hil, gw);
+  const keys = Object.keys(other).sort((a, b) => b.length - a.length).concat(nw, hil, gw);
   const re = new RegExp('(^|[^\\p{L}])(' + keys.map(escRe).join('|') + ')(?![\\p{L}])', 'giu');
   const txt = el.textContent;
   if (!re.test(txt)) return;
@@ -445,6 +448,8 @@ function synWrap() {
   el.innerHTML = esc(txt).replace(re, (m, pre, w, off, all) => {
     const alt = other[w.toLowerCase()], na = notAfter[w.toLowerCase()];
     if (na && new RegExp('(^|\\s)' + na + '\\s*$', 'i').test(all.slice(0, off + pre.length))) return m;   // «A che ora è…»: non si scambia
+    const np = nw.length && numParts(w);
+    if (np) { const cap1 = w.charAt(0) !== w.charAt(0).toLowerCase(); return pre + np.map(([t, k], i) => '<span class="n' + k + '">' + (i === 0 && cap1 ? t.charAt(0).toUpperCase() + t.slice(1) : t) + '</span>').join(''); }
     if (!alt && gw.indexOf(w.toLowerCase()) !== -1) { const e = w.slice(-1).toLowerCase(); return pre + w.slice(0, -1) + '<b class="g' + e + '">' + w.slice(-1) + '</b>'; }
     if (!alt) return pre + '<span class="hl">' + w + '</span>';
     const cap = w.charAt(0) !== w.charAt(0).toLowerCase();

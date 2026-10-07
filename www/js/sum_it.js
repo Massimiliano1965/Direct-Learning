@@ -12,7 +12,10 @@
    ===================================================================== */
 
 const SUMS = {
-  sm_50_50: [50, 50], sm_100_100: [100, 100], sm_200_100: [200, 100], sm_200_200: [200, 200], sm_300_200: [300, 200], sm_500_500: [500, 500]
+  // la radice più l'unità (ventidue, ventitré…; con uno e otto la radice perde la vocale: ventuno, ventotto, trentotto)
+  sm_20_1: [20, 1], sm_20_2: [20, 2], sm_20_3: [20, 3], sm_20_8: [20, 8], sm_30_8: [30, 8], sm_40_5: [40, 5],
+  // e le centinaia fino a mille
+  sm_100_100: [100, 100], sm_300_200: [300, 200], sm_500_500: [500, 500]
 };
 const isSum = (X) => !!SUMS[X];
 const smRes = (X) => SUMS[X][0] + SUMS[X][1];
@@ -22,9 +25,9 @@ const smOp = (X) => smW(SUMS[X][0]) + ' più ' + smW(SUMS[X][1]);               
 const smSay = (X) => smCap(smOp(X)) + ' fa ' + smW(smRes(X)) + '.';
 const smQ = (X) => 'Quanto fa ' + smOp(X) + '?';
 const smShort = (X) => 'Fa ' + smW(smRes(X)) + '.';
-// un risultato sbagliato ma vicino (cento o dieci in più o in meno)
+// un risultato sbagliato ma vicino (uno o dieci in più o in meno; con le centinaia cento)
 function smOther(X) {
-  const r = smRes(X), d = r >= 200 ? 100 : 10, c = [r + d, r - d, r + 2 * d].filter(n => n >= 1 && n <= 1000 && n !== r);
+  const r = smRes(X), c = (r >= 200 ? [r + 100, r - 100, r + 200] : [r + 1, r - 1, r + 10, r - 10]).filter(n => n >= 1 && n <= 1000 && n !== r);
   return pick(c);
 }
 

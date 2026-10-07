@@ -22,6 +22,7 @@ Leggi questo file prima di tutto. Poi `docs/percorso.md` (l'ordine delle lezioni
 ## Regole del corso decise da Massi
 - L'insegnante non usa parole che l'allievo non conosce: niente «bravo/ottimo»; errore = «No.»; l'entusiasmo col corpo.
 - Parole che vanno bene tutte e due (`COURSE.synonyms`): si alternano in oro nella frase scritta, la voce ogni tanto usa la seconda, il microfono le accetta.
+- Numeri composti (lezioni 28, 29; `numParts`): la radice (venti, cinquecento) sottolineata in oro, l'unità rosa; con «uno» e «otto» la vocale della radice tolta e barrata in rosso (vent(i)otto). Idea di Massi.
 - Maschile/femminile: la -o finale azzurra, la -a finale rosa (lezione 22). Esempi solo con parole in -o/-a (niente aggettivi in -e).
 - Si dà del Lei (Suo/Sua). Bandiera del Regno Unito per «inglese».
 - Niente bordeaux né marroni nei colori dell'app; gli piacciono viola e rosa.
@@ -29,7 +30,7 @@ Leggi questo file prima di tutto. Poi `docs/percorso.md` (l'ordine delle lezioni
 ## A che punto siamo (lezioni fatte: 1–31)
 1–4 oggetti · 5 colori · 6–7 numeri · 8–9 città e monumenti · 10 il mio/il Suo · 11 grande/piccolo · 12 il suo/la sua · 13 nazionalità ·
 14 essere · 15 un altro · 16 un/una/un'/uno · 17 il/la/l'/lo · 18 sul/nel… (a e di più avanti) · 19 anche/neanche · 20 che ora è ·
-21 a che ora (aereo, riunione…) · 22 il, la o l'? (-o/-a in colore) · 23 cosa fa? (Max legge un libro, Isa telefona…) · 24 perché? per… (Max prende il libro per leggere; nuvoletta con la scena della 23) · 25 lo/la (Max legge il libro? Sì, lo legge.) · 26 numeri 11–20 · 27 decine 30–100 · 28 quanto fa? (100 + 100: duecento… mille; `numWord` scrive tutti i numeri 1–1000) · 29 quanti chilometri? (cartello verde dell'autostrada) · 30 la famiglia (Chi è? È la nonna.) · 31 essere o avere (Max ha un telefono. Il telefono è nero.).
+21 a che ora (aereo, riunione…) · 22 il, la o l'? (-o/-a in colore) · 23 cosa fa? (Max legge un libro, Isa telefona…) · 24 perché? per… (Max prende il libro per leggere; nuvoletta con la scena della 23) · 25 lo/la (Max legge il libro? Sì, lo legge.) · 26 numeri 11–20 · 27 decine 30–100 · 28 quanto fa? (20 + 8 = ventotto: la radice e l'unità; 100 + 100… fino a mille; `numWord` scrive tutti i numeri 1–1000) · 29 quanti chilometri? (cartello verde dell'autostrada) · 30 la famiglia (Chi è? È la nonna.) · 31 essere o avere (Max ha un telefono. Il telefono è nero.).
 
 ## Da ricordare
 - Ogni lezione ha le **domande dello studente** (tocca una figura e chiede): 7 per lezione. Mantenerle nelle lezioni nuove.
