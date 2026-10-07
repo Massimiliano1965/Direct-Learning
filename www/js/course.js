@@ -313,7 +313,10 @@ const LESSONS = [
     known: ['pc_f_m', 'pc_m_nonna', 'pc_marco_f', 'pc_anna_nonno', 'pc_nonno_marco', 'pc_nonna_anna'] },
   // capitolo 16: «Di che cosa è fatto?» — Il tavolo è di legno. La bottiglia è di vetro. (fatto_it.js)
   { id: 'l83', title: 'Lezione 83', level: 4, md: true, hilite: ['di', 'fatto', 'fatta'],
-    known: ['md_table_legno', 'md_bottle_vetro', 'md_chair_plastica', 'md_coat_lana', 'md_key_metallo', 'md_bag_pelle'] }
+    known: ['md_table_legno', 'md_bottle_vetro', 'md_chair_plastica', 'md_coat_lana', 'md_key_metallo', 'md_bag_pelle'] },
+  // capitolo 16: «Ci vuole — ci vogliono» — Per aprire la porta ci vuole una chiave. Per leggere ci vogliono un libro e una lampada. (civuole_it.js)
+  { id: 'l84', title: 'Lezione 84', level: 4, cu: true, hilite: ['ci vuole', 'ci vogliono'],
+    known: ['cu_porta', 'cu_leggere', 'cu_telefono', 'cu_colazione', 'cu_newyork', 'cu_ora'] }
 ];
 
 // Quattro insegnanti, dal più rigido al più indulgente. gender = voce maschile o femminile.
