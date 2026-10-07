@@ -161,7 +161,7 @@ Durante il test l'insegnante non corregge; contano solo gli errori, mostrati all
 
 ## Capitolo 19
 
-83. **Il tempo che fa**: termometro, parole del tempo
+83. **Il tempo che fa**: termometro, parole del tempo — *fatto: Lezione 87*
 84. **Presente, passato, futuro**
 85. **Gerundio**: sto parlando, sto leggendo… — *fatto: Lezione 80 (Che cosa sta facendo Max? Max sta leggendo un libro.)*
 

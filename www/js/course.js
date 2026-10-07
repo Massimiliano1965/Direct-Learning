@@ -322,7 +322,10 @@ const LESSONS = [
     known: ['pi_m_caffe', 'pi_f_fiori', 'pi_m_libri', 'pi_f_pizza', 'pi_m_mele', 'pi_f_vino'] },
   // capitolo 18: «Le quattro stagioni» — È aprile. È primavera. Che stagione è? (stagioni_it.js)
   { id: 'l86', title: 'Lezione 86', level: 4, sg: true, hilite: ['primavera', 'estate', 'autunno', 'inverno', 'stagione'],
-    known: ['sg_apr', 'sg_lug', 'sg_ott', 'sg_gen', 'sg_mag', 'sg_ago', 'sg_nov', 'sg_feb'] }
+    known: ['sg_apr', 'sg_lug', 'sg_ott', 'sg_gen', 'sg_mag', 'sg_ago', 'sg_nov', 'sg_feb'] },
+  // capitolo 19: «Il tempo che fa» — Che tempo fa? C'è il sole. Piove. Nevica. Fa caldo. (tempofa_it.js)
+  { id: 'l87', title: 'Lezione 87', level: 4, tf: true, hilite: ['Che tempo fa', 'piove', 'nevica', 'c\'è', 'fa caldo', 'fa freddo', 'nuvoloso', 'vento'],
+    known: ['tf_sole', 'tf_piove', 'tf_nevica', 'tf_vento', 'tf_nuvoloso', 'tf_caldo', 'tf_freddo'] }
 ];
 
 // Quattro insegnanti, dal più rigido al più indulgente. gender = voce maschile o femminile.
