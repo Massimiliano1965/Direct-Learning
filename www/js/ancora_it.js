@@ -27,7 +27,7 @@ const anOther = (X) => pick(AN_ACTS.filter(a => a !== anAct(X)));
 
 /* ---------- Figure: ancora = la scena con la freccia verde che gira; non più = ferma, la scena nella nuvoletta barrata ---------- */
 function anFig(X) {
-  const k = p3Key(anWho(X)), LK = (typeof LOOKS !== 'undefined' && LOOKS[TEACHERS[k] ? (TEACHERS[k].look || k) : 'luca']) || null;
+  const k = p3Key(anWho(X)), LK = (typeof LOOKS !== 'undefined' && LOOKS[TEACHERS[k] ? (TEACHERS[k].look || k) : k]) || null;
   if (!LK || typeof tTorso !== 'function') return '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"></svg>';
   const a = anAct(X);
   if (anStill(X)) return '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><ellipse cx="50" cy="97" rx="34" ry="3" fill="#000" opacity=".25"/>' + V_SCENE[a](LK) +

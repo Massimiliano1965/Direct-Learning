@@ -37,7 +37,7 @@ const ldQ = (X) => 'Cosa fa ' + ldName(X) + ' con ' + (p3Art(LD[X].obj) === 'la'
 
 /* ---------- Figure: le scene della lezione 23 e, per «prende», la persona con la cosa in mano ---------- */
 function ldHoldFig(X) {
-  const k = p3Key(ldWho(X)), LK = (typeof LOOKS !== 'undefined' && LOOKS[TEACHERS[k] ? (TEACHERS[k].look || k) : 'luca']) || null;
+  const k = p3Key(ldWho(X)), LK = (typeof LOOKS !== 'undefined' && LOOKS[TEACHERS[k] ? (TEACHERS[k].look || k) : k]) || null;
   if (!LK || typeof tTorso !== 'function') return '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"></svg>';
   const o = LD[X].obj, f = o === 'phone' ? CFIG.phone(COL_SHADE.bianco) : FIG[o];
   const thing = '<g transform="translate(70 62) scale(.36) translate(-50 -50)">' + inner(f).replace(/<ellipse[^>]*opacity="\.2[58]"[^>]*\/>/, '') + '</g>';

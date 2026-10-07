@@ -32,7 +32,9 @@ function choiceLesson(cfg) {
   function lc(t) { const w = t.split(' ')[0]; return cfg.proper && cfg.proper(w) ? t : t.charAt(0).toLowerCase() + t.slice(1); }
   // le cose: la frase normalizzata e la parola principale (l'ultima), più gli alias
   const PH = {};
-  Object.keys(CH).forEach(c => { const t = gNorm(CH[c].the).trim().split(' '); PH[c] = { pre: t.slice(0, -1), word: t[t.length - 1], alias: (CH[c].alias || []).map(a => gNorm(a).trim()) }; });
+  Object.keys(CH).forEach(c => { const t = gNorm(CH[c].the).trim().split(' ');
+    PH[c] = { pre: t.slice(0, -1), word: t[t.length - 1], alias: (CH[c].alias || []).map(a => gNorm(a).trim()),
+      alt: (CH[c].alt || []).map(a => gNorm(a).trim().split(' ').slice(0, -1)) }; });   // alt = altre forme giuste («col treno»)
   const qN = (X) => gNorm(cfg.q(X)).trim();
   function statements(s, X) {
     s = s.replace(new RegExp(' ' + qN(X).replace(/ /g, ' ') + ' ', 'g'), ' # ');
@@ -41,7 +43,8 @@ function choiceLesson(cfg) {
     for (let i = 0; i < w.length; i++) {
       const c = Object.keys(PH).find(k => PH[k].word === w[i] || PH[k].alias.indexOf(w[i]) !== -1);
       if (!c) continue;
-      const P = PH[c], n = P.pre.length, ok = P.word === w[i] && P.pre.every((t, k) => w[i - n + k] === t);
+      const P = PH[c], fits = (pre) => pre.every((t, k) => w[i - pre.length + k] === t);
+      const okPre = P.word === w[i] && ([P.pre].concat(P.alt).find(fits) || null), n = okPre ? okPre.length : P.pre.length, ok = !!okPre;
       // indietro, fino a 4 parole: il «non», il nome, una parola sbagliata
       let neg = false, who = null, bad = false;
       for (let j = i - n - 1; j >= Math.max(0, i - n - 5); j--) {
@@ -103,7 +106,7 @@ const BAR_FIG = {
   spremuta: CZ_FIG.succo
 };
 function barFig(X, it) {
-  const k = p3Key(it.who), LK = (typeof LOOKS !== 'undefined' && LOOKS[TEACHERS[k] ? (TEACHERS[k].look || k) : 'luca']) || null;
+  const k = p3Key(it.who), LK = (typeof LOOKS !== 'undefined' && LOOKS[TEACHERS[k] ? (TEACHERS[k].look || k) : k]) || null;
   if (!LK || typeof tTorso !== 'function') return FLAT(BAR_FIG[it.c], 20);
   return '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">' +
     // il bancone del bar e l'insegna
@@ -128,9 +131,14 @@ const SBAR = choiceLesson({
 const MODA_CH = {
   camicia: { the: 'una camicia', alias: ['camicie'] }, cravatta: { the: 'una cravatta', alias: ['cravatte'] },
   cappello: { the: 'un cappello', alias: ['cappelli'] }, sciarpa: { the: 'una sciarpa', alias: ['sciarpe'] },
-  gonna: { the: 'una gonna', alias: ['gonne'] }, maglione: { the: 'un maglione', alias: ['maglioni'] }
+  gonna: { the: 'una gonna', alias: ['gonne'] }, maglione: { the: 'un maglione', alias: ['maglioni'] },
+  scarpe: { the: 'un paio di scarpe', alias: ['scarpa'], alt: ['le scarpe', 'delle scarpe'] }      // Massi: il negozio di scarpe
 };
+// le scarpe rosse con il tacco (anche nella lezione 85: «A Isa piacciono le scarpe»)
+const SHOES = '<g><path d="M14 70 q2 -14 12 -16 q8 6 18 8 q10 2 14 8 v4 h-30 l-4 -4 l-4 12 h-4z" fill="#c8323b"/><path d="M18 82 l3 -10 h3 l-2 10z" fill="#8e1b2a"/><path d="M24 58 q8 6 18 8" stroke="#e8737c" stroke-width="1.6" fill="none"/></g>' +
+  '<g transform="translate(30 6)"><path d="M14 70 q2 -14 12 -16 q8 6 18 8 q10 2 14 8 v4 h-30 l-4 -4 l-4 12 h-4z" fill="#d23c44"/><path d="M18 82 l3 -10 h3 l-2 10z" fill="#9e222a"/><path d="M24 58 q8 6 18 8" stroke="#ee8a92" stroke-width="1.6" fill="none"/></g>';
 const MODA_FIG = {
+  scarpe: SHOES,
   camicia: '<path d="M30 26 l12 -6 h16 l12 6 l12 16 l-9 7 l-7 -8 v44 h-40 v-44 l-7 8 l-9 -7z" fill="#e9eef6"/><path d="M42 20 l8 10 l8 -10" fill="none" stroke="#b9c3d2" stroke-width="2"/>' +
     '<path d="M50 30 v52" stroke="#b9c3d2" stroke-width="1.4"/><circle cx="50" cy="40" r="1.4" fill="#8d97ad"/><circle cx="50" cy="52" r="1.4" fill="#8d97ad"/><circle cx="50" cy="64" r="1.4" fill="#8d97ad"/>',
   cravatta: '<path d="M44 14 h12 l-2 8 h-8z" fill="#3f6fb5"/><path d="M46 22 h8 l6 50 l-10 12 l-10 -12z" fill="#3f6fb5"/><path d="M47 34 l10 8 M45 48 l13 10 M44 62 l14 10" stroke="#f3d36b" stroke-width="2"/>',
@@ -142,14 +150,14 @@ const MODA_FIG = {
     '<path d="M32 76 h36 M32 80 h36" stroke="#2f6f52" stroke-width="2"/><path d="M38 40 l4 4 l4 -4 l4 4 l4 -4 l4 4 l4 -4" stroke="#f3eee2" stroke-width="1.4" fill="none"/>'
 };
 function modaFig(X, it) {
-  const k = p3Key(it.who), LK = (typeof LOOKS !== 'undefined' && LOOKS[TEACHERS[k] ? (TEACHERS[k].look || k) : 'luca']) || null;
+  const k = p3Key(it.who), LK = (typeof LOOKS !== 'undefined' && LOOKS[TEACHERS[k] ? (TEACHERS[k].look || k) : k]) || null;
   if (!LK || typeof tTorso !== 'function') return FLAT(MODA_FIG[it.c], 20);
   return '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">' +
     // la vetrina del negozio: l'insegna MODA, la cosa appesa alla gruccia
-    '<rect x="54" y="4" width="44" height="13" rx="3" fill="#5b4a8b"/><text x="76" y="14" text-anchor="middle" font-family="Georgia,serif" font-size="9" font-weight="bold" letter-spacing="1.5" fill="#f3eee2">MODA</text>' +
+    '<rect x="54" y="4" width="44" height="13" rx="3" fill="#5b4a8b"/><text x="76" y="14" text-anchor="middle" font-family="Georgia,serif" font-size="' + (it.c === 'scarpe' ? 8 : 9) + '" font-weight="bold" letter-spacing="1.5" fill="#f3eee2">' + (it.c === 'scarpe' ? 'SCARPE' : 'MODA') + '</text>' +
     '<rect x="52" y="20" width="46" height="74" rx="4" fill="#f3eee2" opacity=".14" stroke="#c9a45c" stroke-width="1"/>' +
     '<path d="M75 22 v3 M68 30 l7 -5 l7 5" stroke="#8d93a3" stroke-width="1.4" fill="none"/>' +
-    '<g transform="translate(75 60) scale(.6) translate(-50 -50)">' + MODA_FIG[it.c] + '</g>' +
+    '<g transform="translate(75 60) scale(' + (it.c === 'scarpe' ? .5 : .6) + ') translate(-50 ' + (it.c === 'scarpe' ? -70 : -50) + ')">' + MODA_FIG[it.c] + '</g>' +
     // la persona con la borsa del negozio
     V_PERSON(LK, tArm(LK, ...DOWN_L) + tArm(LK, [65, 47], [70, 66], [66, 84]), { mouth: 'smile' }, -18) +
     '<path d="M42 86 h14 l2 14 h-18z" fill="#c9a45c"/><path d="M45 86 q4 -6 8 0" stroke="#8e6a2a" stroke-width="1.4" fill="none"/></svg>';
@@ -157,11 +165,57 @@ function modaFig(X, it) {
 const SMODA = choiceLesson({
   flag: 'moda', CH: MODA_CH,
   items: { moda_f_sciarpa: { who: 'f', c: 'sciarpa' }, moda_m_cravatta: { who: 'm', c: 'cravatta' }, moda_f_gonna: { who: 'f', c: 'gonna' },
-    moda_m_cappello: { who: 'm', c: 'cappello' }, moda_f_camicia: { who: 'f', c: 'camicia' }, moda_m_maglione: { who: 'm', c: 'maglione' } },
+    moda_m_cappello: { who: 'm', c: 'cappello' }, moda_f_camicia: { who: 'f', c: 'camicia' }, moda_m_maglione: { who: 'm', c: 'maglione' },
+    moda_f_scarpe: { who: 'f', c: 'scarpe' } },
   say: (X, c, neg) => vName(X.charAt(5)) + (neg ? ' non' : '') + ' compra ' + MODA_CH[c].the,
-  lead: () => 'In negozio',
+  lead: (X) => X === 'moda_f_scarpe' ? 'Nel negozio di scarpe' : 'In negozio',
+  strip: / negozio di scarpe /g,
   proper: (w) => vNames()[gNorm(w).trim()] !== undefined,
   q: (X) => 'Che cosa compra ' + vName(X.charAt(5)) + ' in negozio?',
   fig: modaFig,
   wrong: ['compro', 'compri', 'comprare', 'prende', 'porta']
+});
+
+/* ---------- Lezione 92: i trasporti ---------- */
+const VIA_CH = {
+  treno: { the: 'in treno', alias: ['treni'], alt: ['col treno', 'con il treno'] }, autobus: { the: 'in autobus', alias: ['pullman'], alt: ['con l autobus'] },
+  taxi: { the: 'in taxi', alt: ['con il taxi', 'col taxi'] }, aereo: { the: 'in aereo', alt: ['con l aereo'] },
+  bicicletta: { the: 'in bicicletta', alias: ['bici'], alt: ['con la bicicletta'] }, piedi: { the: 'a piedi' }
+};
+const VIA_CITY = { roma: 'Roma', milano: 'Milano', firenze: 'Firenze', venezia: 'Venezia', napoli: 'Napoli', pisa: 'Pisa' };
+const VIA_FIG = {
+  treno: '<path d="M8 62 q4 -22 26 -24 h56 v32 h-82z" fill="#d23c44"/><path d="M14 56 q4 -12 18 -13 h10 v13z" fill="#2a3346"/><rect x="48" y="44" width="10" height="9" rx="1" fill="#2a3346"/><rect x="62" y="44" width="10" height="9" rx="1" fill="#2a3346"/><rect x="76" y="44" width="10" height="9" rx="1" fill="#2a3346"/>' +
+    '<path d="M8 62 h82 v4 h-82z" fill="#f3eee2"/><circle cx="26" cy="72" r="4" fill="#3a3f4a"/><circle cx="74" cy="72" r="4" fill="#3a3f4a"/><path d="M2 76 h96" stroke="#8d93a3" stroke-width="2"/>',
+  autobus: '<rect x="10" y="30" width="80" height="40" rx="6" fill="#e8862a"/><rect x="16" y="36" width="14" height="14" rx="2" fill="#bfe0ee"/><rect x="34" y="36" width="14" height="14" rx="2" fill="#bfe0ee"/><rect x="52" y="36" width="14" height="14" rx="2" fill="#bfe0ee"/>' +
+    '<rect x="70" y="36" width="14" height="26" rx="2" fill="#bfe0ee"/><circle cx="26" cy="72" r="6" fill="#3a3f4a"/><circle cx="74" cy="72" r="6" fill="#3a3f4a"/><rect x="10" y="56" width="58" height="4" fill="#f3eee2"/>',
+  taxi: '<path d="M14 62 v-10 q0 -6 6 -7 l10 -12 h36 l12 12 q8 1 8 7 v10z" fill="#f3eee2"/><path d="M34 36 h30 l9 10 h-48z" fill="#bfe0ee"/><path d="M49 36 v10" stroke="#f3eee2" stroke-width="2"/>' +
+    '<rect x="40" y="24" width="20" height="8" rx="2" fill="#f2c81e"/><text x="50" y="30.5" text-anchor="middle" font-family="Arial,sans-serif" font-size="6" font-weight="bold" fill="#2a3346">TAXI</text>' +
+    '<circle cx="28" cy="64" r="7" fill="#3a3f4a"/><circle cx="72" cy="64" r="7" fill="#3a3f4a"/><circle cx="28" cy="64" r="2.6" fill="#8d93a3"/><circle cx="72" cy="64" r="2.6" fill="#8d93a3"/>',
+  aereo: null,
+  bicicletta: '<circle cx="28" cy="62" r="14" fill="none" stroke="#3f8fd0" stroke-width="3"/><circle cx="72" cy="62" r="14" fill="none" stroke="#3f8fd0" stroke-width="3"/>' +
+    '<path d="M28 62 l14 -22 h22 l8 22 M42 40 l8 22 l14 -22 M50 62 h-22 M40 36 h8 M64 40 l-2 -8 h8" stroke="#d23c44" stroke-width="3" fill="none" stroke-linejoin="round" stroke-linecap="round"/>',
+  // a piedi: le orme delle scarpe, una dopo l'altra, verso la città
+  piedi: [[14, 78, -20], [34, 66, 20], [50, 50, -20], [70, 38, 20], [86, 22, -20]].map(([x, y, r], i) => '<g transform="translate(' + x + ' ' + y + ') rotate(' + (r + 40) + ')" fill="#c9a45c" opacity="' + (.45 + i * .13) + '">' +
+    '<ellipse cx="0" cy="-3" rx="5" ry="7"/><ellipse cx="0" cy="8" rx="3.6" ry="4"/></g>').join('')
+};
+function viaFig(X, it) {
+  const k = p3Key(it.who), LK = (typeof LOOKS !== 'undefined' && LOOKS[TEACHERS[k] ? (TEACHERS[k].look || k) : k]) || null;
+  const veh = it.c === 'aereo' ? inner(FIG.plane) : VIA_FIG[it.c];
+  const city = VIA_CITY[X.split('_')[3]];
+  return '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">' +
+    // il cartello verde della città (come in autostrada), con la freccia
+    '<rect x="50" y="3" width="48" height="16" rx="2" fill="#2f7d4a" stroke="#f3eee2" stroke-width="1.2"/><text x="71" y="14.5" text-anchor="middle" font-family="Arial,sans-serif" font-size="8.5" font-weight="bold" fill="#f3eee2">' + city.toUpperCase() + '</text>' +
+    '<path d="M92 11 l4 0 M93 8 l3 3 l-3 3" stroke="#f3eee2" stroke-width="1.4" fill="none"/>' +
+    (LK && typeof tTorso === 'function' ? '<g transform="translate(-6 18) scale(.6)">' + V_PERSON(LK, tArm(LK, ...DOWN_L) + tArm(LK, ...DOWN_R), { mouth: 'smile' }) + '</g>' : '') +
+    '<g transform="translate(66 64) scale(.56) translate(-50 -54)">' + veh + '</g></svg>';
+}
+const SVIA = choiceLesson({
+  flag: 'via', CH: VIA_CH,
+  items: { via_m_treno_roma: { who: 'm', c: 'treno' }, via_f_aereo_napoli: { who: 'f', c: 'aereo' }, via_m_taxi_milano: { who: 'm', c: 'taxi' },
+    via_f_bicicletta_pisa: { who: 'f', c: 'bicicletta' }, via_m_autobus_firenze: { who: 'm', c: 'autobus' }, via_f_piedi_venezia: { who: 'f', c: 'piedi' } },
+  say: (X, c, neg) => vName(X.charAt(4)) + (neg ? ' non' : '') + ' va a ' + VIA_CITY[X.split('_')[3]] + ' ' + VIA_CH[c].the,
+  proper: (w) => vNames()[gNorm(w).trim()] !== undefined,
+  q: (X) => 'Come va ' + vName(X.charAt(4)) + ' a ' + VIA_CITY[X.split('_')[3]] + '?',
+  fig: viaFig,
+  wrong: ['vado', 'vai', 'andare', 'prende']
 });

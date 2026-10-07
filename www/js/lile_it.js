@@ -32,7 +32,7 @@ const lpFig1 = (o) => o === 'key' ? (FIG.key_giallo || FIG.key) : o === 'umbrell
 
 /* ---------- Figura: la persona con le due cose in mano (le arance: una alla bocca, una in mano) ---------- */
 function lpFig(X) {
-  const k = p3Key(lpWho(X)), LK = (typeof LOOKS !== 'undefined' && LOOKS[TEACHERS[k] ? (TEACHERS[k].look || k) : 'luca']) || null;
+  const k = p3Key(lpWho(X)), LK = (typeof LOOKS !== 'undefined' && LOOKS[TEACHERS[k] ? (TEACHERS[k].look || k) : k]) || null;
   if (!LK || typeof tTorso !== 'function') return '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"></svg>';
   const o = LP[X].obj, one = inner(lpFig1(o)).replace(/<ellipse[^>]*opacity="\.2[58]"[^>]*\/>/, '');
   const base = '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><ellipse cx="44" cy="97" rx="30" ry="3" fill="#000" opacity=".25"/>';

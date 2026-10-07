@@ -24,7 +24,7 @@ FIG.key_giallo = FIG.key_giallo || FIG.key;
 
 /* ---------- Figure: la cosa in mano, oppure le mani vuote e la cosa nella nuvoletta, barrata ---------- */
 function clFig(X) {
-  const k = p3Key(clWho(X)), LK = (typeof LOOKS !== 'undefined' && LOOKS[TEACHERS[k] ? (TEACHERS[k].look || k) : 'luca']) || null;
+  const k = p3Key(clWho(X)), LK = (typeof LOOKS !== 'undefined' && LOOKS[TEACHERS[k] ? (TEACHERS[k].look || k) : k]) || null;
   if (!LK || typeof tTorso !== 'function') return '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"></svg>';
   const o = clObj(X), f = o === 'key' ? FIG.key_giallo : o === 'phone' ? (FIG.phone_giallo || FIG.phone) : FIG[o];   // chiave e telefono gialli: si vedono
   const thing = inner(f).replace(/<ellipse[^>]*opacity="\.2[58]"[^>]*\/>/, '');

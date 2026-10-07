@@ -92,7 +92,7 @@ const V_SCENE = {
     '<path d="M70 14 q4 3 0 7 M73 11 q7 6 0 13" fill="none" stroke="#c9a45c" stroke-width="1.6" stroke-linecap="round"/>', { mouth: 'talk' })
 };
 function verbFig(X) {
-  const k = p3Key(vWho(X)), LK = (typeof LOOKS !== 'undefined' && LOOKS[TEACHERS[k] ? (TEACHERS[k].look || k) : 'luca']) || null;
+  const k = p3Key(vWho(X)), LK = (typeof LOOKS !== 'undefined' && LOOKS[TEACHERS[k] ? (TEACHERS[k].look || k) : k]) || null;
   const body = LK && typeof tTorso === 'function' ? V_SCENE[vAct(X)](LK) : '';
   return '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><ellipse cx="50" cy="97" rx="34" ry="3" fill="#000" opacity=".25"/>' + body + '</svg>';
 }
@@ -117,7 +117,7 @@ const SV = {
    «(Max / lui) (non) legge (un libro)»: chi, il verbo e la sua forma, la cosa (se c'è, con l'articolo giusto). */
 function vNames() {
   const P = p3People(), out = {};
-  ['m', 'f'].forEach(w => { out[norm(TEACHERS[P[w]].name).trim()] = w; });
+  ['m', 'f'].forEach(w => { out[norm(P3_CHARS[P[w]].name).trim()] = w; });
   return out;
 }
 function verbStatements(s) {

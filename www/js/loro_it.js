@@ -34,7 +34,7 @@ const loOther = (X) => pick(Object.keys(LO_ACT).filter(a => a !== loAct(X)));
 
 /* ---------- Figura: i due colleghi, uno accanto all'altro, che fanno la stessa cosa ---------- */
 function loFig(X) {
-  const look = (w) => { const k = p3Key(w); return (typeof LOOKS !== 'undefined' && LOOKS[TEACHERS[k] ? (TEACHERS[k].look || k) : 'luca']) || null; };
+  const look = (w) => { const k = p3Key(w); return (typeof LOOKS !== 'undefined' && LOOKS[TEACHERS[k] ? (TEACHERS[k].look || k) : k]) || null; };
   const m = look('m'), f = look('f');
   if (!m || !f || typeof tTorso !== 'function') return '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"></svg>';
   const a = loAct(X);

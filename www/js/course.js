@@ -319,7 +319,7 @@ const LESSONS = [
     known: ['cu_porta', 'cu_leggere', 'cu_telefono', 'cu_colazione', 'cu_newyork', 'cu_ora'] },
   // capitolo 18: «Piace — piacciono» — A Max piace il caffè. A Isa piacciono i fiori. (piace_it.js)
   { id: 'l85', title: 'Lezione 85', level: 4, pi: true, hilite: ['piace', 'piacciono'],
-    known: ['pi_m_caffe', 'pi_f_fiori', 'pi_m_libri', 'pi_f_pizza', 'pi_m_mele', 'pi_f_vino'] },
+    known: ['pi_m_caffe', 'pi_f_scarpe', 'pi_m_libri', 'pi_f_fiori', 'pi_m_mele', 'pi_f_vino'] },
   // capitolo 18: «Le quattro stagioni» — È aprile. È primavera. Che stagione è? (stagioni_it.js)
   { id: 'l86', title: 'Lezione 86', level: 4, sg: true, hilite: ['primavera', 'estate', 'autunno', 'inverno', 'stagione'],
     known: ['sg_apr', 'sg_lug', 'sg_ott', 'sg_gen', 'sg_mag', 'sg_ago', 'sg_nov', 'sg_feb'] },
@@ -337,7 +337,10 @@ const LESSONS = [
     known: ['bar_m_cappuccino', 'bar_f_cornetto', 'bar_m_caffe', 'bar_f_gelato', 'bar_m_tramezzino', 'bar_f_spremuta'] },
   // «I vestiti» — In negozio Isa compra una sciarpa. (scelta_it.js; la vetrina MODA)
   { id: 'l91', title: 'Lezione 91', level: 4, moda: true, hilite: ['compra', 'in negozio'],
-    known: ['moda_f_sciarpa', 'moda_m_cravatta', 'moda_f_gonna', 'moda_m_cappello', 'moda_f_camicia', 'moda_m_maglione'] }
+    known: ['moda_f_sciarpa', 'moda_m_cravatta', 'moda_f_scarpe', 'moda_f_gonna', 'moda_m_cappello', 'moda_f_camicia', 'moda_m_maglione'] },
+  // «I trasporti» — Come va Max a Roma? Max va a Roma in treno. (scelta_it.js; il cartello verde della città)
+  { id: 'l92', title: 'Lezione 92', level: 4, via: true, hilite: ['Come va', 'in', 'a piedi'],
+    known: ['via_m_treno_roma', 'via_f_aereo_napoli', 'via_m_taxi_milano', 'via_f_bicicletta_pisa', 'via_m_autobus_firenze', 'via_f_piedi_venezia'] }
 ];
 
 // Quattro insegnanti, dal più rigido al più indulgente. gender = voce maschile o femminile.

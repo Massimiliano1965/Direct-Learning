@@ -36,7 +36,7 @@ const nvOther = (X) => pick(Object.keys(NV_ACT).filter(a => a !== nvAct(X)));
 /* ---------- Figura: l'insegnante (a sinistra) e Max (a destra), che fanno la stessa cosa ---------- */
 function nvFig(X) {
   const tk = typeof selectedTeacherKey === 'function' ? selectedTeacherKey() : 'luca';
-  const look = (k) => (typeof LOOKS !== 'undefined' && LOOKS[TEACHERS[k] ? (TEACHERS[k].look || k) : 'luca']) || null;
+  const look = (k) => (typeof LOOKS !== 'undefined' && LOOKS[TEACHERS[k] ? (TEACHERS[k].look || k) : k]) || null;
   const t = look(tk), m = look(p3Key('m'));
   if (!t || !m || typeof tTorso !== 'function') return '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"></svg>';
   const a = nvAct(X);

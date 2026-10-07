@@ -26,7 +26,7 @@ const cmAns = (X, n, neg) => cmMe(X) ? 'Lei ' + (neg ? 'non ' : '') + 'si chiama
 const cmQ = (X) => cmMe(X) ? 'Come mi chiamo io?' : 'Come si chiama ' + cmPron(X) + '?';
 // Max e Isa: in piedi, che salutano con la mano (si presentano)
 function cmPerson(w) {
-  const k = p3Key(w), LK = (typeof LOOKS !== 'undefined' && LOOKS[TEACHERS[k] ? (TEACHERS[k].look || k) : 'luca']) || null;
+  const k = p3Key(w), LK = (typeof LOOKS !== 'undefined' && LOOKS[TEACHERS[k] ? (TEACHERS[k].look || k) : k]) || null;
   if (!LK || typeof tTorso !== 'function') return '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"></svg>';
   return '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><ellipse cx="50" cy="97" rx="30" ry="3" fill="#000" opacity=".25"/>' +
     V_PERSON(LK, tArm(LK, ...DOWN_L) + tArm(LK, [65, 47], [74, 36], [72, 22]), { mouth: 'smile' }) + '</svg>';

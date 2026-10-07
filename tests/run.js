@@ -14,7 +14,7 @@ const evaluate = run('evaluate');
 const evaluateAll = run('evaluateAll');
 const buildSteps = run('buildSteps');
 const answerSteps = run('answerSteps');
-const LESSONS = run('LESSONS').filter(l => !l.colors && !l.numbers && !l.geo && !l.poss && !l.size && !l.third && !l.nat && !l.ess && !l.altro && !l.prep && !l.anche && !l.ora && !l.appt && !l.verbs && !l.purp && !l.pron && !l.sum && !l.km && !l.fam && !l.ea && !l.pl && !l.ce && !l.co && !l.dt && !l.ct && !l.sta && !l.cl && !l.imp && !l.qd && !l.ne && !l.ps && !l.lh && !l.cv && !l.sa && !l.lm && !l.gd && !l.ms && !l.sp && !l.lo && !l.nv && !l.da && !l.qn && !l.bv && !l.lp && !l.cm && !l.tv && !l.lq && !l.cz && !l.qu && !l.fi && !l.nh && !l.rf && !l.gn && !l.vo && !l.po && !l.dv && !l.an && !l.tl && !l.dvp && !l.mc && !l.pe && !l.vi && !l.fu && !l.ge && !l.lg && !l.pc && !l.md && !l.cu && !l.pi && !l.sg && !l.tf && !l.ipf && !l.spu && !l.bar && !l.moda && !l.test);   // lezioni con gli oggetti (colori e numeri hanno i loro test)
+const LESSONS = run('LESSONS').filter(l => !l.colors && !l.numbers && !l.geo && !l.poss && !l.size && !l.third && !l.nat && !l.ess && !l.altro && !l.prep && !l.anche && !l.ora && !l.appt && !l.verbs && !l.purp && !l.pron && !l.sum && !l.km && !l.fam && !l.ea && !l.pl && !l.ce && !l.co && !l.dt && !l.ct && !l.sta && !l.cl && !l.imp && !l.qd && !l.ne && !l.ps && !l.lh && !l.cv && !l.sa && !l.lm && !l.gd && !l.ms && !l.sp && !l.lo && !l.nv && !l.da && !l.qn && !l.bv && !l.lp && !l.cm && !l.tv && !l.lq && !l.cz && !l.qu && !l.fi && !l.nh && !l.rf && !l.gn && !l.vo && !l.po && !l.dv && !l.an && !l.tl && !l.dvp && !l.mc && !l.pe && !l.vi && !l.fu && !l.ge && !l.lg && !l.pc && !l.md && !l.cu && !l.pi && !l.sg && !l.tf && !l.ipf && !l.spu && !l.bar && !l.moda && !l.via && !l.test);   // lezioni con gli oggetti (colori e numeri hanno i loro test)
 const NUM_LESSONS = run('LESSONS').filter(l => l.numbers);
 const COLOR_LESSONS = run('LESSONS').filter(l => l.colors);
 const ITEMS = run('ITEMS');
@@ -495,26 +495,26 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
   check('lezione 11: ripetizioni giuste', models.every(s => buildDrill(s, 5, s.reviewItems || []).every(d => evaluate(d, d.model).ok)));
 }
 
-// Lezione 12: «Il suo, la sua» (le cose di Max e di Isa quando insegna Pietro)
+// Lezione 12: «Il suo, la sua» (le cose di Mario e di Laura quando insegna Pietro)
 {
   const SW = run('SW'), evalAsk = run('evalAsk'), answerAsk = run('answerAsk'), buildDrill = run('buildDrill');
   const ok = (st, t) => evaluate(st, t).ok;
   const l12 = run('LESSONS').find(l => l.id === 'l12');
   check('lezione 12 c\'è', !!l12 && l12.third);
   check('figure con la faccia di chi lo possiede', l12.known.every(k => FIG[k] && FIG[k].indexOf('<svg') === 0 && FIG[k].indexOf(' id=') === -1));
-  check('frasi', SW.present('p3_f_phone').prompt === 'È il telefono di Isa.' && SW.yes('p3_m_bag').prompt === 'È la borsa di Max?' &&
+  check('frasi', SW.present('p3_f_phone').prompt === 'È il telefono di Laura.' && SW.yes('p3_m_bag').prompt === 'È la borsa di Mario?' &&
     SW.yes('p3_m_bag').model === 'Sì, è la sua borsa.' && SW.yes('p3_f_phone').model === 'Sì, è il suo telefono.' &&
-    SW.neg('p3_f_phone').prompt === 'È il telefono di Max?' && SW.neg('p3_f_phone').model === 'No, non è il suo telefono.' &&
-    SW.key('p3_f_suitcase').prompt === 'Di chi è questa valigia?' && SW.key('p3_f_suitcase').model === 'È la valigia di Isa.');
-  check('giusto', ok(SW.yes('p3_m_bag'), 'Sì, è la sua borsa.') && ok(SW.yes('p3_m_bag'), 'Sì, è la borsa di Max.') &&
-    ok(SW.neg('p3_f_phone'), 'No, non è il suo telefono.') && ok(SW.key('p3_m_laptop'), 'È il portatile di Max.') && ok(SW.alt('p3_f_flask'), 'È la borraccia di Isa.'));
+    SW.neg('p3_f_phone').prompt === 'È il telefono di Mario?' && SW.neg('p3_f_phone').model === 'No, non è il suo telefono.' &&
+    SW.key('p3_f_suitcase').prompt === 'Di chi è questa valigia?' && SW.key('p3_f_suitcase').model === 'È la valigia di Laura.');
+  check('giusto', ok(SW.yes('p3_m_bag'), 'Sì, è la sua borsa.') && ok(SW.yes('p3_m_bag'), 'Sì, è la borsa di Mario.') &&
+    ok(SW.neg('p3_f_phone'), 'No, non è il suo telefono.') && ok(SW.key('p3_m_laptop'), 'È il portatile di Mario.') && ok(SW.alt('p3_f_flask'), 'È la borraccia di Laura.'));
   check('sbagliato: «il sua», «la suo»', !ok(SW.yes('p3_f_phone'), 'Sì, è il sua telefono.') && !ok(SW.yes('p3_m_bag'), 'Sì, è la suo borsa.'));
-  check('sbagliato: persona sbagliata', !ok(SW.key('p3_f_phone'), 'È il telefono di Max.') && !ok(SW.yes('p3_f_phone'), 'Sì, è il telefono di Max.'));
+  check('sbagliato: persona sbagliata', !ok(SW.key('p3_f_phone'), 'È il telefono di Mario.') && !ok(SW.yes('p3_f_phone'), 'Sì, è il telefono di Mario.'));
   check('sbagliato: «il mio», «il Suo» al posto di «il suo»... di lui', !ok(SW.yes('p3_m_laptop'), 'Sì, è il mio portatile.'));
   check('alla domanda chiave serve il nome', !ok(SW.key('p3_f_phone'), 'È il suo telefono.'));
-  check('allievo', evalAsk('p3_f_phone', 'Di chi è questo telefono?').kind === 'what' && answerAsk('p3_f_phone', { kind: 'what' }) === 'È il telefono di Isa.' &&
-    evalAsk('p3_f_phone', 'È il telefono di Max?').kind === 'no' && answerAsk('p3_f_phone', { kind: 'no', ask: 'm' }) === 'No, non è il suo telefono. È il telefono di Isa.' &&
-    evalAsk('p3_m_bag', 'È il borsa di Max?').model === 'È la borsa di Max?');
+  check('allievo', evalAsk('p3_f_phone', 'Di chi è questo telefono?').kind === 'what' && answerAsk('p3_f_phone', { kind: 'what' }) === 'È il telefono di Laura.' &&
+    evalAsk('p3_f_phone', 'È il telefono di Mario?').kind === 'no' && answerAsk('p3_f_phone', { kind: 'no', ask: 'm' }) === 'No, non è il suo telefono. È il telefono di Laura.' &&
+    evalAsk('p3_m_bag', 'È il borsa di Mario?').model === 'È la borsa di Mario?');
   const st = buildSteps(l12), models = st.filter(s => s.model && s.type !== 'reveal');
   check('lezione 12: risposte modello giuste', models.every(s => evaluate(s, s.model).ok));
   check('lezione 12: ripetizioni giuste', models.every(s => buildDrill(s, 5, s.reviewItems || []).every(d => evaluate(d, d.model).ok)));
@@ -602,24 +602,24 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
   check('sbagliato: «un zaino», «una agenda», «uno ombrello»', !ok(S_.yes('backpack'), 'Sì, è un zaino.') && !ok(S_.yes('agenda'), 'Sì, è una agenda.') && !ok(S_.yes('umbrella'), 'Sì, è uno ombrello.'));
 }
 
-// Lezione 17: «Il, la, l', lo» (insegna Pietro: le cose di Max e di Isa)
+// Lezione 17: «Il, la, l', lo» (insegna Pietro: le cose di Mario e di Laura)
 {
   const SW = run('SW'), evalAsk = run('evalAsk'), buildDrill = run('buildDrill'), ok = (st, t) => evaluate(st, t).ok;
   const l17 = run('LESSONS').find(l => l.id === 'l17');
   check('lezione 17 c\'è', !!l17 && l17.third && l17.def);
   check('figure', l17.known.every(k => FIG[k] && FIG[k].indexOf('<svg') === 0 && FIG[k].indexOf(' id=') === -1));
-  check('frasi: lo, l\', il, la', SW.present('p3_m_backpack').prompt === 'È lo zaino di Max.' && SW.present('p3_m_agenda').prompt === 'È l\'agenda di Max.' &&
-    SW.present('p3_f_umbrella').prompt === 'È l\'ombrello di Isa.' && SW.present('p3_f_book').prompt === 'È il libro di Isa.' && SW.present('p3_m_key').prompt === 'È la chiave di Max.' &&
-    SW.yes('p3_f_mirror', true).model === 'Sì, è lo specchio di Isa.' && SW.neg('p3_m_backpack', true).model === 'No, non è lo zaino di Isa.');
-  check('giusto (anche «l agenda» del microfono)', ok(SW.key('p3_m_agenda'), 'È l\'agenda di Max.') && ok(SW.key('p3_m_agenda'), 'È l agenda di Max.') &&
-    ok(SW.yes('p3_m_backpack', true), 'Sì, è lo zaino di Max.') && ok(SW.yes('p3_m_backpack', true), 'Sì, è il suo zaino.'));
-  check('sbagliato: «il zaino», «la agenda», «lo ombrello», «lo suo zaino»', !ok(SW.key('p3_m_backpack'), 'È il zaino di Max.') && !ok(SW.key('p3_m_agenda'), 'È la agenda di Max.') &&
-    !ok(SW.key('p3_f_umbrella'), 'È lo ombrello di Isa.') && !ok(SW.yes('p3_m_backpack', true), 'Sì, è lo suo zaino.'));
-  check('lezione 12 non cambia', SW.yes('p3_m_bag').model === 'Sì, è la sua borsa.' && SW.present('p3_f_phone').prompt === 'È il telefono di Isa.');
+  check('frasi: lo, l\', il, la', SW.present('p3_m_backpack').prompt === 'È lo zaino di Mario.' && SW.present('p3_m_agenda').prompt === 'È l\'agenda di Mario.' &&
+    SW.present('p3_f_umbrella').prompt === 'È l\'ombrello di Laura.' && SW.present('p3_f_book').prompt === 'È il libro di Laura.' && SW.present('p3_m_key').prompt === 'È la chiave di Mario.' &&
+    SW.yes('p3_f_mirror', true).model === 'Sì, è lo specchio di Laura.' && SW.neg('p3_m_backpack', true).model === 'No, non è lo zaino di Laura.');
+  check('giusto (anche «l agenda» del microfono)', ok(SW.key('p3_m_agenda'), 'È l\'agenda di Mario.') && ok(SW.key('p3_m_agenda'), 'È l agenda di Mario.') &&
+    ok(SW.yes('p3_m_backpack', true), 'Sì, è lo zaino di Mario.') && ok(SW.yes('p3_m_backpack', true), 'Sì, è il suo zaino.'));
+  check('sbagliato: «il zaino», «la agenda», «lo ombrello», «lo suo zaino»', !ok(SW.key('p3_m_backpack'), 'È il zaino di Mario.') && !ok(SW.key('p3_m_agenda'), 'È la agenda di Mario.') &&
+    !ok(SW.key('p3_f_umbrella'), 'È lo ombrello di Laura.') && !ok(SW.yes('p3_m_backpack', true), 'Sì, è lo suo zaino.'));
+  check('lezione 12 non cambia', SW.yes('p3_m_bag').model === 'Sì, è la sua borsa.' && SW.present('p3_f_phone').prompt === 'È il telefono di Laura.');
   const st = buildSteps(l17), models = st.filter(s => s.model && s.type !== 'reveal');
   check('lezione 17: risposte modello giuste', models.every(s => evaluate(s, s.model).ok));
   check('lezione 17: ripetizioni giuste', models.every(s => buildDrill(s, 5, s.reviewItems || []).every(d => evaluate(d, d.model).ok)));
-  check('lezione 17: risposte con il nome', st.filter(s => s.type === 'yes').every(s => / di (Max|Isa)\.$/.test(s.model)));
+  check('lezione 17: risposte con il nome', st.filter(s => s.type === 'yes').every(s => / di (Mario|Laura)\.$/.test(s.model)));
 }
 
 // Lezione 18: «Preposizioni articolate» (su, in)
@@ -741,7 +741,7 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
   const l23 = run('LESSONS').find(l => l.id === 'l23');
   check('lezione 23 c\'è', !!l23 && l23.verbs);
   check('figure', l23.known.every(k => FIG[k] && FIG[k].indexOf('<svg') === 0 && FIG[k].indexOf(' id=') === -1));
-  const P = run('p3People()'), M = run('TEACHERS')[P.m].name, F = run('TEACHERS')[P.f].name;
+  const P = run('p3People()'), M = run('P3_CHARS')[P.m].name, F = run('P3_CHARS')[P.f].name;
   check('frasi', SV.present('v_m_read').prompt === M + ' legge un libro.' && SV.present('v_f_drink').prompt === F + ' beve un\'aranciata.' &&
     SV.present('v_f_phone').prompt === F + ' telefona.' && SV.key('v_f_close').prompt === 'Cosa fa ' + F + '?' && SV.yes('v_m_open').model === 'Sì, ' + M + ' apre la porta.');
   check('giusto (anche breve, con lui/lei, «il libro»)', ok(SV.key('v_m_read'), M + ' legge un libro.') && ok(SV.key('v_m_read'), 'Legge un libro.') && ok(SV.key('v_m_read'), 'Lui legge il libro.') &&
@@ -767,7 +767,7 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
   const l24 = run('LESSONS').find(l => l.id === 'l24');
   check('lezione 24 c\'è', !!l24 && l24.purp);
   check('figure', l24.known.every(k => FIG[k] && FIG[k].indexOf('<svg') === 0 && FIG[k].indexOf(' id=') === -1));
-  const P = run('p3People()'), M = run('TEACHERS')[P.m].name, F = run('TEACHERS')[P.f].name;
+  const P = run('p3People()'), M = run('P3_CHARS')[P.m].name, F = run('P3_CHARS')[P.f].name;
   check('frasi', SP.present('pp_m_book').prompt === M + ' prende il libro per leggere.' && SP.present('pp_m_key').prompt === M + ' prende la chiave per aprire la porta.' &&
     SP.present('pp_m_orange').prompt === M + ' prende l\'arancia per mangiare.' && SP.key('pp_f_pen').prompt === 'Perché ' + F + ' prende la penna?' && SP.key('pp_f_pen').model === 'Per scrivere.');
   check('giusto (breve e intera)', ok(SP.key('pp_f_soda'), 'Per bere.') && ok(SP.key('pp_f_soda'), F + ' prende l\'aranciata per bere.') && ok(SP.key('pp_m_key'), 'Per aprire la porta.') &&
@@ -793,7 +793,7 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
   const l25 = run('LESSONS').find(l => l.id === 'l25');
   check('lezione 25 c\'è', !!l25 && l25.pron);
   check('figure', l25.known.every(k => FIG[k] && FIG[k].indexOf('<svg') === 0 && FIG[k].indexOf(' id=') === -1));
-  const P = run('p3People()'), M = run('TEACHERS')[P.m].name, F = run('TEACHERS')[P.f].name;
+  const P = run('p3People()'), M = run('P3_CHARS')[P.m].name, F = run('P3_CHARS')[P.f].name;
   check('frasi', SL.present('ld_m_book').prompt === M + ' legge il libro.' && SL.yes('ld_f_window').model === 'Sì, la chiude.' && SL.yes('ld_m_orange').model === 'Sì, la mangia.' &&
     SL.key('ld_m_notebook').prompt === 'Cosa fa ' + M + ' con il quaderno?' && SL.key('ld_m_notebook').model === 'Lo prende.' && SL.key('ld_m_orange').prompt === 'Cosa fa ' + M + ' con l\'arancia?' &&
     SL.neg('ld_m_book').prompt === F + ' legge il libro?' && SL.neg('ld_m_book').model === 'No, non lo legge.');
@@ -892,7 +892,7 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
   const l31 = run('LESSONS').find(l => l.id === 'l31');
   check('lezione 31 c\'è', !!l31 && l31.ea);
   check('figure', l31.known.every(k => FIG[k] && FIG[k].indexOf('<svg') === 0 && FIG[k].indexOf(' id=') === -1));
-  const P = run('p3People()'), M = run('TEACHERS')[P.m].name, F = run('TEACHERS')[P.f].name;
+  const P = run('p3People()'), M = run('P3_CHARS')[P.m].name, F = run('P3_CHARS')[P.f].name;
   check('frasi', SE2.presentHa('ea_m_phone_nero').prompt === M + ' ha un telefono.' && SE2.presentE('ea_m_phone_nero').prompt === 'Il telefono è nero.' &&
     SE2.keyHa('ea_f_suitcase_rosso').prompt === 'Che cosa ha ' + F + '?' && SE2.keyHa('ea_f_suitcase_rosso').model === F + ' ha una valigia.' &&
     SE2.keyE('ea_f_suitcase_rosso').prompt === 'Di che colore è la valigia?' && SE2.keyE('ea_f_suitcase_rosso').model === 'La valigia è rossa.');
@@ -1051,7 +1051,7 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
 {
   const SX = run('SST'), evalAsk = run('evalAsk'), buildDrill = run('buildDrill'), ok = (st, t) => evaluate(st, t).ok;
   const l = run('LESSONS').find(l => l.id === 'l40');
-  const P = run('p3People()'), M = run('TEACHERS')[P.m].name, F = run('TEACHERS')[P.f].name;
+  const P = run('p3People()'), M = run('P3_CHARS')[P.m].name, F = run('P3_CHARS')[P.f].name;
   check('lezione 40 c\'è', !!l && l.sta && l.level === 2);
   check('figure', l.known.every(k => FIG[k] && FIG[k].indexOf('<svg') === 0 && FIG[k].indexOf(' id=') === -1));
   check('frasi', SX.present('st_m_bene').prompt === M + ' sta bene.' && SX.present('st_f_stanco').prompt === F + ' è stanca.' && SX.present('st_m_stanco').prompt === M + ' è stanco.' &&
@@ -1071,7 +1071,7 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
 {
   const SX = run('SCL'), evalAsk = run('evalAsk'), answerAsk = run('answerAsk'), buildDrill = run('buildDrill'), ok = (st, t) => evaluate(st, t).ok;
   const l = run('LESSONS').find(l => l.id === 'l41');
-  const P = run('p3People()'), M = run('TEACHERS')[P.m].name, F = run('TEACHERS')[P.f].name;
+  const P = run('p3People()'), M = run('P3_CHARS')[P.m].name, F = run('P3_CHARS')[P.f].name;
   check('lezione 41 c\'è', !!l && l.cl && l.level === 2);
   check('figure', l.known.every(k => FIG[k] && FIG[k].indexOf('<svg') === 0 && FIG[k].indexOf(' id=') === -1));
   check('frasi', SX.present('cl_m_phone_1').prompt === M + ' ha il telefono. Ce l\'ha.' && SX.present('cl_f_suitcase_0').prompt === F + ' non ha la valigia. Non ce l\'ha.' &&
@@ -1091,7 +1091,7 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
 {
   const SX = run('SIM'), evalAsk = run('evalAsk'), buildDrill = run('buildDrill'), ok = (st, t) => evaluate(st, t).ok;
   const l = run('LESSONS').find(l => l.id === 'l42');
-  const P = run('p3People()'), M = run('TEACHERS')[P.m].name, F = run('TEACHERS')[P.f].name;
+  const P = run('p3People()'), M = run('P3_CHARS')[P.m].name, F = run('P3_CHARS')[P.f].name;
   check('lezione 42 c\'è', !!l && l.imp && l.level === 2);
   check('figure', l.known.every(k => FIG[k] && FIG[k].indexOf('<svg') === 0 && FIG[k].indexOf(' id=') === -1));
   check('frasi', SX.present('im_f_open').prompt === F + ' dice: «Apra la porta!»' && SX.key('im_m_close').prompt === 'Che cosa dice ' + M + '?' && SX.key('im_m_close').model === 'Chiuda la finestra!' &&
@@ -1113,7 +1113,7 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
 {
   const SX = run('SQD'), evalAsk = run('evalAsk'), answerAsk = run('answerAsk'), buildDrill = run('buildDrill'), ok = (st, t) => evaluate(st, t).ok;
   const l = run('LESSONS').find(l => l.id === 'l43');
-  const P = run('p3People()'), M = run('TEACHERS')[P.m].name, F = run('TEACHERS')[P.f].name;
+  const P = run('p3People()'), M = run('P3_CHARS')[P.m].name, F = run('P3_CHARS')[P.f].name;
   check('lezione 43 c\'è', !!l && l.qd && l.level === 2);
   check('figure', l.known.every(k => FIG[k] && FIG[k].indexOf('<svg') === 0));
   check('frasi', SX.key('qd_ora').prompt === 'Sono le otto. Qual è la domanda?' && SX.key('qd_ora').model === 'Che ore sono?' &&
@@ -1158,7 +1158,7 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
 {
   const SX = run('SPS'), evalAsk = run('evalAsk'), answerAsk = run('answerAsk'), buildDrill = run('buildDrill'), ok = (st, t) => evaluate(st, t).ok;
   const l = run('LESSONS').find(l => l.id === 'l45');
-  const P = run('p3People()'), M = run('TEACHERS')[P.m].name, F = run('TEACHERS')[P.f].name;
+  const P = run('p3People()'), M = run('P3_CHARS')[P.m].name, F = run('P3_CHARS')[P.f].name;
   check('lezione 45 c\'è', !!l && l.ps && l.level === 2);
   check('figure', l.known.every(k => FIG[k] && FIG[k].indexOf('<svg') === 0 && FIG[k].indexOf(' id=') === -1));
   check('frasi', SX.present('ps_m_read').prompt === M + ' ha letto un libro.' && SX.key('ps_f_open').prompt === 'Che cosa ha fatto ' + F + '?' &&
@@ -1181,7 +1181,7 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
 {
   const SX = run('SLH'), evalAsk = run('evalAsk'), answerAsk = run('answerAsk'), buildDrill = run('buildDrill'), ok = (st, t) => evaluate(st, t).ok;
   const l = run('LESSONS').find(l => l.id === 'l46');
-  const P = run('p3People()'), M = run('TEACHERS')[P.m].name, F = run('TEACHERS')[P.f].name;
+  const P = run('p3People()'), M = run('P3_CHARS')[P.m].name, F = run('P3_CHARS')[P.f].name;
   check('lezione 46 c\'è', !!l && l.lh && l.level === 2);
   check('figure', l.known.every(k => FIG[k] && FIG[k].indexOf('<svg') === 0 && FIG[k].indexOf(' id=') === -1));
   check('frasi', SX.present('lh_m_book').prompt === M + ' ha letto il libro. L\'ha letto.' && SX.key('lh_f_window').prompt === 'Che cosa ha fatto ' + F + ' con la finestra?' &&
@@ -1204,7 +1204,7 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
 {
   const SX = run('SCV'), evalAsk = run('evalAsk'), answerAsk = run('answerAsk'), buildDrill = run('buildDrill'), ok = (st, t) => evaluate(st, t).ok;
   const l = run('LESSONS').find(l => l.id === 'l47');
-  const P = run('p3People()'), M = run('TEACHERS')[P.m].name, F = run('TEACHERS')[P.f].name;
+  const P = run('p3People()'), M = run('P3_CHARS')[P.m].name, F = run('P3_CHARS')[P.f].name;
   check('lezione 47 c\'è', !!l && l.cv && l.level === 2);
   check('figure', l.known.every(k => FIG[k] && FIG[k].indexOf('<svg') === 0 && FIG[k].indexOf(' id=') === -1));
   check('frasi', SX.present('cv_m_roma_va').prompt === M + ' va a Roma. Ci va.' && SX.present('cv_f_parigi_e').prompt === F + ' è a Parigi. C\'è.' &&
@@ -1227,7 +1227,7 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
 {
   const SX = run('SSA'), evalAsk = run('evalAsk'), answerAsk = run('answerAsk'), buildDrill = run('buildDrill'), ok = (st, t) => evaluate(st, t).ok;
   const l = run('LESSONS').find(l => l.id === 'l48');
-  const P = run('p3People()'), M = run('TEACHERS')[P.m].name, F = run('TEACHERS')[P.f].name;
+  const P = run('p3People()'), M = run('P3_CHARS')[P.m].name, F = run('P3_CHARS')[P.f].name;
   check('lezione 48 c\'è', !!l && l.sa && l.level === 2);
   check('figure', l.known.every(k => FIG[k] && FIG[k].indexOf('<svg') === 0 && FIG[k].indexOf(' id=') === -1));
   check('frasi', SX.present('sa_m_giorno').prompt === M + ' dice: «Buongiorno!»' && SX.key('sa_f_sera').prompt === 'Che cosa dice ' + F + '?' && SX.key('sa_f_arriv').model === 'Arrivederci!');
@@ -1303,7 +1303,7 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
 {
   const SX = run('SSP'), evalAsk = run('evalAsk'), answerAsk = run('answerAsk'), buildDrill = run('buildDrill'), ok = (st, t) => evaluate(st, t).ok;
   const l = run('LESSONS').find(l => l.id === 'l52');
-  const P = run('p3People()'), M = run('TEACHERS')[P.m].name, F = run('TEACHERS')[P.f].name;
+  const P = run('p3People()'), M = run('P3_CHARS')[P.m].name, F = run('P3_CHARS')[P.f].name;
   check('lezione 52 c\'è', !!l && l.sp && l.level === 2);
   check('figure', l.known.every(k => FIG[k] && FIG[k].indexOf('<svg') === 0 && FIG[k].indexOf(' id=') === -1));
   check('frasi', SX.present('sp_m_umbrella').prompt === 'Sono gli ombrelli di ' + M + '. Sono i suoi ombrelli.' && SX.key('sp_f_key').prompt === 'Di chi sono queste chiavi?' &&
@@ -1325,7 +1325,7 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
 {
   const SX = run('SLO'), evalAsk = run('evalAsk'), answerAsk = run('answerAsk'), buildDrill = run('buildDrill'), ok = (st, t) => evaluate(st, t).ok;
   const l = run('LESSONS').find(l => l.id === 'l53');
-  const P = run('p3People()'), M = run('TEACHERS')[P.m].name, F = run('TEACHERS')[P.f].name, W = M + ' e ' + F;
+  const P = run('p3People()'), M = run('P3_CHARS')[P.m].name, F = run('P3_CHARS')[P.f].name, W = M + ' e ' + F;
   check('lezione 53 c\'è', !!l && l.lo && l.level === 2);
   check('figure', l.known.every(k => FIG[k] && FIG[k].indexOf('<svg') === 0 && FIG[k].indexOf(' id=') === -1));
   check('frasi', SX.present('lo_read').prompt === W + ' leggono un libro.' && SX.key('lo_eat').prompt === 'Che cosa fanno ' + W + '?' && SX.key('lo_phone').model === W + ' telefonano.');
@@ -1346,7 +1346,7 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
 {
   const SX = run('SNV'), evalAsk = run('evalAsk'), answerAsk = run('answerAsk'), buildDrill = run('buildDrill'), ok = (st, t) => evaluate(st, t).ok;
   const l = run('LESSONS').find(l => l.id === 'l54');
-  const P = run('p3People()'), M = run('TEACHERS')[P.m].name;
+  const P = run('p3People()'), M = run('P3_CHARS')[P.m].name;
   check('lezione 54 c\'è', !!l && l.nv && l.level === 2);
   check('figure', l.known.every(k => FIG[k] && FIG[k].indexOf('<svg') === 0 && FIG[k].indexOf(' id=') === -1));
   check('frasi', SX.present('nv_read').prompt === 'Io e ' + M + ' leggiamo un libro.' && SX.key('nv_eat').prompt === 'Che cosa facciamo io e ' + M + '?' &&
@@ -1368,7 +1368,7 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
 {
   const SX = run('SDA'), evalAsk = run('evalAsk'), answerAsk = run('answerAsk'), buildDrill = run('buildDrill'), ok = (st, t) => evaluate(st, t).ok;
   const l = run('LESSONS').find(l => l.id === 'l55');
-  const P = run('p3People()'), M = run('TEACHERS')[P.m].name, F = run('TEACHERS')[P.f].name;
+  const P = run('p3People()'), M = run('P3_CHARS')[P.m].name, F = run('P3_CHARS')[P.f].name;
   check('lezione 55 c\'è', !!l && l.da && l.level === 2);
   check('figure', l.known.every(k => FIG[k] && FIG[k].indexOf('<svg') === 0 && FIG[k].indexOf(' id=') === -1));
   check('frasi', SX.present('da_m_book').prompt === M + ' dà il libro a ' + F + '. Le dà il libro.' && SX.key('da_f_pen').prompt === 'Che cosa dà ' + F + ' a ' + M + '?' &&
@@ -1389,7 +1389,7 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
 {
   const SX = run('SQN'), evalAsk = run('evalAsk'), answerAsk = run('answerAsk'), buildDrill = run('buildDrill'), ok = (st, t) => evaluate(st, t).ok;
   const l = run('LESSONS').find(l => l.id === 'l56');
-  const P = run('p3People()'), M = run('TEACHERS')[P.m].name, F = run('TEACHERS')[P.f].name;
+  const P = run('p3People()'), M = run('P3_CHARS')[P.m].name, F = run('P3_CHARS')[P.f].name;
   check('lezione 56 c\'è', !!l && l.qn && l.level === 2);
   check('figure', l.known.every(k => FIG[k] && FIG[k].indexOf('<svg') === 0 && FIG[k].indexOf(' id=') === -1));
   check('frasi', SX.present('qn_p_m').prompt === 'Nella stanza c\'è qualcuno. C\'è ' + M + '.' && SX.present('qn_t_0').prompt === 'Sul tavolo non c\'è niente.' &&
@@ -1433,7 +1433,7 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
 {
   const SX = run('SLP'), evalAsk = run('evalAsk'), answerAsk = run('answerAsk'), buildDrill = run('buildDrill'), ok = (st, t) => evaluate(st, t).ok;
   const l = run('LESSONS').find(l => l.id === 'l58');
-  const P = run('p3People()'), M = run('TEACHERS')[P.m].name, F = run('TEACHERS')[P.f].name;
+  const P = run('p3People()'), M = run('P3_CHARS')[P.m].name, F = run('P3_CHARS')[P.f].name;
   check('lezione 58 c\'è', !!l && l.lp && l.level === 2);
   check('figure', l.known.every(k => FIG[k] && FIG[k].indexOf('<svg') === 0 && FIG[k].indexOf(' id=') === -1));
   check('frasi', SX.present('lp_f_umbrella').prompt === F + ' prende gli ombrelli. Li prende.' && SX.key('lp_f_key').prompt === 'Che cosa fa ' + F + ' con le chiavi?' &&
@@ -1455,7 +1455,7 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
 {
   const SX = run('SCM'), evalAsk = run('evalAsk'), answerAsk = run('answerAsk'), buildDrill = run('buildDrill'), ok = (st, t) => evaluate(st, t).ok;
   const l = run('LESSONS').find(l => l.id === 'l59');
-  const P = run('p3People()'), M = run('TEACHERS')[P.m].name, F = run('TEACHERS')[P.f].name, T = run('eTeacher()').name;
+  const P = run('p3People()'), M = run('P3_CHARS')[P.m].name, F = run('P3_CHARS')[P.f].name, T = run('eTeacher()').name;
   check('lezione 59 c\'è', !!l && l.cm && l.level === 2);
   check('figure', l.known.every(k => FIG[k] && FIG[k].indexOf('<svg') === 0));
   check('frasi', SX.present('cm_me').prompt === 'Io mi chiamo ' + T + '.' && SX.key('cm_me').prompt === 'Come mi chiamo io?' && SX.key('cm_me').model === 'Lei si chiama ' + T + '.' &&
@@ -1512,7 +1512,7 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
 {
   const SX = run('SLQ'), evalAsk = run('evalAsk'), answerAsk = run('answerAsk'), buildDrill = run('buildDrill'), ok = (st, t) => evaluate(st, t).ok;
   const l = run('LESSONS').find(l => l.id === 'l61');
-  const P = run('p3People()'), M = run('TEACHERS')[P.m].name, F = run('TEACHERS')[P.f].name;
+  const P = run('p3People()'), M = run('P3_CHARS')[P.m].name, F = run('P3_CHARS')[P.f].name;
   check('lezione 61 c\'è, livello 3, dopo il test 2', !!l && l.lq && l.level === 3 && run('LESSONS').indexOf(l) === run('LESSONS').findIndex(x => x.id === 't2') + 1);
   check('figure', l.known.every(k => FIG[k] && FIG[k].indexOf('<svg') === 0 && FIG[k].indexOf(' id=') === -1));
   check('frasi', SX.present('lq_m_book').prompt === M + ' ha preso i libri. Li ha presi.' && SX.key('lq_f_key').model === 'Le ha prese.' &&
@@ -1547,7 +1547,7 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
 {
   const SX = run('SCZ'), evalAsk = run('evalAsk'), answerAsk = run('answerAsk'), buildDrill = run('buildDrill'), ok = (st, t) => evaluate(st, t).ok;
   const l = run('LESSONS').find(l => l.id === 'l63');
-  const P = run('p3People()'), M = run('TEACHERS')[P.m].name, F = run('TEACHERS')[P.f].name;
+  const P = run('p3People()'), M = run('P3_CHARS')[P.m].name, F = run('P3_CHARS')[P.f].name;
   check('lezione 63 c\'è', !!l && l.cz && l.level === 3);
   check('figure', l.known.every(k => FIG[k] && FIG[k].indexOf('<svg') === 0 && FIG[k].indexOf(' id=') === -1));
   check('frasi', SX.present('cz_m_cornetto').prompt === 'A colazione ' + M + ' mangia un cornetto.' && SX.key('cz_f_latte').prompt === 'Che cosa beve ' + F + ' a colazione?' &&
@@ -1609,7 +1609,7 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
 {
   const SX = run('SCZ'), buildDrill = run('buildDrill'), ok = (st, t) => evaluate(st, t).ok;
   const l = run('LESSONS').find(l => l.id === 'l66');
-  const P = run('p3People()'), M = run('TEACHERS')[P.m].name, F = run('TEACHERS')[P.f].name;
+  const P = run('p3People()'), M = run('P3_CHARS')[P.m].name, F = run('P3_CHARS')[P.f].name;
   check('lezione 66 c\'è', !!l && l.cz && l.level === 3);
   check('figure', l.known.every(k => FIG[k] && FIG[k].indexOf('<svg') === 0 && FIG[k].indexOf('undefined') === -1));
   check('frasi', SX.present('cz_m_pasta_pranzo').prompt === 'A pranzo ' + M + ' mangia la pasta.' && SX.key('cz_f_pesce_cena').prompt === 'Che cosa mangia ' + F + ' a cena?' &&
@@ -1625,7 +1625,7 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
 {
   const SX = run('SNH'), evalAsk = run('evalAsk'), answerAsk = run('answerAsk'), buildDrill = run('buildDrill'), ok = (st, t) => evaluate(st, t).ok;
   const l = run('LESSONS').find(l => l.id === 'l67');
-  const P = run('p3People()'), M = run('TEACHERS')[P.m].name, F = run('TEACHERS')[P.f].name;
+  const P = run('p3People()'), M = run('P3_CHARS')[P.m].name, F = run('P3_CHARS')[P.f].name;
   check('lezione 67 c\'è', !!l && l.nh && l.level === 3);
   check('figure', l.known.every(k => FIG[k] && FIG[k].indexOf('<svg') === 0 && FIG[k].indexOf(' id=') === -1));
   check('frasi', SX.key('nh_m_book_3').prompt === 'Quanti libri ha ' + M + '?' && SX.key('nh_m_book_3').model === 'Ne ha tre.' && SX.key('nh_f_key_2').prompt === 'Quante chiavi ha ' + F + '?' &&
@@ -1646,7 +1646,7 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
 {
   const SX = run('SRF'), evalAsk = run('evalAsk'), answerAsk = run('answerAsk'), buildDrill = run('buildDrill'), ok = (st, t) => evaluate(st, t).ok;
   const l = run('LESSONS').find(l => l.id === 'l68');
-  const P = run('p3People()'), M = run('TEACHERS')[P.m].name, F = run('TEACHERS')[P.f].name;
+  const P = run('p3People()'), M = run('P3_CHARS')[P.m].name, F = run('P3_CHARS')[P.f].name;
   check('lezione 68 c\'è', !!l && l.rf && l.level === 3);
   check('figure', l.known.every(k => FIG[k] && FIG[k].indexOf('<svg') === 0 && FIG[k].indexOf(' id=') === -1));
   check('frasi', SX.present('rf_m_alza').prompt === M + ' si alza.' && SX.key('rf_f_siede').prompt === 'Che cosa fa ' + F + '?' && SX.key('rf_m_lava').model === M + ' si lava le mani.' &&
@@ -1667,7 +1667,7 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
 {
   const SX = run('SGN'), evalAsk = run('evalAsk'), answerAsk = run('answerAsk'), buildDrill = run('buildDrill'), ok = (st, t) => evaluate(st, t).ok;
   const l = run('LESSONS').find(l => l.id === 'l69');
-  const P = run('p3People()'), M = run('TEACHERS')[P.m].name, F = run('TEACHERS')[P.f].name;
+  const P = run('p3People()'), M = run('P3_CHARS')[P.m].name, F = run('P3_CHARS')[P.f].name;
   check('lezione 69 c\'è', !!l && l.gn && l.level === 3);
   check('figure', l.known.every(k => FIG[k] && FIG[k].indexOf('<svg') === 0 && FIG[k].indexOf(' id=') === -1));
   check('frasi', SX.present('gn_m_eat_1').prompt === M + ' ha già mangiato.' && SX.present('gn_f_read_0').prompt === F + ' non ha ancora letto.' &&
@@ -1687,7 +1687,7 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
 {
   const SX = run('SVO'), evalAsk = run('evalAsk'), answerAsk = run('answerAsk'), buildDrill = run('buildDrill'), ok = (st, t) => evaluate(st, t).ok;
   const l = run('LESSONS').find(l => l.id === 'l70');
-  const P = run('p3People()'), M = run('TEACHERS')[P.m].name, F = run('TEACHERS')[P.f].name;
+  const P = run('p3People()'), M = run('P3_CHARS')[P.m].name, F = run('P3_CHARS')[P.f].name;
   check('lezione 70 c\'è', !!l && l.vo && l.level === 3);
   check('figure', l.known.every(k => FIG[k] && FIG[k].indexOf('<svg') === 0 && FIG[k].indexOf(' id=') === -1));
   check('frasi', SX.present('vo_m_eat').prompt === M + ' vuole mangiare un\'arancia.' && SX.key('vo_f_drink').prompt === 'Che cosa vuole fare ' + F + '?' && SX.key('vo_f_phone').model === F + ' vuole telefonare.');
@@ -1707,7 +1707,7 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
 {
   const SX = run('SPO'), evalAsk = run('evalAsk'), answerAsk = run('answerAsk'), buildDrill = run('buildDrill'), ok = (st, t) => evaluate(st, t).ok;
   const l = run('LESSONS').find(l => l.id === 'l71');
-  const P = run('p3People()'), M = run('TEACHERS')[P.m].name, F = run('TEACHERS')[P.f].name;
+  const P = run('p3People()'), M = run('P3_CHARS')[P.m].name, F = run('P3_CHARS')[P.f].name;
   check('lezione 71 c\'è', !!l && l.po && l.level === 3);
   check('figure', l.known.every(k => FIG[k] && FIG[k].indexOf('<svg') === 0 && FIG[k].indexOf(' id=') === -1));
   check('frasi', SX.present('po_m_key_1').prompt === M + ' ha la chiave. Può aprire la porta.' && SX.key('po_f_key_0').prompt === F + ' può aprire la porta?' &&
@@ -1726,7 +1726,7 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
 {
   const SX = run('SDV'), evalAsk = run('evalAsk'), buildDrill = run('buildDrill'), ok = (st, t) => evaluate(st, t).ok;
   const l = run('LESSONS').find(l => l.id === 'l72');
-  const P = run('p3People()'), M = run('TEACHERS')[P.m].name, F = run('TEACHERS')[P.f].name;
+  const P = run('p3People()'), M = run('P3_CHARS')[P.m].name, F = run('P3_CHARS')[P.f].name;
   check('lezione 72 c\'è', !!l && l.dv && l.level === 3);
   check('figure', l.known.every(k => FIG[k] && FIG[k].indexOf('<svg') === 0 && FIG[k].indexOf(' id=') === -1));
   check('frasi', SX.present('dv_f_open').prompt === F + ' deve aprire la porta.' && SX.key('dv_m_close').prompt === 'Che cosa deve fare ' + M + '?' && SX.key('dv_m_close').model === M + ' deve chiudere la finestra.');
@@ -1741,7 +1741,7 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
 {
   const SX = run('SAN'), evalAsk = run('evalAsk'), buildDrill = run('buildDrill'), ok = (st, t) => evaluate(st, t).ok;
   const l = run('LESSONS').find(l => l.id === 'l73');
-  const P = run('p3People()'), M = run('TEACHERS')[P.m].name, F = run('TEACHERS')[P.f].name;
+  const P = run('p3People()'), M = run('P3_CHARS')[P.m].name, F = run('P3_CHARS')[P.f].name;
   check('lezione 73 c\'è', !!l && l.an && l.level === 3);
   check('figure', l.known.every(k => FIG[k] && FIG[k].indexOf('<svg') === 0 && FIG[k].indexOf(' id=') === -1));
   check('frasi', SX.present('an_m_read_1').prompt === M + ' legge ancora.' && SX.present('an_f_eat_0').prompt === F + ' non mangia più.' &&
@@ -1760,7 +1760,7 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
 {
   const SX = run('STL'), evalAsk = run('evalAsk'), answerAsk = run('answerAsk'), buildDrill = run('buildDrill'), ok = (st, t) => evaluate(st, t).ok;
   const l = run('LESSONS').find(l => l.id === 'l74');
-  const P = run('p3People()'), M = run('TEACHERS')[P.m].name, F = run('TEACHERS')[P.f].name;
+  const P = run('p3People()'), M = run('P3_CHARS')[P.m].name, F = run('P3_CHARS')[P.f].name;
   check('lezione 74 c\'è', !!l && l.tl && l.level === 3);
   check('figure', l.known.every(k => FIG[k] && FIG[k].indexOf('<svg') === 0 && FIG[k].indexOf(' id=') === -1));
   check('frasi', SX.present('tl_m').prompt === 'Pronto, sono ' + M + '.' && SX.key('tl_nonno').prompt === 'Chi parla?' && SX.key('tl_nonno').model === 'Parla il nonno.' && SX.key('tl_anna').model === 'Parla Anna.');
@@ -1797,7 +1797,7 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
 {
   const SX = run('SMC'), evalAsk = run('evalAsk'), answerAsk = run('answerAsk'), buildDrill = run('buildDrill'), ok = (st, t) => evaluate(st, t).ok;
   const l = run('LESSONS').find(l => l.id === 'l76');
-  const P = run('p3People()'), M = run('TEACHERS')[P.m].name, F = run('TEACHERS')[P.f].name;
+  const P = run('p3People()'), M = run('P3_CHARS')[P.m].name, F = run('P3_CHARS')[P.f].name;
   check('lezione 76 c\'è', !!l && l.mc && l.level === 3);
   check('figure', l.known.every(k => FIG[k] && FIG[k].indexOf('<svg') === 0 && FIG[k].indexOf(' id=') === -1));
   check('frasi', SX.present('mc_m_me_book').prompt === M + ' mi dà il libro.' && SX.key('mc_m_me_book').prompt === 'Che cosa mi dà ' + M + '?' && SX.key('mc_m_me_book').model === 'Le dà il libro.' &&
@@ -1817,7 +1817,7 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
 {
   const SX = run('SPE'), evalAsk = run('evalAsk'), buildDrill = run('buildDrill'), ok = (st, t) => evaluate(st, t).ok;
   const l = run('LESSONS').find(l => l.id === 'l77');
-  const P = run('p3People()'), M = run('TEACHERS')[P.m].name, F = run('TEACHERS')[P.f].name;
+  const P = run('p3People()'), M = run('P3_CHARS')[P.m].name, F = run('P3_CHARS')[P.f].name;
   check('lezione 77 c\'è', !!l && l.pe && l.level === 3);
   check('figure', l.known.every(k => FIG[k] && FIG[k].indexOf('<svg') === 0 && FIG[k].indexOf(' id=') === -1));
   check('frasi', SX.present('pe_f_parigi').prompt === F + ' è andata a Parigi.' && SX.key('pe_m_roma').prompt === 'Dove è andato ' + M + '?' && SX.key('pe_m_newyork').model === M + ' è andato a New York.');
@@ -1836,7 +1836,7 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
 {
   const SX = run('SVI'), evalAsk = run('evalAsk'), buildDrill = run('buildDrill'), ok = (st, t) => evaluate(st, t).ok;
   const l = run('LESSONS').find(l => l.id === 'l78');
-  const P = run('p3People()'), M = run('TEACHERS')[P.m].name, F = run('TEACHERS')[P.f].name;
+  const P = run('p3People()'), M = run('P3_CHARS')[P.m].name, F = run('P3_CHARS')[P.f].name;
   check('lezione 78 c\'è', !!l && l.vi && l.level === 3);
   check('figure', l.known.every(k => FIG[k] && FIG[k].indexOf('<svg') === 0 && FIG[k].indexOf(' id=') === -1));
   check('frasi', SX.present('vi_m_colosseo').prompt === M + ' ha visto il Colosseo. L\'ha visto.' && SX.yes('vi_f_eiffel').model === 'Sì, l\'ha vista.' &&
@@ -2039,6 +2039,21 @@ check('88: prima e ora', run("SIMPF.present('ipf_m_read').prompt") === 'Prima ' 
   const st = buildSteps(l), models = st.filter(s => s.model && s.type !== 'reveal');
   check('91: risposte modello giuste', models.every(s => evaluate(s, s.model).ok));
   check('91: ripetizioni giuste', models.every(s => buildDrill(s, 5, s.reviewItems || []).every(d => evaluate(d, d.model).ok)));
+}
+
+// Lezione 92: «I trasporti»
+{
+  const evalAsk = run('evalAsk'), buildDrill = run('buildDrill'), ok = (st, t) => evaluate(st, t).ok, SX = run('SVIA'), M = run("vName('m')");
+  const l = run('LESSONS').find(l => l.id === 'l92');
+  check('lezione 92 c\'è, livello 4', !!l && l.via && l.level === 4);
+  check('92: frasi', SX.key('via_m_treno_roma').prompt === 'Come va ' + M + ' a Roma?' && SX.key('via_m_treno_roma').model === M + ' va a Roma in treno.');
+  check('92: giusto', ok(SX.key('via_m_treno_roma'), 'In treno.') && ok(SX.key('via_m_treno_roma'), M + ' va a Roma col treno.') && ok(SX.key('via_f_piedi_venezia'), 'A piedi.'));
+  check('92: sbagliato', !ok(SX.key('via_m_treno_roma'), M + ' va a Roma a treno.') && !ok(SX.key('via_m_treno_roma'), 'In autobus.'));
+  check('85, 91: le scarpe (Massi)', run("SPI.present('pi_f_scarpe').prompt").indexOf('piacciono le scarpe') !== -1 && ok(run("SMODA.key('moda_f_scarpe')"), 'Un paio di scarpe.'));
+  check('personaggi: Mario e Laura, non gli insegnanti', run("vName('m')") === 'Mario' && run("vName('f')") === 'Laura' && !run('TEACHERS').mario);
+  const st = buildSteps(l), models = st.filter(s => s.model && s.type !== 'reveal');
+  check('92: risposte modello giuste', models.every(s => evaluate(s, s.model).ok));
+  check('92: ripetizioni giuste', models.every(s => buildDrill(s, 5, s.reviewItems || []).every(d => evaluate(d, d.model).ok)));
 }
 
 // Test del livello 3: 8 che contano e 2 libere, dopo la lezione 78

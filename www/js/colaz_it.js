@@ -70,7 +70,7 @@ const CZ_FIG = {
 };
 Object.keys(CZ_FOOD).forEach(f => { FIG['cz_' + f] = FLAT(CZ_FIG[f], 26); });
 function czFig(X) {
-  const k = p3Key(czWho(X)), LK = (typeof LOOKS !== 'undefined' && LOOKS[TEACHERS[k] ? (TEACHERS[k].look || k) : 'luca']) || null;
+  const k = p3Key(czWho(X)), LK = (typeof LOOKS !== 'undefined' && LOOKS[TEACHERS[k] ? (TEACHERS[k].look || k) : k]) || null;
   if (!LK || typeof tTorso !== 'function') return FIG['cz_' + czFood(X)];
   const food = '<g transform="translate(66 36) scale(.48) translate(-50 -50)">' + CZ_FIG[czFood(X)] + '</g>';
   const meal = czMeal(X);

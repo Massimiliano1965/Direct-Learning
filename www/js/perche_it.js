@@ -40,7 +40,7 @@ V_SCENE.write = (LK) => V_PERSON(LK, tArm(LK, [35, 47], [33, 68], [40, 64]) +
   '<path d="M38 60 h16 M38 63.5 h12 M38 67 h9" stroke="#8d93a3" stroke-width="1"/>' +
   tArm(LK, [65, 47], [68, 68], [55, 66]) + '<path d="M55 66 l-6 -3" stroke="#1f2433" stroke-width="2.4" stroke-linecap="round"/><path d="M49.4 63.2 l-1.6 -.8" stroke="#c9a45c" stroke-width="2.4" stroke-linecap="round"/>', { mouth: 'flat' });
 function purpFig(X) {
-  const P = PURP[X], k = p3Key(puWho(X)), LK = (typeof LOOKS !== 'undefined' && LOOKS[TEACHERS[k] ? (TEACHERS[k].look || k) : 'luca']) || null;
+  const P = PURP[X], k = p3Key(puWho(X)), LK = (typeof LOOKS !== 'undefined' && LOOKS[TEACHERS[k] ? (TEACHERS[k].look || k) : k]) || null;
   if (!LK || typeof tTorso !== 'function') return '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"></svg>';
   // la cosa nella mano destra, davanti (il telefono bianco: quello nero sul fondo blu notte non si vede)
   const thing = '<g transform="translate(68 66) scale(.3) translate(-50 -50)">' + inner(P.obj === 'phone' ? CFIG.phone(COL_SHADE.bianco) : FIG[P.obj]).replace(/<ellipse[^>]*opacity="\.2[58]"[^>]*\/>/, '') + '</g>';

@@ -32,7 +32,7 @@ const SA_MOON = (night) => '<rect x="56" y="4" width="40" height="40" rx="10" fi
 const SA_GIFT = '<g transform="translate(70 62)"><rect x="-9" y="-6" width="18" height="14" rx="1.5" fill="#c97bb5"/><rect x="-10" y="-9" width="20" height="5" rx="1.5" fill="#d996c8"/>' +
   '<path d="M0 -9 v17" stroke="#f3d36b" stroke-width="2.4"/><path d="M0 -9 q-6 -7 -8 -2 q2 3 8 2 q6 -7 8 -2 q-2 3 -8 2" fill="none" stroke="#f3d36b" stroke-width="1.6"/></g>';
 function saFig(X) {
-  const k = p3Key(saWho(X)), LK = (typeof LOOKS !== 'undefined' && LOOKS[TEACHERS[k] ? (TEACHERS[k].look || k) : 'luca']) || null;
+  const k = p3Key(saWho(X)), LK = (typeof LOOKS !== 'undefined' && LOOKS[TEACHERS[k] ? (TEACHERS[k].look || k) : k]) || null;
   if (!LK || typeof tTorso !== 'function') return '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"></svg>';
   const kind = saKind(X), wave = tArm(LK, [65, 47], [74, 36], [72, 22]);
   let body, back = '';

@@ -26,7 +26,7 @@ const daFig1 = (o) => o === 'key' ? (FIG.key_giallo || FIG.key) : o === 'umbrell
 
 /* ---------- Figura: chi dà (a sinistra) porge la cosa a chi riceve (a destra) ---------- */
 function daFig(X) {
-  const look = (w) => { const k = p3Key(w); return (typeof LOOKS !== 'undefined' && LOOKS[TEACHERS[k] ? (TEACHERS[k].look || k) : 'luca']) || null; };
+  const look = (w) => { const k = p3Key(w); return (typeof LOOKS !== 'undefined' && LOOKS[TEACHERS[k] ? (TEACHERS[k].look || k) : k]) || null; };
   const g = look(daWho(X)), r = look(daTo(X));
   if (!g || !r || typeof tTorso !== 'function') return '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"></svg>';
   const thing = inner(daFig1(daObj(X))).replace(/<ellipse[^>]*opacity="\.2[58]"[^>]*\/>/, '');

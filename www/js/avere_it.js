@@ -29,7 +29,7 @@ const eaOtherCol = (X) => pick(Object.keys(COLORS).filter(c => c !== eaCol(X)));
 
 /* ---------- Figura: la persona con la cosa colorata in mano ---------- */
 function eaFig(X) {
-  const k = p3Key(eaWho(X)), LK = (typeof LOOKS !== 'undefined' && LOOKS[TEACHERS[k] ? (TEACHERS[k].look || k) : 'luca']) || null;
+  const k = p3Key(eaWho(X)), LK = (typeof LOOKS !== 'undefined' && LOOKS[TEACHERS[k] ? (TEACHERS[k].look || k) : k]) || null;
   if (!LK || typeof tTorso !== 'function') return '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"></svg>';
   const thing = '<g transform="translate(72 60) scale(.42) translate(-50 -50)">' + inner(FIG[eaCombo(X)]).replace(/<ellipse[^>]*opacity="\.2[58]"[^>]*\/>/, '') + '</g>';
   return '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><ellipse cx="44" cy="97" rx="30" ry="3" fill="#000" opacity=".25"/>' +

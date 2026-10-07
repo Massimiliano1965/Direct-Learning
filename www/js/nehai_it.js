@@ -27,7 +27,7 @@ const nhFig1 = (o) => o === 'key' ? (FIG.key_giallo || FIG.key) : o === 'umbrell
 /* ---------- Figura: le cose e il bollino con la faccia ---------- */
 function nhFig(X) {
   const base = inner(gMany(nhFig1(nhObj(X)), nhN(X)));
-  const k = p3Key(nhWho(X)), look = TEACHERS[k] ? (TEACHERS[k].look || k) : 'luca';
+  const k = p3Key(nhWho(X)), look = TEACHERS[k] ? (TEACHERS[k].look || k) : k;
   const head = (typeof tHeadStill === 'function' && typeof LOOKS !== 'undefined') ? tHeadStill(LOOKS[look] || LOOKS.luca, { mouth: 'smile' }) : '';
   return '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">' + base + '<circle cx="84" cy="18" r="14" fill="#1d2638"/><g transform="translate(84 17) scale(.55) translate(-50 -26)">' + head + '</g>' +
     '<circle cx="84" cy="18" r="13" fill="none" stroke="#c9a45c" stroke-width="2.4"/></svg>';

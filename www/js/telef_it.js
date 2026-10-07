@@ -17,7 +17,7 @@ const tlWho = (X) => X.slice(3);
 // il nome (con «il / la» per il nonno e la nonna) e la faccia
 const tlName = (k) => k === 'm' ? vName('m') : k === 'f' ? vName('f') : k === 'marco' ? 'Marco' : k === 'anna' ? 'Anna' : k === 'nonno' ? 'il nonno' : 'la nonna';
 const tlLook = (k) => {
-  if (k === 'm' || k === 'f') { const key = p3Key(k); return (typeof LOOKS !== 'undefined' && LOOKS[TEACHERS[key] ? (TEACHERS[key].look || key) : 'luca']) || null; }
+  if (k === 'm' || k === 'f') { const key = p3Key(k); return (typeof LOOKS !== 'undefined' && LOOKS[TEACHERS[key] ? (TEACHERS[key].look || key) : key]) || null; }
   return typeof FAM_LOOK !== 'undefined' ? FAM_LOOK[{ marco: 'f_padre', anna: 'f_madre', nonno: 'f_nonno', nonna: 'f_nonna' }[k]] : null;
 };
 const tlSays = (X) => 'Pronto, sono ' + tlName(tlWho(X)) + '.';

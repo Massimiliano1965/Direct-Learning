@@ -34,8 +34,8 @@ const imOther = (X) => imAct(X) === 'open' ? 'close' : imAct(X) === 'close' ? 'o
 /* ---------- Figura: chi parla (a sinistra, indica) e, nella nuvoletta, l'altro collega che fa la cosa ---------- */
 function impFig(X) {
   const w = imWho(X), k = p3Key(w), k2 = p3Key(w === 'm' ? 'f' : 'm');
-  const LK = (typeof LOOKS !== 'undefined' && LOOKS[TEACHERS[k] ? (TEACHERS[k].look || k) : 'luca']) || null;
-  const LK2 = (typeof LOOKS !== 'undefined' && LOOKS[TEACHERS[k2] ? (TEACHERS[k2].look || k2) : 'luca']) || null;
+  const LK = (typeof LOOKS !== 'undefined' && LOOKS[TEACHERS[k] ? (TEACHERS[k].look || k) : k]) || null;
+  const LK2 = (typeof LOOKS !== 'undefined' && LOOKS[TEACHERS[k2] ? (TEACHERS[k2].look || k2) : k2]) || null;
   if (!LK || !LK2 || typeof tTorso !== 'function') return '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"></svg>';
   const scene = inner('<svg>' + V_SCENE[imAct(X)](LK2) + '</svg>');
   return '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><ellipse cx="30" cy="97" rx="26" ry="3" fill="#000" opacity=".25"/>' +

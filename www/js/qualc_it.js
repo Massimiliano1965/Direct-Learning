@@ -40,7 +40,7 @@ function qnFig(X) {
     '<path d="M75 16 v22 M64 27 h22" stroke="#8e6741" stroke-width="1.4"/>';
   let who = '';
   if (!qnEmpty(X)) {
-    const k = p3Key(qnWhat(X)), LK = (typeof LOOKS !== 'undefined' && LOOKS[TEACHERS[k] ? (TEACHERS[k].look || k) : 'luca']) || null;
+    const k = p3Key(qnWhat(X)), LK = (typeof LOOKS !== 'undefined' && LOOKS[TEACHERS[k] ? (TEACHERS[k].look || k) : k]) || null;
     if (LK && typeof tTorso === 'function') who = '<g transform="translate(6 10) scale(.86)">' + V_PERSON(LK, tArm(LK, ...DOWN_L) + tArm(LK, ...DOWN_R), { mouth: 'smile' }, -10) + '</g>';
   }
   return '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">' + room + who + '</svg>';

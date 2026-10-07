@@ -27,7 +27,7 @@ const cvOther = (X) => pick(CV_CITIES.filter(c => c !== cvCity(X)));
 
 /* ---------- Figure: chi va (valigia in mano, freccia verde verso il monumento piccolo) e chi c'è (davanti al monumento) ---------- */
 function cvFig(X) {
-  const k = p3Key(cvWho(X)), LK = (typeof LOOKS !== 'undefined' && LOOKS[TEACHERS[k] ? (TEACHERS[k].look || k) : 'luca']) || null;
+  const k = p3Key(cvWho(X)), LK = (typeof LOOKS !== 'undefined' && LOOKS[TEACHERS[k] ? (TEACHERS[k].look || k) : k]) || null;
   if (!LK || typeof tTorso !== 'function') return '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"></svg>';
   const mon = inner(FIG['g_' + cvCity(X)]).replace(/<ellipse[^>]*opacity="\.2[58]"[^>]*\/>/, '');
   const base = '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">';

@@ -118,7 +118,7 @@ const SGE = formLesson({
 const IMPF = { read: 'leggeva', eat: 'mangiava', drink: 'beveva', phone: 'telefonava', open: 'apriva', close: 'chiudeva' };
 const IMPF_NOW = { read: 'phone', drink: 'read', phone: 'eat', open: 'drink', eat: 'close', close: 'open' };
 function impfFig(w, a) {
-  const k = p3Key(w), LK = (typeof LOOKS !== 'undefined' && LOOKS[TEACHERS[k] ? (TEACHERS[k].look || k) : 'luca']) || null;
+  const k = p3Key(w), LK = (typeof LOOKS !== 'undefined' && LOOKS[TEACHERS[k] ? (TEACHERS[k].look || k) : k]) || null;
   if (!LK || typeof tTorso !== 'function') return '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"></svg>';
   const half = (b, x) => '<g transform="translate(' + (x - 3) + ' 26) scale(.58)">' + V_SCENE[b](LK) + '</g>';
   const label = (x, t, c) => '<text x="' + x + '" y="12" text-anchor="middle" font-family="Georgia,serif" font-size="9" font-weight="bold" fill="' + c + '">' + t + '</text>';

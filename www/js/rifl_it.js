@@ -30,7 +30,7 @@ const rfOther = (X) => { const a = rfAct(X); return a === 'alza' ? 'siede' : a =
 const RF_BACK = (x, y) => '<rect x="' + x + '" y="' + y + '" width="28" height="26" rx="2" fill="#8e6741"/><rect x="' + (x + 3) + '" y="' + (y + 5) + '" width="22" height="3" fill="#a37a52"/><rect x="' + (x + 3) + '" y="' + (y + 13) + '" width="22" height="3" fill="#a37a52"/>';
 const RF_SEAT = (x, y) => '<rect x="' + (x - 3) + '" y="' + y + '" width="34" height="6" rx="1.5" fill="#a37a52"/><rect x="' + (x - 1) + '" y="' + (y + 6) + '" width="3.6" height="' + (88 - y) + '" fill="#6e4f33"/><rect x="' + (x + 25.4) + '" y="' + (y + 6) + '" width="3.6" height="' + (88 - y) + '" fill="#6e4f33"/>';
 function rfFig(X) {
-  const k = p3Key(rfWho(X)), LK = (typeof LOOKS !== 'undefined' && LOOKS[TEACHERS[k] ? (TEACHERS[k].look || k) : 'luca']) || null;
+  const k = p3Key(rfWho(X)), LK = (typeof LOOKS !== 'undefined' && LOOKS[TEACHERS[k] ? (TEACHERS[k].look || k) : k]) || null;
   if (!LK || typeof tTorso !== 'function') return '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"></svg>';
   const a = rfAct(X), svg = (inner) => '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><ellipse cx="50" cy="97" rx="36" ry="3" fill="#000" opacity=".25"/>' + inner + '</svg>';
   if (a === 'siede') {

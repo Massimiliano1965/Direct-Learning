@@ -13,10 +13,11 @@
 
 const PI_THING = {
   caffe: { the: 'il caffè', pl: false },  pizza: { the: 'la pizza', pl: false }, vino: { the: 'il vino', pl: false },
-  fiori: { the: 'i fiori', pl: true },    mele: { the: 'le mele', pl: true },    libri: { the: 'i libri', pl: true }
+  fiori: { the: 'i fiori', pl: true },    mele: { the: 'le mele', pl: true },    libri: { the: 'i libri', pl: true },
+  scarpe: { the: 'le scarpe', pl: true }      // Massi: «A Isa piacciono le scarpe»
 };
-const PI_WORD = { caffe: 'caffe', pizza: 'pizza', pizze: 'pizza', vino: 'vino', fiori: 'fiori', fiore: 'fiori', mele: 'mele', mela: 'mele', libri: 'libri', libro: 'libri' };
-const PI = { pi_m_caffe: 1, pi_f_fiori: 1, pi_m_libri: 1, pi_f_pizza: 1, pi_m_mele: 1, pi_f_vino: 1 };
+const PI_WORD = { caffe: 'caffe', pizza: 'pizza', pizze: 'pizza', vino: 'vino', fiori: 'fiori', fiore: 'fiori', mele: 'mele', mela: 'mele', libri: 'libri', libro: 'libri', scarpe: 'scarpe', scarpa: 'scarpe' };
+const PI = { pi_m_caffe: 1, pi_f_fiori: 1, pi_m_libri: 1, pi_f_pizza: 1, pi_m_mele: 1, pi_f_vino: 1, pi_f_scarpe: 1 };
 const isPi = (X) => !!PI[X];
 const piWho = (X) => X.charAt(3);
 const piT = (X) => X.slice(5);
@@ -33,11 +34,12 @@ function piThings(t) {
   const box = (svg, x, y, s) => '<g transform="translate(' + x + ' ' + y + ') scale(' + s + ')">' + inner(svg) + '</g>';
   if (t === 'caffe' || t === 'pizza' || t === 'vino') return food(t, 77, 62, .5);
   if (t === 'mele') return food('mela', 70, 66, .38) + food('mela', 86, 70, .38) + food('mela', 78, 52, .38);
+  if (t === 'scarpe') return '<g transform="translate(76 72) scale(.48) translate(-50 -68)">' + SHOES + '</g>';
   if (t === 'libri') return box(FIG.book, 58, 44, .3) + box(FIG.book, 72, 52, .3);
   return box(FIG.fi_rosa_rosso, 50, 34, .4) + box(FIG.fi_tulipano_giallo, 63, 40, .4) + box(FIG.fi_margherita_bianco, 74, 34, .4);
 }
 function piFig(X) {
-  const k = p3Key(piWho(X)), LK = (typeof LOOKS !== 'undefined' && LOOKS[TEACHERS[k] ? (TEACHERS[k].look || k) : 'luca']) || null;
+  const k = p3Key(piWho(X)), LK = (typeof LOOKS !== 'undefined' && LOOKS[TEACHERS[k] ? (TEACHERS[k].look || k) : k]) || null;
   if (!LK || typeof tTorso !== 'function') return '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"></svg>';
   return '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><ellipse cx="34" cy="97" rx="26" ry="3" fill="#000" opacity=".25"/>' +
     V_PERSON(LK, tArm(LK, ...DOWN_L) + tArm(LK, [65, 47], [74, 60], [80, 52]), { mouth: 'smile' }, -16) +

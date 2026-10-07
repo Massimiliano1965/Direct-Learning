@@ -23,13 +23,12 @@ const p3The = (k) => (p3Art(k) === 'l\'' ? 'l\'' : p3Art(k) + ' ') + ITEMS[k].wo
 const p3ArtN = (k) => p3Art(k) === 'l\'' ? 'l' : p3Art(k);                                          // come lo scrive norm()
 const p3Dem = (k) => p3Fem(k) ? 'questa' : 'questo';
 // I due colleghi: un uomo e una donna tra gli altri insegnanti (non quello che fa lezione)
-function p3People() {
-  const tk = typeof selectedTeacherKey === 'function' ? selectedTeacherKey() : 'luca';
-  const others = Object.keys(TEACHERS).filter(k => k !== tk);
-  return { m: others.find(k => TEACHERS[k].gender === 'm'), f: others.find(k => TEACHERS[k].gender === 'f') };
-}
+// Massi: i personaggi delle frasi NON sono gli insegnanti (l'insegnante dice «io», all'allievo «Lei»; degli altri «lui / lei»):
+// il signor Mario e la signora Laura, con la loro faccia (LOOKS.mario, LOOKS.laura in teacher.js)
+const P3_CHARS = { mario: { name: 'Mario', gender: 'm' }, laura: { name: 'Laura', gender: 'f' } };
+function p3People() { return { m: 'mario', f: 'laura' }; }
 const p3Key = (w) => p3People()[w];
-const p3Name = (w) => TEACHERS[p3Key(w)].name;
+const p3Name = (w) => P3_CHARS[p3Key(w)].name;
 const p3Of = (k, w) => p3The(k) + ' di ' + p3Name(w);          // «il telefono di Isa»
 const p3Suo = (k) => (p3Fem(k) ? 'la sua ' : 'il suo ') + ITEMS[k].word;   // «il suo zaino»: davanti a «suo» sempre il/la   // «il suo telefono»
 const p3OtherW = (w) => w === 'm' ? 'f' : 'm';
@@ -37,7 +36,7 @@ const p3OtherW = (w) => w === 'm' ? 'f' : 'm';
 /* ---------- Figure: l'oggetto con la faccia di chi lo possiede ---------- */
 function thirdFig(X) {
   const base = (FIG[p3Obj(X)] || '').replace(/^<svg[^>]*>/, '').replace(/<\/svg>$/, '');
-  const k = p3Key(p3Who(X)), look = TEACHERS[k] ? (TEACHERS[k].look || k) : 'luca';
+  const k = p3Key(p3Who(X)), look = TEACHERS[k] ? (TEACHERS[k].look || k) : k;
   const head = (typeof tHeadStill === 'function' && typeof LOOKS !== 'undefined') ? tHeadStill(LOOKS[look] || LOOKS.luca, { mouth: 'smile' }) : '';
   const badge = '<circle cx="80" cy="80" r="16" fill="#1d2638"/><g transform="translate(80 79) scale(.62) translate(-50 -26)">' + head + '</g><circle cx="80" cy="80" r="15" fill="none" stroke="#c9a45c" stroke-width="2.6"/>';
   return '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">' + base + badge + '</svg>';
@@ -68,7 +67,7 @@ const SW = {
    Ogni frase: oggetto, articolo, suo/sua giusto, persona. */
 function thirdStatements(s) {
   const P = p3People(), byName = {};
-  ['m', 'f'].forEach(w => { byName[norm(TEACHERS[P[w]].name).trim()] = w; });
+  ['m', 'f'].forEach(w => { byName[norm(P3_CHARS[P[w]].name).trim()] = w; });
   const out = [];
   // «è il telefono di giulia»
   let m, re = / (non )?e (il|la|lo|l) ([a-z]+) di ([a-z]+)(?= )/g;

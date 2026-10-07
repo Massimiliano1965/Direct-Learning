@@ -24,7 +24,7 @@ const stOther = (X) => pick(['bene', 'male', 'stanco'].filter(s => s !== stState
 
 /* ---------- Figure: il collega o la collega che sta bene, sta male o è stanco ---------- */
 function staFig(X) {
-  const k = p3Key(stWho(X)), LK = (typeof LOOKS !== 'undefined' && LOOKS[TEACHERS[k] ? (TEACHERS[k].look || k) : 'luca']) || null;
+  const k = p3Key(stWho(X)), LK = (typeof LOOKS !== 'undefined' && LOOKS[TEACHERS[k] ? (TEACHERS[k].look || k) : k]) || null;
   if (!LK || typeof tTorso !== 'function') return '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"></svg>';
   const st = stState(X);
   let arms, face, extra = '';

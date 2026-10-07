@@ -25,7 +25,7 @@ const mcOther = (X) => pick(Object.keys(MC).map(mcObj).filter(o => o !== mcObj(X
 
 /* ---------- Figura: chi dà (a sinistra) e chi riceve: l'insegnante, o l'insegnante con la sagoma d'oro dell'allievo ---------- */
 function mcFig(X) {
-  const gk = p3Key(mcWho(X)), G = (typeof LOOKS !== 'undefined' && LOOKS[TEACHERS[gk] ? (TEACHERS[gk].look || gk) : 'luca']) || null;
+  const gk = p3Key(mcWho(X)), G = (typeof LOOKS !== 'undefined' && LOOKS[TEACHERS[gk] ? (TEACHERS[gk].look || gk) : gk]) || null;
   const t = eTeacher(), T = (typeof LOOKS !== 'undefined' && LOOKS[t.look || t.key || 'luca']) || null;
   if (!G || !T || typeof tTorso !== 'function') return '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"></svg>';
   const thing = inner(daFig1(mcObj(X))).replace(/<ellipse[^>]*opacity="\.2[58]"[^>]*\/>/, '');

@@ -29,7 +29,7 @@ FIG.umbrella_giallo = FIG.umbrella_giallo || FIG.umbrella;
 function spFig(X) {
   const o = spObj(X), f = o === 'key' ? FIG.key_giallo : o === 'umbrella' ? FIG.umbrella_giallo : FIG[o];
   const base = inner(gMany(f, 2));
-  const k = p3Key(spWho(X)), look = TEACHERS[k] ? (TEACHERS[k].look || k) : 'luca';
+  const k = p3Key(spWho(X)), look = TEACHERS[k] ? (TEACHERS[k].look || k) : k;
   const head = (typeof tHeadStill === 'function' && typeof LOOKS !== 'undefined') ? tHeadStill(LOOKS[look] || LOOKS.luca, { mouth: 'smile' }) : '';
   const badge = '<circle cx="84" cy="18" r="14" fill="#1d2638"/><g transform="translate(84 17) scale(.55) translate(-50 -26)">' + head + '</g><circle cx="84" cy="18" r="13" fill="none" stroke="#c9a45c" stroke-width="2.4"/>';
   return '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">' + base + badge + '</svg>';

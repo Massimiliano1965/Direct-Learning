@@ -32,7 +32,7 @@ const psOther = (X) => pick(Object.keys(PS_PART).filter(a => a !== psAct(X)));
 // mode: niente = il ricordo (↺), 'wait' (o true) = non ancora (clessidra), 'want' = il desiderio (cuore rosa), 'must' = il dovere (punto esclamativo arancione), 'future' = domani (freccia azzurra in avanti)
 function psMemFig(who, scene, look, mode) {
   const wait = mode === true || mode === 'wait', want = mode === 'want', must = mode === 'must', future = mode === 'future';
-  const k = who && p3Key(who), LK = look || (typeof LOOKS !== 'undefined' && LOOKS[TEACHERS[k] ? (TEACHERS[k].look || k) : 'luca']) || null;
+  const k = who && p3Key(who), LK = look || (typeof LOOKS !== 'undefined' && LOOKS[TEACHERS[k] ? (TEACHERS[k].look || k) : k]) || null;
   if (!LK || typeof tTorso !== 'function') return '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"></svg>';
   return '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><ellipse cx="30" cy="97" rx="26" ry="3" fill="#000" opacity=".25"/>' +
     V_PERSON(LK, tArm(LK, ...DOWN_L) + tArm(LK, ...DOWN_R), { mouth: 'smile' }, -20) +
