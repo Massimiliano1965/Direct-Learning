@@ -63,7 +63,7 @@ function impOrders(s) {
   const out = [], w = s.trim().split(' ');
   let neg = false;
   for (let i = 0; i < w.length; i++) {
-    if (w[i] === 'non' && w[i + 1] === 'dice') neg = true;
+    if (w[i] === 'dice') neg = w[i - 1] === 'non';   // «non dice» vale fino al prossimo «dice»
     const f = IMP_FORM[w[i]];
     if (!f) continue;
     // la cosa dopo il verbo, se c'è, deve essere quella giusta («apra la porta», non «apra la finestra»)

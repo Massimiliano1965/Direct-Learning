@@ -199,7 +199,10 @@ const LESSONS = [
     known: ['lh_m_book', 'lh_f_window', 'lh_m_orange', 'lh_f_phone', 'lh_f_soda', 'lh_m_notebook'] },
   // capitolo 7: «Ci vado, ci sono» — Max va a Roma? Sì, ci va. Isa è a Parigi? Sì, c'è. (ci_it.js)
   { id: 'l47', title: 'Lezione 47', level: 2, cv: true, hilite: ['ci va', 'c\'è'],
-    known: ['cv_m_roma_va', 'cv_f_parigi_e', 'cv_f_londra_va', 'cv_m_newyork_e', 'cv_m_parigi_va', 'cv_f_roma_e'] }
+    known: ['cv_m_roma_va', 'cv_f_parigi_e', 'cv_f_londra_va', 'cv_m_newyork_e', 'cv_m_parigi_va', 'cv_f_roma_e'] },
+  // capitolo 7: «Saluti» — Che cosa dice Max? Buongiorno! (il sole), Buonasera! (la luna), Buonanotte!, Arrivederci!, Grazie! (saluti_it.js)
+  { id: 'l48', title: 'Lezione 48', level: 2, sa: true,
+    known: ['sa_m_giorno', 'sa_f_sera', 'sa_m_notte', 'sa_f_arriv', 'sa_m_grazie', 'sa_f_giorno'] }
 ];
 
 // Quattro insegnanti, dal più rigido al più indulgente. gender = voce maschile o femminile.
