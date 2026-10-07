@@ -3,7 +3,7 @@
 Leggi questo file prima di tutto. Poi `docs/percorso.md` (l'ordine delle lezioni dal libro e le regole del corso).
 
 ## Chi è Massi e come lavorare
-- Massi non è un programmatore. Rispondi in **italiano semplice**, **un pezzo alla volta**.
+- Massi non è un programmatore. Rispondi in **italiano semplice**, **un pezzo alla volta**, dandogli del **tu**.
 - **Prima mostrami, poi pusha**: ogni modifica visiva → foto dall'app vera (playwright, telefono Moto g05 = 360×725), poi il push **solo quando scrive «pusha»**.
   Accordo: si carica **ogni 4 lezioni** (o quando dice «pusha»).
 - Niente mail al suo posto. Controllo sintassi con `node --check` su ogni file js toccato.
@@ -15,7 +15,7 @@ Leggi questo file prima di tutto. Poi `docs/percorso.md` (l'ordine delle lezioni
 - Corso italiano: `www/js/course.js` (oggetti, lezioni, insegnanti), `logic.js` (motore), un file per tipo di lezione
   (`colors_it`, `numbers_it`, `geo_it`, `poss_it`, `size_it`, `third_it`, `nat_it`, `essere_it`, `altro_it`, `prep_it`, `anche_it`, `ora_it`, `appt_it`, `gender_it`, `verbs_it`),
   caricati in ordine da `www/index.html`. Ogni file ha in cima la spiegazione della lezione.
-- Insegnanti: Max (molto severo, approva col pollice ogni tanto), Giulia, Pietro (chiave `luca`), Sara. Stile sobrio blu notte e oro.
+- Insegnanti: Max (molto severo, approva col pollice ogni tanto), Giulia, Pietro (chiave `luca`), Sara. Il tailleur di Giulia è viola (il color vino non gli piaceva). Stile sobrio blu notte e oro.
 - 4 livelli (blu notte, blu acciaio, viola, rosa antico), «Livello N» accanto al titolo. Tutte le lezioni fatte sono livello 1; il livello 2 parte dal capitolo 6.
 - Pulsanti di prova sotto la lezione: «Avanti ▶» e «Rispondo: sì/no» (`TEST_BUTTONS` in `course.js`; a fine progetto → false).
 
