@@ -26,6 +26,7 @@ Leggi questo file prima di tutto. Poi `docs/percorso.md` (l'ordine delle lezioni
 - Maschile/femminile: la -o finale azzurra, la -a finale rosa (lezione 22). Esempi solo con parole in -o/-a (niente aggettivi in -e).
 - Si dà del Lei (Suo/Sua). Bandiera del Regno Unito per «inglese».
 - Niente bordeaux né marroni nei colori dell'app; gli piacciono viola e rosa.
+- Le cose «nere» si disegnano grigio antracite con il bordo chiaro (`COL_SHADE.nero`): il nero vero sul fondo blu notte non si vede.
 
 ## A che punto siamo (lezioni fatte: 1–37)
 1–4 oggetti · 5 colori · 6–7 numeri · 8–9 città e monumenti · 10 il mio/il Suo · 11 grande/piccolo · 12 il suo/la sua · 13 nazionalità ·

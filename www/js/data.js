@@ -47,7 +47,8 @@ const svg = (inner) => '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000
 // Oggetti in stile piatto e sobrio (adulti, business): niente contorni, colori smorzati
 const FLAT = (inner, w) => '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><ellipse cx="50" cy="91" rx="' + (w || 30) + '" ry="3" fill="#000" opacity=".25"/>' + inner + '</svg>';
 // Oggetti colorabili (lezione 5 e seguenti): [colore, ombra]
-const COL_SHADE = { nero: ['#2b2e36', '#17181d'], bianco: ['#eceef2', '#c4cad4'], rosso: ['#b3262f', '#861b22'] };
+// nero: grigio antracite con il bordo chiaro, così si vede sul fondo blu notte (Massi)
+const COL_SHADE = { nero: ['#454b5a', '#b9bfcc'], bianco: ['#eceef2', '#c4cad4'], rosso: ['#b3262f', '#861b22'] };
 const CFIG = {
   phone: ([c, d]) => FLAT(`<rect x="30" y="8" width="40" height="80" rx="7" fill="${c}" stroke="${d}" stroke-width="1.5"/><rect x="33.5" y="15" width="33" height="64" rx="2" fill="#2c3e66"/>
     <path d="M33.5 15 h20 l-20 26z" fill="#3a4f7e"/><rect x="44" y="10.5" width="12" height="2" rx="1" fill="${d}"/><circle cx="50" cy="83.5" r="2.2" fill="${d}"/>`, 22),

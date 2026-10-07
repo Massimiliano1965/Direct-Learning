@@ -25,10 +25,10 @@ FIG.soda = FLAT('<path d="M34 16 h32 l3 6 v60 l-3 6 h-32 l-3 -6 v-60z" fill="#c8
   '<rect x="44" y="12" width="12" height="4" rx="2" fill="#9aa1ae"/><path d="M31 38 h38 v26 h-38z" fill="#f3eee2"/><circle cx="50" cy="51" r="9" fill="#e8862a"/>' +
   '<path d="M46 47 q4 -4 8 0" stroke="#c96f1e" stroke-width="1.4" fill="none"/><path d="M38 24 v54" stroke="#e26a6f" stroke-width="3" opacity=".5"/>', 22);
 // le versioni colorate per la lezione 22 (oggetto_colore, come nella lezione 5)
-FIG.umbrella_nero = recolor(FIG.umbrella, { '#2c3e66': '#2b2e36', '#3a4f7e': '#40434e' });
+FIG.umbrella_nero = recolor(FIG.umbrella, { '#2c3e66': '#454b5a', '#3a4f7e': '#5d6475' });   // antracite: si vede sul blu notte
 FIG.clock_bianco = recolor(clockFig(10), { '#c9a45c': '#e3e6ec', '#f3eee2': '#fbfbfd' });
 FIG.plane_bianco = FIG.plane;
-FIG.agenda_nero = FIG.agenda;
+FIG.agenda_nero = recolor(FIG.agenda, { '#2e2f37': '#454b5a', '#24252c': '#383d4a' });
 FIG.label_rosso = FIG.label;
 FIG.ambulance_bianco = FIG.ambulance;
 FIG.soda_rosso = FIG.soda;
