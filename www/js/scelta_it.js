@@ -288,12 +288,25 @@ const MON_ART = {
   rialto: MON_SKY + '<path d="M2 68 h96 V88 a10 10 0 0 1 -10 10 H12 a10 10 0 0 1 -10 -10z" fill="#3f8fb5"/>' +
     '<path d="M8 68 q42 -46 84 0 v6 h-12 q-30 -30 -60 0 h-12z" fill="#f1ede4"/><path d="M30 46 h40 v-10 h-40z" fill="#e6dfcf"/><path d="M34 46 v-10 M42 46 v-10 M50 46 v-10 M58 46 v-10 M66 46 v-10" stroke="#c9c1ad" stroke-width="2"/>' +
     '<path d="M28 36 l22 -12 l22 12z" fill="#c8a37a"/><path d="M16 82 q14 6 30 0 l-4 -3 q-12 4 -22 0z" fill="#2a3346"/><path d="M40 78 l6 -10" stroke="#5a4030" stroke-width="1.4"/>',
-  // il David: la statua bianca nel museo (il muro scuro, così si vede bene)
-  david: '<rect x="2" y="2" width="96" height="96" rx="10" fill="#6b3a3a"/><path d="M2 86 h96 V88 a10 10 0 0 1 -10 10 H12 a10 10 0 0 1 -10 -10z" fill="#4a2a2a"/>' +
-    '<ellipse cx="50" cy="40" rx="30" ry="36" fill="#f3d36b" opacity=".12"/><rect x="32" y="80" width="36" height="12" rx="2" fill="#c9ced8"/><rect x="34" y="78" width="32" height="4" fill="#dfe4ea"/>' +
-    '<g stroke="#b9b09c" stroke-width="1"><circle cx="50" cy="18" r="7.5" fill="#f1ede4"/><path d="M43 14 q7 -8 14 0 q-2 -5 -7 -5 q-5 0 -7 5z" fill="#d8cfbb"/>' +
-    '<path d="M42 28 q8 -4 16 0 l2 24 h-4 l-1 26 h-4.5 l-1 -16 l-1 16 h-4.5 l-1 -26 h-4z" fill="#f1ede4"/></g>' +
-    '<path d="M42 30 l-7 16 l3 2 l6 -12 M58 30 l5 10 l-6 6" stroke="#f1ede4" stroke-width="4.2" fill="none" stroke-linecap="round"/><path d="M42 30 l-7 16 M58 30 l5 10 l-6 6" stroke="#b9b09c" stroke-width=".6" fill="none"/>',
+  // il David di Michelangelo (Firenze, Accademia): marmo bianco, riccioli, il peso su una gamba, la mano sinistra alla spalla con la fionda, la destra giù
+  david: '<rect x="2" y="2" width="96" height="96" rx="10" fill="#5e3434"/><path d="M2 88 h96 V88 a10 10 0 0 1 -10 10 H12 a10 10 0 0 1 -10 -10z" fill="#3e2222"/>' +
+    '<ellipse cx="50" cy="44" rx="28" ry="40" fill="#f3d36b" opacity=".1"/>' +
+    '<rect x="34" y="84" width="32" height="8" rx="1.5" fill="#c9ced8"/><rect x="36" y="82" width="28" height="3" fill="#dfe4ea"/>' +
+    '<g fill="#f1ede4" stroke="#a9a08c" stroke-width=".7" stroke-linejoin="round">' +
+      // le gambe: la destra dritta (il peso), la sinistra piegata in avanti
+      '<path d="M45 56 l-2 26 h5 l1 -24z"/><path d="M53 56 l3 12 l-1 14 h4.5 l1 -15 l-3 -12z"/>' +
+      // il busto, un po' girato
+      '<path d="M41 28 q9 -3 18 0 l1 14 q-1 9 -4 15 h-12 q-3 -6 -4 -15z"/>' +
+      // il braccio destro giù lungo il fianco, la mano chiusa
+      '<path d="M41 30 q-4 2 -4 8 l-1 16 q0 4 3 4 l1 -4 l1 -14 l2 -8z"/>' +
+      // il braccio sinistro piegato, la mano alla spalla
+      '<path d="M59 30 q5 2 5 7 l-3 6 l-5 -2 l3 -5 l-3 -3z"/>' +
+      '<path d="M48 22 h4 v6 h-4z"/>' +
+      '<ellipse cx="50" cy="16" rx="6" ry="7"/></g>' +
+    // i riccioli, la fionda sulla spalla, le ombre dei muscoli
+    '<g fill="#e3dbc8" stroke="#a9a08c" stroke-width=".5">' + [[45, 11], [48, 9], [52, 9], [55, 11], [44, 15], [56, 15], [50, 8]].map(([x, y]) => '<circle cx="' + x + '" cy="' + y + '" r="2.2"/>').join('') + '</g>' +
+    '<path d="M57 31 q-6 6 -12 18" stroke="#8e6741" stroke-width="1.2" fill="none"/><path d="M50 34 v14 M45 36 q5 3 10 0 M46 44 q4 2 8 0" stroke="#c9c0ab" stroke-width=".8" fill="none"/>' +
+    '<path d="M47.5 16 h1.4 M51.2 16 h1.4 M49.4 19.6 h1.6" stroke="#8d8573" stroke-width=".7"/>',
   vesuvio: MON_SKY + '<path d="M2 70 L36 30 h28 L98 70 V88 a10 10 0 0 1 -10 10 H12 a10 10 0 0 1 -10 -10z" fill="#7d6b5a"/><path d="M36 30 h28 l-6 8 h-16z" fill="#5a4a3c"/>' +
     '<path d="M50 28 q-6 -8 0 -14 q6 -6 2 -12" stroke="#dfe4ea" stroke-width="5" fill="none" stroke-linecap="round" opacity=".85"/>' +
     '<path d="M2 80 h96 V88 a10 10 0 0 1 -10 10 H12 a10 10 0 0 1 -10 -10z" fill="#3f7fb5"/><path d="M10 86 h10 M34 90 h14 M66 86 h12" stroke="#cfe6f5" stroke-width="1.4"/>'
