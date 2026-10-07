@@ -79,7 +79,9 @@ const LESSONS = [
   // capitolo 2, esercizio 6: «Il mio, la Sua» — gli stessi oggetti dell'insegnante e dello studente
   { id: 'l10', title: 'Lezione 10', poss: true, known: ['o_t_phone', 'o_s_phone', 'o_t_suitcase', 'o_s_suitcase', 'o_t_laptop', 'o_s_bag'] },
   // capitolo 2: «Questo o questa? Piccolo o piccola?» — lo stesso oggetto grande e piccolo (size_it.js)
-  { id: 'l11', title: 'Lezione 11', size: true, known: ['z_big_book', 'z_small_book', 'z_big_suitcase', 'z_small_suitcase', 'z_big_cup', 'z_small_cup'] }
+  { id: 'l11', title: 'Lezione 11', size: true, known: ['z_big_book', 'z_small_book', 'z_big_suitcase', 'z_small_suitcase', 'z_big_cup', 'z_small_cup'] },
+  // capitolo 2: «Il suo, la sua» — le cose di due colleghi dell'insegnante, un uomo e una donna (third_it.js)
+  { id: 'l12', title: 'Lezione 12', third: true, known: ['p3_f_phone', 'p3_m_laptop', 'p3_f_suitcase', 'p3_m_bag', 'p3_m_coat', 'p3_f_flask'] }
 ];
 
 // Quattro insegnanti, dal più rigido al più indulgente. gender = voce maschile o femminile.
