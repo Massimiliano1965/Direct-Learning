@@ -256,7 +256,10 @@ const LESSONS = [
     known: ['qu_cup_rosso_bianco_n', 'qu_phone_bianco_rosso_f', 'qu_suitcase_bianco_rosso_n', 'qu_umbrella_nero_giallo_f', 'qu_laptop_rosso_bianco_n', 'qu_coat_bianco_rosso_f'] },
   // capitolo 12: «I fiori» — Che fiore è? È una rosa rossa. (fiori_it.js)
   { id: 'l65', title: 'Lezione 65', level: 3, fi: true, gender: true,
-    known: ['fi_rosa_rosso', 'fi_tulipano_giallo', 'fi_margherita_bianco', 'fi_girasole_giallo', 'fi_rosa_bianco', 'fi_tulipano_rosso'] }
+    known: ['fi_rosa_rosso', 'fi_tulipano_giallo', 'fi_margherita_bianco', 'fi_girasole_giallo', 'fi_rosa_bianco', 'fi_tulipano_rosso'] },
+  // capitolo 13: «Il pranzo e la cena» — Che cosa mangia Max a pranzo? Max mangia la pasta. (colaz_it.js: il sole alto o la luna)
+  { id: 'l66', title: 'Lezione 66', level: 3, cz: true, hilite: ['mangia', 'beve'],
+    known: ['cz_m_pasta_pranzo', 'cz_f_pesce_cena', 'cz_m_carne_cena', 'cz_f_insalata_pranzo', 'cz_m_pizza_cena', 'cz_f_vino_cena'] }
 ];
 
 // Quattro insegnanti, dal più rigido al più indulgente. gender = voce maschile o femminile.

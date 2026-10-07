@@ -1604,6 +1604,22 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
   check('lezione 65: ripetizioni giuste', models.every(s => buildDrill(s, 5, s.reviewItems || []).every(d => evaluate(d, d.model).ok)));
 }
 
+// Lezione 66: «Il pranzo e la cena»
+{
+  const SX = run('SCZ'), buildDrill = run('buildDrill'), ok = (st, t) => evaluate(st, t).ok;
+  const l = run('LESSONS').find(l => l.id === 'l66');
+  const P = run('p3People()'), M = run('TEACHERS')[P.m].name, F = run('TEACHERS')[P.f].name;
+  check('lezione 66 c\'è', !!l && l.cz && l.level === 3);
+  check('figure', l.known.every(k => FIG[k] && FIG[k].indexOf('<svg') === 0 && FIG[k].indexOf('undefined') === -1));
+  check('frasi', SX.present('cz_m_pasta_pranzo').prompt === 'A pranzo ' + M + ' mangia la pasta.' && SX.key('cz_f_pesce_cena').prompt === 'Che cosa mangia ' + F + ' a cena?' &&
+    SX.key('cz_f_vino_cena').model === F + ' beve un bicchiere di vino.');
+  check('giusto e sbagliato', ok(SX.key('cz_f_vino_cena'), 'Beve il vino.') && ok(SX.key('cz_m_pizza_cena'), 'La pizza.') && !ok(SX.key('cz_m_pizza_cena'), 'Beve la pizza.') &&
+    !ok(SX.key('cz_m_carne_cena'), 'Mangia il pesce.'));
+  const st = buildSteps(l), models = st.filter(s => s.model && s.type !== 'reveal');
+  check('lezione 66: risposte modello giuste', models.every(s => evaluate(s, s.model).ok));
+  check('lezione 66: ripetizioni giuste', models.every(s => buildDrill(s, 5, s.reviewItems || []).every(d => evaluate(d, d.model).ok)));
+}
+
 // Dal livello 2 le lezioni sono più veloci (Massi): una sola presentazione, 4 sì/no mescolati, sempre 7 domande dell'allievo
 {
   const L = run('LESSONS'), l38 = L.find(l => l.id === 'l38'), l39 = L.find(l => l.id === 'l39');
