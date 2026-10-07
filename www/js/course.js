@@ -146,7 +146,9 @@ const LESSONS = [
   { id: 'l31', title: 'Lezione 31', numbers: true, known: ['n200', 'n300', 'n400', 'n500'], review: ['n100', 'n20', 'n30', 'n40', 'n50', 'n2', 'n3'], fresh: 'n1000' },
   // capitolo 5: «Quanti chilometri ci sono…?» — il cartello verde dell'autostrada: «Da Roma a Milano ci sono cinquecentosettanta chilometri.» (km_it.js)
   { id: 'l32', title: 'Lezione 32', km: true, hilite: ['ci sono'],
-    known: ['km_roma_milano', 'km_roma_napoli', 'km_roma_firenze', 'km_milano_torino', 'km_firenze_bologna', 'km_roma_venezia'] }
+    known: ['km_roma_milano', 'km_roma_napoli', 'km_roma_firenze', 'km_milano_torino', 'km_firenze_bologna', 'km_roma_venezia'] },
+  // capitolo 5: «La famiglia» — una famiglia di sei; la freccia d'oro dice di chi si parla: «Chi è? È la nonna.» (fam_it.js)
+  { id: 'l33', title: 'Lezione 33', fam: true, known: ['f_padre', 'f_madre', 'f_figlio', 'f_figlia', 'f_nonno', 'f_nonna'] }
 ];
 
 // Quattro insegnanti, dal più rigido al più indulgente. gender = voce maschile o femminile.

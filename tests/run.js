@@ -6,7 +6,7 @@ const vm = require('vm');
 
 const ctx = { console: console };
 vm.createContext(ctx);
-['course.js', 'data.js', 'logic.js', 'colors_it.js', 'numbers_it.js', 'geo_fig.js', 'geo_it.js', 'poss_it.js', 'size_it.js', 'third_it.js', 'nat_it.js', 'essere_it.js', 'altro_it.js', 'prep_it.js', 'anche_it.js', 'ora_it.js', 'appt_it.js', 'gender_it.js', 'verbs_it.js', 'perche_it.js', 'pron_it.js', 'sum_it.js', 'km_it.js', 'ui_lang.js'].forEach(f => {
+['course.js', 'data.js', 'logic.js', 'colors_it.js', 'numbers_it.js', 'geo_fig.js', 'geo_it.js', 'poss_it.js', 'size_it.js', 'third_it.js', 'nat_it.js', 'essere_it.js', 'altro_it.js', 'prep_it.js', 'anche_it.js', 'ora_it.js', 'appt_it.js', 'gender_it.js', 'verbs_it.js', 'perche_it.js', 'pron_it.js', 'sum_it.js', 'km_it.js', 'fam_it.js', 'ui_lang.js'].forEach(f => {
   vm.runInContext(fs.readFileSync(path.join(__dirname, '..', 'www', 'js', f), 'utf8'), ctx, { filename: f });
 });
 const run = (code) => vm.runInContext(code, ctx);
@@ -14,7 +14,7 @@ const evaluate = run('evaluate');
 const evaluateAll = run('evaluateAll');
 const buildSteps = run('buildSteps');
 const answerSteps = run('answerSteps');
-const LESSONS = run('LESSONS').filter(l => !l.colors && !l.numbers && !l.geo && !l.poss && !l.size && !l.third && !l.nat && !l.ess && !l.altro && !l.prep && !l.anche && !l.ora && !l.appt && !l.verbs && !l.purp && !l.pron && !l.sum && !l.km);   // lezioni con gli oggetti (colori e numeri hanno i loro test)
+const LESSONS = run('LESSONS').filter(l => !l.colors && !l.numbers && !l.geo && !l.poss && !l.size && !l.third && !l.nat && !l.ess && !l.altro && !l.prep && !l.anche && !l.ora && !l.appt && !l.verbs && !l.purp && !l.pron && !l.sum && !l.km && !l.fam);   // lezioni con gli oggetti (colori e numeri hanno i loro test)
 const NUM_LESSONS = run('LESSONS').filter(l => l.numbers);
 const COLOR_LESSONS = run('LESSONS').filter(l => l.colors);
 const ITEMS = run('ITEMS');
@@ -863,6 +863,26 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
   const st = buildSteps(l32), models = st.filter(s => s.model && s.type !== 'reveal');
   check('lezione 32: risposte modello giuste', models.every(s => evaluate(s, s.model).ok));
   check('lezione 32: ripetizioni giuste', models.every(s => buildDrill(s, 5, []).every(d => evaluate(d, d.model).ok)));
+}
+
+// Lezione 33: «La famiglia»
+{
+  const SF = run('SFM'), evalAsk = run('evalAsk'), answerAsk = run('answerAsk'), buildDrill = run('buildDrill'), ok = (st, t) => evaluate(st, t).ok;
+  const l33 = run('LESSONS').find(l => l.id === 'l33');
+  check('lezione 33 c\'è', !!l33 && l33.fam);
+  check('figure', l33.known.every(k => FIG[k] && FIG[k].indexOf('<svg') === 0 && FIG[k].indexOf(' id=') === -1));
+  check('frasi', SF.present('f_padre').prompt === 'È il padre.' && SF.key('f_nonna').prompt === 'Chi è?' && SF.key('f_nonna').model === 'È la nonna.' && SF.yes('f_figlia').model === 'Sì, è la figlia.');
+  check('giusto', ok(SF.key('f_figlio'), 'È il figlio.') && ok(SF.yes('f_madre'), 'Sì, è la madre.') && ok(SF.askQ('f_padre'), 'Chi è?'));
+  const n = SF.neg('f_nonno');
+  check('giusto: il no', ok(n, n.model) && evaluate(n, n.model.slice(0, -1) + ', è il nonno.').full);
+  check('sbagliato: articolo, persona', !ok(SF.key('f_padre'), 'È la padre.') && !ok(SF.key('f_figlia'), 'È il figlia.') && !ok(SF.key('f_padre'), 'È un padre.') &&
+    !ok(SF.key('f_padre'), 'È il nonno.') && !ok(SF.yes('f_padre'), 'È il padre.'));
+  check('allievo', evalAsk('f_madre', 'Chi è?').kind === 'what' && answerAsk('f_madre', { kind: 'what' }) === 'È la madre.' &&
+    evalAsk('f_madre', 'È la nonna?').kind === 'no' && answerAsk('f_madre', { kind: 'no', ask: 'f_nonna' }) === 'No, non è la nonna. È la madre.' &&
+    evalAsk('f_madre', 'È il madre?').model === 'È la madre?' && evalAsk('f_madre', 'È la madre o la figlia?').kind === 'alt');
+  const st = buildSteps(l33), models = st.filter(s => s.model && s.type !== 'reveal');
+  check('lezione 33: risposte modello giuste', models.every(s => evaluate(s, s.model).ok));
+  check('lezione 33: ripetizioni giuste', models.every(s => buildDrill(s, 5, []).every(d => evaluate(d, d.model).ok)));
 }
 
 // Parole che vanno bene tutte e due (COURSE.synonyms): il microfono le accetta tutte e due
