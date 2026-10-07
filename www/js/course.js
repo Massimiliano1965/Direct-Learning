@@ -176,7 +176,10 @@ const LESSONS = [
     known: ['ct_book_aperto', 'ct_book_chiuso', 'ct_bottle_pieno', 'ct_bottle_vuoto', 'ct_pencil_lungo', 'ct_pencil_corto'] },
   // capitolo 6: «Essere o stare» — Max e Isa stanno bene, stanno male o sono stanchi: «Come sta Isa? Isa è stanca.» (stare_it.js)
   { id: 'l40', title: 'Lezione 40', level: 2, sta: true, gender: true, hilite: ['sta', 'è'],
-    known: ['st_m_bene', 'st_f_male', 'st_m_stanco', 'st_f_bene', 'st_m_male', 'st_f_stanco'] }
+    known: ['st_m_bene', 'st_f_male', 'st_m_stanco', 'st_f_bene', 'st_m_male', 'st_f_stanco'] },
+  // capitolo 6: «Ce l'ho — ce l'ha» — Max ha il telefono? Sì, ce l'ha. Isa ha la valigia? No, non ce l'ha. (celha_it.js)
+  { id: 'l41', title: 'Lezione 41', level: 2, cl: true, hilite: ['ce l\'ha'],
+    known: ['cl_m_phone_1', 'cl_f_suitcase_0', 'cl_m_umbrella_0', 'cl_f_key_1', 'cl_m_book_1', 'cl_f_bag_0'] }
 ];
 
 // Quattro insegnanti, dal più rigido al più indulgente. gender = voce maschile o femminile.

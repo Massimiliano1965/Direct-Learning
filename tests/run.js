@@ -6,7 +6,7 @@ const vm = require('vm');
 
 const ctx = { console: console };
 vm.createContext(ctx);
-['course.js', 'data.js', 'logic.js', 'colors_it.js', 'numbers_it.js', 'geo_fig.js', 'geo_it.js', 'poss_it.js', 'size_it.js', 'third_it.js', 'nat_it.js', 'essere_it.js', 'altro_it.js', 'prep_it.js', 'anche_it.js', 'ora_it.js', 'appt_it.js', 'gender_it.js', 'verbs_it.js', 'perche_it.js', 'pron_it.js', 'sum_it.js', 'km_it.js', 'fam_it.js', 'avere_it.js', 'gen_it.js', 'plur_it.js', 'cece_it.js', 'costa_it.js', 'det_it.js', 'irr_it.js', 'contr_it.js', 'stare_it.js', 'ui_lang.js'].forEach(f => {
+['course.js', 'data.js', 'logic.js', 'colors_it.js', 'numbers_it.js', 'geo_fig.js', 'geo_it.js', 'poss_it.js', 'size_it.js', 'third_it.js', 'nat_it.js', 'essere_it.js', 'altro_it.js', 'prep_it.js', 'anche_it.js', 'ora_it.js', 'appt_it.js', 'gender_it.js', 'verbs_it.js', 'perche_it.js', 'pron_it.js', 'sum_it.js', 'km_it.js', 'fam_it.js', 'avere_it.js', 'gen_it.js', 'plur_it.js', 'cece_it.js', 'costa_it.js', 'det_it.js', 'irr_it.js', 'contr_it.js', 'stare_it.js', 'celha_it.js', 'ui_lang.js'].forEach(f => {
   vm.runInContext(fs.readFileSync(path.join(__dirname, '..', 'www', 'js', f), 'utf8'), ctx, { filename: f });
 });
 const run = (code) => vm.runInContext(code, ctx);
@@ -14,7 +14,7 @@ const evaluate = run('evaluate');
 const evaluateAll = run('evaluateAll');
 const buildSteps = run('buildSteps');
 const answerSteps = run('answerSteps');
-const LESSONS = run('LESSONS').filter(l => !l.colors && !l.numbers && !l.geo && !l.poss && !l.size && !l.third && !l.nat && !l.ess && !l.altro && !l.prep && !l.anche && !l.ora && !l.appt && !l.verbs && !l.purp && !l.pron && !l.sum && !l.km && !l.fam && !l.ea && !l.pl && !l.ce && !l.co && !l.dt && !l.ct && !l.sta);   // lezioni con gli oggetti (colori e numeri hanno i loro test)
+const LESSONS = run('LESSONS').filter(l => !l.colors && !l.numbers && !l.geo && !l.poss && !l.size && !l.third && !l.nat && !l.ess && !l.altro && !l.prep && !l.anche && !l.ora && !l.appt && !l.verbs && !l.purp && !l.pron && !l.sum && !l.km && !l.fam && !l.ea && !l.pl && !l.ce && !l.co && !l.dt && !l.ct && !l.sta && !l.cl);   // lezioni con gli oggetti (colori e numeri hanno i loro test)
 const NUM_LESSONS = run('LESSONS').filter(l => l.numbers);
 const COLOR_LESSONS = run('LESSONS').filter(l => l.colors);
 const ITEMS = run('ITEMS');
@@ -1064,6 +1064,26 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
   const st = buildSteps(l), models = st.filter(s => s.model && s.type !== 'reveal');
   check('lezione 40: risposte modello giuste', models.every(s => evaluate(s, s.model).ok));
   check('lezione 40: ripetizioni giuste', models.every(s => buildDrill(s, 5, []).every(d => evaluate(d, d.model).ok)));
+}
+
+// Lezione 41: «Ce l'ho — ce l'ha»
+{
+  const SX = run('SCL'), evalAsk = run('evalAsk'), answerAsk = run('answerAsk'), buildDrill = run('buildDrill'), ok = (st, t) => evaluate(st, t).ok;
+  const l = run('LESSONS').find(l => l.id === 'l41');
+  const P = run('p3People()'), M = run('TEACHERS')[P.m].name, F = run('TEACHERS')[P.f].name;
+  check('lezione 41 c\'è', !!l && l.cl && l.level === 2);
+  check('figure', l.known.every(k => FIG[k] && FIG[k].indexOf('<svg') === 0 && FIG[k].indexOf(' id=') === -1));
+  check('frasi', SX.present('cl_m_phone_1').prompt === M + ' ha il telefono. Ce l\'ha.' && SX.present('cl_f_suitcase_0').prompt === F + ' non ha la valigia. Non ce l\'ha.' &&
+    SX.key('cl_m_umbrella_0').prompt === M + ' ha l\'ombrello?' && SX.key('cl_m_umbrella_0').model === 'No, non ce l\'ha.' && SX.key('cl_f_key_1').model === 'Sì, ce l\'ha.');
+  check('giusto', ok(SX.key('cl_m_phone_1'), 'Sì, ce l\'ha.') && ok(SX.key('cl_m_phone_1'), 'Sì, ' + M + ' ce l\'ha.') && ok(SX.key('cl_f_bag_0'), 'No, non ce l\'ha.') &&
+    ok(SX.present('cl_m_book_1'), M + ' ha il libro. Ce l\'ha.') && ok(SX.askQ('cl_m_book_1'), M + ' ha il libro?'));
+  check('sbagliato', !ok(SX.key('cl_m_phone_1'), 'Sì, ce l\'ho.') && !ok(SX.key('cl_m_phone_1'), 'Sì, ce la ha.') && !ok(SX.key('cl_m_phone_1'), 'Sì, ha.') &&
+    !ok(SX.key('cl_m_phone_1'), 'No, non ce l\'ha.') && !ok(SX.key('cl_f_bag_0'), 'Sì, ce l\'ha.') && !ok(SX.key('cl_f_bag_0'), 'No, non l\'ha.'));
+  check('allievo', evalAsk('cl_m_phone_1', M + ' ha il telefono?').kind === 'yes' && answerAsk('cl_m_phone_1', { kind: 'yes' }) === 'Sì, ce l\'ha.' &&
+    evalAsk('cl_m_phone_1', M + ' ha la borsa?').kind === 'no' && evalAsk('cl_m_phone_1', M + ' ha la telefono?').model === M + ' ha il telefono?');
+  const st = buildSteps(l), models = st.filter(s => s.model && s.type !== 'reveal');
+  check('lezione 41: risposte modello giuste', models.every(s => evaluate(s, s.model).ok));
+  check('lezione 41: ripetizioni giuste', models.every(s => buildDrill(s, 5, []).every(d => evaluate(d, d.model).ok)));
 }
 
 // Parole che vanno bene tutte e due (COURSE.synonyms): il microfono le accetta tutte e due
