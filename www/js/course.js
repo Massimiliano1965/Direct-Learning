@@ -211,7 +211,10 @@ const LESSONS = [
     known: ['gd_lun', 'gd_mar', 'gd_mer', 'gd_gio', 'gd_ven', 'gd_sab', 'gd_dom'] },
   // capitolo 8: «Calendario: i mesi» — l'anno G F M A M G L A S O N D con la stagione: «Che mese è? È luglio.» (mesi_it.js)
   { id: 'l51', title: 'Lezione 51', level: 2, ms: true,
-    known: ['ms_gen', 'ms_apr', 'ms_mag', 'ms_lug', 'ms_ott', 'ms_dic'] }
+    known: ['ms_gen', 'ms_apr', 'ms_mag', 'ms_lug', 'ms_ott', 'ms_dic'] },
+  // capitolo 8: «Possessivi: i suoi, le sue» — Sono i libri di Max? Sì, sono i suoi libri. (suoi_it.js)
+  { id: 'l52', title: 'Lezione 52', level: 2, sp: true, hilite: ['i suoi', 'le sue'],
+    known: ['sp_m_book', 'sp_f_key', 'sp_f_book', 'sp_m_key', 'sp_m_umbrella', 'sp_f_cup'] }
 ];
 
 // Quattro insegnanti, dal più rigido al più indulgente. gender = voce maschile o femminile.
