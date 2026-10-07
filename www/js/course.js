@@ -262,7 +262,10 @@ const LESSONS = [
     known: ['cz_m_pasta_pranzo', 'cz_f_pesce_cena', 'cz_m_carne_cena', 'cz_f_insalata_pranzo', 'cz_m_pizza_cena', 'cz_f_vino_cena'] },
   // capitolo 13: «Ne» — Quanti libri ha Max? Ne ha tre. Quante arance ha Max? Ne ha una. (nehai_it.js)
   { id: 'l67', title: 'Lezione 67', level: 3, nh: true, hilite: ['ne'],
-    known: ['nh_m_book_3', 'nh_f_key_2', 'nh_m_orange_1', 'nh_f_bottle_3', 'nh_m_cup_2', 'nh_f_umbrella_1'] }
+    known: ['nh_m_book_3', 'nh_f_key_2', 'nh_m_orange_1', 'nh_f_bottle_3', 'nh_m_cup_2', 'nh_f_umbrella_1'] },
+  // capitolo 13: «Verbi riflessivi» — Che cosa fa Max? Max si alza. Isa si siede. (rifl_it.js)
+  { id: 'l68', title: 'Lezione 68', level: 3, rf: true, hilite: ['si alza', 'si siede', 'si lava', 'si pettina'],
+    known: ['rf_m_alza', 'rf_f_siede', 'rf_m_lava', 'rf_f_pettina', 'rf_m_siede', 'rf_f_alza'] }
 ];
 
 // Quattro insegnanti, dal più rigido al più indulgente. gender = voce maschile o femminile.

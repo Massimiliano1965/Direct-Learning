@@ -118,13 +118,13 @@ Durante il test l'insegnante non corregge; contano solo gli errori, mostrati all
 59. **Questo/quel, questa/quella; quale?** — *fatto: Lezione 64 (Quale tazza è rossa? Questa tazza.)*
 60. **Quello studente, ecc.**
 61. **Gli, le, loro; le, mi, ci** (complemento indiretto)
-62. **I fiori**
+62. **I fiori** — *fatto: Lezione 65 (Che fiore è? È una rosa rossa.)*
 
 ## Capitolo 13
 
-63. **Cibi del pranzo e della cena**: pasta, pesce, carne…; il menù
-64. **«Ne»**
-65. **Verbi riflessivi**: alzarsi, sedersi, fermarsi, chiamarsi
+63. **Cibi del pranzo e della cena**: pasta, pesce, carne…; il menù — *fatto: Lezione 66 (a pranzo / a cena)*
+64. **«Ne»** — *fatto: Lezione 67 (Quanti libri ha Max? Ne ha tre.)*
+65. **Verbi riflessivi**: alzarsi, sedersi, fermarsi, chiamarsi — *fatto: Lezione 68 (si alza, si siede, si lava le mani, si pettina)*
 66. **Già — non ancora**
 
 ## Capitolo 14
