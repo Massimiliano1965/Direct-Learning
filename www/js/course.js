@@ -202,7 +202,10 @@ const LESSONS = [
     known: ['cv_m_roma_va', 'cv_f_parigi_e', 'cv_f_londra_va', 'cv_m_newyork_e', 'cv_m_parigi_va', 'cv_f_roma_e'] },
   // capitolo 7: «Saluti» — Che cosa dice Max? Buongiorno! (il sole), Buonasera! (la luna), Buonanotte!, Arrivederci!, Grazie! (saluti_it.js)
   { id: 'l48', title: 'Lezione 48', level: 2, sa: true,
-    known: ['sa_m_giorno', 'sa_f_sera', 'sa_m_notte', 'sa_f_arriv', 'sa_m_grazie', 'sa_f_giorno'] }
+    known: ['sa_m_giorno', 'sa_f_sera', 'sa_m_notte', 'sa_f_arriv', 'sa_m_grazie', 'sa_f_giorno'] },
+  // capitolo 7: «Lui e lei» — il cuoco / la cuoca, il cameriere / la cameriera, il professore / la professoressa: «Chi è lei?» (lui_it.js)
+  { id: 'l49', title: 'Lezione 49', level: 2, lm: true, gender: true,
+    known: ['lm_m_cuoco', 'lm_f_cuoco', 'lm_m_cameriere', 'lm_f_cameriere', 'lm_m_professore', 'lm_f_professore'] }
 ];
 
 // Quattro insegnanti, dal più rigido al più indulgente. gender = voce maschile o femminile.

@@ -80,13 +80,13 @@ Durante il test l'insegnante non corregge; contano solo gli errori, mostrati all
 
 ## Capitolo 7
 
-39. **Qual è la domanda?**
-40. **Né… né…**
-41. **Passato prossimo**
-42. **L'ho letto — l'ho letta** (accordo del participio)
-43. **Ci vado, ci sono**
-44. **Saluti**: come si risponde
-45. **Lui e lei**: maschile e femminile
+39. **Qual è la domanda?** — *fatto: Lezione 43 (l'insegnante dice la risposta, l'allievo trova la domanda già imparata)*
+40. **Né… né…** — *fatto: Lezione 44 (Il telefono è rosso o bianco? Non è né rosso né bianco. È giallo.)*
+41. **Passato prossimo** — *fatto: Lezione 45 (Che cosa ha fatto Max? Max ha letto un libro.)*
+42. **L'ho letto — l'ho letta** (accordo del participio) — *fatto: Lezione 46 (l'ha letto, l'ha chiusa)*
+43. **Ci vado, ci sono** — *fatto: Lezione 47 (ci va, c'è)*
+44. **Saluti**: come si risponde — *fatto: Lezione 48 (buongiorno, buonasera, buonanotte, arrivederci, grazie)*
+45. **Lui e lei**: maschile e femminile — *fatto: Lezione 49 (cuoco/cuoca, cameriere/cameriera, professore/professoressa)*
 
 ## Capitolo 8
 
