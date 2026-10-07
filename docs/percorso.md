@@ -59,7 +59,7 @@ Durante il test l'insegnante non corregge; contano solo gli errori, mostrati all
 
 ## Capitolo 5
 
-24. **Numeri da 1 a 1000**: «Quanto fa…?» «Quanti chilometri ci sono…?» — *in corso: Lezioni 26 (11–16), 27 (17–20), 28 (30–70), 29 (80–100), 30 («Quanto fa…?»), 31 (200–1000)*
+24. **Numeri da 1 a 1000**: «Quanto fa…?» «Quanti chilometri ci sono…?» — *fatto: Lezioni 26 (11–16), 27 (17–20), 28 (30–70), 29 (80–100), 30 («Quanto fa…?»), 31 (200–1000), 32 («Quanti chilometri…?»)*
 25. **La famiglia** (parole)
 26. **Essere o avere**
 27. **Plurale**: o → i, a → e

@@ -143,7 +143,10 @@ const LESSONS = [
   // capitolo 5: «Quanto fa…?» — addizioni con i numeri già imparati: «Quanto fa dieci più venti? Fa trenta.» (sum_it.js)
   { id: 'l30', title: 'Lezione 30', sum: true, hilite: ['più', 'fa'], known: ['sm_10_20', 'sm_20_30', 'sm_40_40', 'sm_50_50', 'sm_3_10', 'sm_8_8'] },
   // le centinaia: duecento… cinquecento (ripasso cento e le decine), poi il mille da scoprire
-  { id: 'l31', title: 'Lezione 31', numbers: true, known: ['n200', 'n300', 'n400', 'n500'], review: ['n100', 'n20', 'n30', 'n40', 'n50', 'n2', 'n3'], fresh: 'n1000' }
+  { id: 'l31', title: 'Lezione 31', numbers: true, known: ['n200', 'n300', 'n400', 'n500'], review: ['n100', 'n20', 'n30', 'n40', 'n50', 'n2', 'n3'], fresh: 'n1000' },
+  // capitolo 5: «Quanti chilometri ci sono…?» — il cartello verde dell'autostrada: «Da Roma a Milano ci sono cinquecentosettanta chilometri.» (km_it.js)
+  { id: 'l32', title: 'Lezione 32', km: true, hilite: ['ci sono'],
+    known: ['km_roma_milano', 'km_roma_napoli', 'km_roma_firenze', 'km_milano_torino', 'km_firenze_bologna', 'km_roma_venezia'] }
 ];
 
 // Quattro insegnanti, dal più rigido al più indulgente. gender = voce maschile o femminile.

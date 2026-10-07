@@ -6,7 +6,7 @@ const vm = require('vm');
 
 const ctx = { console: console };
 vm.createContext(ctx);
-['course.js', 'data.js', 'logic.js', 'colors_it.js', 'numbers_it.js', 'geo_fig.js', 'geo_it.js', 'poss_it.js', 'size_it.js', 'third_it.js', 'nat_it.js', 'essere_it.js', 'altro_it.js', 'prep_it.js', 'anche_it.js', 'ora_it.js', 'appt_it.js', 'gender_it.js', 'verbs_it.js', 'perche_it.js', 'pron_it.js', 'sum_it.js', 'ui_lang.js'].forEach(f => {
+['course.js', 'data.js', 'logic.js', 'colors_it.js', 'numbers_it.js', 'geo_fig.js', 'geo_it.js', 'poss_it.js', 'size_it.js', 'third_it.js', 'nat_it.js', 'essere_it.js', 'altro_it.js', 'prep_it.js', 'anche_it.js', 'ora_it.js', 'appt_it.js', 'gender_it.js', 'verbs_it.js', 'perche_it.js', 'pron_it.js', 'sum_it.js', 'km_it.js', 'ui_lang.js'].forEach(f => {
   vm.runInContext(fs.readFileSync(path.join(__dirname, '..', 'www', 'js', f), 'utf8'), ctx, { filename: f });
 });
 const run = (code) => vm.runInContext(code, ctx);
@@ -14,7 +14,7 @@ const evaluate = run('evaluate');
 const evaluateAll = run('evaluateAll');
 const buildSteps = run('buildSteps');
 const answerSteps = run('answerSteps');
-const LESSONS = run('LESSONS').filter(l => !l.colors && !l.numbers && !l.geo && !l.poss && !l.size && !l.third && !l.nat && !l.ess && !l.altro && !l.prep && !l.anche && !l.ora && !l.appt && !l.verbs && !l.purp && !l.pron && !l.sum);   // lezioni con gli oggetti (colori e numeri hanno i loro test)
+const LESSONS = run('LESSONS').filter(l => !l.colors && !l.numbers && !l.geo && !l.poss && !l.size && !l.third && !l.nat && !l.ess && !l.altro && !l.prep && !l.anche && !l.ora && !l.appt && !l.verbs && !l.purp && !l.pron && !l.sum && !l.km);   // lezioni con gli oggetti (colori e numeri hanno i loro test)
 const NUM_LESSONS = run('LESSONS').filter(l => l.numbers);
 const COLOR_LESSONS = run('LESSONS').filter(l => l.colors);
 const ITEMS = run('ITEMS');
@@ -839,6 +839,30 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
   const st = buildSteps(l30), models = st.filter(s => s.model && s.type !== 'reveal');
   check('lezione 30: risposte modello giuste', models.every(s => evaluate(s, s.model).ok));
   check('lezione 30: ripetizioni giuste', models.every(s => buildDrill(s, 5, []).every(d => evaluate(d, d.model).ok)));
+}
+
+// Lezione 32: «Quanti chilometri ci sono…?»
+{
+  const SK = run('SKM'), evalAsk = run('evalAsk'), answerAsk = run('answerAsk'), buildDrill = run('buildDrill'), ok = (st, t) => evaluate(st, t).ok;
+  const l32 = run('LESSONS').find(l => l.id === 'l32');
+  check('lezione 32 c\'è', !!l32 && l32.km);
+  check('figure', l32.known.every(k => FIG[k] && FIG[k].indexOf('<svg') === 0 && FIG[k].indexOf(' id=') === -1));
+  check('frasi', SK.present('km_roma_milano').prompt === 'Da Roma a Milano ci sono cinquecentosettanta chilometri.' &&
+    SK.key('km_milano_torino').prompt === 'Quanti chilometri ci sono da Milano a Torino?' && SK.key('km_milano_torino').model === 'Ci sono centoquaranta chilometri.' &&
+    SK.yes('km_firenze_bologna').model === 'Sì, ci sono cento chilometri.');
+  check('giusto (breve, cifre, «km», due parole)', ok(SK.key('km_roma_milano'), 'Ci sono cinquecentosettanta chilometri.') && ok(SK.key('km_roma_milano'), 'Cinquecentosettanta chilometri.') &&
+    ok(SK.key('km_roma_milano'), 'ci sono 570 km') && ok(SK.key('km_roma_milano'), 'Ci sono cinquecento settanta chilometri.') &&
+    ok(SK.key('km_roma_napoli'), 'Da Napoli a Roma ci sono duecentoventi chilometri.'));
+  const n = SK.neg('km_roma_venezia');
+  check('giusto: il no', ok(n, n.model));
+  check('sbagliato: numero, «c\'è», città', !ok(SK.key('km_roma_milano'), 'Ci sono cinquecento chilometri.') && !ok(SK.key('km_roma_milano'), 'C\'è cinquecentosettanta chilometri.') &&
+    !ok(SK.key('km_roma_milano'), 'Da Roma a Napoli ci sono cinquecentosettanta chilometri.') && !ok(SK.yes('km_roma_milano'), 'Ci sono cinquecentosettanta chilometri.'));
+  check('allievo', evalAsk('km_roma_firenze', 'Quanti chilometri ci sono da Roma a Firenze?').kind === 'what' && answerAsk('km_roma_firenze', { kind: 'what' }) === 'Ci sono duecentosettanta chilometri.' &&
+    evalAsk('km_roma_firenze', 'Da Roma a Firenze ci sono 300 chilometri?').kind === 'no' && answerAsk('km_roma_firenze', { kind: 'no', ask: 300 }) === 'No, non ci sono trecento chilometri. Ci sono duecentosettanta chilometri.' &&
+    !evalAsk('km_roma_firenze', 'Quanti chilometri ci sono da Roma a Milano?').ok);
+  const st = buildSteps(l32), models = st.filter(s => s.model && s.type !== 'reveal');
+  check('lezione 32: risposte modello giuste', models.every(s => evaluate(s, s.model).ok));
+  check('lezione 32: ripetizioni giuste', models.every(s => buildDrill(s, 5, []).every(d => evaluate(d, d.model).ok)));
 }
 
 // Parole che vanno bene tutte e due (COURSE.synonyms): il microfono le accetta tutte e due
