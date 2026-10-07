@@ -46,9 +46,9 @@ Object.keys(COLORS).forEach(c => ['m', 'f'].forEach(g => {
 /* ---------- Figure: una cosa, due o tre (un po' sovrapposte), vicine o lontane ---------- */
 function gMany(fig, n, far) {
   const body = inner(fig).replace(/<ellipse[^>]*opacity="\.2[58]"[^>]*\/>/, '');
-  const sc = far ? (n === 1 ? .42 : .34) : (n === 1 ? .9 : n === 2 ? .58 : .46);
+  const sc = far ? (n === 1 ? .42 : .34) : (n === 1 ? .74 : n === 2 ? .58 : .46);
   const xs = n === 1 ? [50] : n === 2 ? [32, 68] : [22, 50, 78];
-  const cy = far ? 30 : 52;
+  const cy = far ? 30 : 56;
   let out = xs.map(x => '<g transform="translate(' + (far ? 58 + (x - 50) * .55 : x) + ' ' + cy + ') scale(' + sc + ') translate(-50 -50)">' + body + '</g>').join('');
   if (far) out = '<path d="M2 62 L98 46" stroke="#3a4560" stroke-width="1.4"/><path d="M14 92 L40 66 M26 94 L48 68" stroke="#c9a45c" stroke-width="1.2" stroke-dasharray="2 3" opacity=".7"/>' + out;
   return '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><ellipse cx="' + (far ? 60 : 50) + '" cy="' + (far ? 50 : 92) + '" rx="' + (far ? 20 : 34) + '" ry="2.5" fill="#000" opacity=".25"/>' + out + '</svg>';

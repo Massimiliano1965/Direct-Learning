@@ -154,7 +154,10 @@ const LESSONS = [
     known: ['pl_book_1', 'pl_book_2', 'pl_pen_1', 'pl_pen_3', 'pl_cup_2', 'pl_notebook_3'] },
   // capitolo 5: «C'è un…, ci sono due…» — sul tavolo: «Sul tavolo c'è un telefono.» «Sul tavolo ci sono due tazze.» (cece_it.js)
   { id: 'l33', title: 'Lezione 33', ce: true, hilite: ['c\'è', 'ci sono'],
-    known: ['ce_phone_1', 'ce_cup_2', 'ce_key_1', 'ce_pen_3', 'ce_orange_1', 'ce_book_2'] }
+    known: ['ce_phone_1', 'ce_cup_2', 'ce_key_1', 'ce_pen_3', 'ce_orange_1', 'ce_book_2'] },
+  // capitolo 5: «Quanto costa? Quanto costano?» — il cartellino del prezzo; costa / costano e gli articoli i, le (costa_it.js)
+  { id: 'l34', title: 'Lezione 34', co: true, numParts: true, hilite: ['costa', 'costano'],
+    known: ['co_book_1', 'co_pen_2', 'co_suitcase_1', 'co_cup_2', 'co_phone_1', 'co_notebook_3'] }
 ];
 
 // Quattro insegnanti, dal più rigido al più indulgente. gender = voce maschile o femminile.

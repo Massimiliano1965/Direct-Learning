@@ -6,7 +6,7 @@ const vm = require('vm');
 
 const ctx = { console: console };
 vm.createContext(ctx);
-['course.js', 'data.js', 'logic.js', 'colors_it.js', 'numbers_it.js', 'geo_fig.js', 'geo_it.js', 'poss_it.js', 'size_it.js', 'third_it.js', 'nat_it.js', 'essere_it.js', 'altro_it.js', 'prep_it.js', 'anche_it.js', 'ora_it.js', 'appt_it.js', 'gender_it.js', 'verbs_it.js', 'perche_it.js', 'pron_it.js', 'sum_it.js', 'km_it.js', 'fam_it.js', 'avere_it.js', 'gen_it.js', 'plur_it.js', 'cece_it.js', 'ui_lang.js'].forEach(f => {
+['course.js', 'data.js', 'logic.js', 'colors_it.js', 'numbers_it.js', 'geo_fig.js', 'geo_it.js', 'poss_it.js', 'size_it.js', 'third_it.js', 'nat_it.js', 'essere_it.js', 'altro_it.js', 'prep_it.js', 'anche_it.js', 'ora_it.js', 'appt_it.js', 'gender_it.js', 'verbs_it.js', 'perche_it.js', 'pron_it.js', 'sum_it.js', 'km_it.js', 'fam_it.js', 'avere_it.js', 'gen_it.js', 'plur_it.js', 'cece_it.js', 'costa_it.js', 'ui_lang.js'].forEach(f => {
   vm.runInContext(fs.readFileSync(path.join(__dirname, '..', 'www', 'js', f), 'utf8'), ctx, { filename: f });
 });
 const run = (code) => vm.runInContext(code, ctx);
@@ -14,7 +14,7 @@ const evaluate = run('evaluate');
 const evaluateAll = run('evaluateAll');
 const buildSteps = run('buildSteps');
 const answerSteps = run('answerSteps');
-const LESSONS = run('LESSONS').filter(l => !l.colors && !l.numbers && !l.geo && !l.poss && !l.size && !l.third && !l.nat && !l.ess && !l.altro && !l.prep && !l.anche && !l.ora && !l.appt && !l.verbs && !l.purp && !l.pron && !l.sum && !l.km && !l.fam && !l.ea && !l.pl && !l.ce);   // lezioni con gli oggetti (colori e numeri hanno i loro test)
+const LESSONS = run('LESSONS').filter(l => !l.colors && !l.numbers && !l.geo && !l.poss && !l.size && !l.third && !l.nat && !l.ess && !l.altro && !l.prep && !l.anche && !l.ora && !l.appt && !l.verbs && !l.purp && !l.pron && !l.sum && !l.km && !l.fam && !l.ea && !l.pl && !l.ce && !l.co);   // lezioni con gli oggetti (colori e numeri hanno i loro test)
 const NUM_LESSONS = run('LESSONS').filter(l => l.numbers);
 const COLOR_LESSONS = run('LESSONS').filter(l => l.colors);
 const ITEMS = run('ITEMS');
@@ -954,6 +954,28 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
   const st = buildSteps(l), models = st.filter(s => s.model && s.type !== 'reveal');
   check('lezione 33: risposte modello giuste', models.every(s => evaluate(s, s.model).ok));
   check('lezione 33: ripetizioni giuste', models.every(s => buildDrill(s, 5, []).every(d => evaluate(d, d.model).ok)));
+}
+
+// Lezione 34: «Quanto costa? Quanto costano?»
+{
+  const SX = run('SCO'), evalAsk = run('evalAsk'), answerAsk = run('answerAsk'), buildDrill = run('buildDrill'), ok = (st, t) => evaluate(st, t).ok;
+  const l = run('LESSONS').find(l => l.id === 'l34');
+  check('lezione 34 c\'è', !!l && l.co);
+  check('figure', l.known.every(k => FIG[k] && FIG[k].indexOf('<svg') === 0 && FIG[k].indexOf(' id=') === -1));
+  check('frasi', SX.present('co_book_1').prompt === 'Il libro costa dodici euro.' && SX.present('co_pen_2').prompt === 'Le penne costano tre euro.' &&
+    SX.present('co_notebook_3').prompt === 'I quaderni costano sei euro.' && SX.key('co_cup_2').prompt === 'Quanto costano le tazze?' && SX.key('co_phone_1').model === 'Costa trecento euro.');
+  check('giusto (anche «12 €»)', ok(SX.key('co_book_1'), 'Costa dodici euro.') && ok(SX.key('co_book_1'), 'Il libro costa dodici euro.') && ok(SX.key('co_book_1'), 'costa 12 €') &&
+    ok(SX.key('co_pen_2'), 'Le penne costano tre euro.') && ok(SX.askQ('co_pen_2'), 'Quanto costano le penne?'));
+  const n = SX.neg('co_suitcase_1');
+  check('giusto: il no', ok(n, n.model));
+  check('sbagliato: costa/costano, «è», prezzo, articolo', !ok(SX.key('co_book_1'), 'Costano dodici euro.') && !ok(SX.key('co_pen_2'), 'Costa tre euro.') &&
+    !ok(SX.key('co_book_1'), 'È dodici euro.') && !ok(SX.key('co_book_1'), 'Costa venti euro.') && !ok(SX.key('co_pen_2'), 'I penne costano tre euro.') && !ok(SX.key('co_pen_2'), 'Le penna costano tre euro.'));
+  check('allievo', evalAsk('co_cup_2', 'Quanto costano le tazze?').kind === 'what' && answerAsk('co_cup_2', { kind: 'what' }) === 'Costano otto euro.' &&
+    evalAsk('co_cup_2', 'Le tazze costano dieci euro?').kind === 'no' && answerAsk('co_cup_2', { kind: 'no', ask: 10 }) === 'No, non costano dieci euro. Costano otto euro.' &&
+    !evalAsk('co_cup_2', 'Quanto costa le tazze?').ok && evalAsk('co_cup_2', 'Le tazze costa otto euro?').model === 'Le tazze costano otto euro?');
+  const st = buildSteps(l), models = st.filter(s => s.model && s.type !== 'reveal');
+  check('lezione 34: risposte modello giuste', models.every(s => evaluate(s, s.model).ok));
+  check('lezione 34: ripetizioni giuste', models.every(s => buildDrill(s, 5, []).every(d => evaluate(d, d.model).ok)));
 }
 
 // Parole che vanno bene tutte e due (COURSE.synonyms): il microfono le accetta tutte e due
