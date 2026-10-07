@@ -173,7 +173,10 @@ const LESSONS = [
   // ===== LIVELLO 2 (capitoli 6–10) =====
   // capitolo 6: «Il contrario» — aperto / chiuso, pieno / vuoto, lungo / corto: «Com'è il libro? Il libro è aperto.» (contr_it.js)
   { id: 'l39', title: 'Lezione 39', level: 2, ct: true, gender: true,
-    known: ['ct_book_aperto', 'ct_book_chiuso', 'ct_bottle_pieno', 'ct_bottle_vuoto', 'ct_pencil_lungo', 'ct_pencil_corto'] }
+    known: ['ct_book_aperto', 'ct_book_chiuso', 'ct_bottle_pieno', 'ct_bottle_vuoto', 'ct_pencil_lungo', 'ct_pencil_corto'] },
+  // capitolo 6: «Essere o stare» — Max e Isa stanno bene, stanno male o sono stanchi: «Come sta Isa? Isa è stanca.» (stare_it.js)
+  { id: 'l40', title: 'Lezione 40', level: 2, sta: true, gender: true, hilite: ['sta', 'è'],
+    known: ['st_m_bene', 'st_f_male', 'st_m_stanco', 'st_f_bene', 'st_m_male', 'st_f_stanco'] }
 ];
 
 // Quattro insegnanti, dal più rigido al più indulgente. gender = voce maschile o femminile.
