@@ -31,7 +31,12 @@ Leggi questo file prima di tutto. Poi `docs/percorso.md` (l'ordine delle lezioni
 14 essere · 15 un altro · 16 un/una/un'/uno · 17 il/la/l'/lo · 18 sul/nel… (a e di più avanti) · 19 anche/neanche · 20 che ora è ·
 21 a che ora (aereo, riunione…) · 22 il, la o l'? (-o/-a in colore).
 
+## Da ricordare
+- Ogni lezione ha le **domande dello studente** (tocca una figura e chiede): 7 per lezione. Mantenerle nelle lezioni nuove.
+- **Test di fine livello**: storia da descrivere a voce, niente «giusto/sbagliato» durante, risultato alla fine, ripasso consigliato
+  (anche con un avviso nelle lezioni dopo se gli errori continuano). Dettagli in `docs/percorso.md`.
+
 ## Prossimi passi
 - Lezione 23: «Verbi al presente: Cosa fa…?» (capitolo 4 del percorso). Poi «Perché? Per…», «Lo prendo — la prendo».
 - Più avanti: preposizioni «a» e «di»; il test di fine livello; CIAO English quando le lezioni italiane sono strutturate.
-- Stima: circa 100 lezioni in tutto, in 4 livelli, più i 4 test.
+- Stima: circa 100 lezioni in tutto (ne mancano circa 78), in 4 livelli, più i 4 test.

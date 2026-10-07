@@ -183,3 +183,12 @@ Durante il test l'insegnante non corregge; contano solo gli errori, mostrati all
   nella frase scritta si alternano in oro ogni 2 secondi; la voce, nelle domande, ogni tanto usa la seconda;
   il microfono le accetta tutte e due. L'elenco è `COURSE.synonyms` in `www/js/course.js`: per una coppia nuova basta aggiungerla lì.
 - L'insegnante non usa parole che l'allievo non conosce ancora (niente «bravo», «ottimo»: l'entusiasmo lo mostra il corpo; l'errore è «No.»).
+- **Domande dello studente**: in ogni lezione l'allievo tocca una figura e fa lui la domanda (3 volte dopo la domanda chiave, 4 alla fine);
+  l'insegnante risponde con la frase intera. Da mantenere in tutte le lezioni nuove.
+
+## Test di fine livello (deciso da Massi)
+
+- Una **storia** con oggetti e persone già noti: l'allievo **descrive a voce** quello che succede (a volte tocca qualcosa).
+- L'app controlla le risposte ma **durante il test non dice giusto o sbagliato**: gli errori si contano solo alla fine.
+- Alla fine: il risultato e, se ci sono lacune, **si consiglia un ripasso** delle lezioni con gli errori. Il ripasso si può fare o saltare (molto consigliato).
+- Se l'allievo salta il ripasso e nelle lezioni dopo **sbaglia ancora le stesse cose**, anche nelle lezioni compare l'avviso: «si consiglia il ripasso».
