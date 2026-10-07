@@ -280,7 +280,10 @@ const LESSONS = [
     known: ['dv_f_open', 'dv_m_close', 'dv_f_phone', 'dv_m_read', 'dv_f_eat', 'dv_m_drink'] },
   // capitolo 14: «Ancora — non più» — Max legge ancora? Sì, legge ancora. Isa mangia ancora? No, non mangia più. (ancora_it.js)
   { id: 'l73', title: 'Lezione 73', level: 3, an: true, hilite: ['ancora', 'più'],
-    known: ['an_m_read_1', 'an_f_eat_0', 'an_m_phone_0', 'an_f_drink_1', 'an_m_eat_1', 'an_f_read_0'] }
+    known: ['an_m_read_1', 'an_f_eat_0', 'an_m_phone_0', 'an_f_drink_1', 'an_m_eat_1', 'an_f_read_0'] },
+  // capitolo 14: «Al telefono» — Pronto, sono Max. Chi parla? Parla Max. (telef_it.js)
+  { id: 'l74', title: 'Lezione 74', level: 3, tl: true, hilite: ['Pronto', 'parla'],
+    known: ['tl_m', 'tl_f', 'tl_marco', 'tl_anna', 'tl_nonno', 'tl_nonna'] }
 ];
 
 // Quattro insegnanti, dal più rigido al più indulgente. gender = voce maschile o femminile.
