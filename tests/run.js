@@ -6,7 +6,7 @@ const vm = require('vm');
 
 const ctx = { console: console };
 vm.createContext(ctx);
-['course.js', 'data.js', 'logic.js', 'colors_it.js', 'numbers_it.js', 'geo_fig.js', 'geo_it.js', 'poss_it.js', 'size_it.js', 'third_it.js', 'nat_it.js', 'essere_it.js', 'altro_it.js', 'ui_lang.js'].forEach(f => {
+['course.js', 'data.js', 'logic.js', 'colors_it.js', 'numbers_it.js', 'geo_fig.js', 'geo_it.js', 'poss_it.js', 'size_it.js', 'third_it.js', 'nat_it.js', 'essere_it.js', 'altro_it.js', 'prep_it.js', 'ui_lang.js'].forEach(f => {
   vm.runInContext(fs.readFileSync(path.join(__dirname, '..', 'www', 'js', f), 'utf8'), ctx, { filename: f });
 });
 const run = (code) => vm.runInContext(code, ctx);
@@ -14,7 +14,7 @@ const evaluate = run('evaluate');
 const evaluateAll = run('evaluateAll');
 const buildSteps = run('buildSteps');
 const answerSteps = run('answerSteps');
-const LESSONS = run('LESSONS').filter(l => !l.colors && !l.numbers && !l.geo && !l.poss && !l.size && !l.third && !l.nat && !l.ess && !l.altro);   // lezioni con gli oggetti (colori e numeri hanno i loro test)
+const LESSONS = run('LESSONS').filter(l => !l.colors && !l.numbers && !l.geo && !l.poss && !l.size && !l.third && !l.nat && !l.ess && !l.altro && !l.prep);   // lezioni con gli oggetti (colori e numeri hanno i loro test)
 const NUM_LESSONS = run('LESSONS').filter(l => l.numbers);
 const COLOR_LESSONS = run('LESSONS').filter(l => l.colors);
 const ITEMS = run('ITEMS');
@@ -613,6 +613,29 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
   check('lezione 17: risposte modello giuste', models.every(s => evaluate(s, s.model).ok));
   check('lezione 17: ripetizioni giuste', models.every(s => buildDrill(s, 5, []).every(d => evaluate(d, d.model).ok)));
   check('lezione 17: risposte con il nome', st.filter(s => s.type === 'yes').every(s => / di (Max|Giulia)\.$/.test(s.model)));
+}
+
+// Lezione 18: «Preposizioni articolate» (su, in)
+{
+  const SQ = run('SQ'), evalAsk = run('evalAsk'), answerAsk = run('answerAsk'), buildDrill = run('buildDrill'), ok = (st, t) => evaluate(st, t).ok;
+  const l18 = run('LESSONS').find(l => l.id === 'l18');
+  check('lezione 18 c\'è', !!l18 && l18.prep);
+  check('figure', l18.known.every(k => FIG[k] && FIG[k].indexOf('<svg') === 0 && FIG[k].indexOf(' id=') === -1));
+  check('frasi: sul, sulla, sull\', nel, nello, nella', SQ.present('q_book').prompt === 'Il libro è sul tavolo.' && SQ.present('q_phone').prompt === 'Il telefono è sulla sedia.' &&
+    SQ.present('q_orange').prompt === 'L\'arancia è sull\'agenda.' && SQ.present('q_key').prompt === 'La chiave è nel cappotto.' &&
+    SQ.present('q_pen').prompt === 'La penna è nello zaino.' && SQ.present('q_bottle').prompt === 'La bottiglia è nella borsa.' && SQ.key('q_book').prompt === 'Dov\'è il libro?');
+  check('giusto (anche «È sul tavolo.», «sull agenda»)', ok(SQ.key('q_book'), 'Il libro è sul tavolo.') && ok(SQ.key('q_book'), 'È sul tavolo.') &&
+    ok(SQ.yes('q_orange'), 'Sì, l\'arancia è sull\'agenda.') && ok(SQ.yes('q_orange'), 'Sì, è sull agenda.') && ok(SQ.key('q_pen'), 'La penna è nello zaino.'));
+  check('sbagliato: «su il tavolo», «sullo tavolo», «nel borsa», «in la borsa»', !ok(SQ.key('q_book'), 'È su il tavolo.') && !ok(SQ.key('q_book'), 'È sullo tavolo.') &&
+    !ok(SQ.key('q_bottle'), 'È nel borsa.') && !ok(SQ.key('q_bottle'), 'È in la borsa.'));
+  check('sbagliato: il posto o la preposizione', !ok(SQ.key('q_book'), 'Il libro è sulla sedia.') && !ok(SQ.key('q_pen'), 'La penna è sullo zaino.') && !ok(SQ.key('q_book'), 'La libro è sul tavolo.'));
+  check('ripete «Dov\'è?»', ok(SQ.askQ('q_book'), 'Dov\'è?'));
+  check('allievo', evalAsk('q_book', 'Dov\'è il libro?').kind === 'what' && answerAsk('q_book', { kind: 'what' }) === 'Il libro è sul tavolo.' &&
+    evalAsk('q_book', 'Il libro è sulla sedia?').kind === 'no' && evalAsk('q_book', 'Il libro è sul tavolo?').kind === 'yes' &&
+    evalAsk('q_bottle', 'La bottiglia è nel borsa?').model === 'La bottiglia è nella borsa?');
+  const st = buildSteps(l18), models = st.filter(s => s.model && s.type !== 'reveal');
+  check('lezione 18: risposte modello giuste', models.every(s => evaluate(s, s.model).ok));
+  check('lezione 18: ripetizioni giuste', models.every(s => buildDrill(s, 5, []).every(d => evaluate(d, d.model).ok)));
 }
 
 // Lingua dello studente: ogni scritta c'è in tutte le lingue, con gli stessi segnaposto {…}
