@@ -44,6 +44,6 @@ Leggi questo file prima di tutto. Poi `docs/percorso.md` (l'ordine delle lezioni
 
 ## Prossimi passi
 - Lezioni 1–64 e i test caricati su `main`; 65–68 sul ramo `in-attesa`, da pushare quando Massi dice «pusha». Livello 2 dalla 39 (`level: 2` in LESSONS). I numeri fino a 1000 sono solo 4 lezioni (26–29): decisione di Massi, «non di più».
-- Test di fine livello 1 fatto (`test_it.js`, riga «t1» in LESSONS dopo la 38; risultati in `DB.settings.tests`). Avviso «Ripasso consigliato» a fine lezione: se l'allievo ha saltato il ripasso e la lezione va sotto il 70%; una lezione da ripassare rifatta con l'80% esce dalla lista. Prossimi passi: / potere / dovere, ancora / non più, al telefono (cap. 14); poi preposizioni (cap. 11), gli/le/loro/mi/ci (cap. 12) e il test del livello 3.
+- Test di fine livello 1 fatto (`test_it.js`, riga «t1» in LESSONS dopo la 38; risultati in `DB.settings.tests`). Avviso «Ripasso consigliato» a fine lezione: se l'allievo ha saltato il ripasso e la lezione va sotto il 70%; una lezione da ripassare rifatta con l'80% esce dalla lista. Prossimi passi: preposizioni (cap. 11), gli/le/loro/mi/ci (cap. 12) e il test del livello 3.
 - Più avanti: preposizioni «a» e «di»; il test di fine livello; CIAO English quando le lezioni italiane sono strutturate.
 - Stima: circa 100 lezioni in tutto (ne mancano circa 32), in 4 livelli, più i 4 test.
