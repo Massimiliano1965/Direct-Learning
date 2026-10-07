@@ -4,13 +4,16 @@
    Ogni lezione: Max o Isa, sei azioni (le scene della lezione 23), una forma del verbo e la sua domanda:
      Lezione 79 «Futuro»:     Domani Max leggerà un libro.     Che cosa farà Max domani?     → Max leggerà un libro.
                               (la nuvoletta con la freccia azzurra in avanti = domani)
+     Lezione 88 «Imperfetto»: Prima Max leggeva un libro. Ora telefona.   Che cosa faceva Max prima?   → Prima Max leggeva un libro.
+                              (la figura divisa: a sinistra «prima», sbiadita; a destra «ora»)
      Lezione 80 «Gerundio»:   Max sta leggendo un libro.        Che cosa sta facendo Max?     → Max sta leggendo un libro.
                               (la scena, adesso)
    Domande sì / no / «o» come nelle altre lezioni; errori: la forma di un altro tempo («legge», «ha letto»), le forme inventate.
    ===================================================================== */
 
 const FORM_ACTS = ['read', 'eat', 'drink', 'phone', 'open', 'close'];
-// cfg: flag, form(a) = «leggerà» / «sta leggendo», q(name), lead (parola davanti alla frase: «Domani»), fig(X), items
+// cfg: flag, form(a) = «leggerà» / «sta leggendo», q(name), lead (parola davanti alla frase: «Domani»), fig(X), items;
+// after(X, who, act) = una frase dopo nella presentazione («Ora telefona.»), strip = la regex di quello che non si controlla («ora telefona»)
 function formLesson(cfg) {
   const IT = cfg.items;
   const isX = (X) => !!IT[X];
@@ -23,7 +26,7 @@ function formLesson(cfg) {
   const other = (X) => pick(FORM_ACTS.filter(a => a !== act(X)));
   Object.keys(IT).forEach(X => { Object.defineProperty(FIG, X, { enumerable: true, get: () => cfg.fig(X, who(X), act(X)) }); });
   const SX = gTag(cfg.flag, {
-    present: (X) => { const p = (cfg.lead ? cfg.lead + ' ' : '') + say(X) + '.'; return { type: 'echo', check: 'claim', show: X, prompt: p, model: p }; },
+    present: (X) => { const p = (cfg.lead ? cfg.lead + ' ' : '') + say(X) + '.' + (cfg.after ? ' ' + cfg.after(X, who(X), act(X)) : ''); return { type: 'echo', check: 'claim', show: X, prompt: p, model: p }; },
     yes: (X) => ({ type: 'yes', show: X, prompt: say(X) + '?', model: 'Sì, ' + say(X) + '.' }),
     neg: (X) => { const o = other(X); return { type: 'neg', show: X, ask: o, prompt: say(X, o) + '?', model: 'No, ' + say(X, o, true) + '.', complete: say(X) + '.' }; },
     alt: (X) => { const o = other(X), ord = Math.random() < 0.5 ? [act(X), o] : [o, act(X)];
@@ -41,6 +44,7 @@ function formLesson(cfg) {
   const qRe = new RegExp(gNorm(cfg.q('X')).trim().replace(' x', ' [a-z]+').replace(/ /g, ' '), 'g');
   function statements(s) {
     s = s.replace(qRe, ' # ');
+    if (cfg.strip) s = s.replace(cfg.strip, ' # ');
     const names = vNames(), out = [], w = s.trim().split(' ');
     for (let i = 0; i < w.length; i++) {
       let f = FORMS.find(F => F.w.every((t, k) => w[i + k] === t)), n = f ? f.w.length : 1, a = f ? f.a : null, ok = !!f;
@@ -109,4 +113,27 @@ const SGE = formLesson({
   fig: (X, w, a) => FIG['v_' + w + '_' + a],
   wrong: [['leggendo', 'read'], ['mangiando', 'eat'], ['bevendo', 'drink'], ['telefonando', 'phone'], ['aprendo', 'open'], ['chiudendo', 'close']],
   items: { ge_m_read: 1, ge_f_drink: 1, ge_m_phone: 1, ge_f_open: 1, ge_m_eat: 1, ge_f_close: 1 }
+});
+// Lezione 88: l'imperfetto (prima e ora): a sinistra quello che faceva prima, sbiadito; a destra quello che fa ora
+const IMPF = { read: 'leggeva', eat: 'mangiava', drink: 'beveva', phone: 'telefonava', open: 'apriva', close: 'chiudeva' };
+const IMPF_NOW = { read: 'phone', drink: 'read', phone: 'eat', open: 'drink', eat: 'close', close: 'open' };
+function impfFig(w, a) {
+  const k = p3Key(w), LK = (typeof LOOKS !== 'undefined' && LOOKS[TEACHERS[k] ? (TEACHERS[k].look || k) : 'luca']) || null;
+  if (!LK || typeof tTorso !== 'function') return '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"></svg>';
+  const half = (b, x) => '<g transform="translate(' + (x - 3) + ' 26) scale(.58)">' + V_SCENE[b](LK) + '</g>';
+  const label = (x, t, c) => '<text x="' + x + '" y="12" text-anchor="middle" font-family="Georgia,serif" font-size="9" font-weight="bold" fill="' + c + '">' + t + '</text>';
+  return '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">' +
+    '<rect x="1" y="1" width="48" height="98" rx="8" fill="#c9a45c" opacity=".16"/>' + '<g opacity=".62">' + half(a, 0) + '</g>' +
+    '<rect x="1" y="1" width="48" height="98" rx="8" fill="#e6d6b4" opacity=".14"/>' + label(25, 'prima', '#c9a45c') +
+    '<path d="M50 8 v84" stroke="#c9a45c" stroke-width="1" stroke-dasharray="3 3" opacity=".7"/>' + half(IMPF_NOW[a], 50) + label(75, 'ora', '#f3eee2') + '</svg>';
+}
+const SIMPF = formLesson({
+  flag: 'ipf', lead: 'Prima',
+  form: (a) => IMPF[a],
+  q: (n) => 'Che cosa faceva ' + n + ' prima?',
+  after: (X, w, a) => 'Ora ' + vDoes(IMPF_NOW[a]) + '.',
+  strip: / ora [a-z]+( (un|una|uno|il|la|lo|l) [a-z]+)? /g,
+  fig: (X, w, a) => impfFig(w, a),
+  wrong: [['leggiva', 'read'], ['beviva', 'drink'], ['apreva', 'open'], ['chiudiva', 'close'], ['mangieva', 'eat'], ['telefoneva', 'phone']],
+  items: { ipf_m_read: 1, ipf_f_drink: 1, ipf_m_phone: 1, ipf_f_open: 1, ipf_m_eat: 1, ipf_f_close: 1 }
 });

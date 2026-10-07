@@ -325,7 +325,10 @@ const LESSONS = [
     known: ['sg_apr', 'sg_lug', 'sg_ott', 'sg_gen', 'sg_mag', 'sg_ago', 'sg_nov', 'sg_feb'] },
   // capitolo 19: «Il tempo che fa» — Che tempo fa? C'è il sole. Piove. Nevica. Fa caldo. (tempofa_it.js)
   { id: 'l87', title: 'Lezione 87', level: 4, tf: true, hilite: ['Che tempo fa', 'piove', 'nevica', 'c\'è', 'fa caldo', 'fa freddo', 'nuvoloso', 'vento'],
-    known: ['tf_sole', 'tf_piove', 'tf_nevica', 'tf_vento', 'tf_nuvoloso', 'tf_caldo', 'tf_freddo'] }
+    known: ['tf_sole', 'tf_piove', 'tf_nevica', 'tf_vento', 'tf_nuvoloso', 'tf_caldo', 'tf_freddo'] },
+  // capitolo 18: «Imperfetto: ora e prima» — Prima Max leggeva un libro. Ora telefona. (forme_it.js)
+  { id: 'l88', title: 'Lezione 88', level: 4, ipf: true, hilite: ['faceva', 'leggeva', 'mangiava', 'beveva', 'telefonava', 'apriva', 'chiudeva', 'prima'],
+    known: ['ipf_m_read', 'ipf_f_drink', 'ipf_m_phone', 'ipf_f_open', 'ipf_m_eat', 'ipf_f_close'] }
 ];
 
 // Quattro insegnanti, dal più rigido al più indulgente. gender = voce maschile o femminile.

@@ -14,7 +14,7 @@ const evaluate = run('evaluate');
 const evaluateAll = run('evaluateAll');
 const buildSteps = run('buildSteps');
 const answerSteps = run('answerSteps');
-const LESSONS = run('LESSONS').filter(l => !l.colors && !l.numbers && !l.geo && !l.poss && !l.size && !l.third && !l.nat && !l.ess && !l.altro && !l.prep && !l.anche && !l.ora && !l.appt && !l.verbs && !l.purp && !l.pron && !l.sum && !l.km && !l.fam && !l.ea && !l.pl && !l.ce && !l.co && !l.dt && !l.ct && !l.sta && !l.cl && !l.imp && !l.qd && !l.ne && !l.ps && !l.lh && !l.cv && !l.sa && !l.lm && !l.gd && !l.ms && !l.sp && !l.lo && !l.nv && !l.da && !l.qn && !l.bv && !l.lp && !l.cm && !l.tv && !l.lq && !l.cz && !l.qu && !l.fi && !l.nh && !l.rf && !l.gn && !l.vo && !l.po && !l.dv && !l.an && !l.tl && !l.dvp && !l.mc && !l.pe && !l.vi && !l.fu && !l.ge && !l.lg && !l.pc && !l.md && !l.cu && !l.pi && !l.sg && !l.tf && !l.test);   // lezioni con gli oggetti (colori e numeri hanno i loro test)
+const LESSONS = run('LESSONS').filter(l => !l.colors && !l.numbers && !l.geo && !l.poss && !l.size && !l.third && !l.nat && !l.ess && !l.altro && !l.prep && !l.anche && !l.ora && !l.appt && !l.verbs && !l.purp && !l.pron && !l.sum && !l.km && !l.fam && !l.ea && !l.pl && !l.ce && !l.co && !l.dt && !l.ct && !l.sta && !l.cl && !l.imp && !l.qd && !l.ne && !l.ps && !l.lh && !l.cv && !l.sa && !l.lm && !l.gd && !l.ms && !l.sp && !l.lo && !l.nv && !l.da && !l.qn && !l.bv && !l.lp && !l.cm && !l.tv && !l.lq && !l.cz && !l.qu && !l.fi && !l.nh && !l.rf && !l.gn && !l.vo && !l.po && !l.dv && !l.an && !l.tl && !l.dvp && !l.mc && !l.pe && !l.vi && !l.fu && !l.ge && !l.lg && !l.pc && !l.md && !l.cu && !l.pi && !l.sg && !l.tf && !l.ipf && !l.test);   // lezioni con gli oggetti (colori e numeri hanno i loro test)
 const NUM_LESSONS = run('LESSONS').filter(l => l.numbers);
 const COLOR_LESSONS = run('LESSONS').filter(l => l.colors);
 const ITEMS = run('ITEMS');
@@ -1856,7 +1856,8 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
 {
   const evalAsk = run('evalAsk'), buildDrill = run('buildDrill'), ok = (st, t) => evaluate(st, t).ok;
   const M = run("vName('m')"), F = run("vName('f')");
-  [['l79', 'fu', 'SFU', 'leggerà', 'Che cosa farà ' + M + ' domani?', 'legge'], ['l80', 'ge', 'SGE', 'sta leggendo', 'Che cosa sta facendo ' + M + '?', 'leggendo']].forEach(([id, f, sx, form, q, bad]) => {
+  [['l79', 'fu', 'SFU', 'leggerà', 'Che cosa farà ' + M + ' domani?', 'legge'], ['l80', 'ge', 'SGE', 'sta leggendo', 'Che cosa sta facendo ' + M + '?', 'leggendo'],
+   ['l88', 'ipf', 'SIMPF', 'leggeva', 'Che cosa faceva ' + M + ' prima?', 'leggiva']].forEach(([id, f, sx, form, q, bad]) => {
     const SX = run(sx), l = run('LESSONS').find(l => l.id === id);
     check('lezione ' + id + ' c\'è, livello 4', !!l && l[f] && l.level === 4);
     check(id + ': figure', l.known.every(k => FIG[k] && FIG[k].indexOf('<svg') === 0 && FIG[k].indexOf(' id=') === -1));
@@ -1866,7 +1867,7 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
     check(id + ': il no', ok(n, n.model) && ok(n, n.model + ' ' + n.complete) && !ok(n, 'No.'));
     check(id + ': sbagliato: un altro tempo, un\'altra persona, un\'altra cosa', !ok(SX.key(f + '_m_read'), M + ' ' + bad + ' un libro.') &&
       !ok(SX.key(f + '_m_read'), M + ' ha letto un libro.') && !ok(SX.key(f + '_m_read'), F + ' ' + form + ' un libro.') && !ok(SX.key(f + '_m_read'), M + ' ' + form + ' la porta.'));
-    check(id + ': allievo', evalAsk(f + '_m_read', q).kind === 'what' && evalAsk(f + '_m_read', M + ' ' + form.replace('leggerà', 'telefonerà').replace('sta leggendo', 'sta telefonando') + '?').kind === 'no' &&
+    check(id + ': allievo', evalAsk(f + '_m_read', q).kind === 'what' && evalAsk(f + '_m_read', M + ' ' + form.replace('leggerà', 'telefonerà').replace('sta leggendo', 'sta telefonando').replace('leggeva', 'telefonava') + '?').kind === 'no' &&
       !evalAsk(f + '_m_read', M + ' telefona?').ok);
     const st = buildSteps(l), models = st.filter(s => s.model && s.type !== 'reveal');
     check(id + ': risposte modello giuste', models.every(s => evaluate(s, s.model).ok));
@@ -1900,6 +1901,10 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
     check(id + ': ripetizioni giuste', models.every(s => buildDrill(s, 5, s.reviewItems || []).every(d => evaluate(d, d.model).ok)));
   });
 }
+
+// Lezione 88: la presentazione dice anche «Ora …» (non si controlla)
+check('88: prima e ora', run("SIMPF.present('ipf_m_read').prompt") === 'Prima ' + run("vName('m')") + ' leggeva un libro. Ora telefona.' &&
+  evaluate(run("SIMPF.present('ipf_m_read')"), 'Prima ' + run("vName('m')") + ' leggeva un libro. Ora telefona.').ok);
 
 // Lezione 83: «Di che cosa è fatto?»
 {
