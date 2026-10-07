@@ -121,6 +121,19 @@ const FIG = {
     <path d="M50 14 q-12 12 -12.7 30 q6.3 -5 12.7 0 q6.3 -5 12.7 0 q-.7 -18 -12.7 -30z" fill="#3a4f7e"/>
     <rect x="48.6" y="8" width="2.8" height="7" rx="1.4" fill="#c9a45c"/>
     <path d="M50 44 V80 q0 7 -7 7 q-6 0 -6 -6" fill="none" stroke="#5a3826" stroke-width="3.4" stroke-linecap="round"/>`, 30),
+  // lezione 16: un ombrello, un'agenda, un'arancia, uno zaino, uno specchio
+  agenda: FLAT(`<rect x="25" y="12" width="52" height="76" rx="4" fill="#ece4d2"/><rect x="22" y="10" width="52" height="76" rx="4" fill="#2e2f37"/>
+    <rect x="22" y="10" width="10" height="76" rx="4" fill="#24252c"/><rect x="62" y="10" width="4" height="76" fill="#c9a45c"/>
+    <rect x="38" y="26" width="20" height="10" rx="1.5" fill="#ece4d2"/><path d="M42 31 h12" stroke="#2e2f37" stroke-width="1.6"/><path d="M50 86 v8 l3 -3 l3 3 v-8" fill="#a3263a"/>`, 28),
+  orange: FLAT(`<circle cx="50" cy="56" r="31" fill="#e8862a"/><circle cx="40" cy="46" r="9" fill="#f2a54a" opacity=".7"/>
+    <circle cx="60" cy="66" r="1.2" fill="#c96f1e"/><circle cx="66" cy="54" r="1.2" fill="#c96f1e"/><circle cx="54" cy="74" r="1.2" fill="#c96f1e"/><circle cx="38" cy="66" r="1.2" fill="#c96f1e"/>
+    <path d="M50 26 q1 -6 5 -9" stroke="#5a3826" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M54 21 q12 -11 22 -3 q-11 9 -22 3z" fill="#5a9a46"/>`, 26),
+  backpack: FLAT(`<path d="M40 22 v-6 a10 10 0 0 1 20 0 v6" fill="none" stroke="#24345a" stroke-width="4"/>
+    <rect x="25" y="20" width="50" height="68" rx="13" fill="#3a4f7e"/><path d="M25 42 h50" stroke="#2c3e66" stroke-width="2"/>
+    <rect x="32" y="54" width="36" height="26" rx="6" fill="#2c3e66"/><rect x="45" y="58" width="10" height="3" rx="1.5" fill="#c9a45c"/>
+    <path d="M44 30 h12" stroke="#c9a45c" stroke-width="2.4" stroke-linecap="round"/>`, 28),
+  mirror: FLAT(`<rect x="46" y="66" width="8" height="22" rx="3" fill="#b8924c"/><ellipse cx="50" cy="40" rx="25" ry="30" fill="#c9a45c"/>
+    <ellipse cx="50" cy="40" rx="20" ry="25" fill="#9fbcd0"/><path d="M38 30 l10 -9 M37 42 l20 -18" stroke="#e8f1f7" stroke-width="3" stroke-linecap="round"/>`, 20),
   lamp: FLAT(`<ellipse cx="50" cy="86" rx="20" ry="4" fill="#2a3040"/><rect x="47" y="56" width="5" height="30" fill="#3a4258"/>
     <path d="M49 58 L36 34" stroke="#3a4258" stroke-width="5" stroke-linecap="round"/>
     <path d="M24 34 l14 -22 l22 14 l-10 14z" fill="#c9a45c"/><path d="M40 40 l10 -14 l10 6 z" fill="#e0c287" opacity=".35"/>

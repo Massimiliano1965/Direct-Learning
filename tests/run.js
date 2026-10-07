@@ -93,11 +93,11 @@ askCases.forEach(([t, kind, ans]) => {
 });
 check('domanda con articolo sbagliato → si corregge', (r => !r.ok && r.model === 'È un tavolo?')(evalAsk('chair', 'È una tavolo?')));
 check('risposta invece di domanda → «Che cos\'è?»', (r => !r.ok && r.model === "Che cos'è?")(evalAsk('chair', 'Sì, è una sedia.')));
-check('parola sconosciuta → «Che cos\'è?»', (r => !r.ok && r.model === "Che cos'è?")(evalAsk('chair', 'È un ombrello?')));
+check('parola sconosciuta → «Che cos\'è?»', (r => !r.ok && r.model === "Che cos'è?")(evalAsk('chair', 'È un aquilone?')));
 check('domanda corretta suggerita è accettata', evalAsk('chair', 'È un tavolo?').ok);
 check('alternativa con articolo sbagliato → si corregge', (r => !r.ok && r.model === 'È un tavolo o una sedia?')(evalAsk('chair', 'È una tavolo o una sedia?')));
 check('alternativa con la stessa parola due volte → no', !evalAsk('chair', 'È un tavolo o un tavolo?').ok);
-check('alternativa con parola sconosciuta → no', !evalAsk('chair', 'È un tavolo o un ombrello?').ok);
+check('alternativa con parola sconosciuta → no', !evalAsk('chair', 'È un tavolo o un aquilone?').ok);
 LESSONS.forEach(l => {
   const steps = buildSteps(l);
   const asks = steps.filter(s => s.type === 'ask');
@@ -206,7 +206,7 @@ LESSONS.forEach(l => {
   if (!l.dq) check(l.id + ': niente «Questo è…» nella presentazione', claims.every(s => /^È /.test(s.prompt)) && !dems.length);
   else {
     const n1 = l.questoIntro ? l.known.length + (l.review || []).length : l.known.length;
-    check(l.id + ': primo giro con «Questo/Questa» d\'accordo', claims.slice(0, n1).every(s => s.prompt.startsWith(ITEMS[s.show].art === 'una' ? 'Questa è ' : 'Questo è ')));
+    check(l.id + ': primo giro con «Questo/Questa» d\'accordo', claims.slice(0, n1).every(s => s.prompt.startsWith((ITEMS[s.show].art === 'una' || ITEMS[s.show].art === "un'") ? 'Questa è ' : 'Questo è ')));
     check(l.id + ': poi «È un…»', claims.slice(n1).every(s => /^È /.test(s.prompt)));
   }
   check(l.id + ': domande senza «questo» nelle lezioni che non lo insegnano', l.questo || st.every(s => !/^È quest/.test(s.prompt)));
@@ -584,6 +584,15 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
   check('lezione 15: risposte modello giuste', models.every(s => evaluate(s, s.model).ok));
   check('lezione 15: ripetizioni giuste', models.every(s => buildDrill(s, 5, []).every(d => evaluate(d, d.model).ok)));
   check('lezione 15: il primo è sempre l\'altro della coppia', st.filter(s => s.prev).every(s => s.prev.split('_')[0] === s.show.split('_')[0] && s.prev !== s.show));
+}
+
+// Lezione 16: «Un, una, un', uno»
+{
+  const S_ = run('S'), ok = (st, t) => evaluate(st, t).ok;
+  check('frasi: un\'agenda, uno zaino, un ombrello', S_.present('agenda').prompt === 'È un\'agenda.' && S_.present('backpack').prompt === 'È uno zaino.' &&
+    S_.present('umbrella').prompt === 'È un ombrello.' && S_.present('agenda', true).prompt === 'Questa è un\'agenda.' && S_.present('backpack', true).prompt === 'Questo è uno zaino.');
+  check('giusto: «uno specchio», «un\'agenda» (anche «un agenda» del microfono)', ok(S_.yes('mirror'), 'Sì, è uno specchio.') && ok(S_.yes('agenda'), 'Sì, è un\'agenda.') && ok(S_.yes('agenda'), 'Sì, è un agenda.'));
+  check('sbagliato: «un zaino», «una agenda», «uno ombrello»', !ok(S_.yes('backpack'), 'Sì, è un zaino.') && !ok(S_.yes('agenda'), 'Sì, è una agenda.') && !ok(S_.yes('umbrella'), 'Sì, è uno ombrello.'));
 }
 
 // Lingua dello studente: ogni scritta c'è in tutte le lingue, con gli stessi segnaposto {…}

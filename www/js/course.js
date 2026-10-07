@@ -42,7 +42,13 @@ const ITEMS = {
   laptop:   { word: 'portatile', art: 'un',  alias: ['portatili', 'portabile'] },
   coat:     { word: 'cappotto',  art: 'un',  alias: ['cappotti', 'capotto'] },
   suitcase: { word: 'valigia',   art: 'una', alias: ['valige', 'valigie', 'valiggia'] },
-  flask:    { word: 'borraccia', art: 'una', alias: ['borracce', 'boraccia'] }
+  flask:    { word: 'borraccia', art: 'una', alias: ['borracce', 'boraccia'] },
+  // lezione 16 (capitolo 3): «un, una, un', uno»
+  umbrella: { word: 'ombrello',  art: 'un',  alias: ['ombrelli', 'ombrella'] },
+  agenda:   { word: 'agenda',    art: "un'", alias: ['agende'] },
+  orange:   { word: 'arancia',   art: "un'", alias: ['arance', 'arancio', 'aranci'] },
+  backpack: { word: 'zaino',     art: 'uno', alias: ['zaini'] },
+  mirror:   { word: 'specchio',  art: 'uno', alias: ['specchi'] }
 };
 
 // Colori (lezione 5): forma maschile e femminile. Il rosso è il colore nuovo, da scoprire.
@@ -87,7 +93,10 @@ const LESSONS = [
   // capitolo 2: «Il verbo essere» — io sono / Lei è / lui è / lei è, con le persone della lezione 13 (essere_it.js)
   { id: 'l14', title: 'Lezione 14', ess: true, known: ['e_me', 'e_you', 'n_m_inghilterra', 'n_f_francia', 'n_m_cina', 'n_f_america'] },
   // capitolo 2: «Un altro, un'altra» — lo stesso oggetto in due colori; il primo resta piccolo sotto il palco (altro_it.js)
-  { id: 'l15', title: 'Lezione 15', altro: true, known: ['phone_nero', 'phone_bianco', 'suitcase_nero', 'suitcase_rosso', 'cup_bianco', 'cup_rosso'] }
+  { id: 'l15', title: 'Lezione 15', altro: true, known: ['phone_nero', 'phone_bianco', 'suitcase_nero', 'suitcase_rosso', 'cup_bianco', 'cup_rosso'] },
+  // capitolo 3: «Un, una, un', uno» — un ombrello, un'agenda, uno zaino, uno specchio; l'arancia da scoprire
+  { id: 'l16', title: 'Lezione 16', known: ['umbrella', 'agenda', 'backpack', 'mirror'], review: ['key', 'book'],
+    fresh: 'orange', questo: true, dq: true }
 ];
 
 // Quattro insegnanti, dal più rigido al più indulgente. gender = voce maschile o femminile.
