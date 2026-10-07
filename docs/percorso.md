@@ -69,14 +69,14 @@ Durante il test l'insegnante non corregge; contano solo gli errori, mostrati all
 31. **Plurale**: e → i — *fatto: Lezione 36*
 32. **Plurale degli articoli**: l' → gli, l' → le — *fatto: Lezione 36*
 33. **Quei, quelle, quegli** — *fatto: Lezione 37*
-34. **Plurali irregolari**
+34. **Plurali irregolari** — *fatto: Lezione 38*
 
 ## Capitolo 6
 
-35. **Il contrario** (grande/piccolo…)
-36. **Essere o stare**
-37. **Ce l'ho — ce l'ha**
-38. **Imperativo**
+35. **Il contrario** (grande/piccolo…) — *fatto: Lezione 39 (aperto/chiuso, pieno/vuoto, lungo/corto)*
+36. **Essere o stare** — *fatto: Lezione 40*
+37. **Ce l'ho — ce l'ha** — *fatto: Lezione 41*
+38. **Imperativo** — *fatto: Lezione 42 (con il Lei)*
 
 ## Capitolo 7
 

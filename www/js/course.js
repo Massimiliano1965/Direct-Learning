@@ -179,7 +179,10 @@ const LESSONS = [
     known: ['st_m_bene', 'st_f_male', 'st_m_stanco', 'st_f_bene', 'st_m_male', 'st_f_stanco'] },
   // capitolo 6: «Ce l'ho — ce l'ha» — Max ha il telefono? Sì, ce l'ha. Isa ha la valigia? No, non ce l'ha. (celha_it.js)
   { id: 'l41', title: 'Lezione 41', level: 2, cl: true, hilite: ['ce l\'ha'],
-    known: ['cl_m_phone_1', 'cl_f_suitcase_0', 'cl_m_umbrella_0', 'cl_f_key_1', 'cl_m_book_1', 'cl_f_bag_0'] }
+    known: ['cl_m_phone_1', 'cl_f_suitcase_0', 'cl_m_umbrella_0', 'cl_f_key_1', 'cl_m_book_1', 'cl_f_bag_0'] },
+  // capitolo 6: «Imperativo» con il Lei — Isa dice: «Apra la porta!» (imper_it.js); il verbo sottolineato
+  { id: 'l42', title: 'Lezione 42', level: 2, imp: true, hilite: ['apra', 'chiuda', 'legga', 'beva', 'mangi', 'telefoni'],
+    known: ['im_f_open', 'im_m_close', 'im_f_read', 'im_m_drink', 'im_f_eat', 'im_m_phone'] }
 ];
 
 // Quattro insegnanti, dal più rigido al più indulgente. gender = voce maschile o femminile.
