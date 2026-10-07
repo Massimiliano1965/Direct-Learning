@@ -187,7 +187,10 @@ const LESSONS = [
     known: ['im_f_open', 'im_m_close', 'im_f_read', 'im_m_drink', 'im_f_eat', 'im_m_phone'] },
   // capitolo 7: «Qual è la domanda?» — l'insegnante dice la risposta, l'allievo trova la domanda già imparata (qual_it.js)
   { id: 'l43', title: 'Lezione 43', level: 2, qd: true, hilite: ['domanda'],
-    known: ['qd_ora', 'qd_fa', 'qd_costa', 'qd_sta', 'qd_chi', 'qd_perche'] }
+    known: ['qd_ora', 'qd_fa', 'qd_costa', 'qd_sta', 'qd_chi', 'qd_perche'] },
+  // capitolo 7: «Né… né…» — Il telefono è rosso o bianco? Il telefono non è né rosso né bianco. È giallo. (ne_it.js)
+  { id: 'l44', title: 'Lezione 44', level: 2, ne: true, gender: true, hilite: ['né'],
+    known: ['ne_phone_giallo', 'ne_suitcase_rosso', 'ne_cup_bianco', 'ne_coat_nero', 'ne_umbrella_giallo', 'ne_agenda_bianco'] }
 ];
 
 // Quattro insegnanti, dal più rigido al più indulgente. gender = voce maschile o femminile.

@@ -6,7 +6,7 @@ const vm = require('vm');
 
 const ctx = { console: console };
 vm.createContext(ctx);
-['course.js', 'data.js', 'logic.js', 'colors_it.js', 'numbers_it.js', 'geo_fig.js', 'geo_it.js', 'poss_it.js', 'size_it.js', 'third_it.js', 'nat_it.js', 'essere_it.js', 'altro_it.js', 'prep_it.js', 'anche_it.js', 'ora_it.js', 'appt_it.js', 'gender_it.js', 'verbs_it.js', 'perche_it.js', 'pron_it.js', 'sum_it.js', 'km_it.js', 'fam_it.js', 'avere_it.js', 'gen_it.js', 'plur_it.js', 'cece_it.js', 'costa_it.js', 'det_it.js', 'irr_it.js', 'test_it.js', 'contr_it.js', 'stare_it.js', 'celha_it.js', 'imper_it.js', 'qual_it.js', 'ripasso_it.js', 'ui_lang.js'].forEach(f => {
+['course.js', 'data.js', 'logic.js', 'colors_it.js', 'numbers_it.js', 'geo_fig.js', 'geo_it.js', 'poss_it.js', 'size_it.js', 'third_it.js', 'nat_it.js', 'essere_it.js', 'altro_it.js', 'prep_it.js', 'anche_it.js', 'ora_it.js', 'appt_it.js', 'gender_it.js', 'verbs_it.js', 'perche_it.js', 'pron_it.js', 'sum_it.js', 'km_it.js', 'fam_it.js', 'avere_it.js', 'gen_it.js', 'plur_it.js', 'cece_it.js', 'costa_it.js', 'det_it.js', 'irr_it.js', 'test_it.js', 'contr_it.js', 'stare_it.js', 'celha_it.js', 'imper_it.js', 'qual_it.js', 'ne_it.js', 'ripasso_it.js', 'ui_lang.js'].forEach(f => {
   vm.runInContext(fs.readFileSync(path.join(__dirname, '..', 'www', 'js', f), 'utf8'), ctx, { filename: f });
 });
 const run = (code) => vm.runInContext(code, ctx);
@@ -14,7 +14,7 @@ const evaluate = run('evaluate');
 const evaluateAll = run('evaluateAll');
 const buildSteps = run('buildSteps');
 const answerSteps = run('answerSteps');
-const LESSONS = run('LESSONS').filter(l => !l.colors && !l.numbers && !l.geo && !l.poss && !l.size && !l.third && !l.nat && !l.ess && !l.altro && !l.prep && !l.anche && !l.ora && !l.appt && !l.verbs && !l.purp && !l.pron && !l.sum && !l.km && !l.fam && !l.ea && !l.pl && !l.ce && !l.co && !l.dt && !l.ct && !l.sta && !l.cl && !l.imp && !l.qd && !l.test);   // lezioni con gli oggetti (colori e numeri hanno i loro test)
+const LESSONS = run('LESSONS').filter(l => !l.colors && !l.numbers && !l.geo && !l.poss && !l.size && !l.third && !l.nat && !l.ess && !l.altro && !l.prep && !l.anche && !l.ora && !l.appt && !l.verbs && !l.purp && !l.pron && !l.sum && !l.km && !l.fam && !l.ea && !l.pl && !l.ce && !l.co && !l.dt && !l.ct && !l.sta && !l.cl && !l.imp && !l.qd && !l.ne && !l.test);   // lezioni con gli oggetti (colori e numeri hanno i loro test)
 const NUM_LESSONS = run('LESSONS').filter(l => l.numbers);
 const COLOR_LESSONS = run('LESSONS').filter(l => l.colors);
 const ITEMS = run('ITEMS');
@@ -1129,6 +1129,29 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
   const st = buildSteps(l), models = st.filter(s => s.model && s.type !== 'reveal');
   check('lezione 43: risposte modello giuste', models.every(s => evaluate(s, s.model).ok));
   check('lezione 43: ripetizioni giuste', models.every(s => buildDrill(s, 5, s.reviewItems || []).every(d => evaluate(d, d.model).ok)));
+}
+
+// Lezione 44: «Né… né…»
+{
+  const SX = run('SNE'), evalAsk = run('evalAsk'), answerAsk = run('answerAsk'), buildDrill = run('buildDrill'), ok = (st, t) => evaluate(st, t).ok;
+  const l = run('LESSONS').find(l => l.id === 'l44');
+  check('lezione 44 c\'è', !!l && l.ne && l.level === 2);
+  check('figure', l.known.every(k => FIG[k] && FIG[k].indexOf('<svg') === 0));
+  const k = Object.assign(SX.key('ne_suitcase_rosso'), { two: ['bianco', 'giallo'], prompt: 'La valigia è bianca o gialla?' });
+  check('frasi', SX.yes('ne_suitcase_rosso').prompt === 'La valigia è rossa?' && SX.alt('ne_phone_giallo').model === 'Il telefono è giallo.' && /^L'agenda non è né (\S+) né (\S+)\. È bianca\.$/.test(SX.key('ne_agenda_bianco').model));
+  check('giusto', ok(k, 'La valigia non è né bianca né gialla. È rossa.') && ok(k, 'Non è né bianca né gialla, è rossa.') && ok(k, 'Non è né gialla né bianca.') &&
+    ok(SX.yes('ne_coat_nero'), 'Sì, il cappotto è nero.') && ok(SX.alt('ne_cup_bianco'), 'La tazza è bianca.'));
+  const n = SX.neg('ne_cup_bianco');
+  check('giusto: il no', ok(n, n.model) && ok(n, n.model + ' ' + n.complete));
+  check('sbagliato: senza «non», un solo né, accordo, colore vero sbagliato, colori sbagliati', !ok(k, 'La valigia è né bianca né gialla.') && !ok(k, 'La valigia non è bianca né gialla.') &&
+    !ok(k, 'La valigia non è né bianco né giallo.') && !ok(k, 'Non è né bianca né gialla. È nera.') && !ok(k, 'Non è né bianca né nera.') && !ok(k, 'La valigia è rossa o gialla.'));
+  check('allievo', evalAsk('ne_phone_giallo', 'Il telefono è rosso o bianco?').kind === 'ne' && evalAsk('ne_phone_giallo', 'Il telefono è giallo o nero?').kind === 'alt' &&
+    evalAsk('ne_phone_giallo', 'Il telefono è rosso?').kind === 'no' && evalAsk('ne_phone_giallo', 'Di che colore è il telefono?').kind === 'what' &&
+    answerAsk('ne_phone_giallo', { kind: 'ne', two: ['rosso', 'bianco'] }) === 'Il telefono non è né rosso né bianco. È giallo.' &&
+    evalAsk('ne_suitcase_rosso', 'La valigia è bianco o nero?').model === 'La valigia è bianca o nera?');
+  const st = buildSteps(l), models = st.filter(s => s.model && s.type !== 'reveal');
+  check('lezione 44: risposte modello giuste', models.every(s => evaluate(s, s.model).ok));
+  check('lezione 44: ripetizioni giuste', models.every(s => buildDrill(s, 5, s.reviewItems || []).every(d => evaluate(d, d.model).ok)));
 }
 
 // Dal livello 2 le lezioni sono più veloci (Massi): una sola presentazione, 4 sì/no mescolati, sempre 7 domande dell'allievo
