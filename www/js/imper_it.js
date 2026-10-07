@@ -8,25 +8,35 @@
      Isa dice «Chiuda la finestra»?                  → No, Isa non dice: «Chiuda la finestra!»
      Isa dice «Apra la porta» o «Legga il libro»?    → Apra la porta!
    Il punto: con il Lei, -are → -i (mangi, telefoni), -ere / -ire → -a (apra, chiuda, legga, beva). Il verbo sottolineato.
+   Con il «tu» (la scelta dell'allievo): apri, chiudi, leggi, bevi, mangia, telefona — e «apra» è l'errore.
    Errori: «apre» (il presente), «apri» (il tu), «aprire», la cosa sbagliata.
    ===================================================================== */
 
 const IMP_ACT = {
-  open:  { imp: 'apra',     obj: 'la porta',       wrong: ['apri', 'apre', 'aprire', 'aprite'] },
-  close: { imp: 'chiuda',   obj: 'la finestra',    wrong: ['chiudi', 'chiude', 'chiudere'] },
-  read:  { imp: 'legga',    obj: 'il libro',       wrong: ['leggi', 'legge', 'leggere'] },
-  drink: { imp: 'beva',     obj: 'l\'aranciata',   wrong: ['bevi', 'beve', 'bere'] },
-  eat:   { imp: 'mangi',    obj: 'l\'arancia',     wrong: ['mangia', 'mangiare', 'mangio'] },
-  phone: { imp: 'telefoni', obj: '',               wrong: ['telefona', 'telefonare', 'telefono'] }
+  open:  { imp: 'apra',     tu: 'apri',     obj: 'la porta',       wrong: ['apri', 'apre', 'aprire', 'aprite'] },
+  close: { imp: 'chiuda',   tu: 'chiudi',   obj: 'la finestra',    wrong: ['chiudi', 'chiude', 'chiudere'] },
+  read:  { imp: 'legga',    tu: 'leggi',    obj: 'il libro',       wrong: ['leggi', 'legge', 'leggere'] },
+  drink: { imp: 'beva',     tu: 'bevi',     obj: 'l\'aranciata',   wrong: ['bevi', 'beve', 'bere'] },
+  eat:   { imp: 'mangi',    tu: 'mangia',   obj: 'l\'arancia',     wrong: ['mangia', 'mangiare', 'mangio'] },
+  phone: { imp: 'telefoni', tu: 'telefona', obj: '',               wrong: ['telefona', 'telefonare', 'telefono'] }
 };
-const IMP_FORM = {};
-Object.keys(IMP_ACT).forEach(a => { IMP_FORM[IMP_ACT[a].imp] = { act: a, ok: true }; IMP_ACT[a].wrong.forEach(w => { IMP_FORM[w] = { act: a, ok: false }; }); });
+// con il «Lei»: apra, legga…; con il «tu» (regTu(), la scelta dell'allievo): apri, leggi… (e allora «apra» è l'errore)
+const impW = (a) => regTu() ? IMP_ACT[a].tu : IMP_ACT[a].imp;
+const IMP_FORMS = {};
+['lei', 'tu'].forEach(r => {
+  const F = IMP_FORMS[r] = {};
+  Object.keys(IMP_ACT).forEach(a => {
+    const A = IMP_ACT[a], right = r === 'tu' ? A.tu : A.imp;
+    A.wrong.concat([A.imp, A.tu]).forEach(w => { if (w !== right) F[w] = { act: a, ok: false }; });
+    F[right] = { act: a, ok: true };
+  });
+});
 const IMP = { im_f_open: 1, im_m_close: 1, im_f_read: 1, im_m_drink: 1, im_f_eat: 1, im_m_phone: 1 };
 const isImp = (X) => !!IMP[X];
 const imWho = (X) => X.charAt(3);
 const imAct = (X) => X.slice(5);
 const imName = (X) => vName(imWho(X));
-const imOrder = (a) => gCap(IMP_ACT[a].imp) + (IMP_ACT[a].obj ? ' ' + IMP_ACT[a].obj : '');           // «Apra la porta»
+const imOrder = (a) => gCap(impW(a)) + (IMP_ACT[a].obj ? ' ' + IMP_ACT[a].obj : '');                   // «Apra la porta» / «Apri la porta»
 const imSay = (X) => imName(X) + ' dice: «' + imOrder(imAct(X)) + '!»';
 const imQ = (X) => 'Che cosa dice ' + imName(X) + '?';
 const imOther = (X) => imAct(X) === 'open' ? 'close' : imAct(X) === 'close' ? 'open' : pick(Object.keys(IMP_ACT).filter(a => a !== imAct(X)));
@@ -64,7 +74,7 @@ function impOrders(s) {
   let neg = false;
   for (let i = 0; i < w.length; i++) {
     if (w[i] === 'dice') neg = w[i - 1] === 'non';   // «non dice» vale fino al prossimo «dice»
-    const f = IMP_FORM[w[i]];
+    const f = IMP_FORMS[regTu() ? 'tu' : 'lei'][w[i]];
     if (!f) continue;
     // la cosa dopo il verbo, se c'è, deve essere quella giusta («apra la porta», non «apra la finestra»)
     const want = gNorm(IMP_ACT[f.act].obj).trim(), after = w.slice(i + 1, i + 1 + (want ? want.split(' ').length : 0)).join(' ');

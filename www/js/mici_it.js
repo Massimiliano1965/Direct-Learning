@@ -8,7 +8,7 @@
      Isa ci dà la tazza.                    → ripete
      Che cosa ci dà Isa?                    → Ci dà la tazza.
      Max mi dà la penna?                    → No, non Le dà la penna.
-   Il punto: a me → mi (a Lei → Le), a noi → ci. «mi», «Le» e «ci» sottolineati.
+   Il punto: a me → mi (a Lei → Le; con il «tu»: a te → ti), a noi → ci. «mi», «Le» e «ci» sottolineati.
    Errori: «Mi dà il libro» nella risposta (è l'insegnante che dice «mi»), «gli dà», «le» e «ci» scambiati, la cosa sbagliata.
    ===================================================================== */
 
@@ -19,7 +19,7 @@ const mcUs = (X) => X.split('_')[2] === 'us';
 const mcObj = (X) => X.split('_')[3];
 const mcName = (X) => vName(mcWho(X));
 const mcTeach = (X, o, neg) => mcName(X) + (neg ? ' non ' : ' ') + (mcUs(X) ? 'ci' : 'mi') + ' dà ' + daThe(o || mcObj(X));          // «Max mi dà il libro»
-const mcAns = (X, o, neg) => (neg ? 'non ' : '') + (mcUs(X) ? 'ci' : 'Le') + ' dà ' + daThe(o || mcObj(X));                         // «Le dà il libro»
+const mcAns = (X, o, neg) => (neg ? 'non ' : '') + (mcUs(X) ? 'ci' : R.toYou()) + ' dà ' + daThe(o || mcObj(X));                    // «Le dà il libro» (con il «tu»: «ti dà»)
 const mcQ = (X) => 'Che cosa ' + (mcUs(X) ? 'ci' : 'mi') + ' dà ' + mcName(X) + '?';
 const mcOther = (X) => pick(Object.keys(MC).map(mcObj).filter(o => o !== mcObj(X)));
 
@@ -65,7 +65,7 @@ function mcEvaluate(step, text) {
   if (echo && step.check === 'question') return { ok: has(s, gNorm(mcQ(X)).trim()), full: true };
   const st = mcStatements(s), pos = st.filter(x => !x.neg), neg = st.filter(x => x.neg), yes = has(s, 'si'), no = has(s, 'no');
   // nella ripetizione «mi / ci» (l'insegnante); nella risposta «Le / ci» (l'allievo)
-  const want = mcUs(X) ? 'ci' : (echo ? 'mi' : 'le');
+  const want = mcUs(X) ? 'ci' : (echo ? 'mi' : regTu() ? 'ti' : 'le');
   const good = (x, o) => x.ok && x.pro === want && x.obj === o;
   switch (step.type) {
     case 'echo': return { ok: pos.length > 0 && pos.every(x => good(x, mcObj(X))) && !neg.length, full: true };
@@ -76,9 +76,9 @@ function mcEvaluate(step, text) {
 }
 // L'allievo chiede all'insegnante: «Che cosa Le dà Max?» → «Mi dà il libro.»
 function mcEvalAsk(X, text) {
-  const s = gNorm(text), bad = (model) => ({ ok: false, model: model || 'Che cosa ' + (mcUs(X) ? 'ci' : 'Le') + ' dà ' + mcName(X) + '?' });
+  const s = gNorm(text), bad = (model) => ({ ok: false, model: model || 'Che cosa ' + (mcUs(X) ? 'ci' : R.toYou()) + ' dà ' + mcName(X) + '?' });
   if (has(s, 'si') || has(s, 'no') || has(s, 'non')) return bad();
-  if (has(s, 'cosa ' + (mcUs(X) ? 'ci' : 'le') + ' da')) return { ok: true, kind: 'what' };
+  if (has(s, 'cosa ' + (mcUs(X) ? 'ci' : regTu() ? 'ti' : 'le') + ' da')) return { ok: true, kind: 'what' };
   return bad();
 }
 function mcAnswerAsk(X) { return gCap((mcUs(X) ? 'ci' : 'mi') + ' dà ' + daThe(mcObj(X))) + '.'; }

@@ -2,18 +2,18 @@
 /* =====================================================================
    CAPITOLO 9: «Biglietto da visita: nome, città, lavoro» (lezione 57, livello 2). Si carica dopo lui_it.js e geo_it.js.
    Due biglietti da visita (la faccia, il nome, la città, il segno del lavoro); la freccia d'oro indica la riga della domanda:
-     Si chiama Marco Rossi.  Abita a Roma.  È un cuoco.      → ripete
-     Come si chiama?                                          → Si chiama Marco Rossi.
+     Si chiama Carlo Rossi.  Abita a Roma.  È un cuoco.      → ripete
+     Come si chiama?                                          → Si chiama Carlo Rossi.
      Dove abita?                                              → Abita a Roma.
      Che lavoro fa?                                           → È un cuoco.   (va bene anche «Fa il cuoco.»)
-     Si chiama Anna Bianchi?                                  → No, non si chiama Anna Bianchi.
+     Si chiama Lucia Rossi?                                  → No, non si chiama Lucia Rossi.
    Il punto: «si chiama», «abita a», «che lavoro fa?». Il lavoro come nella lezione 49 (un cuoco, una professoressa).
    Errori: il nome dell'altro biglietto, «abita in Roma», «è un professoressa», la riga sbagliata.
    ===================================================================== */
 
 const BV_CARD = {
-  1: { name: 'Marco Rossi',  g: 'm', city: 'roma',   job: 'cuoco',      look: 'f_padre' },
-  2: { name: 'Anna Bianchi', g: 'f', city: 'parigi', job: 'professore', look: 'f_madre' }
+  1: { name: 'Carlo Rossi',  g: 'm', city: 'roma',   job: 'cuoco',      look: 'f_padre' },
+  2: { name: 'Lucia Rossi', g: 'f', city: 'parigi', job: 'professore', look: 'f_madre' }
 };
 const BV = { bv_1_nome: 1, bv_1_citta: 1, bv_1_lavoro: 1, bv_2_nome: 1, bv_2_citta: 1, bv_2_lavoro: 1 };
 const BV_CITIES = ['roma', 'parigi', 'londra', 'newyork'];

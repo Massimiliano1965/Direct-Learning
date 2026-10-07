@@ -6,8 +6,9 @@
      Come mi chiamo io?                    → Lei si chiama Pietro.   (l'allievo parla all'insegnante con il Lei)
      Come si chiama lui?                   → Lui si chiama Max.     (va bene anche «Si chiama Max.»)
      Io mi chiamo Max?                     → No, Lei non si chiama Max.
-     Lui si chiama Max o Marco?            → Lui si chiama Max.
+     Lui si chiama Mario o Carlo?            → Lui si chiama Max.
    E l'allievo chiede all'insegnante: «Come si chiama Lei?» → «Mi chiamo Pietro.»
+   Con il «tu» (la scelta dell'allievo): «Tu ti chiami Pietro.», «Come ti chiami?».
    Il punto: io mi chiamo, Lei / lui / lei si chiama. «mi chiamo» e «si chiama» sottolineati.
    Errori: «Lei mi chiamo», «si chiamo», «chiama» senza «si», il nome sbagliato, «Io mi chiamo Pietro» come risposta.
    ===================================================================== */
@@ -22,7 +23,9 @@ const cmG = (X) => cmMe(X) ? eTG() : cmPron(X) === 'lei' ? 'f' : 'm';
 const cmOther = (X) => pick(Object.keys(CM).filter(k => k !== X && cmG(k) === cmG(X)).map(cmName));
 // la frase: per l'insegnante «Io mi chiamo» (l'insegnante) / «Lei si chiama» (l'allievo); per gli altri «Lui / Lei si chiama»
 const cmSay = (X, n, neg) => cmMe(X) ? 'Io ' + (neg ? 'non ' : '') + 'mi chiamo ' + (n || cmName(X)) : gCap(cmPron(X)) + ' ' + (neg ? 'non ' : '') + 'si chiama ' + (n || cmName(X));
-const cmAns = (X, n, neg) => cmMe(X) ? 'Lei ' + (neg ? 'non ' : '') + 'si chiama ' + (n || cmName(X)) : cmSay(X, n, neg);
+// all'insegnante: «Lei si chiama» o, con il «tu» (regTu(), la scelta dell'allievo), «Tu ti chiami»
+const cmAns = (X, n, neg) => cmMe(X) ? (regTu() ? 'Tu ' + (neg ? 'non ' : '') + 'ti chiami ' : 'Lei ' + (neg ? 'non ' : '') + 'si chiama ') + (n || cmName(X)) : cmSay(X, n, neg);
+const cmYouQ = () => regTu() ? 'Come ti chiami?' : 'Come si chiama Lei?';
 const cmQ = (X) => cmMe(X) ? 'Come mi chiamo io?' : 'Come si chiama ' + cmPron(X) + '?';
 // Max e Isa: in piedi, che salutano con la mano (si presentano)
 function cmPerson(w) {
@@ -58,7 +61,7 @@ function cmStatements(s) {
 }
 // la frase giusta per X: per l'insegnante l'allievo dice «Lei si chiama» (nella ripetizione «io mi chiamo»)
 const cmGood = (x, X, echo) => {
-  if (cmMe(X)) return echo ? x.form === 'mi chiamo' && (x.subj === null || x.subj === 'io') : x.form === 'si chiama' && (x.subj === null || x.subj === 'lei');
+  if (cmMe(X)) return echo ? x.form === 'mi chiamo' && (x.subj === null || x.subj === 'io') : regTu() ? x.form === 'ti chiami' && (x.subj === null || x.subj === 'tu') : x.form === 'si chiama' && (x.subj === null || x.subj === 'lei');
   return x.form === 'si chiama' && (x.subj === null || x.subj === cmPron(X));
 };
 // il nome giusto (il cognome si può dire o no; un cognome sbagliato è sbagliato)
@@ -78,11 +81,11 @@ function cmEvaluate(step, text) {
 }
 // L'allievo chiede: all'insegnante «Come si chiama Lei?» (→ «Mi chiamo Pietro.»), «Come si chiama lui?», «Lui si chiama Max?»
 function cmEvalAsk(X, text) {
-  const s = gNorm(text), bad = (model) => ({ ok: false, model: model || (cmMe(X) ? 'Come si chiama Lei?' : cmQ(X)) });
+  const s = gNorm(text), bad = (model) => ({ ok: false, model: model || (cmMe(X) ? cmYouQ() : cmQ(X)) });
   if (has(s.replace(/ si chiama /g, ' # '), 'si') || has(s, 'no') || has(s, 'non')) return bad();
-  if (cmMe(X) ? has(s, 'come si chiama lei') || has(s, 'come si chiama') : has(s, 'come si chiama ' + cmPron(X)) || has(s, 'come si chiama')) return { ok: true, kind: 'what' };
+  if (cmMe(X) ? (regTu() ? has(s, 'come ti chiami') : has(s, 'come si chiama lei') || has(s, 'come si chiama')) : has(s, 'come si chiama ' + cmPron(X)) || has(s, 'come si chiama')) return { ok: true, kind: 'what' };
   const st = cmStatements(s);
-  if (st.length === 1 && st[0].form === 'si chiama') return { ok: true, kind: cmNameIs(st[0], cmName(X)) ? 'yes' : 'no', name: st[0].name };
+  if (st.length === 1 && st[0].form === (cmMe(X) && regTu() ? 'ti chiami' : 'si chiama')) return { ok: true, kind: cmNameIs(st[0], cmName(X)) ? 'yes' : 'no', name: st[0].name };
   return bad();
 }
 function cmAnswerAsk(X, r) {

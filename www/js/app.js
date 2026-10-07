@@ -98,6 +98,8 @@ function renderHome() {
     $('lang-box').appendChild(lbtn);
   }
 
+  renderReg();
+
   const ll = $('lesson-list');
   ll.innerHTML = '';
   const db = document.createElement('button');
@@ -138,6 +140,29 @@ function renderHome() {
   showSpeed();
   applyStaticText();
   applyUiWords();
+}
+
+/* ---------- «Lei» o «tu» (Massi): come l'insegnante parla all'allievo, in tutte le lezioni (regTu() in logic.js) ----------
+   Un'app sola: una delle due forme si sblocca (REG_LOCKED = quella da sbloccare; null = tutte e due aperte, in prova). */
+const REG_LOCKED = null;
+function regUnlocked(r) { return !REG_LOCKED || r !== REG_LOCKED || !!(DB.settings.unlocked || {})[r]; }
+function renderReg() {
+  const box = $('reg-box');
+  if (!box) return;
+  if (typeof BUILD_COURSE === 'undefined' || BUILD_COURSE !== 'it') { box.innerHTML = ''; return; }
+  const cur = DB.settings.reg === 'tu' ? 'tu' : 'lei';
+  box.innerHTML = '<div class="label">' + tx('regTitle') + '</div><div class="reg-choice">' +
+    ['lei', 'tu'].map(r => '<button class="choice reg-btn' + (r === cur ? ' selected' : '') + '" data-r="' + r + '">' +
+      '<span class="reg-word">' + (r === 'lei' ? 'Lei' : 'tu') + (regUnlocked(r) ? '' : ' 🔒') + '</span><span class="reg-sub">' + tx(r === 'lei' ? 'regLei' : 'regTu').replace(/^[^—]*— /, '') + '</span></button>').join('') +
+    '</div><p class="muted reg-note"></p>';
+  box.querySelectorAll('.reg-btn').forEach(b => {
+    b.onclick = () => {
+      const r = b.dataset.r;
+      if (!regUnlocked(r)) { box.querySelector('.reg-note').textContent = tx('regLocked'); return; }
+      DB.settings.reg = r; saveDB(); renderReg();
+      box.querySelector('.reg-note').textContent = tx('regNote');
+    };
+  });
 }
 
 /* ---------- Prima schermata: «Che lingua parli?» ----------

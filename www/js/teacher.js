@@ -21,10 +21,10 @@ const LOOKS = {
             suit: '#2f4a8a', suit2: '#263d73', shirt: '#e8eefc', tie: '#7d80d8', shoe: '#2a1d16' },
   sara:   { man: false, skin: '#f1c7a5', skin2: '#e0b08c', hair: '#a8522a', hair2: '#8a4020', style: 'long',
             suit: '#a8805a', suit2: '#8f6b48', shirt: '#fbe3d8', scarf: '#c8433a', legs: '#e0b08c', shoe: '#5a2a20' },
-  // i personaggi delle frasi (NON insegnanti, Massi): il signor Mario e la signora Laura
+  // i personaggi delle frasi (NON insegnanti, Massi): il signor Mario e la signora Anna
   mario:  { man: true, skin: '#e2ae86', skin2: '#cc9670', hair: '#2a1d16', hair2: '#1c140f', style: 'short',
             suit: '#5a6b4a', suit2: '#4a593c', shirt: '#f2efe6', tie: '#c9a45c', shoe: '#2a1d16' },
-  laura:  { man: false, skin: '#f0c4a2', skin2: '#dcab86', hair: '#3a2418', hair2: '#2a1810', style: 'long',
+  anna:   { man: false, skin: '#f0c4a2', skin2: '#dcab86', hair: '#3a2418', hair2: '#2a1810', style: 'long',
             suit: '#2f7d7a', suit2: '#256664', shirt: '#f6f1ec', scarf: '#e8862a', legs: '#dcab86', shoe: '#2a1d16' }
 };
 // braccio: spalla → gomito → mano (manica della giacca, polsino, mano piccola)

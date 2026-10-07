@@ -183,7 +183,7 @@ const LESSONS = [
   { id: 'l41', title: 'Lezione 41', level: 2, cl: true, hilite: ['ce l\'ha'],
     known: ['cl_m_phone_1', 'cl_f_suitcase_0', 'cl_m_umbrella_0', 'cl_f_key_1', 'cl_m_book_1', 'cl_f_bag_0'] },
   // capitolo 6: «Imperativo» con il Lei — Isa dice: «Apra la porta!» (imper_it.js); il verbo sottolineato
-  { id: 'l42', title: 'Lezione 42', level: 2, imp: true, hilite: ['apra', 'chiuda', 'legga', 'beva', 'mangi', 'telefoni'],
+  { id: 'l42', title: 'Lezione 42', level: 2, imp: true, hilite: ['apra', 'chiuda', 'legga', 'beva', 'mangi', 'telefoni', 'apri', 'chiudi', 'leggi', 'bevi', 'mangia', 'telefona'],
     known: ['im_f_open', 'im_m_close', 'im_f_read', 'im_m_drink', 'im_f_eat', 'im_m_phone'] },
   // capitolo 7: «Qual è la domanda?» — l'insegnante dice la risposta, l'allievo trova la domanda già imparata (qual_it.js)
   { id: 'l43', title: 'Lezione 43', level: 2, qd: true, hilite: ['domanda'],
@@ -234,10 +234,10 @@ const LESSONS = [
   { id: 'l58', title: 'Lezione 58', level: 2, lp: true, hilite: ['li', 'le'],
     known: ['lp_m_book', 'lp_f_key', 'lp_m_orange', 'lp_f_pen', 'lp_m_cup', 'lp_f_umbrella'] },
   // capitolo 10: «Il verbo chiamarsi» — Io mi chiamo Pietro. Come si chiama lui? Si chiama Max. (chiama_it.js)
-  { id: 'l59', title: 'Lezione 59', level: 2, cm: true, hilite: ['mi chiamo', 'si chiama'],
+  { id: 'l59', title: 'Lezione 59', level: 2, cm: true, hilite: ['mi chiamo', 'si chiama', 'ti chiami'],
     known: ['cm_me', 'cm_m', 'cm_f', 'cm_c1', 'cm_c2'] },
   // capitolo 10: «Verbi al presente e al passato» — Che cosa faccio io? Lei legge un libro. Che cosa ho fatto io? Lei ha letto un libro. (tempi_it.js)
-  { id: 'l60', title: 'Lezione 60', level: 2, tv: true, hilite: ['leggo', 'legge', 'mangio', 'mangia', 'telefono', 'telefona', 'ho letto', 'ha letto', 'ho mangiato', 'ha mangiato', 'ho telefonato', 'ha telefonato'],
+  { id: 'l60', title: 'Lezione 60', level: 2, tv: true, hilite: ['leggo', 'legge', 'mangio', 'mangia', 'telefono', 'telefona', 'ho letto', 'ha letto', 'ho mangiato', 'ha mangiato', 'ho telefonato', 'ha telefonato', 'leggi', 'mangi', 'telefoni', 'hai letto', 'hai mangiato', 'hai telefonato'],
     known: ['tv_now_read', 'tv_past_read', 'tv_now_eat', 'tv_past_eat', 'tv_now_phone', 'tv_past_phone'] },
   // TEST DI FINE LIVELLO 2 (test_it.js): 8 domande che contano e 2 descrizioni libere; non blocca il livello 3
   { id: 't2', title: 'Test del livello 2', test: 2, level: 2, known: [] },
@@ -288,7 +288,7 @@ const LESSONS = [
   { id: 'l75', title: 'Lezione 75', level: 3, dvp: true, hilite: ['sul', 'sotto', 'davanti al', 'dietro', 'accanto al'],
     known: ['dvp_suitcase_sotto', 'dvp_book_sul', 'dvp_suitcase_davanti', 'dvp_book_accanto', 'dvp_suitcase_dietro', 'dvp_book_sotto'] },
   // capitolo 12: «Mi, Le, ci» — Che cosa mi dà Max? Le dà il libro. Che cosa ci dà Isa? Ci dà la tazza. (mici_it.js)
-  { id: 'l76', title: 'Lezione 76', level: 3, mc: true, hilite: ['mi', 'Le', 'ci'],
+  { id: 'l76', title: 'Lezione 76', level: 3, mc: true, hilite: ['mi', 'Le', 'ti', 'ci'],
     known: ['mc_m_me_book', 'mc_f_us_cup', 'mc_f_me_key', 'mc_m_us_phone', 'mc_m_me_pen', 'mc_f_us_umbrella'] },
   // capitolo 15: «Il passato con essere» — Dove è andato Max? Max è andato a Roma. Isa è andata a Parigi. (essere2_it.js)
   { id: 'l77', title: 'Lezione 77', level: 3, pe: true, gender: true, hilite: ['è andato', 'è andata'],

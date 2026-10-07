@@ -1,11 +1,11 @@
 'use strict';
 /* =====================================================================
    CAPITOLO 14: «Al telefono» (lezione 74, livello 3). Si carica dopo verbs_it.js, fam_it.js e bigl_it.js (le persone).
-   Qualcuno telefona (il telefono all'orecchio e il fumetto con «Pronto, sono …» che esce dalla bocca): Max, Isa, Marco Rossi, Anna Bianchi, il nonno, la nonna.
+   Qualcuno telefona (il telefono all'orecchio e il fumetto con «Pronto, sono …» che esce dalla bocca): Mario, Anna, Carlo Rossi, Lucia Rossi, il nonno, la nonna.
      Pronto, sono Max.                → ripete
      Chi parla?                       → Parla Max.   (va bene anche «È Max.»)
      Parla Isa?                       → No, non parla Isa.
-     Parla Max o Marco?               → Parla Max.
+     Parla Mario o Carlo?             → Parla Mario.
      Parla il nonno?                  → Sì, parla il nonno.
    Il punto: al telefono «Pronto, sono …», e chi ascolta chiede «Chi parla?». «Pronto» e «parla» sottolineati.
    Errori: la persona sbagliata, «parla nonno» (senza «il»), «sono Max» come risposta a «Chi parla?».
@@ -15,7 +15,7 @@ const TL = { tl_m: 1, tl_f: 1, tl_marco: 1, tl_anna: 1, tl_nonno: 1, tl_nonna: 1
 const isTl = (X) => !!TL[X];
 const tlWho = (X) => X.slice(3);
 // il nome (con «il / la» per il nonno e la nonna) e la faccia
-const tlName = (k) => k === 'm' ? vName('m') : k === 'f' ? vName('f') : k === 'marco' ? 'Marco' : k === 'anna' ? 'Anna' : k === 'nonno' ? 'il nonno' : 'la nonna';
+const tlName = (k) => k === 'm' ? vName('m') : k === 'f' ? vName('f') : k === 'marco' ? 'Carlo' : k === 'anna' ? 'Lucia' : k === 'nonno' ? 'il nonno' : 'la nonna';
 const tlLook = (k) => {
   if (k === 'm' || k === 'f') { const key = p3Key(k); return (typeof LOOKS !== 'undefined' && LOOKS[TEACHERS[key] ? (TEACHERS[key].look || key) : key]) || null; }
   return typeof FAM_LOOK !== 'undefined' ? FAM_LOOK[{ marco: 'f_padre', anna: 'f_madre', nonno: 'f_nonno', nonna: 'f_nonna' }[k]] : null;
@@ -65,7 +65,7 @@ const STL = gTag('tl', {
 function tlWhoIs(w1, w2) {
   const names = vNames();
   if (names[w1]) return { k: names[w1], n: 1 };
-  if (w1 === 'marco' || w1 === 'anna') return { k: w1, n: 1 };
+  if (w1 === 'carlo' || w1 === 'lucia') return { k: w1 === 'carlo' ? 'marco' : 'anna', n: 1 };   // le chiavi marco / anna: i nomi detti sono Carlo e Lucia
   if (/^(il|la)$/.test(w1) && /^(nonno|nonna)$/.test(w2)) return { k: w2, n: 2, ok: (w1 === 'il') === (w2 === 'nonno') };
   if (/^(nonno|nonna)$/.test(w1)) return { k: w1, n: 1, ok: false };          // senza «il / la»
   return null;

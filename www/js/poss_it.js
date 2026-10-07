@@ -9,7 +9,7 @@
      È il Suo telefono? (è dell'insegnante) → No, non è il mio telefono.
      È il mio telefono o il Suo telefono? → È il Suo telefono.
      Di chi è questo telefono?         → È il mio telefono.
-   Si usa il «Lei» (Suo/Sua), come nel libro: «tuo/tua» è un errore.
+   Con il «Lei» (Suo/Sua), come nel libro: «tuo/tua» è un errore. Con il «tu» (la scelta dell'allievo, regTu()): tuo/tua, e «Suo» è l'errore.
    Errori: «la mio valigia», «il Sua telefono», possessivo sbagliato.
    ===================================================================== */
 
@@ -19,7 +19,7 @@ const pOwner = (X) => X.charAt(2);                // 't' = dell'insegnante, 's' 
 const pObj = (X) => X.slice(4);
 const pFem = (k) => ITEMS[k].art === 'una' || ITEMS[k].art === 'un\'';   // un'agenda, un'arancia: femminili (Massi: «la sua agenda»)
 // possessivo detto da chi parla: «il mio telefono», «la Sua valigia»
-const pPoss = (k, mine) => (pFem(k) ? 'la ' : 'il ') + (mine ? (pFem(k) ? 'mia' : 'mio') : (pFem(k) ? 'Sua' : 'Suo')) + ' ' + ITEMS[k].word;
+const pPoss = (k, mine) => (pFem(k) ? 'la ' : 'il ') + (mine ? (pFem(k) ? 'mia' : 'mio') : R.your(pFem(k))) + ' ' + ITEMS[k].word;   // il Suo / il tuo (R in logic.js)
 // frase dell'insegnante (suo punto di vista) e dello studente (punto di vista rovesciato)
 const tSays = (X) => pPoss(pObj(X), pOwner(X) === 't');
 const sSays = (X) => pPoss(pObj(X), pOwner(X) === 's');
@@ -68,7 +68,7 @@ function possStatements(s) {
   let m;
   while ((m = re.exec(s)) !== null) {
     const k = WORD2KEY[m[4]], fem = k && pFem(k);
-    const mine = m[3].slice(0, 2) === 'mi', formal = m[3].slice(0, 2) === 'su';
+    const mine = m[3].slice(0, 2) === 'mi', formal = m[3].slice(0, 2) === (regTu() ? 'tu' : 'su');   // con il «tu»: il tuo; con il «Lei»: il Suo
     const good = !!k && (m[2] === (fem ? 'la' : 'il')) && (m[3].slice(-1) === (fem ? 'a' : 'o')) && (mine || formal);
     out.push({ key: k ? 'o_' + (mine ? 's' : 't') + '_' + k : null, neg: !!m[1], good: good });
   }

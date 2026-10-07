@@ -10,6 +10,7 @@
      Io sono francese?                               → No, Lei non è francese.   (punto di vista rovesciato)
      Di che nazionalità sono io?                     → Lei è italiano.
      Di che nazionalità è Lei?                       → Io sono … (la sua: qualunque nazionalità va bene)
+   Con il «tu» (regTu(), la scelta dell'allievo): «Tu sei italiano.», «Di che nazionalità sei tu?»; allora «Lei è» è l'errore.
    Errori: «io sono italiano» detto dell'insegnante, «lui sono», «tu sei» (si dà del Lei),
    la nazionalità o l'accordo sbagliati.
    ===================================================================== */
@@ -40,6 +41,9 @@ function eSelf() {
   return SELF_NAT[ui] || 'inglese';
 }
 const ePron = (X) => nG(X) === 'f' ? 'lei' : 'lui';
+// l'insegnante visto dall'allievo: «Lei è» / «tu sei» (regTu() in logic.js: la scelta dell'allievo); youQ = la domanda all'allievo
+const eYou = (neg) => regTu() ? (neg ? 'tu non sei' : 'tu sei') : (neg ? 'Lei non è' : 'Lei è');
+const eYouQ = () => regTu() ? 'Di che nazionalità sei tu?' : 'Di che nazionalità è Lei?';
 const eCap = (s) => s.charAt(0).toUpperCase() + s.slice(1);
 
 /* ---------- Figure: l'insegnante con la bandiera italiana, lo studente = sagoma d'oro ---------- */
@@ -60,27 +64,27 @@ const SE = {
   // persone: «Lui è inglese.»
   present: (X) => { const p = eCap(ePron(X)) + ' è ' + nAdj(nC(X), nG(X)) + '.'; return { type: 'echo', check: 'claim', ess: true, show: X, prompt: p, model: p }; },
   yes: (X) => {
-    if (X === 'e_me') return { type: 'yes', ess: true, show: X, prompt: 'Io sono ' + eIt() + '?', model: 'Sì, Lei è ' + eIt() + '.' };
+    if (X === 'e_me') return { type: 'yes', ess: true, show: X, prompt: 'Io sono ' + eIt() + '?', model: 'Sì, ' + eYou() + ' ' + eIt() + '.' };
     const a = nAdj(nC(X), nG(X)); return { type: 'yes', ess: true, show: X, prompt: eCap(ePron(X)) + ' è ' + a + '?', model: 'Sì, ' + ePron(X) + ' è ' + a + '.' };
   },
   neg: (X, other) => {
-    if (X === 'e_me') { const a = nAdj(other, eTG()); return { type: 'neg', ess: true, show: X, ask: other, prompt: 'Io sono ' + a + '?', model: 'No, Lei non è ' + a + '.', complete: 'Lei è ' + eIt() + '.' }; }
+    if (X === 'e_me') { const a = nAdj(other, eTG()); return { type: 'neg', ess: true, show: X, ask: other, prompt: 'Io sono ' + a + '?', model: 'No, ' + eYou(true) + ' ' + a + '.', complete: eCap(eYou()) + ' ' + eIt() + '.' }; }
     const a = nAdj(other, nG(X));
     return { type: 'neg', ess: true, show: X, ask: other, prompt: eCap(ePron(X)) + ' è ' + a + '?', model: 'No, ' + ePron(X) + ' non è ' + a + '.', complete: eCap(ePron(X)) + ' è ' + nAdj(nC(X), nG(X)) + '.' };
   },
   alt: (X, other) => {
     const me = X === 'e_me', c = me ? 'italia' : nC(X), g = me ? eTG() : nG(X), o = Math.random() < 0.5 ? [c, other] : [other, c];
     return { type: 'alt', ess: true, show: X, prompt: (me ? 'Io sono ' : eCap(ePron(X)) + ' è ') + nAdj(o[0], g) + ' o ' + nAdj(o[1], g) + '?',
-             model: (me ? 'Lei è ' : eCap(ePron(X)) + ' è ') + nAdj(c, g) + '.' };
+             model: (me ? eCap(eYou()) + ' ' : eCap(ePron(X)) + ' è ') + nAdj(c, g) + '.' };
   },
   key: (X) => {
-    if (X === 'e_me') return { type: 'key', ess: true, show: X, prompt: 'Di che nazionalità sono io?', model: 'Lei è ' + eIt() + '.' };
-    if (X === 'e_you') return { type: 'key', ess: true, self: true, show: X, prompt: 'Di che nazionalità è Lei?', model: 'Io sono ' + eSelf() + '.' };
+    if (X === 'e_me') return { type: 'key', ess: true, show: X, prompt: 'Di che nazionalità sono io?', model: eCap(eYou()) + ' ' + eIt() + '.' };
+    if (X === 'e_you') return { type: 'key', ess: true, self: true, show: X, prompt: eYouQ(), model: 'Io sono ' + eSelf() + '.' };
     return { type: 'key', ess: true, show: X, prompt: 'Di che nazionalità è ' + ePron(X) + '?', model: eCap(ePron(X)) + ' è ' + nAdj(nC(X), nG(X)) + '.' };
   },
   // l'insegnante si presenta (si ascolta): «Io sono italiano.» / chiede all'allievo e risponde per lui la prima volta
   meIntro: () => ({ type: 'reveal', ess: true, show: 'e_me', prompt: 'Io sono ' + eIt() + '.', model: '' }),
-  youIntro: () => ({ type: 'reveal', ess: true, show: 'e_you', prompt: 'Io sono ' + eIt() + '. E Lei? Di che nazionalità è Lei?', model: '' })
+  youIntro: () => ({ type: 'reveal', ess: true, show: 'e_you', prompt: 'Io sono ' + eIt() + '. E ' + R.you() + '? ' + eYouQ(), model: '' })
 };
 const eOther = (X) => pick(Object.keys(NATS).filter(c => c !== (X === 'e_me' ? 'italia' : nC(X))));
 
@@ -96,10 +100,10 @@ function essStatements(s) {
   }
   return out;
 }
-// Chi è il soggetto giusto per la figura: persone = lui/lei + «è»; insegnante = Lei + «è»; studente = io + «sono»
+// Chi è il soggetto giusto per la figura: persone = lui/lei + «è»; insegnante = Lei + «è» (con il «tu»: tu + «sei»); studente = io + «sono»
 function essSubjOk(X, x) {
   if (X === 'e_you') return (x.pron === null || x.pron === 'io') && x.verb === 'sono';
-  if (X === 'e_me') return (x.pron === null || x.pron === 'lei') && x.verb === 'e';
+  if (X === 'e_me') return regTu() ? (x.pron === null || x.pron === 'tu') && x.verb === 'sei' : (x.pron === null || x.pron === 'lei') && x.verb === 'e';
   return (x.pron === null || x.pron === ePron(X)) && x.verb === 'e';
 }
 function essTruth(X, x, c) {
@@ -135,19 +139,19 @@ function essEvaluate(step, text) {
    «Di che nazionalità è lui?» «Lui è inglese?» «Lei è italiano?» (all'insegnante) «Di che nazionalità sono io?» */
 function essEvalAsk(X, text) {
   const s = norm(text);
-  const bad = (model) => ({ ok: false, model: model || (X === 'e_me' ? 'Di che nazionalità è Lei?' : X === 'e_you' ? 'Di che nazionalità sono io?' : 'Di che nazionalità è ' + ePron(X) + '?') });
+  const bad = (model) => ({ ok: false, model: model || (X === 'e_me' ? eYouQ() : X === 'e_you' ? 'Di che nazionalità sono io?' : 'Di che nazionalità è ' + ePron(X) + '?') });
   if (has(s, 'si') || has(s, 'no') || / non e /.test(s)) return bad();
   if (has(s, 'di che nazionalita')) return { ok: true, kind: 'what' };
   if (X === 'e_you') return bad();
   const st = essStatements(s);
-  const g = X === 'e_me' ? eTG() : nG(X), pron = X === 'e_me' ? 'lei' : ePron(X);
-  const q = st.filter(x => x.verb === 'e' && (x.pron === null || x.pron === pron));
+  const tu = X === 'e_me' && regTu(), g = X === 'e_me' ? eTG() : nG(X), pron = X === 'e_me' ? (tu ? 'tu' : 'lei') : ePron(X);
+  const q = st.filter(x => x.verb === (tu ? 'sei' : 'e') && (x.pron === null || x.pron === pron));
   if (q.length === 1 && q[0].g[g]) return { ok: true, kind: q[0].c === (X === 'e_me' ? 'italia' : nC(X)) ? 'yes' : 'no', ask: q[0].c };
-  if (q.length === 1) return bad(eCap(pron) + ' è ' + nAdj(NATS[q[0].c] ? q[0].c : 'italia', g) + '?');
+  if (q.length === 1) return bad(eCap(pron) + (tu ? ' sei ' : ' è ') + nAdj(NATS[q[0].c] ? q[0].c : 'italia', g) + '?');
   return bad();
 }
 function essAnswerAsk(X, r) {
-  if (X === 'e_you') return 'Lei è ' + eSelf() + '.';
+  if (X === 'e_you') return eCap(eYou()) + ' ' + eSelf() + '.';
   if (X === 'e_me') {
     if (r.kind === 'yes') return 'Sì, io sono ' + eIt() + '.';
     if (r.kind === 'no') return 'No, io non sono ' + nAdj(NATS[r.ask] ? r.ask : 'italia', eTG()) + '. Io sono ' + eIt() + '.';

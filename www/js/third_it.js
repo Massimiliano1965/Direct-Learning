@@ -24,9 +24,9 @@ const p3ArtN = (k) => p3Art(k) === 'l\'' ? 'l' : p3Art(k);                      
 const p3Dem = (k) => p3Fem(k) ? 'questa' : 'questo';
 // I due colleghi: un uomo e una donna tra gli altri insegnanti (non quello che fa lezione)
 // Massi: i personaggi delle frasi NON sono gli insegnanti (l'insegnante dice «io», all'allievo «Lei»; degli altri «lui / lei»):
-// il signor Mario e la signora Laura, con la loro faccia (LOOKS.mario, LOOKS.laura in teacher.js)
-const P3_CHARS = { mario: { name: 'Mario', gender: 'm' }, laura: { name: 'Laura', gender: 'f' } };
-function p3People() { return { m: 'mario', f: 'laura' }; }
+// il signor Mario e la signora Anna, con la loro faccia (LOOKS.mario, LOOKS.anna in teacher.js)
+const P3_CHARS = { mario: { name: 'Mario', gender: 'm' }, anna: { name: 'Anna', gender: 'f' } };
+function p3People() { return { m: 'mario', f: 'anna' }; }
 const p3Key = (w) => p3People()[w];
 const p3Name = (w) => P3_CHARS[p3Key(w)].name;
 const p3Of = (k, w) => p3The(k) + ' di ' + p3Name(w);          // «il telefono di Isa»

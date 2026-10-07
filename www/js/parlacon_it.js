@@ -1,6 +1,6 @@
 'use strict';
 /* =====================================================================
-   «Parla con…» (lezione 82, livello 4). Si carica dopo telef_it.js (le persone: Max, Isa, Marco, Anna, il nonno, la nonna).
+   «Parla con…» (lezione 82, livello 4). Si carica dopo telef_it.js (le persone: Mario, Anna, Carlo, Lucia, il nonno, la nonna).
    Due persone una davanti all'altra; chi parla ha il fumetto che gli esce dalla bocca, con un saluto già conosciuto (Ciao, Max! Buongiorno! Grazie!…):
      Isa parla con Max.                            → ripete
      Isa parla con Max?                            → Sì, Isa parla con Max.
@@ -50,7 +50,7 @@ const SPC = gTag('pc', {
 function pcPerson(w, i) {
   const names = vNames();
   if (names[w[i]]) return { k: names[w[i]], n: 1, ok: true };
-  if (w[i] === 'marco' || w[i] === 'anna') return { k: w[i], n: 1, ok: true };
+  if (w[i] === 'carlo' || w[i] === 'lucia') return { k: w[i] === 'carlo' ? 'marco' : 'anna', n: 1, ok: true };   // chiavi marco / anna = Carlo e Lucia
   if (w[i] === 'lui' || w[i] === 'lei') return { k: w[i], n: 1, ok: true };
   if (/^(il|la)$/.test(w[i] || '') && /^(nonno|nonna)$/.test(w[i + 1] || '')) return { k: w[i + 1], n: 2, ok: w[i] === (w[i + 1] === 'nonno' ? 'il' : 'la') };
   if (/^(nonno|nonna)$/.test(w[i] || '')) return { k: w[i], n: 1, ok: false };

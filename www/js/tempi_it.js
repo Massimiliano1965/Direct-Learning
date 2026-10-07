@@ -2,7 +2,7 @@
 /* =====================================================================
    CAPITOLO 10: «Verbi al presente e al passato» (lezione 60, livello 2). Si carica dopo passato_it.js e chiama_it.js.
    L'insegnante fa una cosa adesso (la scena) o l'ha già fatta (la nuvoletta del ricordo, come nella lezione 45).
-   L'insegnante dice «io», l'allievo risponde con il Lei:
+   L'insegnante dice «io», l'allievo risponde con il Lei (o con il «tu», se l'ha scelto: «Tu leggi un libro.», «Tu hai letto un libro.»):
      Io leggo un libro.          Io ho letto un libro.                 → ripete
      Che cosa faccio io?                         → Lei legge un libro.
      Che cosa ho fatto io?                       → Lei ha letto un libro.
@@ -19,7 +19,12 @@ const tvPast = (X) => X.split('_')[1] === 'past';
 const tvAct = (X) => X.split('_')[2];
 const tvObj = (a) => ACTS[a].obj ? ' ' + vObj(a) : '';
 const tvIo = (a, past, neg) => 'Io ' + (neg ? 'non ' : '') + (past ? 'ho ' + PS_PART[a] : TV_IO[a]) + tvObj(a);       // «Io leggo un libro», «Io ho letto un libro»
-const tvLei = (a, past, neg) => 'Lei ' + (neg ? 'non ' : '') + (past ? 'ha ' + PS_PART[a] : ACTS[a].verb) + tvObj(a); // «Lei legge un libro»
+const TV_TU = { read: 'leggi', eat: 'mangi', phone: 'telefoni' };
+// l'insegnante visto dall'allievo: «Lei legge», «Lei ha letto»; con il «tu» (regTu(), la scelta dell'allievo): «Tu leggi», «Tu hai letto»
+const tvLei = (a, past, neg) => regTu() ? 'Tu ' + (neg ? 'non ' : '') + (past ? 'hai ' + PS_PART[a] : TV_TU[a]) + tvObj(a)
+  : 'Lei ' + (neg ? 'non ' : '') + (past ? 'ha ' + PS_PART[a] : ACTS[a].verb) + tvObj(a);   // «Lei legge un libro»
+const tvP = () => regTu() ? 2 : 3;                       // la persona della risposta: tu (2) o Lei (3)
+const tvYouQ = (past) => regTu() ? (past ? 'Che cosa hai fatto?' : 'Che cosa fai?') : (past ? 'Che cosa ha fatto Lei?' : 'Che cosa fa Lei?');
 const tvQ = (X) => tvPast(X) ? 'Che cosa ho fatto io?' : 'Che cosa faccio io?';
 const tvOther = (X) => pick(Object.keys(TV_IO).filter(a => a !== tvAct(X)));
 
@@ -50,7 +55,8 @@ const STV = gTag('tv', {
 /* ---------- Capire le frasi: «(io / Lei) (non) leggo / legge / ho letto / ha letto (un libro)» ---------- */
 const TV_FORM = {};
 Object.keys(TV_IO).forEach(a => { TV_FORM[TV_IO[a]] = { act: a, p: 1, past: false }; TV_FORM[ACTS[a].verb] = { act: a, p: 3, past: false }; });
-['leggere', 'leggi', 'mangiare', 'mangi', 'telefonare', 'telefoni'].forEach(w => { TV_FORM[w] = { act: VFORM[w].act, p: 0, past: false }; });
+['leggere', 'mangiare', 'telefonare'].forEach(w => { TV_FORM[w] = { act: VFORM[w].act, p: 0, past: false }; });
+Object.keys(TV_TU).forEach(a => { TV_FORM[TV_TU[a]] = { act: a, p: 2, past: false }; });
 function tvStatements(s) {
   s = s.replace(/ (che )?cosa (faccio|ho fatto) io /g, ' # ');
   const out = [], w = s.trim().split(' ');
@@ -70,24 +76,24 @@ function tvEvaluate(step, text) {
   const s = gNorm(text), X = step.show, echo = step.type === 'echo';
   if (echo && step.check === 'question') return { ok: has(s, gNorm(tvQ(X)).trim()), full: true };
   const st = tvStatements(s), pos = st.filter(x => !x.neg), neg = st.filter(x => x.neg), yes = has(s, 'si'), no = has(s, 'no');
-  const p = echo ? 1 : 3;                               // si ripete «io»; si risponde «Lei»
+  const p = echo ? 1 : tvP();                           // si ripete «io»; si risponde «Lei» (o «tu»)
   const truth = (x) => x.ok && x.p === p && x.past === tvPast(X) && x.act === tvAct(X), allPos = pos.every(truth);
   if (!echo && has(s, 'io')) return { ok: false, full: false };
   switch (step.type) {
     case 'echo': return { ok: pos.some(truth) && allPos && !neg.length, full: true };
     case 'yes': return { ok: yes && !no && !neg.length && pos.some(truth) && allPos, full: true };
-    case 'neg': return { ok: !yes && neg.length === 1 && neg[0].ok && neg[0].p === 3 && neg[0].past === tvPast(X) && neg[0].act === step.ask && allPos, full: pos.some(truth) };
+    case 'neg': return { ok: !yes && neg.length === 1 && neg[0].ok && neg[0].p === tvP() && neg[0].past === tvPast(X) && neg[0].act === step.ask && allPos, full: pos.some(truth) };
     default: return { ok: pos.some(truth) && allPos && !neg.length && !yes && !no && !has(s, 'o'), full: true };
   }
 }
 // L'allievo chiede all'insegnante: «Che cosa fa Lei?», «Che cosa ha fatto Lei?», «Lei legge un libro?», «Lei ha letto un libro?»
 function tvEvalAsk(X, text) {
-  const s = gNorm(text), bad = (model) => ({ ok: false, model: model || (tvPast(X) ? 'Che cosa ha fatto Lei?' : 'Che cosa fa Lei?') });
+  const s = gNorm(text), bad = (model) => ({ ok: false, model: model || tvYouQ(tvPast(X)) });
   if (has(s, 'si') || has(s, 'no') || has(s, 'non')) return bad();
-  if (has(s, 'cosa ha fatto')) return tvPast(X) ? { ok: true, kind: 'what' } : bad('Che cosa fa Lei?');
-  if (has(s, 'cosa fa')) return tvPast(X) ? bad('Che cosa ha fatto Lei?') : { ok: true, kind: 'what' };
+  if (has(s, regTu() ? 'cosa hai fatto' : 'cosa ha fatto')) return tvPast(X) ? { ok: true, kind: 'what' } : bad(tvYouQ(false));
+  if (has(s, regTu() ? 'cosa fai' : 'cosa fa')) return tvPast(X) ? bad(tvYouQ(true)) : { ok: true, kind: 'what' };
   const st = tvStatements(s);
-  if (st.length === 1 && st[0].ok && st[0].p === 3) return { ok: true, kind: st[0].act === tvAct(X) && st[0].past === tvPast(X) ? 'yes' : 'no', ask: st[0].act, past: st[0].past };
+  if (st.length === 1 && st[0].ok && st[0].p === tvP()) return { ok: true, kind: st[0].act === tvAct(X) && st[0].past === tvPast(X) ? 'yes' : 'no', ask: st[0].act, past: st[0].past };
   if (st.length === 1) return bad(tvLei(st[0].act, st[0].past) + '?');
   return bad();
 }

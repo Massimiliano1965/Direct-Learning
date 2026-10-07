@@ -43,6 +43,19 @@ function norm(text) {
 
 function has(s, phrase) { return s.indexOf(' ' + phrase + ' ') !== -1; }
 
+// «Lei» o «tu» (Massi): come si parla tra insegnante e allievo, dalla prima lezione. DB.settings.reg = 'lei' (formale, business) | 'tu' (normale).
+// La scelta è nel menu (una delle due si sblocca). REG_TEST: i test la forzano.
+let REG_TEST = null;
+function regTu() { if (REG_TEST) return REG_TEST === 'tu'; return typeof DB !== 'undefined' && !!DB && !!DB.settings && DB.settings.reg === 'tu'; }
+// le parole che cambiano: Lei / tu, il Suo / il tuo, Le / ti …
+const R = {
+  you: () => regTu() ? 'tu' : 'Lei',                       // il soggetto
+  your: (fem) => regTu() ? (fem ? 'tua' : 'tuo') : (fem ? 'Sua' : 'Suo'),
+  toYou: () => regTu() ? 'ti' : 'Le',                      // a te / a Lei
+  is: () => regTu() ? 'sei' : 'è',                         // tu sei / Lei è
+  isYou: () => regTu() ? 'Tu sei' : 'Lei è'
+};
+
 // Articolo + parola → chiave dell'oggetto. L'articolo deve essere quello giusto:
 // "un sedia" non vale. Parole sconosciute contano come oggetto sbagliato.
 function nounKey(art, word) {

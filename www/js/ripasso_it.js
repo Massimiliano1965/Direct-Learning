@@ -15,8 +15,9 @@ const reviewSkip = (l) => l.test || l.placeHints || l.altro || l.anche || l.ess;
 // Le domande chiave di una lezione, che l'app sa mostrare e correggere (calcolate una volta sola, poi in memoria)
 const REVIEW_KEYS = {};
 function reviewKeys(l, build) {
-  // i nomi dei colleghi cambiano con l'insegnante scelto: la memoria vale per quei due nomi
-  const id = l.id + '|' + (typeof vName === 'function' ? vName('m') + vName('f') : '');
+  // le frasi cambiano con i nomi, l'insegnante scelto (io sono italiano / italiana) e il «Lei» o il «tu» dell'allievo
+  const tk = typeof selectedTeacherKey === 'function' ? selectedTeacherKey() : '';
+  const id = l.id + '|' + (typeof vName === 'function' ? vName('m') + vName('f') : '') + '|' + tk + '|' + (typeof regTu === 'function' && regTu() ? 'tu' : 'lei');
   if (REVIEW_KEYS[id]) return REVIEW_KEYS[id];
   let keys = [];
   const items = lessonWords(l);
