@@ -98,7 +98,7 @@ const LESSONS = [
   // capitolo 2: «Il suo, la sua» — le cose di due colleghi dell'insegnante, un uomo e una donna (third_it.js)
   { id: 'l12', title: 'Lezione 12', third: true, known: ['p3_f_phone', 'p3_m_laptop', 'p3_f_suitcase', 'p3_m_bag', 'p3_m_coat', 'p3_f_flask'] },
   // capitolo 2: «Paese e nazionalità» — un signore o una signora con la bandiera del suo paese (nat_it.js)
-  { id: 'l13', title: 'Lezione 13', nat: true, known: ['n_m_italia', 'n_f_italia', 'n_f_francia', 'n_m_inghilterra', 'n_f_america', 'n_m_cina'] },
+  { id: 'l13', title: 'Lezione 13', nat: true, known: ['n_m_italia', 'n_f_francia', 'n_m_inghilterra', 'n_f_germania', 'n_f_america', 'n_m_giappone', 'n_m_cina'] },
   // capitolo 2: «Il verbo essere» — io sono / Lei è / lui è / lei è, con le persone della lezione 13 (essere_it.js)
   { id: 'l14', title: 'Lezione 14', ess: true, known: ['e_me', 'e_you', 'n_m_inghilterra', 'n_f_francia', 'n_m_cina', 'n_f_america'] },
   // capitolo 2: «Un altro, un'altra» — lo stesso oggetto in due colori; il primo resta piccolo sotto il palco (altro_it.js)
@@ -304,7 +304,13 @@ const LESSONS = [
     known: ['fu_m_read', 'fu_f_drink', 'fu_m_phone', 'fu_f_open', 'fu_m_eat', 'fu_f_close'] },
   // capitolo 19: «Il gerundio» — Che cosa sta facendo Max? Max sta leggendo un libro. (forme_it.js)
   { id: 'l80', title: 'Lezione 80', level: 4, ge: true, hilite: ['sta leggendo', 'sta mangiando', 'sta bevendo', 'sta telefonando', 'sta aprendo', 'sta chiudendo'],
-    known: ['ge_m_read', 'ge_f_drink', 'ge_m_phone', 'ge_f_open', 'ge_m_eat', 'ge_f_close'] }
+    known: ['ge_m_read', 'ge_f_drink', 'ge_m_phone', 'ge_f_open', 'ge_m_eat', 'ge_f_close'] },
+  // «Che lingua parla?» — Questa signora è americana. Parla inglese. (lingua_it.js; le persone della lezione 13 con il fumetto)
+  { id: 'l81', title: 'Lezione 81', level: 4, lg: true, hilite: ['parla', 'Che lingua'],
+    known: ['lg_m_italia', 'lg_f_america', 'lg_m_giappone', 'lg_f_germania', 'lg_m_inghilterra', 'lg_f_francia', 'lg_m_cina'] },
+  // «Parla con…» — Con chi parla Isa? Isa parla con Max. (parlacon_it.js; le persone della lezione 74, una davanti all'altra)
+  { id: 'l82', title: 'Lezione 82', level: 4, pc: true, hilite: ['parla con', 'Con chi'],
+    known: ['pc_f_m', 'pc_m_nonna', 'pc_marco_f', 'pc_anna_nonno', 'pc_nonno_marco', 'pc_nonna_anna'] }
 ];
 
 // Quattro insegnanti, dal più rigido al più indulgente. gender = voce maschile o femminile.

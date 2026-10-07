@@ -1,7 +1,7 @@
 'use strict';
 /* =====================================================================
    CAPITOLO 14: «Al telefono» (lezione 74, livello 3). Si carica dopo verbs_it.js, fam_it.js e bigl_it.js (le persone).
-   Qualcuno telefona (il telefono all'orecchio, le onde d'oro): Max, Isa, Marco Rossi, Anna Bianchi, il nonno, la nonna.
+   Qualcuno parla (il fumetto con «Pronto, sono …» che esce dalla bocca; senza telefono in mano): Max, Isa, Marco Rossi, Anna Bianchi, il nonno, la nonna.
      Pronto, sono Max.                → ripete
      Chi parla?                       → Parla Max.   (va bene anche «È Max.»)
      Parla Isa?                       → No, non parla Isa.
@@ -25,12 +25,28 @@ const tlIs = (k, neg) => (neg ? 'non ' : '') + 'parla ' + tlName(k);            
 const TL_Q = 'Chi parla?';
 const tlOther = (X) => pick(Object.keys(TL).map(tlWho).filter(k => k !== tlWho(X)));
 
-/* ---------- Figura: la persona con il telefono all'orecchio ---------- */
+/* ---------- Figura: la persona che parla (Massi: senza telefono, sennò sembra «telefona»; il fumetto con le parole dalla bocca) ---------- */
 function tlFig(X) {
   const LK = tlLook(tlWho(X));
   if (!LK || typeof tTorso !== 'function') return '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"></svg>';
-  return '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><ellipse cx="50" cy="97" rx="34" ry="3" fill="#000" opacity=".25"/>' + V_SCENE.phone(LK) + '</svg>';
+  return '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><ellipse cx="62" cy="97" rx="30" ry="3" fill="#000" opacity=".25"/>' +
+    V_PERSON(LK, tArm(LK, ...DOWN_L) + tArm(LK, ...DOWN_R), { mouth: 'talk' }, 12) + tlTalk(X) + '</svg>';
 }
+// il fumetto che esce dalla bocca (Massi): dentro parole già conosciute (un ripasso da leggere), non «bla bla».
+// box = [x, y, larghezza, altezza], tail = [x, y] la punta verso la bocca; le parole escono dalla bocca, restano da leggere, poi ricominciano.
+function sayBubble(box, tail, lines, size) {
+  const [x, y, w, h] = box, cx = x + w / 2, by = y + h, tx = Math.min(Math.max(tail[0], x + 8), x + w - 8);
+  const path = 'M' + (x + 6) + ' ' + y + ' h' + (w - 12) + ' a6 6 0 0 1 6 6 v' + (h - 12) + ' a6 6 0 0 1 -6 6 H' + (tx + 4) + ' L' + tail[0] + ' ' + tail[1] + ' L' + (tx - 4) + ' ' + by +
+    ' H' + (x + 6) + ' a6 6 0 0 1 -6 -6 v' + (12 - h) + ' a6 6 0 0 1 6 -6z';
+  const top = y + h / 2 - (lines.length - 1) * size * .6 + size * .35;
+  const text = lines.map((t, i) => '<text x="' + cx + '" y="' + (top + i * size * 1.2).toFixed(1) + '" text-anchor="middle" font-family="Georgia,serif" font-size="' + size + '" font-weight="bold" fill="#2a3346">' + t + '</text>').join('');
+  const dx = tail[0] - cx, dy = tail[1] - (y + h / 2);
+  return '<path d="' + path + '" fill="#f3eee2" stroke="#c9a45c" stroke-width="1.2"/><g>' + text +
+    '<animateTransform attributeName="transform" type="translate" values="' + dx.toFixed(1) + ' ' + dy.toFixed(1) + ';0 0;0 0" keyTimes="0;.12;1" dur="3.5s" repeatCount="indefinite"/>' +
+    '<animate attributeName="opacity" values="0;1;1;0" keyTimes="0;.12;.94;1" dur="3.5s" repeatCount="indefinite"/></g>';
+}
+// lezione 74: nel fumetto quello che dice: «Pronto, sono Max.»
+const tlTalk = (X) => sayBubble([1, 2, 44, 26], [53, 33], ['Pronto,', 'sono ' + tlName(tlWho(X)) + '.'], tlName(tlWho(X)).length > 6 ? 6.6 : 7.5);
 Object.keys(TL).forEach(X => { Object.defineProperty(FIG, X, { enumerable: true, get: () => tlFig(X) }); });
 
 const STL = gTag('tl', {

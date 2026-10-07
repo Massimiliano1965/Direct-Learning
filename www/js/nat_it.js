@@ -18,7 +18,9 @@ const NATS = {
   francia:     { m: 'francese',  f: 'francese' },
   inghilterra: { m: 'inglese',   f: 'inglese' },
   america:     { m: 'americano', f: 'americana' },
-  cina:        { m: 'cinese',    f: 'cinese' }
+  cina:        { m: 'cinese',    f: 'cinese' },
+  germania:    { m: 'tedesco',   f: 'tedesca' },      // Massi: anche le nazioni degli allievi (tedesco, giapponese)
+  giappone:    { m: 'giapponese', f: 'giapponese' }
 };
 const NAT_WORD = {};
 Object.keys(NATS).forEach(c => { ['m', 'f'].forEach(g => { const w = NATS[c][g]; NAT_WORD[w] = NAT_WORD[w] || { c: c, g: {} }; NAT_WORD[w].g[g] = true; }); });
@@ -39,8 +41,15 @@ const NAT_LOOKS = {
   n_f_francia:     { man: false, skin: '#f3d0b4', skin2: '#e2b898', hair: '#d9b46a', hair2: '#b8924c', style: 'bun', glasses: 'thin', suit: '#2f3b52', suit2: '#263043', shirt: '#f6f3ee' },
   n_m_inghilterra: { man: true, skin: '#f0c8a8', skin2: '#dcae8c', hair: '#b0703a', hair2: '#8a5428', style: 'short', suit: '#3b3f47', suit2: '#30333a', shirt: '#f2f2f2', tie: '#8a2c3a' },
   n_f_america:     { man: false, skin: '#c98e62', skin2: '#b27a50', hair: '#2a1d16', hair2: '#1c140f', style: 'long', suit: '#45506a', suit2: '#3a4459', shirt: '#f5efe6', scarf: '#c9a45c' },
+  n_f_germania:    { man: false, skin: '#f3d2b8', skin2: '#e0b898', hair: '#e2c27a', hair2: '#c4a25a', style: 'long', suit: '#3f5a5a', suit2: '#344b4b', shirt: '#f5f2ec' },
+  n_m_giappone:    { man: true, skin: '#efcaa2', skin2: '#dbb088', hair: '#1c1a20', hair2: '#121016', style: 'short', glasses: 'thin', suit: '#34384a', suit2: '#2a2d3c', shirt: '#f2f2f4', tie: '#b23a48' },
   n_m_cina:        { man: true, skin: '#ecc59c', skin2: '#d8ad84', hair: '#16161a', hair2: '#0c0c10', style: 'short', suit: '#2b2f3a', suit2: '#22252e', shirt: '#f0f0f2', tie: '#c9a45c' }
 };
+// le bandiere nuove (la Germania: il nero è antracite, sul fondo scuro si vede; il Giappone: il sole rosso, tondo anche schiacciato)
+if (typeof FLAG !== 'undefined') {
+  FLAG.germania = FLAG.germania || '<rect width="100" height="34" fill="#2b2d33"/><rect y="33" width="100" height="34" fill="#d42a33"/><rect y="66" width="100" height="34" fill="#f2c230"/>';
+  FLAG.giappone = FLAG.giappone || '<rect width="100" height="100" fill="#f4f4f4"/><ellipse cx="50" cy="50" rx="19" ry="29" fill="#c8202f"/>';
+}
 function natFig(X) {
   const L = NAT_LOOKS[X], flag = (typeof FLAG !== 'undefined' && FLAG[nC(X)]) || '';
   const body = (typeof tTorso === 'function') ? tTorso(L) + tArm(L, ...DOWN_L) + tArm(L, ...DOWN_R) + tHeadStill(L, { mouth: 'smile' }) : '';

@@ -150,6 +150,7 @@ Durante il test l'insegnante non corregge; contano solo gli errori, mostrati all
 76. **La casa**: luce, lampada…
 77. **Futuro** — *fatto: Lezione 79 (Domani Max leggerà un libro; nuvoletta con la freccia azzurra in avanti)*
 78. **Verbi riflessivi** (ripasso)
+— *fatto in più: Lezione 81 «Che lingua parla?» (Parla inglese / tedesco / giapponese, il saluto nel fumetto) e Lezione 82 «Parla con…» (Isa parla con Max)*
 
 ## Capitolo 18
 

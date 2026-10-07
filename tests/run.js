@@ -6,7 +6,7 @@ const vm = require('vm');
 
 const ctx = { console: console };
 vm.createContext(ctx);
-['course.js', 'data.js', 'logic.js', 'colors_it.js', 'numbers_it.js', 'geo_fig.js', 'geo_it.js', 'poss_it.js', 'size_it.js', 'third_it.js', 'nat_it.js', 'essere_it.js', 'altro_it.js', 'prep_it.js', 'anche_it.js', 'ora_it.js', 'appt_it.js', 'gender_it.js', 'verbs_it.js', 'perche_it.js', 'pron_it.js', 'sum_it.js', 'km_it.js', 'fam_it.js', 'avere_it.js', 'gen_it.js', 'plur_it.js', 'cece_it.js', 'costa_it.js', 'det_it.js', 'irr_it.js', 'test_it.js', 'contr_it.js', 'stare_it.js', 'celha_it.js', 'imper_it.js', 'qual_it.js', 'ne_it.js', 'passato_it.js', 'lho_it.js', 'ci_it.js', 'saluti_it.js', 'lui_it.js', 'giorni_it.js', 'mesi_it.js', 'suoi_it.js', 'loro_it.js', 'noi_it.js', 'dare_it.js', 'qualc_it.js', 'bigl_it.js', 'lile_it.js', 'chiama_it.js', 'tempi_it.js', 'liha_it.js', 'contr2_it.js', 'colaz_it.js', 'quale_it.js', 'fiori_it.js', 'nehai_it.js', 'rifl_it.js', 'gia_it.js', 'volere_it.js', 'potere_it.js', 'ancora_it.js', 'telef_it.js', 'dove_it.js', 'mici_it.js', 'essere2_it.js', 'visto_it.js', 'forme_it.js', 'ripasso_it.js', 'ui_lang.js'].forEach(f => {
+['course.js', 'data.js', 'logic.js', 'colors_it.js', 'numbers_it.js', 'geo_fig.js', 'geo_it.js', 'poss_it.js', 'size_it.js', 'third_it.js', 'nat_it.js', 'essere_it.js', 'altro_it.js', 'prep_it.js', 'anche_it.js', 'ora_it.js', 'appt_it.js', 'gender_it.js', 'verbs_it.js', 'perche_it.js', 'pron_it.js', 'sum_it.js', 'km_it.js', 'fam_it.js', 'avere_it.js', 'gen_it.js', 'plur_it.js', 'cece_it.js', 'costa_it.js', 'det_it.js', 'irr_it.js', 'test_it.js', 'contr_it.js', 'stare_it.js', 'celha_it.js', 'imper_it.js', 'qual_it.js', 'ne_it.js', 'passato_it.js', 'lho_it.js', 'ci_it.js', 'saluti_it.js', 'lui_it.js', 'giorni_it.js', 'mesi_it.js', 'suoi_it.js', 'loro_it.js', 'noi_it.js', 'dare_it.js', 'qualc_it.js', 'bigl_it.js', 'lile_it.js', 'chiama_it.js', 'tempi_it.js', 'liha_it.js', 'contr2_it.js', 'colaz_it.js', 'quale_it.js', 'fiori_it.js', 'nehai_it.js', 'rifl_it.js', 'gia_it.js', 'volere_it.js', 'potere_it.js', 'ancora_it.js', 'telef_it.js', 'dove_it.js', 'mici_it.js', 'essere2_it.js', 'visto_it.js', 'forme_it.js', 'lingua_it.js', 'parlacon_it.js', 'ripasso_it.js', 'ui_lang.js'].forEach(f => {
   vm.runInContext(fs.readFileSync(path.join(__dirname, '..', 'www', 'js', f), 'utf8'), ctx, { filename: f });
 });
 const run = (code) => vm.runInContext(code, ctx);
@@ -14,7 +14,7 @@ const evaluate = run('evaluate');
 const evaluateAll = run('evaluateAll');
 const buildSteps = run('buildSteps');
 const answerSteps = run('answerSteps');
-const LESSONS = run('LESSONS').filter(l => !l.colors && !l.numbers && !l.geo && !l.poss && !l.size && !l.third && !l.nat && !l.ess && !l.altro && !l.prep && !l.anche && !l.ora && !l.appt && !l.verbs && !l.purp && !l.pron && !l.sum && !l.km && !l.fam && !l.ea && !l.pl && !l.ce && !l.co && !l.dt && !l.ct && !l.sta && !l.cl && !l.imp && !l.qd && !l.ne && !l.ps && !l.lh && !l.cv && !l.sa && !l.lm && !l.gd && !l.ms && !l.sp && !l.lo && !l.nv && !l.da && !l.qn && !l.bv && !l.lp && !l.cm && !l.tv && !l.lq && !l.cz && !l.qu && !l.fi && !l.nh && !l.rf && !l.gn && !l.vo && !l.po && !l.dv && !l.an && !l.tl && !l.dvp && !l.mc && !l.pe && !l.vi && !l.fu && !l.ge && !l.test);   // lezioni con gli oggetti (colori e numeri hanno i loro test)
+const LESSONS = run('LESSONS').filter(l => !l.colors && !l.numbers && !l.geo && !l.poss && !l.size && !l.third && !l.nat && !l.ess && !l.altro && !l.prep && !l.anche && !l.ora && !l.appt && !l.verbs && !l.purp && !l.pron && !l.sum && !l.km && !l.fam && !l.ea && !l.pl && !l.ce && !l.co && !l.dt && !l.ct && !l.sta && !l.cl && !l.imp && !l.qd && !l.ne && !l.ps && !l.lh && !l.cv && !l.sa && !l.lm && !l.gd && !l.ms && !l.sp && !l.lo && !l.nv && !l.da && !l.qn && !l.bv && !l.lp && !l.cm && !l.tv && !l.lq && !l.cz && !l.qu && !l.fi && !l.nh && !l.rf && !l.gn && !l.vo && !l.po && !l.dv && !l.an && !l.tl && !l.dvp && !l.mc && !l.pe && !l.vi && !l.fu && !l.ge && !l.lg && !l.pc && !l.test);   // lezioni con gli oggetti (colori e numeri hanno i loro test)
 const NUM_LESSONS = run('LESSONS').filter(l => l.numbers);
 const COLOR_LESSONS = run('LESSONS').filter(l => l.colors);
 const ITEMS = run('ITEMS');
@@ -1869,6 +1869,33 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
     check(id + ': allievo', evalAsk(f + '_m_read', q).kind === 'what' && evalAsk(f + '_m_read', M + ' ' + form.replace('leggerà', 'telefonerà').replace('sta leggendo', 'sta telefonando') + '?').kind === 'no' &&
       !evalAsk(f + '_m_read', M + ' telefona?').ok);
     const st = buildSteps(l), models = st.filter(s => s.model && s.type !== 'reveal');
+    check(id + ': risposte modello giuste', models.every(s => evaluate(s, s.model).ok));
+    check(id + ': ripetizioni giuste', models.every(s => buildDrill(s, 5, s.reviewItems || []).every(d => evaluate(d, d.model).ok)));
+  });
+}
+
+// Lezione 81: «Che lingua parla?» e lezione 82: «Parla con…» (fumetto dalla bocca, niente telefono)
+{
+  const evalAsk = run('evalAsk'), buildDrill = run('buildDrill'), ok = (st, t) => evaluate(st, t).ok;
+  const SL = run('SLG'), SP = run('SPC'), M = run("vName('m')"), F = run("vName('f')");
+  check('lezione 81 c\'è, livello 4', run('LESSONS').find(l => l.id === 'l81').level === 4);
+  check('81: frasi', SL.present('lg_f_america').prompt === 'Questa signora è americana. Parla inglese.' && SL.key('lg_f_germania').prompt === 'Che lingua parla questa signora?' &&
+    SL.key('lg_f_germania').model === 'Questa signora parla tedesco.');
+  check('81: giusto', ok(SL.key('lg_f_america'), 'Questa signora parla inglese.') && ok(SL.key('lg_f_america'), 'Parla inglese.') && ok(SL.key('lg_m_giappone'), 'Lui parla giapponese.'));
+  check('81: sbagliato', !ok(SL.key('lg_f_america'), 'Questa signora parla americano.') && !ok(SL.key('lg_f_germania'), 'Questa signora parla tedesca.') &&
+    !ok(SL.key('lg_f_america'), 'Questa signore parla inglese.') && !ok(SL.key('lg_m_italia'), 'Questo signore parla francese.'));
+  check('81: allievo', evalAsk('lg_m_cina', 'Che lingua parla questo signore?').kind === 'what' && evalAsk('lg_m_cina', 'Questo signore parla giapponese?').kind === 'no');
+  check('lezione 82 c\'è, livello 4', run('LESSONS').find(l => l.id === 'l82').level === 4);
+  check('82: frasi', SP.present('pc_f_m').prompt === F + ' parla con ' + M + '.' && SP.key('pc_m_nonna').prompt === 'Con chi parla ' + M + '?' && SP.key('pc_m_nonna').model === M + ' parla con la nonna.');
+  check('82: giusto', ok(SP.key('pc_m_nonna'), M + ' parla con la nonna.') && ok(SP.key('pc_m_nonna'), 'Lui parla con la nonna.') && ok(SP.key('pc_nonno_marco'), 'Il nonno parla con Marco.'));
+  check('82: sbagliato', !ok(SP.key('pc_m_nonna'), M + ' parla con nonna.') && !ok(SP.key('pc_m_nonna'), M + ' parla con Anna.') && !ok(SP.key('pc_f_m'), M + ' parla con ' + F + '.'));
+  check('82: allievo', evalAsk('pc_nonno_marco', 'Con chi parla il nonno?').kind === 'what' && evalAsk('pc_nonno_marco', 'Il nonno parla con Anna?').kind === 'no');
+  check('74, 82: niente telefono, nel fumetto parole conosciute', fs.readFileSync('www/js/telef_it.js', 'utf8').indexOf('V_SCENE.phone') === -1 && run("tlTalk('tl_nonno')").indexOf('sono il nonno.') !== -1 &&
+    run("pcWords('pc_m_nonna')") === 'Buongiorno!' && fs.readFileSync('www/js/parlacon_it.js', 'utf8').indexOf('bla') === -1);
+  check('81: il saluto nella lingua', run('LG_HELLO').giapponese[0] === 'こんにちは' && run('LG_HELLO').inglese[0] === 'Hello!');
+  check('13: anche il tedesco e il giapponese', run('LESSONS').find(l => l.id === 'l13').known.indexOf('n_f_germania') !== -1 && FIG.n_m_giappone.indexOf('<svg') === 0);
+  ['l81', 'l82', 'l13'].forEach(id => {
+    const st = buildSteps(run('LESSONS').find(l => l.id === id)), models = st.filter(s => s.model && s.type !== 'reveal');
     check(id + ': risposte modello giuste', models.every(s => evaluate(s, s.model).ok));
     check(id + ': ripetizioni giuste', models.every(s => buildDrill(s, 5, s.reviewItems || []).every(d => evaluate(d, d.model).ok)));
   });
