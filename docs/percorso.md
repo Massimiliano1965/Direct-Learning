@@ -154,7 +154,7 @@ Durante il test l'insegnante non corregge; contano solo gli errori, mostrati all
 
 ## Capitolo 18
 
-79. **«Piace»**: a lui piace…
+79. **«Piace»**: a lui piace… — *fatto: Lezione 85*
 80. **Le quattro stagioni**
 81. **Imperfetto**: ora e prima
 82. **«Si può…»**

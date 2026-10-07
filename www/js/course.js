@@ -316,7 +316,10 @@ const LESSONS = [
     known: ['md_table_legno', 'md_bottle_vetro', 'md_chair_plastica', 'md_coat_lana', 'md_key_metallo', 'md_bag_pelle'] },
   // capitolo 16: «Ci vuole — ci vogliono» — Per aprire la porta ci vuole una chiave. Per leggere ci vogliono un libro e una lampada. (civuole_it.js)
   { id: 'l84', title: 'Lezione 84', level: 4, cu: true, hilite: ['ci vuole', 'ci vogliono'],
-    known: ['cu_porta', 'cu_leggere', 'cu_telefono', 'cu_colazione', 'cu_newyork', 'cu_ora'] }
+    known: ['cu_porta', 'cu_leggere', 'cu_telefono', 'cu_colazione', 'cu_newyork', 'cu_ora'] },
+  // capitolo 18: «Piace — piacciono» — A Max piace il caffè. A Isa piacciono i fiori. (piace_it.js)
+  { id: 'l85', title: 'Lezione 85', level: 4, pi: true, hilite: ['piace', 'piacciono'],
+    known: ['pi_m_caffe', 'pi_f_fiori', 'pi_m_libri', 'pi_f_pizza', 'pi_m_mele', 'pi_f_vino'] }
 ];
 
 // Quattro insegnanti, dal più rigido al più indulgente. gender = voce maschile o femminile.
