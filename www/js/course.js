@@ -328,7 +328,10 @@ const LESSONS = [
     known: ['tf_sole', 'tf_piove', 'tf_nevica', 'tf_vento', 'tf_nuvoloso', 'tf_caldo', 'tf_freddo'] },
   // capitolo 18: «Imperfetto: ora e prima» — Prima Max leggeva un libro. Ora telefona. (forme_it.js)
   { id: 'l88', title: 'Lezione 88', level: 4, ipf: true, hilite: ['faceva', 'leggeva', 'mangiava', 'beveva', 'telefonava', 'apriva', 'chiudeva', 'prima'],
-    known: ['ipf_m_read', 'ipf_f_drink', 'ipf_m_phone', 'ipf_f_open', 'ipf_m_eat', 'ipf_f_close'] }
+    known: ['ipf_m_read', 'ipf_f_drink', 'ipf_m_phone', 'ipf_f_open', 'ipf_m_eat', 'ipf_f_close'] },
+  // capitolo 18: «Si può…» — Qui si può mangiare. Non si può fumare. (sipuo_it.js: il cartello verde e quello rosso)
+  { id: 'l89', title: 'Lezione 89', level: 4, spu: true, hilite: ['si può', 'non si può'],
+    known: ['spu_eat_smoke', 'spu_phone_photo', 'spu_swim_eat', 'spu_park_smoke', 'spu_photo_swim', 'spu_smoke_park'] }
 ];
 
 // Quattro insegnanti, dal più rigido al più indulgente. gender = voce maschile o femminile.

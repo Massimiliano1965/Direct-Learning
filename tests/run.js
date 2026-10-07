@@ -6,7 +6,7 @@ const vm = require('vm');
 
 const ctx = { console: console };
 vm.createContext(ctx);
-['course.js', 'data.js', 'logic.js', 'colors_it.js', 'numbers_it.js', 'geo_fig.js', 'geo_it.js', 'poss_it.js', 'size_it.js', 'third_it.js', 'nat_it.js', 'essere_it.js', 'altro_it.js', 'prep_it.js', 'anche_it.js', 'ora_it.js', 'appt_it.js', 'gender_it.js', 'verbs_it.js', 'perche_it.js', 'pron_it.js', 'sum_it.js', 'km_it.js', 'fam_it.js', 'avere_it.js', 'gen_it.js', 'plur_it.js', 'cece_it.js', 'costa_it.js', 'det_it.js', 'irr_it.js', 'test_it.js', 'contr_it.js', 'stare_it.js', 'celha_it.js', 'imper_it.js', 'qual_it.js', 'ne_it.js', 'passato_it.js', 'lho_it.js', 'ci_it.js', 'saluti_it.js', 'lui_it.js', 'giorni_it.js', 'mesi_it.js', 'suoi_it.js', 'loro_it.js', 'noi_it.js', 'dare_it.js', 'qualc_it.js', 'bigl_it.js', 'lile_it.js', 'chiama_it.js', 'tempi_it.js', 'liha_it.js', 'contr2_it.js', 'colaz_it.js', 'quale_it.js', 'fiori_it.js', 'nehai_it.js', 'rifl_it.js', 'gia_it.js', 'volere_it.js', 'potere_it.js', 'ancora_it.js', 'telef_it.js', 'dove_it.js', 'mici_it.js', 'essere2_it.js', 'visto_it.js', 'forme_it.js', 'lingua_it.js', 'parlacon_it.js', 'fatto_it.js', 'civuole_it.js', 'piace_it.js', 'stagioni_it.js', 'tempofa_it.js', 'ripasso_it.js', 'ui_lang.js'].forEach(f => {
+['course.js', 'data.js', 'logic.js', 'colors_it.js', 'numbers_it.js', 'geo_fig.js', 'geo_it.js', 'poss_it.js', 'size_it.js', 'third_it.js', 'nat_it.js', 'essere_it.js', 'altro_it.js', 'prep_it.js', 'anche_it.js', 'ora_it.js', 'appt_it.js', 'gender_it.js', 'verbs_it.js', 'perche_it.js', 'pron_it.js', 'sum_it.js', 'km_it.js', 'fam_it.js', 'avere_it.js', 'gen_it.js', 'plur_it.js', 'cece_it.js', 'costa_it.js', 'det_it.js', 'irr_it.js', 'test_it.js', 'contr_it.js', 'stare_it.js', 'celha_it.js', 'imper_it.js', 'qual_it.js', 'ne_it.js', 'passato_it.js', 'lho_it.js', 'ci_it.js', 'saluti_it.js', 'lui_it.js', 'giorni_it.js', 'mesi_it.js', 'suoi_it.js', 'loro_it.js', 'noi_it.js', 'dare_it.js', 'qualc_it.js', 'bigl_it.js', 'lile_it.js', 'chiama_it.js', 'tempi_it.js', 'liha_it.js', 'contr2_it.js', 'colaz_it.js', 'quale_it.js', 'fiori_it.js', 'nehai_it.js', 'rifl_it.js', 'gia_it.js', 'volere_it.js', 'potere_it.js', 'ancora_it.js', 'telef_it.js', 'dove_it.js', 'mici_it.js', 'essere2_it.js', 'visto_it.js', 'forme_it.js', 'lingua_it.js', 'parlacon_it.js', 'fatto_it.js', 'civuole_it.js', 'piace_it.js', 'stagioni_it.js', 'tempofa_it.js', 'sipuo_it.js', 'ripasso_it.js', 'ui_lang.js'].forEach(f => {
   vm.runInContext(fs.readFileSync(path.join(__dirname, '..', 'www', 'js', f), 'utf8'), ctx, { filename: f });
 });
 const run = (code) => vm.runInContext(code, ctx);
@@ -14,7 +14,7 @@ const evaluate = run('evaluate');
 const evaluateAll = run('evaluateAll');
 const buildSteps = run('buildSteps');
 const answerSteps = run('answerSteps');
-const LESSONS = run('LESSONS').filter(l => !l.colors && !l.numbers && !l.geo && !l.poss && !l.size && !l.third && !l.nat && !l.ess && !l.altro && !l.prep && !l.anche && !l.ora && !l.appt && !l.verbs && !l.purp && !l.pron && !l.sum && !l.km && !l.fam && !l.ea && !l.pl && !l.ce && !l.co && !l.dt && !l.ct && !l.sta && !l.cl && !l.imp && !l.qd && !l.ne && !l.ps && !l.lh && !l.cv && !l.sa && !l.lm && !l.gd && !l.ms && !l.sp && !l.lo && !l.nv && !l.da && !l.qn && !l.bv && !l.lp && !l.cm && !l.tv && !l.lq && !l.cz && !l.qu && !l.fi && !l.nh && !l.rf && !l.gn && !l.vo && !l.po && !l.dv && !l.an && !l.tl && !l.dvp && !l.mc && !l.pe && !l.vi && !l.fu && !l.ge && !l.lg && !l.pc && !l.md && !l.cu && !l.pi && !l.sg && !l.tf && !l.ipf && !l.test);   // lezioni con gli oggetti (colori e numeri hanno i loro test)
+const LESSONS = run('LESSONS').filter(l => !l.colors && !l.numbers && !l.geo && !l.poss && !l.size && !l.third && !l.nat && !l.ess && !l.altro && !l.prep && !l.anche && !l.ora && !l.appt && !l.verbs && !l.purp && !l.pron && !l.sum && !l.km && !l.fam && !l.ea && !l.pl && !l.ce && !l.co && !l.dt && !l.ct && !l.sta && !l.cl && !l.imp && !l.qd && !l.ne && !l.ps && !l.lh && !l.cv && !l.sa && !l.lm && !l.gd && !l.ms && !l.sp && !l.lo && !l.nv && !l.da && !l.qn && !l.bv && !l.lp && !l.cm && !l.tv && !l.lq && !l.cz && !l.qu && !l.fi && !l.nh && !l.rf && !l.gn && !l.vo && !l.po && !l.dv && !l.an && !l.tl && !l.dvp && !l.mc && !l.pe && !l.vi && !l.fu && !l.ge && !l.lg && !l.pc && !l.md && !l.cu && !l.pi && !l.sg && !l.tf && !l.ipf && !l.spu && !l.test);   // lezioni con gli oggetti (colori e numeri hanno i loro test)
 const NUM_LESSONS = run('LESSONS').filter(l => l.numbers);
 const COLOR_LESSONS = run('LESSONS').filter(l => l.colors);
 const ITEMS = run('ITEMS');
@@ -1989,6 +1989,22 @@ check('88: prima e ora', run("SIMPF.present('ipf_m_read').prompt") === 'Prima ' 
   const st = buildSteps(l), models = st.filter(s => s.model && s.type !== 'reveal');
   check('87: risposte modello giuste', models.every(s => evaluate(s, s.model).ok));
   check('87: ripetizioni giuste', models.every(s => buildDrill(s, 5, s.reviewItems || []).every(d => evaluate(d, d.model).ok)));
+}
+
+// Lezione 89: «Si può…» (i cartelli)
+{
+  const evalAsk = run('evalAsk'), buildDrill = run('buildDrill'), ok = (st, t) => evaluate(st, t).ok, SX = run('SSPU');
+  const l = run('LESSONS').find(l => l.id === 'l89');
+  check('lezione 89 c\'è, livello 4', !!l && l.spu && l.level === 4);
+  check('89: frasi', SX.present('spu_eat_smoke').prompt === 'Qui si può mangiare. Non si può fumare.' && SX.key('spu_park_smoke').model === 'Qui si può parcheggiare.');
+  check('89: giusto', ok(SX.key('spu_eat_smoke'), 'Si può mangiare.') && ok(SX.key('spu_photo_swim'), 'Qui si può fare foto.') && ok(SX.yes('spu_swim_eat'), 'Sì, si può nuotare.'));
+  check('89: sbagliato', !ok(SX.key('spu_eat_smoke'), 'Si può mangia.') && !ok(SX.key('spu_eat_smoke'), 'Si può fumare.') && !ok(SX.neg('spu_eat_smoke'), 'Sì, si può fumare.'));
+  const n = SX.neg('spu_phone_photo');
+  check('89: il no', ok(n, n.model) && ok(n, n.model + ' ' + n.complete));
+  check('89: allievo', evalAsk('spu_eat_smoke', 'Che cosa si può fare qui?').kind === 'what' && evalAsk('spu_eat_smoke', 'Qui si può fumare?').kind === 'no');
+  const st = buildSteps(l), models = st.filter(s => s.model && s.type !== 'reveal');
+  check('89: risposte modello giuste', models.every(s => evaluate(s, s.model).ok));
+  check('89: ripetizioni giuste', models.every(s => buildDrill(s, 5, s.reviewItems || []).every(d => evaluate(d, d.model).ok)));
 }
 
 // Test del livello 3: 8 che contano e 2 libere, dopo la lezione 78
