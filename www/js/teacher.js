@@ -13,9 +13,9 @@
      nod   = approva sobrio: sorriso e pollice in su (Max)
    ===================================================================== */
 const LOOKS = {
-  mass:   { man: true, skin: '#c98e62', skin2: '#b27a50', hair: '#a9a9b0', hair2: '#7d7d86', style: 'back', glasses: 'thin',
+  mass:   { man: true, skin: '#f0c6a4', skin2: '#dfae88', hair: '#a9a9b0', hair2: '#7d7d86', style: 'back', glasses: 'thin',
             suit: '#4a4a57', suit2: '#3a3a45', shirt: '#f4f4f6', tie: '#a3263a', shoe: '#1b1b22' },
-  giulia: { man: false, skin: '#eab892', skin2: '#d9a27c', hair: '#e2c06a', hair2: '#c29a45', style: 'long',
+  giulia: { man: false, skin: '#eab892', skin2: '#d9a27c', hair: '#e2c06a', hair2: '#c29a45', style: 'bob',
             suit: '#5b4a8b', suit2: '#4a3b75', shirt: '#f8f1f3', pearls: true, legs: '#d9a27c', shoe: '#1b1b22' },
   luca:   { man: true, skin: '#eab892', skin2: '#d9a27c', hair: '#4a3326', hair2: '#38261c', style: 'short',
             suit: '#2f4a8a', suit2: '#263d73', shirt: '#e8eefc', tie: '#7d80d8', shoe: '#2a1d16' },
@@ -58,6 +58,8 @@ function tTorso(L) {
 function tHead(L, f) {
   let back = '', front = '';
   if (L.style === 'long') back = `<path d="M38 22 q-2 -14 12 -15 q14 1 12 15 q1 14 3 22 q-6 4 -15 3 q-9 1 -15 -3 q2 -8 3 -22z" fill="${L.hair}"/>`;
+  // bob: sciolti fino alle spalle (Isa), più corti di «long»
+  if (L.style === 'bob') back = `<path d="M38 22 q-2 -14 12 -15 q14 1 12 15 q1 8 2.5 15 q-6 3 -14.5 2 q-8.5 1 -14.5 -2 q1.5 -7 2.5 -15z" fill="${L.hair}"/>`;
   if (L.style === 'bun') back = `<ellipse cx="50" cy="8" rx="6" ry="5" fill="${L.hair2}"/>`;
   const head = `<path d="M46.5 31 h7 v9 l-3.5 2 l-3.5 -2z" fill="${L.skin2}"/>
     <ellipse cx="40.6" cy="24" rx="1.6" ry="2.6" fill="${L.skin2}"/><ellipse cx="59.4" cy="24" rx="1.6" ry="2.6" fill="${L.skin2}"/>
@@ -66,7 +68,7 @@ function tHead(L, f) {
     <path d="M44 13 q6 -2.5 12 0" stroke="#d8d8de" stroke-width=".9" fill="none"/>`;
   if (L.style === 'short') front = `<path d="M40.6 21 q-1.5 -11.5 9.4 -12 q11 .5 9.4 12 q-1 -4 -2.5 -5.5 q-4 1.5 -9 -.5 q-3 1 -5 0 q-1.5 1.5 -2.3 6z" fill="${L.hair}"/>`;
   if (L.style === 'bun') front = `<path d="M40.8 22 q-1 -12 9.2 -12 q10.2 0 9.2 12 q-3 -7 -9.2 -7.5 q-6.2 .5 -9.2 7.5z" fill="${L.hair}"/>`;
-  if (L.style === 'long') front = `<path d="M40.6 23 q-1 -13 9.4 -13 q10.4 0 9.4 13 q-2 -7 -6 -8.5 q-6 3 -12.8 8.5z" fill="${L.hair}"/>`;
+  if (L.style === 'long' || L.style === 'bob') front = `<path d="M40.6 23 q-1 -13 9.4 -13 q10.4 0 9.4 13 q-2 -7 -6 -8.5 q-6 3 -12.8 8.5z" fill="${L.hair}"/>`;
   // lineamenti piccoli, da adulto
   const b = f.brow || 0;   // -1 aggrottate, 1 alzate
   const by = 20.5 - b * 1.2;
