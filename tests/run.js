@@ -1891,7 +1891,7 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
   check('82: giusto', ok(SP.key('pc_m_nonna'), M + ' parla con la nonna.') && ok(SP.key('pc_m_nonna'), 'Lui parla con la nonna.') && ok(SP.key('pc_nonno_marco'), 'Il nonno parla con Marco.'));
   check('82: sbagliato', !ok(SP.key('pc_m_nonna'), M + ' parla con nonna.') && !ok(SP.key('pc_m_nonna'), M + ' parla con Anna.') && !ok(SP.key('pc_f_m'), M + ' parla con ' + F + '.'));
   check('82: allievo', evalAsk('pc_nonno_marco', 'Con chi parla il nonno?').kind === 'what' && evalAsk('pc_nonno_marco', 'Il nonno parla con Anna?').kind === 'no');
-  check('74, 82: niente telefono, nel fumetto parole conosciute', fs.readFileSync('www/js/telef_it.js', 'utf8').indexOf('V_SCENE.phone') === -1 && run("tlTalk('tl_nonno')").indexOf('sono il nonno.') !== -1 &&
+  check('74: il telefono e il fumetto; 82: parole conosciute', fs.readFileSync('www/js/telef_it.js', 'utf8').indexOf('V_SCENE.phone') !== -1 && run("tlTalk('tl_nonno')").indexOf('sono il nonno.') !== -1 &&
     run("pcWords('pc_m_nonna')") === 'Buongiorno!' && fs.readFileSync('www/js/parlacon_it.js', 'utf8').indexOf('bla') === -1);
   check('81: il saluto nella lingua', run('LG_HELLO').giapponese[0] === 'こんにちは' && run('LG_HELLO').inglese[0] === 'Hello!');
   check('13: anche il tedesco e il giapponese', run('LESSONS').find(l => l.id === 'l13').known.indexOf('n_f_germania') !== -1 && FIG.n_m_giappone.indexOf('<svg') === 0);

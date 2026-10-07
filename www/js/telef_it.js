@@ -1,7 +1,7 @@
 'use strict';
 /* =====================================================================
    CAPITOLO 14: «Al telefono» (lezione 74, livello 3). Si carica dopo verbs_it.js, fam_it.js e bigl_it.js (le persone).
-   Qualcuno parla (il fumetto con «Pronto, sono …» che esce dalla bocca; senza telefono in mano): Max, Isa, Marco Rossi, Anna Bianchi, il nonno, la nonna.
+   Qualcuno telefona (il telefono all'orecchio e il fumetto con «Pronto, sono …» che esce dalla bocca): Max, Isa, Marco Rossi, Anna Bianchi, il nonno, la nonna.
      Pronto, sono Max.                → ripete
      Chi parla?                       → Parla Max.   (va bene anche «È Max.»)
      Parla Isa?                       → No, non parla Isa.
@@ -25,12 +25,13 @@ const tlIs = (k, neg) => (neg ? 'non ' : '') + 'parla ' + tlName(k);            
 const TL_Q = 'Chi parla?';
 const tlOther = (X) => pick(Object.keys(TL).map(tlWho).filter(k => k !== tlWho(X)));
 
-/* ---------- Figura: la persona che parla (Massi: senza telefono, sennò sembra «telefona»; il fumetto con le parole dalla bocca) ---------- */
+/* ---------- Figura: la persona al telefono (il telefono all'orecchio: «Pronto» si dice solo al telefono) e il fumetto con le parole dalla bocca ---------- */
 function tlFig(X) {
   const LK = tlLook(tlWho(X));
   if (!LK || typeof tTorso !== 'function') return '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"></svg>';
   return '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><ellipse cx="62" cy="97" rx="30" ry="3" fill="#000" opacity=".25"/>' +
-    V_PERSON(LK, tArm(LK, ...DOWN_L) + tArm(LK, ...DOWN_R), { mouth: 'talk' }, 12) + tlTalk(X) + '</svg>';
+    // al telefono (lezione 74): il telefono all'orecchio (senza le onde) e il fumetto con le parole
+    '<g transform="translate(12 0)">' + V_SCENE.phone(LK).replace(/<path d="M70 14[^>]*\/>/, '') + '</g>' + tlTalk(X) + '</svg>';
 }
 // il fumetto che esce dalla bocca (Massi): dentro parole già conosciute (un ripasso da leggere), non «bla bla».
 // box = [x, y, larghezza, altezza], tail = [x, y] la punta verso la bocca; le parole escono dalla bocca, restano da leggere, poi ricominciano.
