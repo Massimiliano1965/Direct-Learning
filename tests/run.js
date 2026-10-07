@@ -6,7 +6,7 @@ const vm = require('vm');
 
 const ctx = { console: console };
 vm.createContext(ctx);
-['course.js', 'data.js', 'logic.js', 'colors_it.js', 'numbers_it.js', 'geo_fig.js', 'geo_it.js', 'poss_it.js', 'size_it.js', 'third_it.js', 'nat_it.js', 'essere_it.js', 'altro_it.js', 'prep_it.js', 'anche_it.js', 'ui_lang.js'].forEach(f => {
+['course.js', 'data.js', 'logic.js', 'colors_it.js', 'numbers_it.js', 'geo_fig.js', 'geo_it.js', 'poss_it.js', 'size_it.js', 'third_it.js', 'nat_it.js', 'essere_it.js', 'altro_it.js', 'prep_it.js', 'anche_it.js', 'ora_it.js', 'ui_lang.js'].forEach(f => {
   vm.runInContext(fs.readFileSync(path.join(__dirname, '..', 'www', 'js', f), 'utf8'), ctx, { filename: f });
 });
 const run = (code) => vm.runInContext(code, ctx);
@@ -14,7 +14,7 @@ const evaluate = run('evaluate');
 const evaluateAll = run('evaluateAll');
 const buildSteps = run('buildSteps');
 const answerSteps = run('answerSteps');
-const LESSONS = run('LESSONS').filter(l => !l.colors && !l.numbers && !l.geo && !l.poss && !l.size && !l.third && !l.nat && !l.ess && !l.altro && !l.prep && !l.anche);   // lezioni con gli oggetti (colori e numeri hanno i loro test)
+const LESSONS = run('LESSONS').filter(l => !l.colors && !l.numbers && !l.geo && !l.poss && !l.size && !l.third && !l.nat && !l.ess && !l.altro && !l.prep && !l.anche && !l.ora);   // lezioni con gli oggetti (colori e numeri hanno i loro test)
 const NUM_LESSONS = run('LESSONS').filter(l => l.numbers);
 const COLOR_LESSONS = run('LESSONS').filter(l => l.colors);
 const ITEMS = run('ITEMS');
@@ -659,6 +659,28 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
   check('lezione 19: ripetizioni giuste', models.every(s => buildDrill(s, 5, []).every(d => evaluate(d, d.model).ok)));
   check('ripetizioni: la voce alterna «neanche» e «nemmeno»', (d => d.some(x => /^Neanche /.test(x.model)) && d.some(x => /^Nemmeno /.test(x.model)))(buildDrill(kn, 5, [])));
   check('lezione 19: il primo oggetto sempre sotto', st.filter(s => s.type !== 'ask').every(s => s.prev && s.prev !== s.show));
+}
+
+// Lezione 20: «Che ora è?»
+{
+  const SO = run('SO'), evalAsk = run('evalAsk'), answerAsk = run('answerAsk'), buildDrill = run('buildDrill'), ok = (st, t) => evaluate(st, t).ok;
+  const l20 = run('LESSONS').find(l => l.id === 'l20');
+  check('lezione 20 c\'è', !!l20 && l20.ora);
+  check('figure', l20.known.every(k => FIG[k] && FIG[k].indexOf('<svg') === 0 && FIG[k].indexOf(' id=') === -1));
+  check('frasi', SO.present('h1').prompt === 'È l\'una.' && SO.present('h3').prompt === 'Sono le tre.' && SO.yes('h10').model === 'Sì, sono le dieci.' &&
+    SO.key('h5').prompt === 'Che ora è?');
+  check('giusto (anche cifre e «Che ore sono?»)', ok(SO.key('h3'), 'Sono le tre.') && ok(SO.key('h3'), 'Sono le 3.') && ok(SO.key('h1'), 'È l\'una.') &&
+    ok(SO.yes('h8'), 'Sì, sono le otto.') && ok(SO.askQ('h1'), 'Che ore sono?') && ok(SO.askQ('h1'), 'Che ora è?'));
+  const n = SO.neg('h3');
+  check('giusto: il no', ok(n, n.model));
+  check('sbagliato: «è le tre», «sono l\'una», «la una», ora sbagliata', !ok(SO.key('h3'), 'È le tre.') && !ok(SO.key('h1'), 'Sono l\'una.') &&
+    !ok(SO.key('h1'), 'È la una.') && !ok(SO.key('h3'), 'Sono le due.'));
+  check('allievo', evalAsk('h3', 'Che ora è?').kind === 'what' && answerAsk('h3', { kind: 'what' }) === 'Sono le tre.' && evalAsk('h3', 'Sono le cinque?').kind === 'no' &&
+    answerAsk('h3', { kind: 'no', ask: 5 }) === 'No, non sono le cinque. Sono le tre.' && evalAsk('h3', 'È le tre?').model === 'Sono le tre?');
+  const st = buildSteps(l20), models = st.filter(s => s.model && s.type !== 'reveal');
+  check('lezione 20: risposte modello giuste', models.every(s => evaluate(s, s.model).ok));
+  check('lezione 20: ripetizioni giuste', models.every(s => buildDrill(s, 5, []).every(d => evaluate(d, d.model).ok)));
+  check('lezione 20: domanda «o» con l\'una detta bene', [1, 2, 3, 4, 5, 6, 7, 8].map(() => SO.alt('h1').prompt).every(p => /^È l'una o sono le [a-z]+\?$|^Sono le [a-z]+ o è l'una\?$/.test(p)));
 }
 
 // Lingua dello studente: ogni scritta c'è in tutte le lingue, con gli stessi segnaposto {…}
