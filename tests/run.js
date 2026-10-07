@@ -6,7 +6,7 @@ const vm = require('vm');
 
 const ctx = { console: console };
 vm.createContext(ctx);
-['course.js', 'data.js', 'logic.js', 'colors_it.js', 'numbers_it.js', 'geo_fig.js', 'geo_it.js', 'poss_it.js', 'size_it.js', 'third_it.js', 'nat_it.js', 'essere_it.js', 'altro_it.js', 'prep_it.js', 'anche_it.js', 'ora_it.js', 'appt_it.js', 'gender_it.js', 'verbs_it.js', 'perche_it.js', 'pron_it.js', 'sum_it.js', 'km_it.js', 'fam_it.js', 'avere_it.js', 'ui_lang.js'].forEach(f => {
+['course.js', 'data.js', 'logic.js', 'colors_it.js', 'numbers_it.js', 'geo_fig.js', 'geo_it.js', 'poss_it.js', 'size_it.js', 'third_it.js', 'nat_it.js', 'essere_it.js', 'altro_it.js', 'prep_it.js', 'anche_it.js', 'ora_it.js', 'appt_it.js', 'gender_it.js', 'verbs_it.js', 'perche_it.js', 'pron_it.js', 'sum_it.js', 'km_it.js', 'fam_it.js', 'avere_it.js', 'gen_it.js', 'plur_it.js', 'ui_lang.js'].forEach(f => {
   vm.runInContext(fs.readFileSync(path.join(__dirname, '..', 'www', 'js', f), 'utf8'), ctx, { filename: f });
 });
 const run = (code) => vm.runInContext(code, ctx);
@@ -14,7 +14,7 @@ const evaluate = run('evaluate');
 const evaluateAll = run('evaluateAll');
 const buildSteps = run('buildSteps');
 const answerSteps = run('answerSteps');
-const LESSONS = run('LESSONS').filter(l => !l.colors && !l.numbers && !l.geo && !l.poss && !l.size && !l.third && !l.nat && !l.ess && !l.altro && !l.prep && !l.anche && !l.ora && !l.appt && !l.verbs && !l.purp && !l.pron && !l.sum && !l.km && !l.fam && !l.ea);   // lezioni con gli oggetti (colori e numeri hanno i loro test)
+const LESSONS = run('LESSONS').filter(l => !l.colors && !l.numbers && !l.geo && !l.poss && !l.size && !l.third && !l.nat && !l.ess && !l.altro && !l.prep && !l.anche && !l.ora && !l.appt && !l.verbs && !l.purp && !l.pron && !l.sum && !l.km && !l.fam && !l.ea && !l.pl);   // lezioni con gli oggetti (colori e numeri hanno i loro test)
 const NUM_LESSONS = run('LESSONS').filter(l => l.numbers);
 const COLOR_LESSONS = run('LESSONS').filter(l => l.colors);
 const ITEMS = run('ITEMS');
@@ -910,6 +910,28 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
   check('lezione 31: risposte modello giuste', models.every(s => evaluate(s, s.model).ok));
   check('lezione 31: ripetizioni giuste', models.every(s => buildDrill(s, 5, []).every(d => evaluate(d, d.model).ok)));
   check('lezione 31: lunghezza', st.length < 115);
+}
+
+// Lezione 32: «Plurale: o → i, a → e»
+{
+  const SP2 = run('SPL'), evalAsk = run('evalAsk'), answerAsk = run('answerAsk'), buildDrill = run('buildDrill'), ok = (st, t) => evaluate(st, t).ok;
+  const l = run('LESSONS').find(l => l.id === 'l32');
+  check('lezione 32 c\'è', !!l && l.pl);
+  check('figure', l.known.every(k => FIG[k] && FIG[k].indexOf('<svg') === 0 && FIG[k].indexOf(' id=') === -1));
+  check('frasi', SP2.present('pl_book_1').prompt === 'È un libro.' && SP2.present('pl_book_2').prompt === 'Sono due libri.' && SP2.present('pl_pen_3').prompt === 'Sono tre penne.' &&
+    SP2.key('pl_cup_2').prompt === 'Che cosa sono?' && SP2.key('pl_pen_1').prompt === 'Che cos\'è?' && SP2.yes('pl_notebook_3').model === 'Sì, sono tre quaderni.');
+  check('giusto', ok(SP2.key('pl_book_2'), 'Sono due libri.') && ok(SP2.key('pl_cup_2'), 'Sono due tazze.') && ok(SP2.key('pl_book_1'), 'È un libro.') && ok(SP2.yes('pl_pen_3'), 'Sì, sono tre penne.'));
+  const n = SP2.neg('pl_cup_2');
+  check('giusto: il no', ok(n, n.model));
+  check('sbagliato: «due libro», «è due», «una libri», numero', !ok(SP2.key('pl_book_2'), 'Sono due libro.') && !ok(SP2.key('pl_book_2'), 'È due libri.') &&
+    !ok(SP2.key('pl_pen_3'), 'Sono tre penna.') && !ok(SP2.key('pl_pen_3'), 'Sono due penne.') && !ok(SP2.key('pl_book_1'), 'Sono un libro.') && !ok(SP2.key('pl_pen_1'), 'È un penna.'));
+  check('allievo', evalAsk('pl_cup_2', 'Che cosa sono?').kind === 'what' && answerAsk('pl_cup_2', { kind: 'what' }) === 'Sono due tazze.' &&
+    evalAsk('pl_cup_2', 'Sono due penne?').kind === 'no' && evalAsk('pl_cup_2', 'Sono due tazza?').model === 'Sono due tazze?' && !evalAsk('pl_cup_2', 'Che cos\'è?').ok);
+  check('-o/-i azzurre, -a/-e rosa', (w => ['libro', 'libri', 'penna', 'penne', 'tazze'].every(x => w.indexOf(x) !== -1))(run('genderWords')(l)));
+  const st = buildSteps(l), models = st.filter(s => s.model && s.type !== 'reveal');
+  check('lezione 32: risposte modello giuste', models.every(s => evaluate(s, s.model).ok));
+  check('lezione 32: ripetizioni giuste', models.every(s => buildDrill(s, 5, []).every(d => evaluate(d, d.model).ok)));
+  check('lezione 32: domande dell\'allievo', st.filter(s => s.type === 'ask').length === 7 && st.filter(s => s.type === 'ask').every(s => s.pl));
 }
 
 // Parole che vanno bene tutte e due (COURSE.synonyms): il microfono le accetta tutte e due

@@ -148,7 +148,10 @@ const LESSONS = [
   { id: 'l30', title: 'Lezione 30', fam: true, known: ['f_padre', 'f_madre', 'f_figlio', 'f_figlia', 'f_nonno', 'f_nonna'] },
   // capitolo 5: «Essere o avere» — Max e Isa hanno una cosa colorata: «Max ha un telefono. Il telefono è nero.» (avere_it.js)
   { id: 'l31', title: 'Lezione 31', ea: true, hilite: ['ha', 'è'],
-    known: ['ea_m_phone_nero', 'ea_f_suitcase_rosso', 'ea_m_laptop_bianco', 'ea_f_flask_nero', 'ea_m_coat_rosso', 'ea_f_cup_bianco'] }
+    known: ['ea_m_phone_nero', 'ea_f_suitcase_rosso', 'ea_m_laptop_bianco', 'ea_f_flask_nero', 'ea_m_coat_rosso', 'ea_f_cup_bianco'] },
+  // capitolo 5: «Plurale: o → i, a → e» — «È un libro.» / «Sono due libri.» (plur_it.js); -o/-i azzurre, -a/-e rosa
+  { id: 'l32', title: 'Lezione 32', pl: true, gender: true, hilite: ['è', 'sono'],
+    known: ['pl_book_1', 'pl_book_2', 'pl_pen_1', 'pl_pen_3', 'pl_cup_2', 'pl_notebook_3'] }
 ];
 
 // Quattro insegnanti, dal più rigido al più indulgente. gender = voce maschile o femminile.
