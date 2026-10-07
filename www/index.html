@@ -42,7 +42,7 @@
 <!-- ============ LEZIONE ============ -->
 <section id="screen-lesson" class="screen hidden">
   <div id="demo-caption" class="hidden"></div>
-  <div class="topbar"><span><span id="l-title"></span><span id="l-level" class="level-tag"></span></span><span id="l-count"></span></div>
+  <div class="topbar"><span><span id="l-title"></span><span id="l-level" class="level-tag"></span></span><span><button id="btn-fav" class="fav-star hidden" aria-label="★">☆</button><span id="l-count"></span></span></div>
   <div id="progress"><div id="progress-fill"></div></div>
   <div id="l-teacher"></div>
   <div id="stage">
@@ -73,6 +73,15 @@
   <button id="btn-end-home" class="secondary" data-t="menu">Menu</button>
 </section>
 
+<!-- ============ LE MIE FRASI (favs.js) ============ -->
+<section id="screen-favs" class="screen hidden">
+  <h2 data-t="favs">My sentences</h2>
+  <p class="muted" data-t="favHint">Tap the star ☆ during a lesson to save a sentence here.</p>
+  <div id="favs-body"></div>
+  <div style="height:18px"></div>
+  <button id="btn-favs-home" class="secondary" data-t="menu">Menu</button>
+</section>
+
 <!-- ============ RISULTATI ============ -->
 <section id="screen-report" class="screen hidden">
   <h2 data-t="reportTitle">Trial results</h2>
@@ -99,5 +108,6 @@
 <script src="js/storage.js"></script>
 <script src="js/demo.js"></script>
 <script src="js/app.js"></script>
+<script src="js/favs.js"></script>
 </body>
 </html>

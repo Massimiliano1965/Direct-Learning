@@ -313,3 +313,28 @@ body.test-end #btn-again { display: none; }
 #end-body .t-review .lesson-btn { margin: 0; min-height: 0; }
 #end-body .t-review .lesson-btn { width: auto; padding: 8px 14px; }
 #end-body .t-notice { margin-top: 14px; padding-top: 6px; border-top: 1px solid var(--line); }
+
+/* ===== Le mie frasi (favs.js): la stellina, la lista, il pollice ===== */
+.fav-star { display: inline-block; width: auto; min-height: 0; margin: 0 10px 0 0; padding: 0 6px; background: none; border: none; box-shadow: none; color: #c9a45c; font-size: 26px; line-height: 1; vertical-align: middle; }
+.fav-star.on { color: #f3d36b; text-shadow: 0 0 10px rgba(243, 211, 107, .7); }
+.fav-star:disabled { opacity: .3; }
+.fav-star.pop { animation: favPop .45s ease-out; }
+@keyframes favPop { 0% { transform: scale(1); } 45% { transform: scale(1.7) rotate(-12deg); } 100% { transform: scale(1); } }
+.lesson-btn.favs-btn { border-left: 4px solid #f3d36b; color: #f3d36b; }
+.fav-card { display: flex; gap: 12px; align-items: flex-start; background: var(--surface, #182133); border: 1px solid var(--line, #2a3550); border-radius: 14px; padding: 10px; margin-bottom: 10px; }
+.fav-fig { flex: 0 0 72px; width: 72px; height: 72px; }
+.fav-fig svg { width: 72px; height: 72px; }
+.fav-main { flex: 1; min-width: 0; }
+.fav-text { font-family: Georgia, serif; font-size: 18px; line-height: 1.25; margin-bottom: 4px; }
+.fav-meta { font-size: 13px; margin-bottom: 6px; display: flex; gap: 10px; }
+.fav-timer-on { color: #f3d36b; }
+.fav-row { display: flex; gap: 6px; }
+.fav-row button { width: auto; flex: 0 0 auto; min-height: 38px; padding: 6px 12px; margin: 0; font-size: 15px; }
+.fav-row .fav-go { flex: 1; }
+.fav-when { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.fav-when button { width: auto; min-height: 34px; padding: 4px 10px; margin: 0; font-size: 14px; }
+.fav-msg { flex-basis: 100%; font-size: 13px; }
+.fav-phrase { font-family: Georgia, serif; font-size: 20px; }
+.fav-thumb { width: 190px; height: 190px; margin: 6px auto 4px; animation: favThumb 1s cubic-bezier(.2, 1.5, .4, 1) both; }
+.fav-thumb svg { width: 100%; height: 100%; filter: drop-shadow(0 6px 18px rgba(243, 211, 107, .45)); }
+@keyframes favThumb { 0% { transform: scale(.05) rotate(-30deg); opacity: 0; } 60% { transform: scale(1.25) rotate(6deg); opacity: 1; } 80% { transform: scale(.94); } 100% { transform: scale(1) rotate(0); } }

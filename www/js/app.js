@@ -9,7 +9,7 @@ const $ = (id) => document.getElementById(id);
 const IS_CORDOVA = !!window.cordova;
 let currentScreen = 'home';
 function showScreen(name, replace) {
-  ['lang', 'home', 'lesson', 'end', 'report'].forEach(n => $('screen-' + n).classList.toggle('hidden', n !== name));
+  ['lang', 'home', 'lesson', 'end', 'report', 'favs'].forEach(n => $('screen-' + n).classList.toggle('hidden', n !== name));
   const wasHome = currentScreen === 'home';
   currentScreen = name;
   document.documentElement.classList.toggle('fisso', name === 'lesson');   // la lezione non scorre mai
@@ -105,6 +105,12 @@ function renderHome() {
   db.innerHTML = '<span>' + tx('demoLesson') + '</span><span class="score">' + tx(DB.settings.demoSeen ? 'seen' : 'watchFirst') + '</span>';
   db.onclick = once(() => startDemo(null));
   ll.appendChild(db);
+  // le mie frasi (la stellina ☆ nelle lezioni): la lista, le mini-sessioni, il timer
+  const fb = document.createElement('button');
+  fb.className = 'lesson-btn favs-btn';
+  fb.innerHTML = '<span>★ ' + tx('favs') + '</span><span class="score">' + ((DB.settings.favs || []).length || '') + '</span>';
+  fb.onclick = () => showFavs();
+  ll.appendChild(fb);
   let lastLevel = 0;
   LESSONS.forEach(l => {
     // lezioni divise per livello, ognuno con il suo colore
@@ -235,17 +241,19 @@ function alive(run) { return !!L && L.run === run && RUN === run; }
 // Passo corrente: durante le ripetizioni dopo un errore, quello delle ripetizioni
 function cur() { return L.drill ? L.drill[L.di] : L.steps[L.i]; }
 
-function startLesson(id) {
+// obj = una lezione fatta al momento (la mini-sessione delle «mie frasi», favs.js): { lesson, steps, items }
+function startLesson(id, obj) {
+  if (!obj && typeof id === 'string' && id.indexOf('fav:') === 0) { startFav(+id.slice(4)); return; }
   if (id === 'l1' && !DB.settings.demoSeen) { startDemo('l1'); return; }
-  const lesson = LESSONS.find(l => l.id === id);
+  const lesson = obj ? obj.lesson : LESSONS.find(l => l.id === id);
   if (!lesson) return;
   stopLesson();
-  const items = lessonItems(lesson);
+  const items = obj ? obj.items : lessonItems(lesson);
   const teacher = TEACHERS[selectedTeacherKey()];
   RUN++;
   L = {
     run: RUN, lesson: lesson, items: items, teacher: teacher,
-    steps: buildSteps(lesson), streak: 0,
+    steps: obj ? obj.steps : buildSteps(lesson), streak: 0,
     i: 0, attempts: 0, noSpeech: 0, first: 0, busy: false, paused: false,
     drill: null, di: 0, repFails: 0, errCount: 0,
     coach: true, coached: false,
@@ -292,6 +300,7 @@ function stopLesson() {
     saveDB();
   }
   L = null;
+  if (typeof favUpdateStar === 'function') favUpdateStar();
   $('screen-lesson').classList.remove('tunnel');
   hideMark();
   hideYourTurn();
@@ -535,6 +544,7 @@ function runStep() {
   L.attempts = 0;
   L.noSpeech = 0;
   drawStep();
+  if (typeof favUpdateStar === 'function') favUpdateStar();
   askStep();
 }
 
@@ -852,6 +862,7 @@ function nextStep(run, delay) {
 // Errore: parola secca dell'insegnante con la sua icona, poi la risposta giusta.
 // Poi le ripetizioni intorno a quella parola: quante, lo decide l'insegnante (al massimo 5).
 function onWrong() {
+  if (L.lesson.fav && !L.drill) { favWrong(); return; }    // le mie frasi: domande serrate, niente ripetizioni lunghe
   const st = cur();
   const run = L.run;
   const t = L.teacher;
@@ -1016,6 +1027,8 @@ function finishTest() {
 
 function finishLesson() {
   if (L.test) { finishTest(); return; }
+  if (L.lesson.fav) { favFinish(); return; }
+  const ag = $('btn-again'); ag.dataset.t = 'again'; ag.textContent = tx('again');
   const total = answerSteps(L.steps);
   const pct = Math.round(L.first / total * 100);
   const id = L.lesson.id;
