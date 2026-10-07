@@ -15,7 +15,7 @@ Leggi questo file prima di tutto. Poi `docs/percorso.md` (l'ordine delle lezioni
 - Corso italiano: `www/js/course.js` (oggetti, lezioni, insegnanti), `logic.js` (motore), un file per tipo di lezione
   (`colors_it`, `numbers_it`, `geo_it`, `poss_it`, `size_it`, `third_it`, `nat_it`, `essere_it`, `altro_it`, `prep_it`, `anche_it`, `ora_it`, `appt_it`, `gender_it`, `verbs_it`),
   caricati in ordine da `www/index.html`. Ogni file ha in cima la spiegazione della lezione.
-- Insegnanti: Max (molto severo, approva col pollice ogni tanto), Giulia, Pietro (chiave `luca`), Sara. Il tailleur di Giulia è viola (il color vino non gli piaceva). Stile sobrio blu notte e oro.
+- Insegnanti: Max (molto severo, approva col pollice ogni tanto), Isa (chiave `giulia`: era Giulia; bionda), Pietro (chiave `luca`), Sara. Il tailleur di Isa è viola (il color vino non gli piaceva). Stile sobrio blu notte e oro.
 - 4 livelli (blu notte, blu acciaio, viola, rosa antico), «Livello N» accanto al titolo. Tutte le lezioni fatte sono livello 1; il livello 2 parte dal capitolo 6.
 - Pulsanti di prova sotto la lezione: «Avanti ▶» e «Rispondo: sì/no» (`TEST_BUTTONS` in `course.js`; a fine progetto → false).
 
@@ -29,7 +29,7 @@ Leggi questo file prima di tutto. Poi `docs/percorso.md` (l'ordine delle lezioni
 ## A che punto siamo (lezioni fatte: 1–23)
 1–4 oggetti · 5 colori · 6–7 numeri · 8–9 città e monumenti · 10 il mio/il Suo · 11 grande/piccolo · 12 il suo/la sua · 13 nazionalità ·
 14 essere · 15 un altro · 16 un/una/un'/uno · 17 il/la/l'/lo · 18 sul/nel… (a e di più avanti) · 19 anche/neanche · 20 che ora è ·
-21 a che ora (aereo, riunione…) · 22 il, la o l'? (-o/-a in colore) · 23 cosa fa? (Max legge un libro, Giulia telefona…; *da approvare*).
+21 a che ora (aereo, riunione…) · 22 il, la o l'? (-o/-a in colore) · 23 cosa fa? (Max legge un libro, Isa telefona…; *da approvare*).
 
 ## Da ricordare
 - Ogni lezione ha le **domande dello studente** (tocca una figura e chiede): 7 per lezione. Mantenerle nelle lezioni nuove.

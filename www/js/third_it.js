@@ -3,12 +3,12 @@
    CAPITOLO 2: «Il suo, la sua» (lezione 12)
    Si carica dopo logic.js. Gli oggetti di due altre persone: un uomo e una donna
    (due colleghi dell'insegnante, con la loro faccia nel bollino: figure «p3_m_laptop», «p3_f_phone»).
-   «Suo/sua» va con l'oggetto, non con la persona: il suo telefono (di Giulia), la sua borsa (di Max).
-     È il telefono di Giulia.                 → ripete
-     È il telefono di Giulia?                 → Sì, è il suo telefono.
+   «Suo/sua» va con l'oggetto, non con la persona: il suo telefono (di Isa), la sua borsa (di Max).
+     È il telefono di Isa.                 → ripete
+     È il telefono di Isa?                 → Sì, è il suo telefono.
      È il telefono di Max?                    → No, non è il suo telefono.
-     È il telefono di Giulia o di Max?        → È il telefono di Giulia.
-     Di chi è questo telefono?                → È il telefono di Giulia.
+     È il telefono di Isa o di Max?        → È il telefono di Isa.
+     Di chi è questo telefono?                → È il telefono di Isa.
    Errori: «il sua telefono», «la suo borsa», la persona sbagliata.
    ===================================================================== */
 
@@ -30,7 +30,7 @@ function p3People() {
 }
 const p3Key = (w) => p3People()[w];
 const p3Name = (w) => TEACHERS[p3Key(w)].name;
-const p3Of = (k, w) => p3The(k) + ' di ' + p3Name(w);          // «il telefono di Giulia»
+const p3Of = (k, w) => p3The(k) + ' di ' + p3Name(w);          // «il telefono di Isa»
 const p3Suo = (k) => (p3Fem(k) ? 'la sua ' : 'il suo ') + ITEMS[k].word;   // «il suo zaino»: davanti a «suo» sempre il/la   // «il suo telefono»
 const p3OtherW = (w) => w === 'm' ? 'f' : 'm';
 
@@ -101,13 +101,13 @@ function thirdEvaluate(step, text) {
       const denyTrue = neg.some(x => x.obj === k && whoOf(x) === W);
       return { ok: !yes && said && !denyTrue && allPos && neg.every(x => x.good), full: pos.some(truth) };
     }
-    default:   // alt, key: serve il nome («È il telefono di Giulia.»), non la domanda ripetuta
+    default:   // alt, key: serve il nome («È il telefono di Isa.»), non la domanda ripetuta
       return { ok: pos.some(x => truth(x) && !x.suo) && allPos && !neg.length && !has(s, 'o di') && !has(s, 'di chi e'), full: true };
   }
 }
 
 /* ---------- Le domande dell'allievo ----------
-   «Di chi è questo telefono?» «È il telefono di Giulia?» «È il telefono di Giulia o di Max?» (e «Che cos'è?»). */
+   «Di chi è questo telefono?» «È il telefono di Isa?» «È il telefono di Isa o di Max?» (e «Che cos'è?»). */
 function thirdEvalAsk(X, text) {
   const s = norm(text), k = p3Obj(X);
   const bad = (model) => ({ ok: false, model: model || 'Di chi è ' + p3Dem(k) + ' ' + ITEMS[k].word + '?' });

@@ -488,25 +488,25 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
   check('lezione 11: ripetizioni giuste', models.every(s => buildDrill(s, 5, []).every(d => evaluate(d, d.model).ok)));
 }
 
-// Lezione 12: «Il suo, la sua» (le cose di Max e di Giulia quando insegna Pietro)
+// Lezione 12: «Il suo, la sua» (le cose di Max e di Isa quando insegna Pietro)
 {
   const SW = run('SW'), evalAsk = run('evalAsk'), answerAsk = run('answerAsk'), buildDrill = run('buildDrill');
   const ok = (st, t) => evaluate(st, t).ok;
   const l12 = run('LESSONS').find(l => l.id === 'l12');
   check('lezione 12 c\'è', !!l12 && l12.third);
   check('figure con la faccia di chi lo possiede', l12.known.every(k => FIG[k] && FIG[k].indexOf('<svg') === 0 && FIG[k].indexOf(' id=') === -1));
-  check('frasi', SW.present('p3_f_phone').prompt === 'È il telefono di Giulia.' && SW.yes('p3_m_bag').prompt === 'È la borsa di Max?' &&
+  check('frasi', SW.present('p3_f_phone').prompt === 'È il telefono di Isa.' && SW.yes('p3_m_bag').prompt === 'È la borsa di Max?' &&
     SW.yes('p3_m_bag').model === 'Sì, è la sua borsa.' && SW.yes('p3_f_phone').model === 'Sì, è il suo telefono.' &&
     SW.neg('p3_f_phone').prompt === 'È il telefono di Max?' && SW.neg('p3_f_phone').model === 'No, non è il suo telefono.' &&
-    SW.key('p3_f_suitcase').prompt === 'Di chi è questa valigia?' && SW.key('p3_f_suitcase').model === 'È la valigia di Giulia.');
+    SW.key('p3_f_suitcase').prompt === 'Di chi è questa valigia?' && SW.key('p3_f_suitcase').model === 'È la valigia di Isa.');
   check('giusto', ok(SW.yes('p3_m_bag'), 'Sì, è la sua borsa.') && ok(SW.yes('p3_m_bag'), 'Sì, è la borsa di Max.') &&
-    ok(SW.neg('p3_f_phone'), 'No, non è il suo telefono.') && ok(SW.key('p3_m_laptop'), 'È il portatile di Max.') && ok(SW.alt('p3_f_flask'), 'È la borraccia di Giulia.'));
+    ok(SW.neg('p3_f_phone'), 'No, non è il suo telefono.') && ok(SW.key('p3_m_laptop'), 'È il portatile di Max.') && ok(SW.alt('p3_f_flask'), 'È la borraccia di Isa.'));
   check('sbagliato: «il sua», «la suo»', !ok(SW.yes('p3_f_phone'), 'Sì, è il sua telefono.') && !ok(SW.yes('p3_m_bag'), 'Sì, è la suo borsa.'));
   check('sbagliato: persona sbagliata', !ok(SW.key('p3_f_phone'), 'È il telefono di Max.') && !ok(SW.yes('p3_f_phone'), 'Sì, è il telefono di Max.'));
   check('sbagliato: «il mio», «il Suo» al posto di «il suo»... di lui', !ok(SW.yes('p3_m_laptop'), 'Sì, è il mio portatile.'));
   check('alla domanda chiave serve il nome', !ok(SW.key('p3_f_phone'), 'È il suo telefono.'));
-  check('allievo', evalAsk('p3_f_phone', 'Di chi è questo telefono?').kind === 'what' && answerAsk('p3_f_phone', { kind: 'what' }) === 'È il telefono di Giulia.' &&
-    evalAsk('p3_f_phone', 'È il telefono di Max?').kind === 'no' && answerAsk('p3_f_phone', { kind: 'no', ask: 'm' }) === 'No, non è il suo telefono. È il telefono di Giulia.' &&
+  check('allievo', evalAsk('p3_f_phone', 'Di chi è questo telefono?').kind === 'what' && answerAsk('p3_f_phone', { kind: 'what' }) === 'È il telefono di Isa.' &&
+    evalAsk('p3_f_phone', 'È il telefono di Max?').kind === 'no' && answerAsk('p3_f_phone', { kind: 'no', ask: 'm' }) === 'No, non è il suo telefono. È il telefono di Isa.' &&
     evalAsk('p3_m_bag', 'È il borsa di Max?').model === 'È la borsa di Max?');
   const st = buildSteps(l12), models = st.filter(s => s.model && s.type !== 'reveal');
   check('lezione 12: risposte modello giuste', models.every(s => evaluate(s, s.model).ok));
@@ -595,24 +595,24 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
   check('sbagliato: «un zaino», «una agenda», «uno ombrello»', !ok(S_.yes('backpack'), 'Sì, è un zaino.') && !ok(S_.yes('agenda'), 'Sì, è una agenda.') && !ok(S_.yes('umbrella'), 'Sì, è uno ombrello.'));
 }
 
-// Lezione 17: «Il, la, l', lo» (insegna Pietro: le cose di Max e di Giulia)
+// Lezione 17: «Il, la, l', lo» (insegna Pietro: le cose di Max e di Isa)
 {
   const SW = run('SW'), evalAsk = run('evalAsk'), buildDrill = run('buildDrill'), ok = (st, t) => evaluate(st, t).ok;
   const l17 = run('LESSONS').find(l => l.id === 'l17');
   check('lezione 17 c\'è', !!l17 && l17.third && l17.def);
   check('figure', l17.known.every(k => FIG[k] && FIG[k].indexOf('<svg') === 0 && FIG[k].indexOf(' id=') === -1));
   check('frasi: lo, l\', il, la', SW.present('p3_m_backpack').prompt === 'È lo zaino di Max.' && SW.present('p3_m_agenda').prompt === 'È l\'agenda di Max.' &&
-    SW.present('p3_f_umbrella').prompt === 'È l\'ombrello di Giulia.' && SW.present('p3_f_book').prompt === 'È il libro di Giulia.' && SW.present('p3_m_key').prompt === 'È la chiave di Max.' &&
-    SW.yes('p3_f_mirror', true).model === 'Sì, è lo specchio di Giulia.' && SW.neg('p3_m_backpack', true).model === 'No, non è lo zaino di Giulia.');
+    SW.present('p3_f_umbrella').prompt === 'È l\'ombrello di Isa.' && SW.present('p3_f_book').prompt === 'È il libro di Isa.' && SW.present('p3_m_key').prompt === 'È la chiave di Max.' &&
+    SW.yes('p3_f_mirror', true).model === 'Sì, è lo specchio di Isa.' && SW.neg('p3_m_backpack', true).model === 'No, non è lo zaino di Isa.');
   check('giusto (anche «l agenda» del microfono)', ok(SW.key('p3_m_agenda'), 'È l\'agenda di Max.') && ok(SW.key('p3_m_agenda'), 'È l agenda di Max.') &&
     ok(SW.yes('p3_m_backpack', true), 'Sì, è lo zaino di Max.') && ok(SW.yes('p3_m_backpack', true), 'Sì, è il suo zaino.'));
   check('sbagliato: «il zaino», «la agenda», «lo ombrello», «lo suo zaino»', !ok(SW.key('p3_m_backpack'), 'È il zaino di Max.') && !ok(SW.key('p3_m_agenda'), 'È la agenda di Max.') &&
-    !ok(SW.key('p3_f_umbrella'), 'È lo ombrello di Giulia.') && !ok(SW.yes('p3_m_backpack', true), 'Sì, è lo suo zaino.'));
-  check('lezione 12 non cambia', SW.yes('p3_m_bag').model === 'Sì, è la sua borsa.' && SW.present('p3_f_phone').prompt === 'È il telefono di Giulia.');
+    !ok(SW.key('p3_f_umbrella'), 'È lo ombrello di Isa.') && !ok(SW.yes('p3_m_backpack', true), 'Sì, è lo suo zaino.'));
+  check('lezione 12 non cambia', SW.yes('p3_m_bag').model === 'Sì, è la sua borsa.' && SW.present('p3_f_phone').prompt === 'È il telefono di Isa.');
   const st = buildSteps(l17), models = st.filter(s => s.model && s.type !== 'reveal');
   check('lezione 17: risposte modello giuste', models.every(s => evaluate(s, s.model).ok));
   check('lezione 17: ripetizioni giuste', models.every(s => buildDrill(s, 5, []).every(d => evaluate(d, d.model).ok)));
-  check('lezione 17: risposte con il nome', st.filter(s => s.type === 'yes').every(s => / di (Max|Giulia)\.$/.test(s.model)));
+  check('lezione 17: risposte con il nome', st.filter(s => s.type === 'yes').every(s => / di (Max|Isa)\.$/.test(s.model)));
 }
 
 // Lezione 18: «Preposizioni articolate» (su, in)

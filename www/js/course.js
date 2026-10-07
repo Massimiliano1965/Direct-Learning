@@ -106,7 +106,7 @@ const LESSONS = [
   // capitolo 3: «Un, una, un', uno» — un ombrello, un'agenda, uno zaino, uno specchio; l'arancia da scoprire
   { id: 'l16', title: 'Lezione 16', known: ['umbrella', 'agenda', 'backpack', 'mirror'], review: ['key', 'book'],
     fresh: 'orange', questo: true, dq: true },
-  // capitolo 3: «Il, la, l', lo» — le cose dei due colleghi, come nella lezione 12: «lo zaino di Max», «l'agenda di Giulia»
+  // capitolo 3: «Il, la, l', lo» — le cose dei due colleghi, come nella lezione 12: «lo zaino di Max», «l'agenda di Isa»
   { id: 'l17', title: 'Lezione 17', third: true, def: true,
     known: ['p3_m_backpack', 'p3_f_mirror', 'p3_m_agenda', 'p3_f_umbrella', 'p3_m_key', 'p3_f_book'] },
   // capitolo 3: «Preposizioni articolate» — su e in: sul tavolo, sulla sedia, sull'agenda, nel cappotto, nello zaino, nella borsa (prep_it.js)
@@ -142,7 +142,7 @@ const TEACHERS = {
     done: ''
   },
   giulia: {
-    key: 'giulia', name: 'Giulia', gender: 'f', style: 'Strict', mark: 'notcorrect',
+    key: 'giulia', name: 'Isa', gender: 'f', style: 'Strict', mark: 'notcorrect',
     rate: 1.05, pitch: 1.15, modelRate: 0.95, praiseEvery: 5, repeats: [3, 4, 3, 5, 3],
     praise: [],
     wrong: 'No.',

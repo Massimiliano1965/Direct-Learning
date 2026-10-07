@@ -15,7 +15,7 @@
 const LOOKS = {
   mass:   { man: true, skin: '#c98e62', skin2: '#b27a50', hair: '#a9a9b0', hair2: '#7d7d86', style: 'back',
             suit: '#4a4a57', suit2: '#3a3a45', shirt: '#f4f4f6', tie: '#a3263a', shoe: '#1b1b22' },
-  giulia: { man: false, skin: '#eab892', skin2: '#d9a27c', hair: '#2b2028', hair2: '#1c151a', style: 'bun', glasses: 'thin',
+  giulia: { man: false, skin: '#eab892', skin2: '#d9a27c', hair: '#e2c06a', hair2: '#c29a45', style: 'bun', glasses: 'thin',
             suit: '#5b4a8b', suit2: '#4a3b75', shirt: '#f8f1f3', pearls: true, legs: '#d9a27c', shoe: '#1b1b22' },
   luca:   { man: true, skin: '#eab892', skin2: '#d9a27c', hair: '#4a3326', hair2: '#38261c', style: 'short',
             suit: '#2f4a8a', suit2: '#263d73', shirt: '#e8eefc', tie: '#7d80d8', shoe: '#2a1d16' },

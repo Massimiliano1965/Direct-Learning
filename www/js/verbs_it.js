@@ -3,13 +3,13 @@
    CAPITOLO 4: «Verbi al presente: Cosa fa…?» (lezione 23). Si carica dopo third_it.js (i due colleghi)
    e appt_it.js. I due colleghi dell'insegnante (un uomo e una donna, come nella lezione 12) fanno qualcosa,
    con le cose già note: libro, porta, finestra, arancia, aranciata, telefono.
-     Max legge un libro.  Giulia telefona.           → ripete
+     Max legge un libro.  Isa telefona.           → ripete
      Max apre la porta?                              → Sì, Max apre la porta.
-     Giulia beve un'aranciata?                       → No, Giulia non beve un'aranciata.
+     Isa beve un'aranciata?                       → No, Isa non beve un'aranciata.
      Max legge un libro o mangia un'arancia?         → Max legge un libro.
-     Cosa fa Giulia?                                 → Giulia chiude la finestra.   (va bene anche «Chiude la finestra.»)
+     Cosa fa Isa?                                 → Isa chiude la finestra.   (va bene anche «Chiude la finestra.»)
    Il punto: il verbo con «lui / lei»: legge, apre, beve, chiude (-e); mangia, telefona (-a).
-   Errori: «Max leggo», «Giulia leggere», il verbo sbagliato, la persona sbagliata, «un porta».
+   Errori: «Max leggo», «Isa leggere», il verbo sbagliato, la persona sbagliata, «un porta».
    ===================================================================== */
 
 // le azioni: chi la fa (m = il collega, f = la collega), il verbo e la cosa (obj = chiave in ITEMS, the = articolo)
@@ -60,13 +60,15 @@ const V_SCENE = {
     '<path d="M50 56 q-7 -4 -16 -2 v13 q9 -2 16 2z" fill="#f3eee2"/><path d="M50 56 q7 -4 16 -2 v13 q-9 -2 -16 2z" fill="#ece4d2"/>' +
     '<path d="M50 56 v13" stroke="#c9b994" stroke-width="1"/><path d="M38 59 h8 M38 62 h8 M54 59 h8 M54 62 h8" stroke="#a9a089" stroke-width="1"/>' +
     '<path d="M34 67 q8 -2 16 2 q8 -4 16 -2 v2.5 q-8 -2 -16 2 q-8 -4 -16 -2z" fill="#2c3e66"/>', { mouth: 'flat' }),
-  // apre la porta: porta scorrevole (come gli shoji giapponesi); scorre verso Max e si vede il panorama (freccia ←)
-  open: (LK) => '<rect x="60" y="6" width="36" height="86" fill="#4a3628"/>' + vView(63, 9, 30, 83) +
-    '<rect x="63" y="9" width="17" height="83" fill="#8e6741"/><rect x="65.5" y="12" width="12" height="77" fill="#f3eee2"/>' +
-    '<path d="M71.5 12 v77 M65.5 28 h12 M65.5 44 h12 M65.5 60 h12 M65.5 76 h12" stroke="#b58a5e" stroke-width="1.2"/>' +
-    '<rect x="78" y="46" width="1.6" height="8" rx=".8" fill="#4a3628"/>' +
-    V_PERSON(LK, tArm(LK, ...DOWN_L) + tArm(LK, [65, 47], [80, 58], [94, 45]), null, -16) +
-    vArrow([93, 32], [84, 26], [70, 31]),
+  // apre la porta: porta scorrevole nel muro (come gli shoji): scorre sul binario da destra verso sinistra,
+  // davanti al muro, e nell'apertura si vede il panorama (freccia ←). Max è a destra e la spinge.
+  open: (LK) => '<rect x="2" y="4" width="66" height="88" fill="#e3d8c1"/><rect x="28" y="12" width="32" height="80" fill="#4a3628"/>' + vView(30, 14, 28, 78) +
+    '<rect x="2" y="7" width="66" height="3" fill="#8d93a3"/>' +
+    '<rect x="12" y="10" width="30" height="82" fill="#8e6741"/><rect x="14.5" y="13" width="25" height="76" fill="#f3eee2"/>' +
+    '<path d="M23 13 v76 M31 13 v76 M14.5 28 h25 M14.5 44 h25 M14.5 60 h25 M14.5 76 h25" stroke="#b58a5e" stroke-width="1.2"/>' +
+    '<rect x="38" y="46" width="1.8" height="9" rx=".9" fill="#4a3628"/>' +
+    V_PERSON(LK, tArm(LK, [35, 47], [26, 60], [16, 46]) + tArm(LK, ...DOWN_R), null, 23) +
+    vArrow([56, 24], [44, 18], [26, 24]),
   // mangia un'arancia: l'arancia alla bocca
   eat: (LK) => V_PERSON(LK, tArm(LK, ...DOWN_L) + tArm(LK, [65, 47], [72, 62], [60, 38]) +
     '<circle cx="58" cy="32" r="6.5" fill="#e8862a"/><circle cx="56" cy="30" r="2" fill="#f2a54a" opacity=".7"/><path d="M58 25.5 q4 -4 8 -1 q-4 3 -8 1z" fill="#5a9a46"/>', { mouth: 'open' }),
@@ -76,12 +78,14 @@ const V_SCENE = {
     '<path d="M54 41 h8 l1.2 2.2 v18 l-1.2 2.2 h-8 l-1.2 -2.2 v-18z" fill="#c8262f"/><path d="M54 41 h8 l1.2 2.2 h-10.4z M52.8 61.2 h10.4 l-1.2 2.2 h-8z" fill="#c9ccd4"/>' +
     '<path d="M52.8 48 h10.4 v8 h-10.4z" fill="#f3eee2"/><circle cx="58" cy="52" r="2.6" fill="#e8862a"/><path d="M55 45 v15" stroke="#e26a6f" stroke-width="1.3" opacity=".6"/>' +
     tArm(LK, [65, 47], [72, 64], [63, 55]), { mouth: 'o' }),
-  // chiude la finestra: finestra scorrevole; Giulia spinge il vetro verso destra e copre il panorama (freccia →)
-  close: (LK) => '<rect x="60" y="10" width="36" height="52" rx="1.5" fill="#dfe4ea"/>' + vView(63, 13, 30, 46, true) +
-    '<rect x="63" y="13" width="18" height="46" fill="#c8ced6"/><rect x="65" y="15" width="14" height="42" fill="#9fbcd0"/><path d="M65 15 h8 l-8 12z M79 33 v10 l-10 14 h-4z" fill="#eef4f8" opacity=".6"/>' +
-    '<rect x="79" y="31" width="1.6" height="8" rx=".8" fill="#8d93a3"/><rect x="58" y="62" width="40" height="4" fill="#c8ced6"/>' +
-    V_PERSON(LK, tArm(LK, ...DOWN_L) + tArm(LK, [65, 47], [76, 56], [88, 44]), null, -16) +
-    vArrow([66, 22], [76, 16], [89, 22]),
+  // chiude la finestra: finestra scorrevole nel muro; si apre da destra verso sinistra, quindi per chiuderla
+  // Isa tira il vetro verso destra e copre il panorama (freccia →). Isa è a destra.
+  close: (LK) => '<rect x="2" y="4" width="66" height="88" fill="#e3d8c1"/><rect x="26" y="16" width="36" height="40" fill="#dfe4ea"/>' + vView(28, 18, 32, 36, true) +
+    '<rect x="2" y="14" width="66" height="2.4" fill="#8d93a3"/><rect x="2" y="55.6" width="66" height="2.4" fill="#8d93a3"/><rect x="24" y="58" width="40" height="3" fill="#c8ced6"/>' +
+    '<rect x="8" y="16.4" width="32" height="39.2" fill="#c8ced6"/><rect x="10" y="18.4" width="28" height="35.2" fill="#9fbcd0"/><path d="M10 18.4 h12 l-12 14z M38 30 v10 l-12 13.6 h-6z" fill="#eef4f8" opacity=".6"/>' +
+    '<rect x="36" y="32" width="1.8" height="9" rx=".9" fill="#5d6577"/>' +
+    V_PERSON(LK, tArm(LK, [35, 47], [27, 56], [15, 32]) + tArm(LK, ...DOWN_R), null, 23) +
+    vArrow([14, 70], [26, 76], [40, 70]),
   // telefona: il telefono all'orecchio, parla
   phone: (LK) => V_PERSON(LK, tArm(LK, ...DOWN_L) + tArm(LK, [65, 47], [74, 58], [62, 30]) +
     '<g transform="rotate(14 62 24)"><rect x="58" y="13" width="9" height="20" rx="2" fill="#2c3e66" stroke="#b9bdc8" stroke-width="1.2"/><rect x="59.6" y="16" width="5.8" height="13" fill="#3a4f7e"/></g>' +
