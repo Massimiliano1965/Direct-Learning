@@ -223,7 +223,10 @@ const LESSONS = [
     known: ['nv_read', 'nv_eat', 'nv_drink', 'nv_phone', 'nv_write'] },
   // capitolo 9: «Complemento indiretto: gli, le» — Che cosa dà Max a Isa? Le dà il libro. (dare_it.js)
   { id: 'l55', title: 'Lezione 55', level: 2, da: true, hilite: ['gli', 'le'],
-    known: ['da_m_book', 'da_f_pen', 'da_m_key', 'da_f_cup', 'da_m_phone', 'da_f_umbrella'] }
+    known: ['da_m_book', 'da_f_pen', 'da_m_key', 'da_f_cup', 'da_m_phone', 'da_f_umbrella'] },
+  // capitolo 9: «Qualcuno / nessuno, qualche cosa / niente» — Chi c'è nella stanza? Non c'è nessuno. (qualc_it.js)
+  { id: 'l56', title: 'Lezione 56', level: 2, qn: true, hilite: ['qualcuno', 'nessuno', 'qualche cosa', 'niente'],
+    known: ['qn_p_m', 'qn_t_book', 'qn_p_0', 'qn_t_0', 'qn_p_f', 'qn_t_cup'] }
 ];
 
 // Quattro insegnanti, dal più rigido al più indulgente. gender = voce maschile o femminile.

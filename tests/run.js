@@ -6,7 +6,7 @@ const vm = require('vm');
 
 const ctx = { console: console };
 vm.createContext(ctx);
-['course.js', 'data.js', 'logic.js', 'colors_it.js', 'numbers_it.js', 'geo_fig.js', 'geo_it.js', 'poss_it.js', 'size_it.js', 'third_it.js', 'nat_it.js', 'essere_it.js', 'altro_it.js', 'prep_it.js', 'anche_it.js', 'ora_it.js', 'appt_it.js', 'gender_it.js', 'verbs_it.js', 'perche_it.js', 'pron_it.js', 'sum_it.js', 'km_it.js', 'fam_it.js', 'avere_it.js', 'gen_it.js', 'plur_it.js', 'cece_it.js', 'costa_it.js', 'det_it.js', 'irr_it.js', 'test_it.js', 'contr_it.js', 'stare_it.js', 'celha_it.js', 'imper_it.js', 'qual_it.js', 'ne_it.js', 'passato_it.js', 'lho_it.js', 'ci_it.js', 'saluti_it.js', 'lui_it.js', 'giorni_it.js', 'mesi_it.js', 'suoi_it.js', 'loro_it.js', 'noi_it.js', 'dare_it.js', 'ripasso_it.js', 'ui_lang.js'].forEach(f => {
+['course.js', 'data.js', 'logic.js', 'colors_it.js', 'numbers_it.js', 'geo_fig.js', 'geo_it.js', 'poss_it.js', 'size_it.js', 'third_it.js', 'nat_it.js', 'essere_it.js', 'altro_it.js', 'prep_it.js', 'anche_it.js', 'ora_it.js', 'appt_it.js', 'gender_it.js', 'verbs_it.js', 'perche_it.js', 'pron_it.js', 'sum_it.js', 'km_it.js', 'fam_it.js', 'avere_it.js', 'gen_it.js', 'plur_it.js', 'cece_it.js', 'costa_it.js', 'det_it.js', 'irr_it.js', 'test_it.js', 'contr_it.js', 'stare_it.js', 'celha_it.js', 'imper_it.js', 'qual_it.js', 'ne_it.js', 'passato_it.js', 'lho_it.js', 'ci_it.js', 'saluti_it.js', 'lui_it.js', 'giorni_it.js', 'mesi_it.js', 'suoi_it.js', 'loro_it.js', 'noi_it.js', 'dare_it.js', 'qualc_it.js', 'ripasso_it.js', 'ui_lang.js'].forEach(f => {
   vm.runInContext(fs.readFileSync(path.join(__dirname, '..', 'www', 'js', f), 'utf8'), ctx, { filename: f });
 });
 const run = (code) => vm.runInContext(code, ctx);
@@ -14,7 +14,7 @@ const evaluate = run('evaluate');
 const evaluateAll = run('evaluateAll');
 const buildSteps = run('buildSteps');
 const answerSteps = run('answerSteps');
-const LESSONS = run('LESSONS').filter(l => !l.colors && !l.numbers && !l.geo && !l.poss && !l.size && !l.third && !l.nat && !l.ess && !l.altro && !l.prep && !l.anche && !l.ora && !l.appt && !l.verbs && !l.purp && !l.pron && !l.sum && !l.km && !l.fam && !l.ea && !l.pl && !l.ce && !l.co && !l.dt && !l.ct && !l.sta && !l.cl && !l.imp && !l.qd && !l.ne && !l.ps && !l.lh && !l.cv && !l.sa && !l.lm && !l.gd && !l.ms && !l.sp && !l.lo && !l.nv && !l.da && !l.test);   // lezioni con gli oggetti (colori e numeri hanno i loro test)
+const LESSONS = run('LESSONS').filter(l => !l.colors && !l.numbers && !l.geo && !l.poss && !l.size && !l.third && !l.nat && !l.ess && !l.altro && !l.prep && !l.anche && !l.ora && !l.appt && !l.verbs && !l.purp && !l.pron && !l.sum && !l.km && !l.fam && !l.ea && !l.pl && !l.ce && !l.co && !l.dt && !l.ct && !l.sta && !l.cl && !l.imp && !l.qd && !l.ne && !l.ps && !l.lh && !l.cv && !l.sa && !l.lm && !l.gd && !l.ms && !l.sp && !l.lo && !l.nv && !l.da && !l.qn && !l.test);   // lezioni con gli oggetti (colori e numeri hanno i loro test)
 const NUM_LESSONS = run('LESSONS').filter(l => l.numbers);
 const COLOR_LESSONS = run('LESSONS').filter(l => l.colors);
 const ITEMS = run('ITEMS');
@@ -1383,6 +1383,29 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
   const st = buildSteps(l), models = st.filter(s => s.model && s.type !== 'reveal');
   check('lezione 55: risposte modello giuste', models.every(s => evaluate(s, s.model).ok));
   check('lezione 55: ripetizioni giuste', models.every(s => buildDrill(s, 5, s.reviewItems || []).every(d => evaluate(d, d.model).ok)));
+}
+
+// Lezione 56: «qualcuno / nessuno, qualche cosa / niente»
+{
+  const SX = run('SQN'), evalAsk = run('evalAsk'), answerAsk = run('answerAsk'), buildDrill = run('buildDrill'), ok = (st, t) => evaluate(st, t).ok;
+  const l = run('LESSONS').find(l => l.id === 'l56');
+  const P = run('p3People()'), M = run('TEACHERS')[P.m].name, F = run('TEACHERS')[P.f].name;
+  check('lezione 56 c\'è', !!l && l.qn && l.level === 2);
+  check('figure', l.known.every(k => FIG[k] && FIG[k].indexOf('<svg') === 0 && FIG[k].indexOf(' id=') === -1));
+  check('frasi', SX.present('qn_p_m').prompt === 'Nella stanza c\'è qualcuno. C\'è ' + M + '.' && SX.present('qn_t_0').prompt === 'Sul tavolo non c\'è niente.' &&
+    SX.key('qn_p_0').prompt === 'Chi c\'è nella stanza?' && SX.key('qn_p_0').model === 'Non c\'è nessuno.' && SX.yes('qn_t_book').model === 'Sì, c\'è qualche cosa.');
+  check('giusto', ok(SX.key('qn_p_f'), 'C\'è ' + F + '.') && ok(SX.key('qn_t_0'), 'Non c\'è niente.') && ok(SX.key('qn_t_cup'), 'C\'è una tazza.') &&
+    ok(SX.yes('qn_t_book'), 'Sì, c\'è qualcosa.') && ok(SX.yes('qn_p_0'), 'No, non c\'è nessuno.') && ok(SX.yes('qn_p_m'), 'Sì, c\'è ' + M + '.'));
+  const n = SX.neg('qn_p_m');
+  check('giusto: il no', ok(n, n.model) && ok(n, n.model + ' ' + n.complete));
+  check('sbagliato: senza non, non c\'è qualcuno, nessuno/niente scambiati, la persona, la cosa', !ok(SX.key('qn_p_0'), 'C\'è nessuno.') &&
+    !ok(SX.yes('qn_p_0'), 'No, non c\'è qualcuno.') && !ok(SX.key('qn_t_0'), 'Non c\'è nessuno.') && !ok(SX.key('qn_p_0'), 'Non c\'è niente.') &&
+    !ok(SX.key('qn_p_m'), 'C\'è ' + F + '.') && !ok(SX.key('qn_t_book'), 'C\'è una tazza.') && !ok(SX.key('qn_t_book'), 'C\'è una libro.') && !ok(SX.key('qn_p_m'), 'Non c\'è nessuno.'));
+  check('allievo', evalAsk('qn_p_m', 'Chi c\'è nella stanza?').kind === 'what' && evalAsk('qn_p_0', 'C\'è qualcuno nella stanza?').kind === 'no' &&
+    evalAsk('qn_t_book', 'C\'è un libro sul tavolo?').kind === 'yes' && answerAsk('qn_p_0', { kind: 'no' }) === 'No, non c\'è nessuno.');
+  const st = buildSteps(l), models = st.filter(s => s.model && s.type !== 'reveal');
+  check('lezione 56: risposte modello giuste', models.every(s => evaluate(s, s.model).ok));
+  check('lezione 56: ripetizioni giuste', models.every(s => buildDrill(s, 5, s.reviewItems || []).every(d => evaluate(d, d.model).ok)));
 }
 
 // Dal livello 2 le lezioni sono più veloci (Massi): una sola presentazione, 4 sì/no mescolati, sempre 7 domande dell'allievo
