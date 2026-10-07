@@ -127,7 +127,11 @@ const LESSONS = [
     known: ['v_m_read', 'v_m_open', 'v_m_eat', 'v_f_drink', 'v_f_close', 'v_f_phone'] },
   // capitolo 4: «Perché? Per…» — Max e Isa prendono una cosa; nella nuvoletta si vede perché: «Per leggere.» (perche_it.js)
   { id: 'l24', title: 'Lezione 24', purp: true, hilite: ['perché', 'per'],
-    known: ['pp_m_book', 'pp_f_phone', 'pp_m_orange', 'pp_f_soda', 'pp_m_key', 'pp_f_pen'] }
+    known: ['pp_m_book', 'pp_f_phone', 'pp_m_orange', 'pp_f_soda', 'pp_m_key', 'pp_f_pen'] },
+  // capitolo 4: «Lo prendo — la prendo», «Non la chiude!» — «Max legge il libro? Sì, lo legge.» (pron_it.js)
+  // gender: come nella lezione 22, -o azzurra e -a rosa nelle cose e in «lo» / «la»
+  { id: 'l25', title: 'Lezione 25', pron: true, gender: true,
+    known: ['ld_m_book', 'ld_f_phone', 'ld_m_notebook', 'ld_m_orange', 'ld_f_soda', 'ld_f_window'] }
 ];
 
 // Quattro insegnanti, dal più rigido al più indulgente. gender = voce maschile o femminile.

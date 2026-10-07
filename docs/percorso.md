@@ -55,7 +55,7 @@ Durante il test l'insegnante non corregge; contano solo gli errori, mostrati all
 20. **Il, la, o l'?**
 21. **Verbi al presente**: «Cosa fa…?» (vari verbi) — *fatto: Lezione 23 (legge, apre, mangia, beve, chiude, telefona)*
 22. **Perché? Per…** — *fatto: Lezione 24 (per leggere, per bere, per aprire la porta…)*
-23. **Complemento diretto**: «Lo prendo — la prendo», «Non la chiude!»
+23. **Complemento diretto**: «Lo prendo — la prendo», «Non la chiude!» — *fatto: Lezione 25 (lo legge, la chiude, non lo prende…)*
 
 ## Capitolo 5
 
