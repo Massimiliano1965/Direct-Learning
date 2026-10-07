@@ -272,5 +272,7 @@ html[data-level] #stage { background: linear-gradient(180deg, var(--surface2), v
 .lesson-btn.lv4 { border-left: 4px solid #d49abd; }
 
 /* parole che vanno bene tutte e due: in oro, si alternano (synWrap in app.js) */
-#prompt-text .syn { display: inline-block; text-align: center; color: #e6c77e; transition: opacity .25s; }
+#prompt-text .syn { text-align: center; color: #e6c77e; transition: opacity .25s; }
 #prompt-text .syn.fade { opacity: 0; }
+#prompt-text .syn[style] { display: inline-block; }
+#prompt-text .hl { text-decoration: underline; text-decoration-color: #c9a45c; text-decoration-thickness: 2px; text-underline-offset: 5px; }

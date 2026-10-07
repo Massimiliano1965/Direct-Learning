@@ -668,7 +668,7 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
   check('lezione 20 c\'è', !!l20 && l20.ora);
   check('figure', l20.known.every(k => FIG[k] && FIG[k].indexOf('<svg') === 0 && FIG[k].indexOf(' id=') === -1));
   check('frasi', SO.present('h1').prompt === 'È l\'una.' && SO.present('h3').prompt === 'Sono le tre.' && SO.yes('h10').model === 'Sì, sono le dieci.' &&
-    SO.key('h5').prompt === 'Che ora è?');
+    /^Che (ora è|ore sono)\?$/.test(SO.key('h5').prompt));
   check('giusto (anche cifre e «Che ore sono?»)', ok(SO.key('h3'), 'Sono le tre.') && ok(SO.key('h3'), 'Sono le 3.') && ok(SO.key('h1'), 'È l\'una.') &&
     ok(SO.yes('h8'), 'Sì, sono le otto.') && ok(SO.askQ('h1'), 'Che ore sono?') && ok(SO.askQ('h1'), 'Che ora è?'));
   const n = SO.neg('h3');
@@ -680,7 +680,11 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
   const st = buildSteps(l20), models = st.filter(s => s.model && s.type !== 'reveal');
   check('lezione 20: risposte modello giuste', models.every(s => evaluate(s, s.model).ok));
   check('lezione 20: ripetizioni giuste', models.every(s => buildDrill(s, 5, []).every(d => evaluate(d, d.model).ok)));
-  check('lezione 20: domanda «o» con l\'una detta bene', [1, 2, 3, 4, 5, 6, 7, 8].map(() => SO.alt('h1').prompt).every(p => /^È l'una o sono le [a-z]+\?$|^Sono le [a-z]+ o è l'una\?$/.test(p)));
+  check('mezzogiorno e mezzanotte', SO.present('h12d').prompt === 'È mezzogiorno.' && SO.present('h12n').prompt === 'È mezzanotte.' &&
+    ok(SO.key('h12d'), 'È mezzogiorno.') && !ok(SO.key('h12d'), 'Sono mezzogiorno.') && !ok(SO.key('h12d'), 'È mezzanotte.') && !ok(SO.key('h12n'), 'È il mezzanotte.'));
+  check('«Che ore sono?» anche dall\'insegnante', [...Array(30)].some(() => SO.key('h3').prompt === 'Che ore sono?') && SO.askQ('h3', 'Che ore sono?').model === 'Che ore sono?');
+  check('la lezione mette in evidenza «è» e «sono»', l20.hilite.join() === 'è,sono');
+  check('lezione 20: domanda «o» con l\'una detta bene', [1, 2, 3, 4, 5, 6, 7, 8].map(() => SO.alt('h1').prompt).every(p => /^È l'una o (sono le [a-z]+|mezzogiorno|mezzanotte)\?$|^Sono le [a-z]+ o è l'una\?$|^È (mezzogiorno|mezzanotte) o l'una\?$/.test(p)));
 }
 
 // Lingua dello studente: ogni scritta c'è in tutte le lingue, con gli stessi segnaposto {…}

@@ -427,21 +427,28 @@ function setPrompt(text) { $('prompt-text').textContent = DB.settings.showText ?
    Nella frase scritta la parola, in oro, si alterna con l'altra ogni 2 secondi: si vede che sono uguali. */
 function synWrap() {
   const el = $('prompt-text'), pairs = COURSE.synonyms || [];
-  if (!pairs.length || !el.textContent) return;
+  // parole da mettere in evidenza in questa lezione (es. «è» e «sono» nella lezione 20)
+  const hil = (L && L.lesson && L.lesson.hilite) || [];
+  if ((!pairs.length && !hil.length) || !el.textContent) return;
   const esc = (t) => t.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  const escRe = (t) => t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   const other = {};
   pairs.forEach(([a, b]) => { other[a] = b; other[b] = a; });
-  const re = new RegExp('(^|[^\\p{L}])(' + Object.keys(other).join('|') + ')(?![\\p{L}])', 'giu');
+  const keys = Object.keys(other).sort((a, b) => b.length - a.length).concat(hil);
+  const re = new RegExp('(^|[^\\p{L}])(' + keys.map(escRe).join('|') + ')(?![\\p{L}])', 'giu');
   const txt = el.textContent;
   if (!re.test(txt)) return;
   re.lastIndex = 0;
   el.innerHTML = esc(txt).replace(re, (m, pre, w) => {
-    const alt = other[w.toLowerCase()], cap = w.charAt(0) !== w.charAt(0).toLowerCase();
+    const alt = other[w.toLowerCase()];
+    if (!alt) return pre + '<span class="hl">' + w + '</span>';
+    const cap = w.charAt(0) !== w.charAt(0).toLowerCase();
     const b = cap ? alt.charAt(0).toUpperCase() + alt.slice(1) : alt;
     return pre + '<span class="syn" data-a="' + w + '" data-b="' + b + '">' + w + '</span>';
   });
   // larghezza fissa (la più lunga delle due parole): la frase non salta quando la parola cambia
   el.querySelectorAll('.syn').forEach(sp => {
+    if (sp.dataset.a.indexOf(' ') !== -1) return;   // le frasi («che ora è» / «che ore sono») vanno a capo da sole
     const wa = sp.offsetWidth; sp.textContent = sp.dataset.b; const wb = sp.offsetWidth; sp.textContent = sp.dataset.a;
     sp.style.minWidth = Math.max(wa, wb) + 'px';
   });

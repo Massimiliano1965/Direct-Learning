@@ -7,25 +7,31 @@
      Sono le cinque?                        → No, non sono le cinque.
      È l'una? (sono le tre)                 → No, non è l'una.
      Sono le due o le tre?                  → Sono le tre.
-     Che ora è?                             → Sono le tre.   (va bene anche «Che ore sono?»)
-   Il punto: «è l'una» (una sola) ma «sono le due, le tre…» (più ore).
+     Che ora è? / Che ore sono?             → Sono le tre.   (le due domande vanno bene tutte e due: si alternano)
+     È mezzogiorno. È mezzanotte.           (orologio sulle 12 con il sole o con la luna)
+   Il punto: «è l'una, è mezzogiorno, è mezzanotte» (singolare) ma «sono le due, le tre…» (plurale):
+   nella frase scritta «è» e «sono» sono in evidenza (lesson.hilite).
    Errori: «è le tre», «sono l'una», «la una», l'ora sbagliata. Il microfono scrive le cifre: «sono le 3» va bene.
    ===================================================================== */
 
-const HOURS = { h1: 1, h2: 2, h3: 3, h5: 5, h8: 8, h10: 10 };
+const HOURS = { h1: 1, h2: 2, h3: 3, h5: 5, h8: 8, h10: 10, h12d: 'md', h12n: 'mn' };   // md = mezzogiorno, mn = mezzanotte
 const isHour = (X) => typeof X === 'string' && !!HOURS[X];
 const hNum = (X) => HOURS[X];
+const H_ONE = { 1: 'l\'una', md: 'mezzogiorno', mn: 'mezzanotte' };   // le ore al singolare: «è …»
 const hWord = (n) => n === 1 ? 'una' : NUMS['n' + n];
-const hIs = (n) => n === 1 ? 'è l\'una' : 'sono le ' + hWord(n);              // «è l'una», «sono le tre»
-const hIsNot = (n) => n === 1 ? 'non è l\'una' : 'non sono le ' + hWord(n);
+const hIs = (n) => H_ONE[n] ? 'è ' + H_ONE[n] : 'sono le ' + hWord(n);              // «è l'una», «è mezzogiorno», «sono le tre»
+const hIsNot = (n) => H_ONE[n] ? 'non è ' + H_ONE[n] : 'non sono le ' + hWord(n);
 const hCap = (s) => s.charAt(0).toUpperCase() + s.slice(1);
 const hSay = (X) => hCap(hIs(hNum(X))) + '.';
-const QH = 'Che ora è?';
-const hOther = (X) => pick([1, 2, 3, 4, 5, 6, 7, 8, 9, 10].filter(n => n !== hNum(X)));
+const QH = 'Che ora è?', QH2 = 'Che ore sono?';
+const hQ = () => Math.random() < 0.35 ? QH2 : QH;   // la domanda: di solito «Che ora è?», a volte «Che ore sono?»
+// un'altra ora; sull'orologio delle 12 spesso l'altra metà del giorno («È mezzanotte?» col sole)
+const hOther = (X) => { const n = hNum(X); if ((n === 'md' || n === 'mn') && Math.random() < 0.6) return n === 'md' ? 'mn' : 'md'; return pick([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 'md', 'mn'].filter(m => m !== n)); };
 
 /* ---------- Figure: orologio sobrio (blu e oro), lancetta delle ore sull'ora, minuti sulle 12 ---------- */
 function clockFig(n) {
-  const a = (n % 12) * 30 * Math.PI / 180, hx = 50 + Math.sin(a) * 20, hy = 48 - Math.cos(a) * 20;
+  const h = typeof n === 'number' ? n : 12;
+  const a = (h % 12) * 30 * Math.PI / 180, hx = 50 + Math.sin(a) * 20, hy = 48 - Math.cos(a) * 20;
   let ticks = '';
   for (let i = 0; i < 12; i++) {
     const b = i * 30 * Math.PI / 180, r1 = i % 3 ? 32 : 29, x1 = 50 + Math.sin(b) * r1, y1 = 48 - Math.cos(b) * r1, x2 = 50 + Math.sin(b) * 35, y2 = 48 - Math.cos(b) * 35;
@@ -34,6 +40,8 @@ function clockFig(n) {
   return FLAT('<circle cx="50" cy="48" r="42" fill="#c9a45c"/><circle cx="50" cy="48" r="38" fill="#f3eee2"/>' + ticks +
     '<path d="M50 48 V18" stroke="#1d2638" stroke-width="2.4" stroke-linecap="round"/>' +
     '<path d="M50 48 L' + hx.toFixed(1) + ' ' + hy.toFixed(1) + '" stroke="#1d2638" stroke-width="4.4" stroke-linecap="round"/>' +
+    (n === 'md' ? '<circle cx="50" cy="66" r="5" fill="#e8a33a"/>' + [0, 45, 90, 135, 180, 225, 270, 315].map(d => { const r = d * Math.PI / 180; return '<path d="M' + (50 + Math.cos(r) * 7).toFixed(1) + ' ' + (66 + Math.sin(r) * 7).toFixed(1) + ' L' + (50 + Math.cos(r) * 9.5).toFixed(1) + ' ' + (66 + Math.sin(r) * 9.5).toFixed(1) + '" stroke="#e8a33a" stroke-width="1.6" stroke-linecap="round"/>'; }).join('') : '') +
+    (n === 'mn' ? '<path d="M53 59 a8 8 0 1 0 0 14 a6.5 6.5 0 1 1 0 -14z" fill="#2c3e66"/><circle cx="58" cy="61" r=".9" fill="#2c3e66"/><circle cx="43" cy="60" r=".7" fill="#2c3e66"/>' : '') +
     '<circle cx="50" cy="48" r="3.2" fill="#a3263a"/>', 32);
 }
 Object.keys(HOURS).forEach(X => { FIG[X] = clockFig(HOURS[X]); });
@@ -46,12 +54,13 @@ const SO = {
   alt: (X) => {
     const n = hNum(X), o = hOther(X), ord = Math.random() < 0.5 ? [n, o] : [o, n];
     // «Sono le due o le tre?»; con l'una: «È l'una o sono le due?»
-    const q = ord.indexOf(1) === -1 ? 'Sono le ' + hWord(ord[0]) + ' o le ' + hWord(ord[1]) + '?' : hCap(hIs(ord[0])) + ' o ' + hIs(ord[1]) + '?';
+    const q = !H_ONE[ord[0]] && !H_ONE[ord[1]] ? 'Sono le ' + hWord(ord[0]) + ' o le ' + hWord(ord[1]) + '?'
+      : H_ONE[ord[0]] && H_ONE[ord[1]] ? 'È ' + H_ONE[ord[0]] + ' o ' + H_ONE[ord[1]] + '?' : hCap(hIs(ord[0])) + ' o ' + hIs(ord[1]) + '?';
     return { type: 'alt', ora: true, show: X, prompt: q, model: hSay(X) };
   },
-  key: (X) => ({ type: 'key', ora: true, show: X, prompt: QH, model: hSay(X) }),
-  reveal: (X) => ({ type: 'reveal', ora: true, show: X, prompt: QH + ' ' + hSay(X), model: '' }),
-  askQ: (X) => ({ type: 'echo', check: 'question', ora: true, show: X, prompt: QH, model: QH })
+  key: (X) => ({ type: 'key', ora: true, show: X, prompt: hQ(), model: hSay(X) }),
+  reveal: (X, q) => ({ type: 'reveal', ora: true, show: X, prompt: (q || QH) + ' ' + hSay(X), model: '' }),
+  askQ: (X, q) => ({ type: 'echo', check: 'question', ora: true, show: X, prompt: q || QH, model: q || QH })
 };
 
 /* ---------- Capire le frasi ----------
@@ -60,6 +69,9 @@ const oraNorm = (text) => numNorm(text);
 function oraStatements(s) {
   const out = [], re = / (non )?(e|sono) (l|le|la|lo|il) ([a-z]+)(?= )/g;
   let m;
+  // «è mezzogiorno», «è mezzanotte» (senza articolo; «sono mezzogiorno» è sbagliato)
+  const re2 = / (non )?(e|sono) (?:(il|la|lo|l|le) )?(mezzogiorno|mezzanotte)(?= )/g;
+  while ((m = re2.exec(s)) !== null) out.push({ n: m[4] === 'mezzogiorno' ? 'md' : 'mn', neg: !!m[1], good: m[2] === 'e' && !m[3] });
   while ((m = re.exec(s)) !== null) {
     const n = m[4] === 'una' || m[4] === 'uno' ? 1 : (NUM_KEY[m[4]] ? +NUM_KEY[m[4]].slice(1) : null);
     if (!n) continue;
@@ -123,9 +135,10 @@ function buildOraSteps(lesson) {
   let prev = null;
   for (let i = 0; i < 6; i++) { const X = pick(K.filter(x => x !== prev)); add(Math.random() < 0.5 ? SO.yes(X) : SO.neg(X), 'yesno'); prev = X; }
   shuffle(K).slice(0, 4).forEach(x => add(SO.alt(x), 'alt'));
-  add(SO.reveal(K[0]), 'reveal').pause = 1200;
-  add(SO.reveal(K[K.length - 1]), 'reveal');
-  for (let i = 0; i < 2; i++) add(SO.askQ(K[0]), 'askq');
+  add(SO.reveal(K[0], QH), 'reveal').pause = 1200;
+  add(SO.reveal(K[K.length - 1], QH2), 'reveal');
+  add(SO.askQ(K[0], QH), 'askq');
+  add(SO.askQ(K[0], QH2), 'askq');
   for (let r = 0; r < 2; r++) shuffle(K).forEach(x => add(SO.key(x), 'key'));
   for (let i = 0; i < ASK_EARLY; i++) { const s = add({ type: 'ask', ora: true, prompt: '', model: '' }, 'askfirst'); if (!i) s.intro = true; }
   prev = null;
