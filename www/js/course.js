@@ -205,7 +205,10 @@ const LESSONS = [
     known: ['sa_m_giorno', 'sa_f_sera', 'sa_m_notte', 'sa_f_arriv', 'sa_m_grazie', 'sa_f_giorno'] },
   // capitolo 7: «Lui e lei» — il cuoco / la cuoca, il cameriere / la cameriera, il professore / la professoressa: «Chi è lei?» (lui_it.js)
   { id: 'l49', title: 'Lezione 49', level: 2, lm: true, gender: true,
-    known: ['lm_m_cuoco', 'lm_f_cuoco', 'lm_m_cameriere', 'lm_f_cameriere', 'lm_m_professore', 'lm_f_professore'] }
+    known: ['lm_m_cuoco', 'lm_f_cuoco', 'lm_m_cameriere', 'lm_f_cameriere', 'lm_m_professore', 'lm_f_professore'] },
+  // capitolo 8: «Calendario: i giorni» — la settimana L M M G V S D, oggi in oro: «Che giorno è oggi? Oggi è martedì.» (giorni_it.js)
+  { id: 'l50', title: 'Lezione 50', level: 2, gd: true,
+    known: ['gd_lun', 'gd_mar', 'gd_mer', 'gd_gio', 'gd_ven', 'gd_sab', 'gd_dom'] }
 ];
 
 // Quattro insegnanti, dal più rigido al più indulgente. gender = voce maschile o femminile.
