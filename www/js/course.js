@@ -196,7 +196,10 @@ const LESSONS = [
     known: ['ps_m_read', 'ps_f_open', 'ps_m_eat', 'ps_f_drink', 'ps_m_close', 'ps_f_phone'] },
   // capitolo 7: «L'ho letto — l'ho letta» — Max ha letto il libro? Sì, l'ha letto. Isa ha chiuso la finestra? Sì, l'ha chiusa. (lho_it.js)
   { id: 'l46', title: 'Lezione 46', level: 2, lh: true, gender: true, hilite: ['l\'ha'],
-    known: ['lh_m_book', 'lh_f_window', 'lh_m_orange', 'lh_f_phone', 'lh_f_soda', 'lh_m_notebook'] }
+    known: ['lh_m_book', 'lh_f_window', 'lh_m_orange', 'lh_f_phone', 'lh_f_soda', 'lh_m_notebook'] },
+  // capitolo 7: «Ci vado, ci sono» — Max va a Roma? Sì, ci va. Isa è a Parigi? Sì, c'è. (ci_it.js)
+  { id: 'l47', title: 'Lezione 47', level: 2, cv: true, hilite: ['ci va', 'c\'è'],
+    known: ['cv_m_roma_va', 'cv_f_parigi_e', 'cv_f_londra_va', 'cv_m_newyork_e', 'cv_m_parigi_va', 'cv_f_roma_e'] }
 ];
 
 // Quattro insegnanti, dal più rigido al più indulgente. gender = voce maschile o femminile.
