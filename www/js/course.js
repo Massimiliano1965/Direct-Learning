@@ -220,7 +220,10 @@ const LESSONS = [
     known: ['lo_read', 'lo_eat', 'lo_drink', 'lo_phone', 'lo_write'] },
   // capitolo 8: «Verbi al presente: noi e voi» — Che cosa facciamo io e Max? Voi leggete un libro. (noi_it.js)
   { id: 'l54', title: 'Lezione 54', level: 2, nv: true, hilite: ['leggiamo', 'mangiamo', 'beviamo', 'telefoniamo', 'scriviamo', 'leggete', 'mangiate', 'bevete', 'telefonate', 'scrivete'],
-    known: ['nv_read', 'nv_eat', 'nv_drink', 'nv_phone', 'nv_write'] }
+    known: ['nv_read', 'nv_eat', 'nv_drink', 'nv_phone', 'nv_write'] },
+  // capitolo 9: «Complemento indiretto: gli, le» — Che cosa dà Max a Isa? Le dà il libro. (dare_it.js)
+  { id: 'l55', title: 'Lezione 55', level: 2, da: true, hilite: ['gli', 'le'],
+    known: ['da_m_book', 'da_f_pen', 'da_m_key', 'da_f_cup', 'da_m_phone', 'da_f_umbrella'] }
 ];
 
 // Quattro insegnanti, dal più rigido al più indulgente. gender = voce maschile o femminile.
