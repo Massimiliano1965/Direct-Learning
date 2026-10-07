@@ -34,13 +34,8 @@ const apOther = (X) => pick([1, 2, 3, 4, 5, 6, 7, 8, 9, 10].filter(n => n !== AP
 
 /* ---------- Figure: l'impegno con il suo orologio piccolo ---------- */
 const APPT_ICON = {
-  // aereo di linea visto di lato: fusoliera bianca, finestrini, ala, motore, coda blu e oro
-  a_plane: '<path d="M8 50 q0 -8 10 -8 h58 q14 0 20 8 q-6 8 -20 8 h-58 q-10 0 -10 -8z" fill="#eef1f6"/>' +
-    '<path d="M8 50 h88" stroke="#2c3e66" stroke-width="2.2"/><path d="M84 44 q6 1 9 4 h-9z" fill="#2c3e66"/>' +
-    '<path d="M10 43 l-2 -24 h8 l16 23z" fill="#2c3e66"/><path d="M11 30 l-1 -8 h4 l6 9z" fill="#c9a45c"/><path d="M14 48 l-8 4 h12z" fill="#2c3e66"/>' +
-    [28, 34, 40, 46, 52, 58, 64, 70].map(x => '<rect x="' + x + '" y="45" width="3" height="3" rx="1" fill="#2c3e66"/>').join('') +
-    '<path d="M38 56 l26 0 l-22 22 h-8 l10 -22z" fill="#d6dbe5"/><path d="M38 56 l26 0" stroke="#b9c0cd" stroke-width="1"/>' +
-    '<rect x="44" y="61" width="13" height="6" rx="3" fill="#9aa6bd"/><path d="M56 62 h2 v4 h-2z" fill="#2c3e66"/>',
+  // aereo in volo che sale, visto dall'alto, con le scie (scelto da Massi)
+  a_plane: '<g transform="rotate(-30 50 50)"><path d="M14 50 q0 -4 6 -4 h56 q12 0 18 4 q-6 4 -18 4 h-56 q-6 0 -6 -4z" fill="#eef1f6"/><path d="M44 46 l-6 -30 h7 l20 30z M44 54 l-6 30 h7 l20 -30z" fill="#d6dbe5"/><path d="M16 46 l-6 -12 h5 l9 12z M16 54 l-6 12 h5 l9 -12z" fill="#2c3e66"/><rect x="44" y="33" width="9" height="4" rx="2" fill="#9aa6bd"/><rect x="44" y="63" width="9" height="4" rx="2" fill="#9aa6bd"/><path d="M84 47 q6 1 8 3 q-2 2 -8 3z" fill="#2c3e66"/><path d="M10 50 h-8" stroke="#2c3e66" stroke-width="1"/></g><path d="M8 88 l22 -13 M14 94 l22 -13" stroke="#9fbcd0" stroke-width="1.6" stroke-linecap="round" opacity=".7"/>',
   // riunione: tavolo lungo con tante persone sedute intorno e il capo in piedi a capotavola (a sinistra)
   a_meeting: '<rect x="40" y="8" width="30" height="19" rx="1.5" fill="#ece4d2"/><path d="M44 22 l6 -6 l5 4 l7 -8 l5 5" fill="none" stroke="#2c3e66" stroke-width="1.8"/><rect x="54" y="27" width="2" height="5" fill="#8d93a3"/>' +
     [40, 54, 68].map(x => '<path d="M' + (x - 7) + ' 60 q0 -11 7 -11 q7 0 7 11z" fill="#4a5a7a"/><circle cx="' + x + '" cy="44" r="4.6" fill="#eab892"/><path d="M' + (x - 4.6) + ' 43 q4.6 -7 9.2 0 q-4.6 -3 -9.2 0z" fill="#3a2a20"/>').join('') +
