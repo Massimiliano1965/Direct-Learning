@@ -1,6 +1,6 @@
 'use strict';
 /* =====================================================================
-   CORSO: arabo (standard), per chi parla italiano, inglese o tedesco. Lezioni 1 e 2 (motore comune: world.js).
+   CORSO: arabo (standard), per chi parla italiano, inglese o tedesco. Lezioni 1–4 (motore comune: world.js).
      هذا كتاب.                     Questo è un libro.      (maschile: هذا «hàdha»)
      هذه طاولة.                    Questo è un tavolo.     (femminile, finisce in ة: هذه «hàdhihi»)
      هل هذا كتاب؟                  → نعم، هذا كتاب.
@@ -31,7 +31,15 @@ const ITEMS = {
   chair:  { word: 'كرسي',   f: false, acc: 'كرسيًا',  art: '', alias: [] },
   pen:    { word: 'قلم',    f: false, acc: 'قلمًا',   art: '', alias: [] },
   door:   { word: 'باب',    f: false, acc: 'بابًا',   art: '', alias: [] },
-  window: { word: 'نافذة',  f: true,  acc: 'نافذةً',  art: '', alias: ['نافذه'] }
+  window: { word: 'نافذة',  f: true,  acc: 'نافذةً',  art: '', alias: ['نافذه'] },
+  bottle:   { word: 'زجاجة', f: true,  acc: 'زجاجةً', art: '', alias: [] },
+  cup:      { word: 'كوب',   f: false, acc: 'كوبًا',  art: '', alias: [] },
+  computer: { word: 'حاسوب', f: false, acc: 'حاسوبًا', art: '', alias: [] },
+  phone:    { word: 'هاتف',  f: false, acc: 'هاتفًا', art: '', alias: [] },
+  key:      { word: 'مفتاح', f: false, acc: 'مفتاحًا', art: '', alias: [] },
+  notebook: { word: 'دفتر',  f: false, acc: 'دفترًا', art: '', alias: [] },
+  bag:      { word: 'حقيبة', f: true,  acc: 'حقيبةً', art: '', alias: [] },
+  umbrella: { word: 'مظلة',  f: true,  acc: 'مظلةً',  art: '', alias: [] }
 };
 const LESSONS = WORLD_LESSONS('a');
 const TEACHERS = worldTeachers(['Omar', 'Layla', 'Salma', 'Karim'], 'لا.');
@@ -84,5 +92,21 @@ const TR = {
   'هل':    { it: 'hal',       en: 'hal',          de: 'hal' },
   'أم':    { it: 'am',        en: 'am',           de: 'am' },
   'ما':    { it: 'mà',        en: 'maa',          de: 'má' },
+  'زجاجة': { it: 'zugiàgia',   en: 'zoo-JAA-ja',      de: 'zudschádscha' },
+  'زجاجةً': { it: 'zugiàgiatan', en: 'zoo-JAA-ja-tan', de: 'zudschádschatan' },
+  'كوب':   { it: 'kùb',        en: 'koob',            de: 'kúb' },
+  'كوبًا':  { it: 'kùban',      en: 'KOO-ban',         de: 'kúban' },
+  'حاسوب': { it: 'hasùb',      en: 'haa-SOOB',        de: 'hasúb' },
+  'حاسوبًا': { it: 'hasùban',   en: 'haa-SOO-ban',     de: 'hasúban' },
+  'هاتف':  { it: 'hàtif',      en: 'HAA-tif',         de: 'hátif' },
+  'هاتفًا': { it: 'hàtifan',    en: 'HAA-ti-fan',      de: 'hátifan' },
+  'مفتاح': { it: 'miftàh',     en: 'mif-TAAH',        de: 'miftách' },
+  'مفتاحًا': { it: 'miftàhan',  en: 'mif-TAA-han',     de: 'miftáchan' },
+  'دفتر':  { it: 'dàftar',     en: 'DAF-tar',         de: 'dáftar' },
+  'دفترًا': { it: 'dàftaran',   en: 'DAF-ta-ran',      de: 'dáftaran' },
+  'حقيبة': { it: 'haqìba',     en: 'ha-QEE-ba',       de: 'haqíba' },
+  'حقيبةً': { it: 'haqìbatan',  en: 'ha-QEE-ba-tan',   de: 'haqíbatan' },
+  'مظلة':  { it: 'midhàlla',   en: 'mi-DHAL-la',      de: 'midhálla' },
+  'مظلةً':  { it: 'midhàllatan', en: 'mi-DHAL-la-tan', de: 'midhállatan' },
   ',': { it: ',', en: ',', de: ',' }, '?': { it: '?', en: '?', de: '?' }
 };

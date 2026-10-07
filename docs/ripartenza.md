@@ -43,7 +43,7 @@ Leggi questo file prima di tutto. Poi `docs/percorso.md` (l'ordine delle lezioni
   (anche con un avviso nelle lezioni dopo se gli errori continuano). Dettagli in `docs/percorso.md`.
 
 ## Corsi di russo, arabo e cinese (iniziati il 7/10/2026, richiesta di Massi)
-- Lezioni 1 e 2 (libro, tavolo, sedia → penna; sedia, porta → finestra) con il motore comune `world.js`;
+- Lezioni 1–4 (libro, tavolo, sedia → penna; sedia, porta → finestra; bottiglia, tazza → computer; telefono, chiave, quaderno, borsa → ombrello; Massi: «solo le prime 4») con il motore comune `world.js`;
   ogni lingua in `course_ru.js`, `course_ar.js`, `course_zh.js` (COURSE, ITEMS, PH = le frasi, TR = la pronuncia);
   gli insegnanti in `teachers_world.js` (l'errore è solo «No» nella lingua del corso). Test: `node tests/run_world.js`.
 - Sotto ogni frase, più piccola, **la pronuncia scritta per la lingua dello studente** (italiano, inglese, tedesco):

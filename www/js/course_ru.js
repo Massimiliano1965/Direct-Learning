@@ -1,6 +1,6 @@
 'use strict';
 /* =====================================================================
-   CORSO: russo, per chi parla italiano, inglese o tedesco. Lezioni 1 e 2 (motore comune: world.js).
+   CORSO: russo, per chi parla italiano, inglese o tedesco. Lezioni 1–4 (motore comune: world.js).
      Это книга.                 È un libro.          (in russo niente articolo: «это» = «questo è / è»)
      Это книга?                 → Да, это книга.
      Это стол?                  → Нет, это не стол.
@@ -29,7 +29,15 @@ const ITEMS = {
   chair:  { word: 'стул',  art: '', alias: ['стула'] },
   pen:    { word: 'ручка', art: '', alias: ['ручку', 'ручки'] },
   door:   { word: 'дверь', art: '', alias: ['двери'] },
-  window: { word: 'окно',  art: '', alias: ['окна'] }
+  window: { word: 'окно',  art: '', alias: ['окна'] },
+  bottle:   { word: 'бутылка',   art: '', alias: ['бутылку', 'бутылки'] },
+  cup:      { word: 'чашка',     art: '', alias: ['чашку', 'чашки'] },
+  computer: { word: 'компьютер', art: '', alias: ['компьютера', 'компютер'] },
+  phone:    { word: 'телефон',   art: '', alias: ['телефона'] },
+  key:      { word: 'ключ',      art: '', alias: ['ключа'] },
+  notebook: { word: 'тетрадь',   art: '', alias: ['тетради'] },
+  bag:      { word: 'сумка',     art: '', alias: ['сумку', 'сумки'] },
+  umbrella: { word: 'зонт',      art: '', alias: ['зонтик', 'зонта'] }
 };
 const LESSONS = WORLD_LESSONS('r');
 const TEACHERS = worldTeachers(['Ivan', 'Olga', 'Anna', 'Pavel'], 'Нет.');
@@ -69,5 +77,13 @@ const TR = {
   'нет':   { it: 'nièt',    en: 'nyet',      de: 'njét' },
   'не':    { it: 'ni',      en: 'nee',       de: 'ni' },
   'или':   { it: 'ìli',     en: 'EE-lee',    de: 'íli' },
-  'что':   { it: 'sctò',    en: 'shto',      de: 'schtó' }
+  'что':   { it: 'sctò',    en: 'shto',      de: 'schtó' },
+  'бутылка':   { it: 'butìlka',    en: 'boo-TIL-kuh',    de: 'butílka' },
+  'чашка':     { it: 'ciàshka',    en: 'CHAHSH-kuh',     de: 'tscháschka' },
+  'компьютер': { it: 'kampiùtier', en: 'kum-PYOO-ter',   de: 'kampjútjer' },
+  'телефон':   { it: 'tilifòn',    en: 'tee-lee-FON',    de: 'tilifón' },
+  'ключ':      { it: 'kliùc\'',    en: 'klyooch',        de: 'kljútsch' },
+  'тетрадь':   { it: 'titràt\'',   en: 'tee-TRAHT',      de: 'titrát' },
+  'сумка':     { it: 'sùmka',      en: 'SOOM-kuh',       de: 'súmka' },
+  'зонт':      { it: 'zònt',       en: 'zont',           de: 'sónt' }
 };

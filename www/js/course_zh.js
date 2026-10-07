@@ -1,6 +1,6 @@
 'use strict';
 /* =====================================================================
-   CORSO: cinese (mandarino), per chi parla italiano, inglese o tedesco. Lezioni 1 e 2 (motore comune: world.js).
+   CORSO: cinese (mandarino), per chi parla italiano, inglese o tedesco. Lezioni 1–4 (motore comune: world.js).
      这是书。                    È un libro.          (senza articolo; «这是» = «questo è»)
      这是书吗？                   → 是，这是书。          (吗 alla fine = domanda sì / no)
      这是桌子吗？                 → 不，这不是桌子。
@@ -28,13 +28,21 @@ const ITEMS = {
   chair:  { word: '椅子', art: '', alias: [] },
   pen:    { word: '笔',   art: '', alias: [] },
   door:   { word: '门',   art: '', alias: [] },
-  window: { word: '窗户', art: '', alias: ['窗'] }
+  window: { word: '窗户', art: '', alias: ['窗'] },
+  bottle:   { word: '瓶子', art: '', alias: [] },
+  cup:      { word: '杯子', art: '', alias: [] },
+  computer: { word: '电脑', art: '', alias: [] },
+  phone:    { word: '手机', art: '', alias: [] },
+  key:      { word: '钥匙', art: '', alias: [] },
+  notebook: { word: '本子', art: '', alias: [] },
+  bag:      { word: '包',   art: '', alias: [] },
+  umbrella: { word: '伞',   art: '', alias: ['雨伞'] }
 };
 const LESSONS = WORLD_LESSONS('z');
 const TEACHERS = worldTeachers(['Wei', 'Li', 'Mei', 'Jun'], '不对。');
 
 // il cinese si scrive senza spazi: si divide con le parole che si conoscono (le più lunghe prima)
-const ZH_LEX = ['桌子', '椅子', '窗户', '什么', '还是', '不是', '这', '是', '书', '笔', '门', '吗', '不', '对', '窗'];
+const ZH_LEX = ['桌子', '椅子', '窗户', '瓶子', '杯子', '电脑', '手机', '钥匙', '本子', '雨伞', '什么', '还是', '不是', '这', '是', '书', '笔', '门', '包', '伞', '吗', '不', '对', '窗'];
 function zhSplit(text) {
   const t = String(text || ''), out = [];
   let i = 0;
@@ -59,7 +67,7 @@ const PH = {
   negCore: (k) => '这不是' + ITEMS[k].word,
   askCore: (k) => '这是' + ITEMS[k].word + '吗',
   yesW: ['是', '对'], noW: ['不'], orW: ['还是'],
-  tokens: (text) => zhSplit(text).filter(w => /\p{L}/u.test(w)).map(w => w === '窗' ? '窗户' : w),
+  tokens: (text) => zhSplit(text).filter(w => /\p{L}/u.test(w)).map(w => w === '窗' ? '窗户' : w === '雨伞' ? '伞' : w),
   words: (text) => zhSplit(text),
   trKey: (w) => w,
   joinTr: (parts) => parts.join(' ')
@@ -80,5 +88,13 @@ const TR = {
   '对':   { it: 'duì',       en: 'dwày',        de: 'duèi' },
   '还是': { it: 'hǎiscì',    en: 'hǎi-shì',     de: 'chǎi-schi' },
   '什么': { it: 'scénme',    en: 'shén-muh',    de: 'schén-me' },
+  '瓶子': { it: 'pínze',     en: 'píng-dzuh',   de: 'píng-dse' },
+  '杯子': { it: 'bēize',     en: 'bāy-dzuh',    de: 'bēi-dse' },
+  '电脑': { it: 'diènnǎo',   en: 'dyèn-nǎo',    de: 'diän-nǎo' },
+  '手机': { it: 'sciǒugī',   en: 'shǒ-jēe',     de: 'schǒu-dschī' },
+  '钥匙': { it: 'iàosci',    en: 'yào-shih',    de: 'jào-schi' },
+  '本子': { it: 'běnze',     en: 'běn-dzuh',    de: 'běn-dse' },
+  '包':   { it: 'bāo',       en: 'bāo',         de: 'bāo' },
+  '伞':   { it: 'sǎn',       en: 'sǎn',         de: 'sǎn' },
   '.': { it: '.', en: '.', de: '.' }, '?': { it: '?', en: '?', de: '?' }, ',': { it: ',', en: ',', de: ',' }
 };

@@ -15,7 +15,7 @@ function check(name, cond) { count++; if (!cond) { fails++; console.log('FALLITO
   const S = run('S'), PH = run('PH'), LESSONS = run('LESSONS'), FIG = run('FIG'), COURSE = run('COURSE'), ITEMS = run('ITEMS');
   const ok = (st, t) => evaluate(st, t).ok;
   const C = code + ': ';
-  check(C + 'due lezioni, figure', LESSONS.length === 2 && Object.keys(ITEMS).every(k => FIG[k]));
+  check(C + 'quattro lezioni, figure', LESSONS.length === 4 && Object.keys(ITEMS).every(k => FIG[k]));
   check(C + 'studenti italiani, inglesi, tedeschi', COURSE.students.join() === 'it,en,de');
   // tutte le frasi delle lezioni: le risposte modello sono giuste, anche nelle ripetizioni
   LESSONS.forEach(l => {

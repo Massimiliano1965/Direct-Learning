@@ -22,8 +22,11 @@ const UI_WORDS = { talk: { lang: '' }, repeat: { lang: '' }, exit: { lang: '' } 
 const MENU_LESSON = null;
 const UI_SWITCH_DAYS = 3;
 const UI_HINT_DAYS = 4;
-// Le lezioni 1 e 2, uguali per le tre lingue: libro, tavolo, sedia → penna; sedia, porta → finestra
+// Le lezioni 1–4, uguali per le tre lingue (come il corso di inglese): libro, tavolo, sedia → penna; sedia, porta → finestra;
+// bottiglia, tazza (+ ripasso) → computer; telefono, chiave, quaderno, borsa (+ ripasso) → ombrello
 const WORLD_LESSONS = (p) => [
   { id: p + '1', title: 'Lezione 1', known: ['book', 'table', 'chair'], fresh: 'pen' },
-  { id: p + '2', title: 'Lezione 2', known: ['chair', 'door'], fresh: 'window' }
+  { id: p + '2', title: 'Lezione 2', known: ['chair', 'door'], fresh: 'window' },
+  { id: p + '3', title: 'Lezione 3', known: ['bottle', 'cup'], review: ['book', 'table', 'chair', 'pen', 'door', 'window'], fresh: 'computer' },
+  { id: p + '4', title: 'Lezione 4', known: ['phone', 'key', 'notebook', 'bag'], review: ['book', 'pen', 'cup', 'chair'], fresh: 'umbrella' }
 ];
