@@ -77,7 +77,9 @@ const LESSONS = [
   // capitolo 2, esercizio 5 A: «In o a?» — il Colosseo è a Roma, in Italia; la Grande Muraglia da scoprire con «Dov'è…?»
   { id: 'l9', title: 'Lezione 9', geo: 'dove', placeHints: true, known: ['g_colosseo', 'g_eiffel', 'g_bigben', 'g_liberta'], fresh: 'g_muraglia' },
   // capitolo 2, esercizio 6: «Il mio, la Sua» — gli stessi oggetti dell'insegnante e dello studente
-  { id: 'l10', title: 'Lezione 10', poss: true, known: ['o_t_phone', 'o_s_phone', 'o_t_suitcase', 'o_s_suitcase', 'o_t_laptop', 'o_s_bag'] }
+  { id: 'l10', title: 'Lezione 10', poss: true, known: ['o_t_phone', 'o_s_phone', 'o_t_suitcase', 'o_s_suitcase', 'o_t_laptop', 'o_s_bag'] },
+  // capitolo 2: «Questo o questa? Piccolo o piccola?» — lo stesso oggetto grande e piccolo (size_it.js)
+  { id: 'l11', title: 'Lezione 11', size: true, known: ['z_big_book', 'z_small_book', 'z_big_suitcase', 'z_small_suitcase', 'z_big_cup', 'z_small_cup'] }
 ];
 
 // Quattro insegnanti, dal più rigido al più indulgente. gender = voce maschile o femminile.

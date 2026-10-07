@@ -6,7 +6,7 @@ const vm = require('vm');
 
 const ctx = { console: console };
 vm.createContext(ctx);
-['course.js', 'data.js', 'logic.js', 'colors_it.js', 'numbers_it.js', 'geo_fig.js', 'geo_it.js', 'poss_it.js', 'ui_lang.js'].forEach(f => {
+['course.js', 'data.js', 'logic.js', 'colors_it.js', 'numbers_it.js', 'geo_fig.js', 'geo_it.js', 'poss_it.js', 'size_it.js', 'ui_lang.js'].forEach(f => {
   vm.runInContext(fs.readFileSync(path.join(__dirname, '..', 'www', 'js', f), 'utf8'), ctx, { filename: f });
 });
 const run = (code) => vm.runInContext(code, ctx);
@@ -14,7 +14,7 @@ const evaluate = run('evaluate');
 const evaluateAll = run('evaluateAll');
 const buildSteps = run('buildSteps');
 const answerSteps = run('answerSteps');
-const LESSONS = run('LESSONS').filter(l => !l.colors && !l.numbers && !l.geo && !l.poss);   // lezioni con gli oggetti (colori e numeri hanno i loro test)
+const LESSONS = run('LESSONS').filter(l => !l.colors && !l.numbers && !l.geo && !l.poss && !l.size);   // lezioni con gli oggetti (colori e numeri hanno i loro test)
 const NUM_LESSONS = run('LESSONS').filter(l => l.numbers);
 const COLOR_LESSONS = run('LESSONS').filter(l => l.colors);
 const ITEMS = run('ITEMS');
@@ -462,6 +462,30 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
   check('lezione 10: risposte modello giuste', models.every(s => evaluate(s, s.model).ok));
   check('lezione 10: ripetizioni giuste', models.every(s => buildDrill(s, 5, []).every(d => evaluate(d, d.model).ok)));
   check('gesti: le sue cose → mano sul petto, quelle dello studente → lo indica', run('possPose')(SP.yes('o_t_phone')) === 'me' && run('possPose')(SP.yes('o_s_bag')) === 'you');
+}
+
+// Lezione 11: «Questo o questa? Piccolo o piccola?»
+{
+  const SZ = run('SZ'), evalAsk = run('evalAsk'), answerAsk = run('answerAsk'), buildDrill = run('buildDrill');
+  const ok = (st, t) => evaluate(st, t).ok;
+  const l11 = run('LESSONS').find(l => l.id === 'l11');
+  check('lezione 11 c\'è', !!l11 && l11.size);
+  check('figure grandi e piccole', l11.known.every(k => FIG[k] && FIG[k].indexOf('<svg') === 0 && FIG[k].indexOf(' id=') === -1));
+  check('frasi', SZ.present('z_big_book').prompt === 'Questo libro è grande.' && SZ.yes('z_small_suitcase').prompt === 'Questa valigia è piccola?' &&
+    SZ.neg('z_big_book').model === 'No, questo libro non è piccolo.' && SZ.key('z_big_suitcase').prompt === 'Com\'è questa valigia?' &&
+    SZ.neg('z_big_cup').prompt === 'Questa tazza è piccola?' && SZ.neg('z_small_cup').prompt === 'Questa tazza è grande?');
+  check('giusto', ok(SZ.yes('z_small_suitcase'), 'Sì, questa valigia è piccola.') && ok(SZ.key('z_big_book'), 'Questo libro è grande.') &&
+    ok(SZ.neg('z_big_book'), 'No, questo libro non è piccolo.') && ok(SZ.alt('z_small_cup'), 'Questa tazza è piccola.'));
+  check('sbagliato: «questa libro», «questo valigia»', !ok(SZ.key('z_big_book'), 'Questa libro è grande.') && !ok(SZ.key('z_big_suitcase'), 'Questo valigia è grande.'));
+  check('sbagliato: «piccolo» con la valigia', !ok(SZ.yes('z_small_suitcase'), 'Sì, questa valigia è piccolo.'));
+  check('sbagliato: grande e piccolo scambiati', !ok(SZ.key('z_small_book'), 'Questo libro è grande.'));
+  check('ripete «Com\'è?»', ok(SZ.askQ('z_big_book'), 'Com\'è?'));
+  check('allievo', evalAsk('z_big_book', 'Com\'è questo libro?').kind === 'what' && answerAsk('z_big_book', { kind: 'what' }) === 'Questo libro è grande.' &&
+    evalAsk('z_small_cup', 'Questa tazza è grande?').kind === 'no' && answerAsk('z_small_cup', { kind: 'no', ask: 'big' }) === 'No, questa tazza non è grande. Questa tazza è piccola.' &&
+    evalAsk('z_small_suitcase', 'Questa valigia è piccolo?').model === 'Questa valigia è piccola?');
+  const st = buildSteps(l11), models = st.filter(s => s.model && s.type !== 'reveal');
+  check('lezione 11: risposte modello giuste', models.every(s => evaluate(s, s.model).ok));
+  check('lezione 11: ripetizioni giuste', models.every(s => buildDrill(s, 5, []).every(d => evaluate(d, d.model).ok)));
 }
 
 // Lingua dello studente: ogni scritta c'è in tutte le lingue, con gli stessi segnaposto {…}
