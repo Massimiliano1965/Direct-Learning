@@ -214,7 +214,10 @@ const LESSONS = [
     known: ['ms_gen', 'ms_apr', 'ms_mag', 'ms_lug', 'ms_ott', 'ms_dic'] },
   // capitolo 8: «Possessivi: i suoi, le sue» — Sono i libri di Max? Sì, sono i suoi libri. (suoi_it.js)
   { id: 'l52', title: 'Lezione 52', level: 2, sp: true, hilite: ['i suoi', 'le sue'],
-    known: ['sp_m_book', 'sp_f_key', 'sp_f_book', 'sp_m_key', 'sp_m_umbrella', 'sp_f_cup'] }
+    known: ['sp_m_book', 'sp_f_key', 'sp_f_book', 'sp_m_key', 'sp_m_umbrella', 'sp_f_cup'] },
+  // capitolo 8: «Verbi al presente: loro» — Che cosa fanno Max e Isa? Max e Isa leggono un libro. (loro_it.js)
+  { id: 'l53', title: 'Lezione 53', level: 2, lo: true, hilite: ['leggono', 'mangiano', 'bevono', 'telefonano', 'scrivono', 'fanno'],
+    known: ['lo_read', 'lo_eat', 'lo_drink', 'lo_phone', 'lo_write'] }
 ];
 
 // Quattro insegnanti, dal più rigido al più indulgente. gender = voce maschile o femminile.
