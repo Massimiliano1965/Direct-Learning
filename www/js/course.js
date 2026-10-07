@@ -19,7 +19,7 @@ const COURSE = {
   // parole che vanno bene tutte e due: nella frase scritta si alternano (la prima è quella principale).
   // Terzo elemento (se c'è): la parola davanti alla quale NON si scambiano («A che ora è l'aereo?» resta così)
   // (la voce dell'insegnante, nelle domande, ogni tanto usa la seconda; il microfono le accetta tutte e due)
-  synonyms: [['neanche', 'nemmeno'], ['che ora è', 'che ore sono', 'a'], ['che cos\'è', 'cos\'è'], ['o', 'oppure']]
+  synonyms: [['neanche', 'nemmeno'], ['che ora è', 'che ore sono', 'a'], ['che cos\'è', 'cos\'è'], ['o', 'oppure'], ['cosa fa', 'che cosa fa']]
 };
 
 // Oggetti: chiave = figura in data.js. art = articolo indeterminativo.
@@ -120,7 +120,11 @@ const LESSONS = [
   { id: 'l21', title: 'Lezione 21', appt: true, known: ['a_plane', 'a_meeting', 'a_dinner', 'a_lunch', 'a_taxi', 'a_breakfast'] },
   // capitolo 4: «Il, la o l'?» — con l' non si sente se è maschile o femminile: lo dice la -o / la -a (in colore) del nome e del colore
   { id: 'l22', title: 'Lezione 22', colors: true, gender: true,
-    known: ['umbrella_nero', 'clock_bianco', 'plane_bianco', 'agenda_nero', 'label_rosso', 'ambulance_bianco', 'soda_rosso'] }
+    known: ['umbrella_nero', 'clock_bianco', 'plane_bianco', 'agenda_nero', 'label_rosso', 'ambulance_bianco', 'soda_rosso'] },
+  // capitolo 4: «Verbi al presente: Cosa fa…?» — i due colleghi della lezione 12 fanno qualcosa: «Max legge un libro.» (verbs_it.js)
+  // il verbo (legge, apre, mangia…) sottolineato in oro nella frase scritta
+  { id: 'l23', title: 'Lezione 23', verbs: true, hilite: ['legge', 'apre', 'mangia', 'beve', 'chiude', 'telefona'],
+    known: ['v_m_read', 'v_m_open', 'v_m_eat', 'v_f_drink', 'v_f_close', 'v_f_phone'] }
 ];
 
 // Quattro insegnanti, dal più rigido al più indulgente. gender = voce maschile o femminile.

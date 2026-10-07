@@ -53,7 +53,7 @@ Durante il test l'insegnante non corregge; contano solo gli errori, mostrati all
 
 19. **Che ora è? A che ora?**
 20. **Il, la, o l'?**
-21. **Verbi al presente**: «Cosa fa…?» (vari verbi)
+21. **Verbi al presente**: «Cosa fa…?» (vari verbi) — *fatto: Lezione 23 (legge, apre, mangia, beve, chiude, telefona)*
 22. **Perché? Per…**
 23. **Complemento diretto**: «Lo prendo — la prendo», «Non la chiude!»
 
@@ -179,7 +179,7 @@ Durante il test l'insegnante non corregge; contano solo gli errori, mostrati all
 
 ## Regole del corso (decise da Massi)
 
-- **Parole che vanno bene tutte e due** (neanche/nemmeno, che ora è/che ore sono, che cos'è/cos'è, o/oppure):
+- **Parole che vanno bene tutte e due** (neanche/nemmeno, che ora è/che ore sono, che cos'è/cos'è, o/oppure, cosa fa/che cosa fa):
   nella frase scritta si alternano in oro ogni 2 secondi; la voce, nelle domande, ogni tanto usa la seconda;
   il microfono le accetta tutte e due. L'elenco è `COURSE.synonyms` in `www/js/course.js`: per una coppia nuova basta aggiungerla lì.
 - L'insegnante non usa parole che l'allievo non conosce ancora (niente «bravo», «ottimo»: l'entusiasmo lo mostra il corpo; l'errore è «No.»).
