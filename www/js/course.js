@@ -193,7 +193,10 @@ const LESSONS = [
     known: ['ne_phone_giallo', 'ne_suitcase_rosso', 'ne_cup_bianco', 'ne_coat_nero', 'ne_umbrella_giallo', 'ne_agenda_bianco'] },
   // capitolo 7: «Passato prossimo» — Che cosa ha fatto Max? Max ha letto un libro. (passato_it.js); «ha» e il participio sottolineati
   { id: 'l45', title: 'Lezione 45', level: 2, ps: true, hilite: ['ha letto', 'ha aperto', 'ha mangiato', 'ha bevuto', 'ha chiuso', 'ha telefonato', 'ha fatto'],
-    known: ['ps_m_read', 'ps_f_open', 'ps_m_eat', 'ps_f_drink', 'ps_m_close', 'ps_f_phone'] }
+    known: ['ps_m_read', 'ps_f_open', 'ps_m_eat', 'ps_f_drink', 'ps_m_close', 'ps_f_phone'] },
+  // capitolo 7: «L'ho letto — l'ho letta» — Max ha letto il libro? Sì, l'ha letto. Isa ha chiuso la finestra? Sì, l'ha chiusa. (lho_it.js)
+  { id: 'l46', title: 'Lezione 46', level: 2, lh: true, gender: true, hilite: ['l\'ha'],
+    known: ['lh_m_book', 'lh_f_window', 'lh_m_orange', 'lh_f_phone', 'lh_f_soda', 'lh_m_notebook'] }
 ];
 
 // Quattro insegnanti, dal più rigido al più indulgente. gender = voce maschile o femminile.
