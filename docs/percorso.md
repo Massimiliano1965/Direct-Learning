@@ -62,13 +62,13 @@ Durante il test l'insegnante non corregge; contano solo gli errori, mostrati all
 24. **Numeri da 1 a 1000**: «Quanto fa…?» «Quanti chilometri ci sono…?» — *fatto in 4 lezioni (Massi: non di più): 26 (11–20), 27 (decine fino a 100), 28 («Quanto fa…?»: venti più otto fa ventotto — radice + unità, vocale tolta con uno e otto — e le centinaia fino a mille), 29 («Quanti chilometri…?»)*
 25. **La famiglia** (parole) — *fatto: Lezione 30 (padre, madre, figlio, figlia, nonno, nonna; «Chi è?»)*
 26. **Essere o avere** — *fatto: Lezione 31 (Max ha un telefono. Il telefono è nero.)*
-27. **Plurale**: o → i, a → e
-28. **C'è un, ci sono due**
-29. **Plurale di nomi e aggettivi**: «Ecco due…» «Quanto costano?»
-30. **Questo, questa, questi, queste**
-31. **Plurale**: e → i
-32. **Plurale degli articoli**: l' → gli, l' → le
-33. **Quei, quelle, quegli**
+27. **Plurale**: o → i, a → e — *fatto: Lezione 32*
+28. **C'è un, ci sono due** — *fatto: Lezione 33*
+29. **Plurale di nomi e aggettivi**: «Ecco due…» «Quanto costano?» — *fatto: Lezioni 34 (quanto costa/costano) e 35 (aggettivi al plurale)*
+30. **Questo, questa, questi, queste** — *fatto: Lezione 35*
+31. **Plurale**: e → i — *fatto: Lezione 36*
+32. **Plurale degli articoli**: l' → gli, l' → le — *fatto: Lezione 36*
+33. **Quei, quelle, quegli** — *fatto: Lezione 37*
 34. **Plurali irregolari**
 
 ## Capitolo 6

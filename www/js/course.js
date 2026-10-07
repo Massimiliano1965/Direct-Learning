@@ -157,7 +157,16 @@ const LESSONS = [
     known: ['ce_phone_1', 'ce_cup_2', 'ce_key_1', 'ce_pen_3', 'ce_orange_1', 'ce_book_2'] },
   // capitolo 5: «Quanto costa? Quanto costano?» — il cartellino del prezzo; costa / costano e gli articoli i, le (costa_it.js)
   { id: 'l34', title: 'Lezione 34', co: true, numParts: true, hilite: ['costa', 'costano'],
-    known: ['co_book_1', 'co_pen_2', 'co_suitcase_1', 'co_cup_2', 'co_phone_1', 'co_notebook_3'] }
+    known: ['co_book_1', 'co_pen_2', 'co_suitcase_1', 'co_cup_2', 'co_phone_1', 'co_notebook_3'] },
+  // capitolo 5: «Questo, questa, questi, queste» con i colori al plurale: «Queste tazze sono bianche.» (det_it.js)
+  { id: 'l35', title: 'Lezione 35', dt: true, gender: true,
+    known: ['dq_phone_nero_1', 'dq_phone_nero_2', 'dq_cup_bianco_1', 'dq_cup_bianco_2', 'dq_suitcase_rosso_2', 'dq_coat_rosso_1'] },
+  // capitolo 5: «Plurale: e → i» e «Plurale degli articoli: l' → gli, l' → le»: «Gli ombrelli sono neri.» «I portatili sono bianchi.»
+  { id: 'l36', title: 'Lezione 36', dt: true, gender: true,
+    known: ['dd_umbrella_nero_2', 'dd_backpack_rosso_2', 'dd_agenda_nero_2', 'dd_label_rosso_2', 'dd_laptop_bianco_2', 'dd_key_nero_2'] },
+  // capitolo 5: «Quel, quella, quei, quegli, quelle» — le cose lontane: «Quegli zaini sono rossi.»
+  { id: 'l37', title: 'Lezione 37', dt: true, gender: true,
+    known: ['dl_umbrella_nero_1', 'dl_phone_nero_2', 'dl_backpack_rosso_2', 'dl_suitcase_rosso_1', 'dl_cup_bianco_2', 'dl_coat_rosso_1'] }
 ];
 
 // Quattro insegnanti, dal più rigido al più indulgente. gender = voce maschile o femminile.

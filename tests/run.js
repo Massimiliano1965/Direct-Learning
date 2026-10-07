@@ -6,7 +6,7 @@ const vm = require('vm');
 
 const ctx = { console: console };
 vm.createContext(ctx);
-['course.js', 'data.js', 'logic.js', 'colors_it.js', 'numbers_it.js', 'geo_fig.js', 'geo_it.js', 'poss_it.js', 'size_it.js', 'third_it.js', 'nat_it.js', 'essere_it.js', 'altro_it.js', 'prep_it.js', 'anche_it.js', 'ora_it.js', 'appt_it.js', 'gender_it.js', 'verbs_it.js', 'perche_it.js', 'pron_it.js', 'sum_it.js', 'km_it.js', 'fam_it.js', 'avere_it.js', 'gen_it.js', 'plur_it.js', 'cece_it.js', 'costa_it.js', 'ui_lang.js'].forEach(f => {
+['course.js', 'data.js', 'logic.js', 'colors_it.js', 'numbers_it.js', 'geo_fig.js', 'geo_it.js', 'poss_it.js', 'size_it.js', 'third_it.js', 'nat_it.js', 'essere_it.js', 'altro_it.js', 'prep_it.js', 'anche_it.js', 'ora_it.js', 'appt_it.js', 'gender_it.js', 'verbs_it.js', 'perche_it.js', 'pron_it.js', 'sum_it.js', 'km_it.js', 'fam_it.js', 'avere_it.js', 'gen_it.js', 'plur_it.js', 'cece_it.js', 'costa_it.js', 'det_it.js', 'ui_lang.js'].forEach(f => {
   vm.runInContext(fs.readFileSync(path.join(__dirname, '..', 'www', 'js', f), 'utf8'), ctx, { filename: f });
 });
 const run = (code) => vm.runInContext(code, ctx);
@@ -14,7 +14,7 @@ const evaluate = run('evaluate');
 const evaluateAll = run('evaluateAll');
 const buildSteps = run('buildSteps');
 const answerSteps = run('answerSteps');
-const LESSONS = run('LESSONS').filter(l => !l.colors && !l.numbers && !l.geo && !l.poss && !l.size && !l.third && !l.nat && !l.ess && !l.altro && !l.prep && !l.anche && !l.ora && !l.appt && !l.verbs && !l.purp && !l.pron && !l.sum && !l.km && !l.fam && !l.ea && !l.pl && !l.ce && !l.co);   // lezioni con gli oggetti (colori e numeri hanno i loro test)
+const LESSONS = run('LESSONS').filter(l => !l.colors && !l.numbers && !l.geo && !l.poss && !l.size && !l.third && !l.nat && !l.ess && !l.altro && !l.prep && !l.anche && !l.ora && !l.appt && !l.verbs && !l.purp && !l.pron && !l.sum && !l.km && !l.fam && !l.ea && !l.pl && !l.ce && !l.co && !l.dt);   // lezioni con gli oggetti (colori e numeri hanno i loro test)
 const NUM_LESSONS = run('LESSONS').filter(l => l.numbers);
 const COLOR_LESSONS = run('LESSONS').filter(l => l.colors);
 const ITEMS = run('ITEMS');
@@ -976,6 +976,38 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
   const st = buildSteps(l), models = st.filter(s => s.model && s.type !== 'reveal');
   check('lezione 34: risposte modello giuste', models.every(s => evaluate(s, s.model).ok));
   check('lezione 34: ripetizioni giuste', models.every(s => buildDrill(s, 5, []).every(d => evaluate(d, d.model).ok)));
+}
+
+// Lezioni 35, 36, 37: questo / gli, le / quel, quei, quegli (con i colori al plurale)
+{
+  const SX = run('SDT'), evalAsk = run('evalAsk'), answerAsk = run('answerAsk'), buildDrill = run('buildDrill'), ok = (st, t) => evaluate(st, t).ok;
+  const L3 = ['l35', 'l36', 'l37'].map(id => run('LESSONS').find(l => l.id === id));
+  check('lezioni 35, 36, 37 ci sono', L3.every(l => l && l.dt));
+  check('figure', L3.every(l => l.known.every(k => FIG[k] && FIG[k].indexOf('<svg') === 0 && FIG[k].indexOf(' id=') === -1)));
+  check('frasi 35', SX.present('dq_phone_nero_1').prompt === 'Questo telefono è nero.' && SX.present('dq_cup_bianco_2').prompt === 'Queste tazze sono bianche.' &&
+    SX.present('dq_phone_nero_2').prompt === 'Questi telefoni sono neri.' && SX.key('dq_suitcase_rosso_2').prompt === 'Di che colore sono queste valigie?');
+  check('frasi 36', SX.present('dd_umbrella_nero_2').prompt === 'Gli ombrelli sono neri.' && SX.present('dd_backpack_rosso_2').prompt === 'Gli zaini sono rossi.' &&
+    SX.present('dd_agenda_nero_2').prompt === 'Le agende sono nere.' && SX.present('dd_laptop_bianco_2').prompt === 'I portatili sono bianchi.' && SX.present('dd_key_nero_2').prompt === 'Le chiavi sono nere.');
+  check('frasi 37', SX.present('dl_umbrella_nero_1').prompt === 'Quell\'ombrello è nero.' && SX.present('dl_phone_nero_2').prompt === 'Quei telefoni sono neri.' &&
+    SX.present('dl_backpack_rosso_2').prompt === 'Quegli zaini sono rossi.' && SX.present('dl_suitcase_rosso_1').prompt === 'Quella valigia è rossa.' &&
+    SX.present('dl_cup_bianco_2').prompt === 'Quelle tazze sono bianche.' && SX.present('dl_coat_rosso_1').prompt === 'Quel cappotto è rosso.');
+  check('giusto', ok(SX.key('dq_cup_bianco_2'), 'Queste tazze sono bianche.') && ok(SX.key('dd_umbrella_nero_2'), 'Gli ombrelli sono neri.') &&
+    ok(SX.key('dl_umbrella_nero_1'), 'Quell\'ombrello è nero.') && ok(SX.yes('dl_backpack_rosso_2'), 'Sì, quegli zaini sono rossi.'));
+  const n = SX.neg('dd_label_rosso_2');
+  check('giusto: il no', ok(n, n.model));
+  check('sbagliato: parola davanti, plurale, verbo, accordo', !ok(SX.key('dq_cup_bianco_2'), 'Questo tazze sono bianche.') && !ok(SX.key('dq_cup_bianco_2'), 'Queste tazza sono bianche.') &&
+    !ok(SX.key('dq_cup_bianco_2'), 'Queste tazze sono bianchi.') && !ok(SX.key('dq_cup_bianco_2'), 'Queste tazze è bianche.') && !ok(SX.key('dd_umbrella_nero_2'), 'I ombrelli sono neri.') &&
+    !ok(SX.key('dd_backpack_rosso_2'), 'I zaini sono rossi.') && !ok(SX.key('dl_backpack_rosso_2'), 'Quei zaini sono rossi.') && !ok(SX.key('dl_phone_nero_2'), 'Quegli telefoni sono neri.') &&
+    !ok(SX.key('dd_laptop_bianco_2'), 'I portatile sono bianchi.') && !ok(SX.key('dq_phone_nero_1'), 'Questo telefono è nera.'));
+  check('allievo', evalAsk('dq_cup_bianco_2', 'Di che colore sono queste tazze?').kind === 'what' && answerAsk('dq_cup_bianco_2', { kind: 'what' }) === 'Queste tazze sono bianche.' &&
+    evalAsk('dq_cup_bianco_2', 'Queste tazze sono rosse?').kind === 'no' && answerAsk('dq_cup_bianco_2', { kind: 'no', ask: 'rosso' }) === 'No, queste tazze non sono rosse. Queste tazze sono bianche.' &&
+    evalAsk('dq_cup_bianco_2', 'Questi tazze sono rosse?').model === 'Queste tazze sono rosse?');
+  check('-i azzurre e -e rosa anche nei colori e in questi/quelle', (w => ['tazze', 'bianche', 'neri', 'queste', 'quegli'].every(x => w.indexOf(x) !== -1))(run('genderWords')(L3[0])));
+  L3.forEach(l => {
+    const st = buildSteps(l), models = st.filter(s => s.model && s.type !== 'reveal');
+    check(l.id + ': risposte modello giuste', models.every(s => evaluate(s, s.model).ok));
+    check(l.id + ': ripetizioni giuste', models.every(s => buildDrill(s, 5, []).every(d => evaluate(d, d.model).ok)));
+  });
 }
 
 // Parole che vanno bene tutte e due (COURSE.synonyms): il microfono le accetta tutte e due
