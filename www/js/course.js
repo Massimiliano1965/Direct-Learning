@@ -340,7 +340,10 @@ const LESSONS = [
     known: ['moda_f_sciarpa', 'moda_m_cravatta', 'moda_f_scarpe', 'moda_f_gonna', 'moda_m_cappello', 'moda_f_camicia', 'moda_m_maglione'] },
   // «I trasporti» — Come va Max a Roma? Max va a Roma in treno. (scelta_it.js; il cartello verde della città)
   { id: 'l92', title: 'Lezione 92', level: 4, via: true, hilite: ['Come va', 'in', 'a piedi'],
-    known: ['via_m_treno_roma', 'via_f_aereo_napoli', 'via_m_taxi_milano', 'via_f_bicicletta_pisa', 'via_m_autobus_firenze', 'via_f_piedi_venezia'] }
+    known: ['via_m_treno_roma', 'via_f_aereo_napoli', 'via_m_taxi_milano', 'via_f_bicicletta_pisa', 'via_m_autobus_firenze', 'via_f_piedi_venezia'] },
+  // «In albergo» — Dov'è Mario? Mario è alla reception / in camera / in ascensore / al ristorante / in piscina / al bar. (scelta_it.js)
+  { id: 'l93', title: 'Lezione 93', level: 4, hot: true, hilite: ['alla', 'al', 'in'],
+    known: ['hot_m_reception', 'hot_f_camera', 'hot_m_ascensore', 'hot_f_ristorante', 'hot_m_piscina', 'hot_f_bar'] }
 ];
 
 // Quattro insegnanti, dal più rigido al più indulgente. gender = voce maschile o femminile.

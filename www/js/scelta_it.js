@@ -219,3 +219,52 @@ const SVIA = choiceLesson({
   fig: viaFig,
   wrong: ['vado', 'vai', 'andare', 'prende']
 });
+
+/* ---------- Lezione 93: in albergo ---------- */
+const HOT_CH = {
+  reception: { the: 'alla reception' }, camera: { the: 'in camera', alt: ['nella camera', 'nella sua camera'] },
+  ascensore: { the: 'in ascensore', alt: ['nell ascensore'] }, ristorante: { the: 'al ristorante' },
+  piscina: { the: 'in piscina', alt: ['nella piscina'] }, bar: { the: 'al bar' }
+};
+const HOT_FIG = {
+  reception: '<rect x="8" y="50" width="84" height="40" rx="3" fill="#8e6741"/><rect x="6" y="46" width="88" height="6" rx="2" fill="#a87a4e"/>' +
+    '<rect x="20" y="8" width="60" height="12" rx="2" fill="#2f5d4a"/><text x="50" y="17" text-anchor="middle" font-family="Arial,sans-serif" font-size="7.5" font-weight="bold" fill="#f3d36b">RECEPTION</text>' +
+    '<path d="M60 44 a8 8 0 0 1 16 0z" fill="#f3d36b"/><rect x="58" y="44" width="20" height="2.4" rx="1" fill="#c9a45c"/><circle cx="68" cy="34.6" r="1.6" fill="#c9a45c"/>' +
+    '<rect x="20" y="24" width="30" height="16" rx="2" fill="#5a4030"/>' + [0, 1, 2, 3].map(i => '<path d="M' + (25 + i * 7) + ' 27 v6" stroke="#f3d36b" stroke-width="1.6"/><circle cx="' + (25 + i * 7) + '" cy="35" r="1.6" fill="#f3d36b"/>').join(''),
+  camera: '<rect x="10" y="30" width="16" height="44" rx="2" fill="#8e6741"/><rect x="10" y="56" width="80" height="18" rx="3" fill="#f3eee2"/><rect x="14" y="48" width="18" height="10" rx="4" fill="#ffffff"/>' +
+    '<rect x="30" y="52" width="60" height="10" rx="3" fill="#5b4a8b"/><rect x="12" y="74" width="4" height="10" fill="#5a4030"/><rect x="84" y="74" width="4" height="10" fill="#5a4030"/>' +
+    '<rect x="66" y="10" width="22" height="12" rx="2" fill="#f3eee2"/><text x="77" y="19" text-anchor="middle" font-family="Arial,sans-serif" font-size="8" font-weight="bold" fill="#2a3346">205</text>',
+  ascensore: '<rect x="18" y="8" width="64" height="82" rx="3" fill="#8d93a3"/><rect x="22" y="20" width="27" height="68" fill="#c9ced8"/><rect x="51" y="20" width="27" height="68" fill="#c9ced8"/>' +
+    '<path d="M49 20 v68" stroke="#5d6577" stroke-width="2"/><rect x="38" y="10" width="24" height="8" rx="2" fill="#2a3346"/><path d="M44 16 l3 -4 l3 4z M53 12 l3 4 l3 -4z" fill="#f3d36b"/>' +
+    '<rect x="84" y="44" width="8" height="16" rx="2" fill="#5d6577"/><circle cx="88" cy="49" r="2" fill="#f3d36b"/><circle cx="88" cy="55" r="2" fill="#f3eee2"/>',
+  ristorante: '<rect x="12" y="56" width="76" height="6" rx="2" fill="#f3eee2"/><path d="M16 62 l-4 26 M84 62 l4 26" stroke="#8e6741" stroke-width="3"/><path d="M12 56 h76 l-6 10 h-64z" fill="#c8323b" opacity=".85"/>' +
+    '<ellipse cx="50" cy="52" rx="16" ry="4" fill="#ffffff"/><ellipse cx="50" cy="51" rx="9" ry="2" fill="#f2c55a"/><path d="M30 54 v-14 M28 40 v6 M32 40 v6" stroke="#8d93a3" stroke-width="1.6"/>' +
+    '<path d="M70 54 v-16 q5 2 5 10 q0 3 -5 3" stroke="#8d93a3" stroke-width="1.6" fill="#8d93a3"/><path d="M60 32 h8 q0 10 -4 12 q-4 -2 -4 -12z M64 44 v8 M60 52 h8" stroke="#dfe4ea" stroke-width="1.2" fill="#8e1b3a"/>' +
+    '<rect x="26" y="10" width="48" height="12" rx="2" fill="#5a4030"/><text x="50" y="19" text-anchor="middle" font-family="Georgia,serif" font-size="7.5" font-weight="bold" fill="#f3d36b">RISTORANTE</text>',
+  piscina: '<rect x="6" y="40" width="88" height="46" rx="6" fill="#dfe4ea"/><rect x="12" y="46" width="76" height="34" rx="4" fill="#3f9fd6"/>' +
+    '<path d="M16 56 q6 -4 12 0 t12 0 t12 0 t12 0 t12 0 M16 68 q6 -4 12 0 t12 0 t12 0 t12 0 t12 0" stroke="#bfe6f8" stroke-width="2" fill="none"/>' +
+    '<path d="M76 30 v24 M86 30 v24 M76 38 h10 M76 46 h10" stroke="#c9ced8" stroke-width="2.4" fill="none" stroke-linecap="round"/><circle cx="24" cy="22" r="8" fill="#f3d36b"/>',
+  bar: '<rect x="62" y="4" width="34" height="13" rx="3" fill="#2f5d4a"/><text x="79" y="14" text-anchor="middle" font-family="Georgia,serif" font-size="9" font-weight="bold" fill="#f3d36b">BAR</text>' +
+    '<rect x="8" y="56" width="84" height="34" rx="2" fill="#7a5735"/><rect x="6" y="52" width="88" height="5" rx="1.5" fill="#a87a4e"/>' +
+    '<g transform="translate(32 40) scale(.3) translate(-50 -60)">' + CZ_FIG.caffe + '</g><g transform="translate(64 38) scale(.32) translate(-50 -60)">' + BAR_FIG.cappuccino + '</g>'
+};
+function hotFig(X, it) {
+  const k = p3Key(it.who), LK = (typeof LOOKS !== 'undefined' && LOOKS[TEACHERS[k] ? (TEACHERS[k].look || k) : k]) || null;
+  return '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">' +
+    '<g transform="translate(36 18) scale(.66)">' + HOT_FIG[it.c] + '</g>' +
+    // l'insegna dell'albergo: HOTEL e le stelle
+    '<rect x="3" y="3" width="34" height="13" rx="2" fill="#1d2638" stroke="#c9a45c" stroke-width="1"/><text x="20" y="11.4" text-anchor="middle" font-family="Georgia,serif" font-size="7" font-weight="bold" fill="#f3d36b">HOTEL</text>' +
+    '<text x="20" y="15.4" text-anchor="middle" font-size="3.6" fill="#f3d36b">★★★★</text>' +
+    (LK && typeof tTorso === 'function' ? '<g transform="translate(-10 22) scale(.74)">' + V_PERSON(LK, tArm(LK, ...DOWN_L) + tArm(LK, ...DOWN_R), { mouth: 'smile' }) + '</g>' : '') + '</svg>';
+}
+const SHOT = choiceLesson({
+  flag: 'hot', CH: HOT_CH,
+  items: { hot_m_reception: { who: 'm', c: 'reception' }, hot_f_camera: { who: 'f', c: 'camera' }, hot_m_ascensore: { who: 'm', c: 'ascensore' },
+    hot_f_ristorante: { who: 'f', c: 'ristorante' }, hot_m_piscina: { who: 'm', c: 'piscina' }, hot_f_bar: { who: 'f', c: 'bar' } },
+  say: (X, c, neg) => vName(X.charAt(4)) + (neg ? ' non' : '') + ' è ' + HOT_CH[c].the,
+  lead: () => 'In albergo',
+  proper: (w) => vNames()[gNorm(w).trim()] !== undefined,
+  q: (X) => 'Dov\'è ' + vName(X.charAt(4)) + '?',
+  fig: hotFig,
+  wrong: ['sono', 'sei', 'va', 'sta']
+});
