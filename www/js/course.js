@@ -132,23 +132,18 @@ const LESSONS = [
   // gender: come nella lezione 22, -o azzurra e -a rosa nelle cose e in «lo» / «la»
   { id: 'l25', title: 'Lezione 25', pron: true, gender: true,
     known: ['ld_m_book', 'ld_f_phone', 'ld_m_notebook', 'ld_m_orange', 'ld_f_soda', 'ld_f_window'] },
-  // capitolo 5: «I numeri da 1 a 1000» — si comincia da undici a quindici (ripasso 1–10), poi il sedici da scoprire
-  { id: 'l26', title: 'Lezione 26', numbers: true, known: ['n11', 'n12', 'n13', 'n14', 'n15'], review: ['n1', 'n2', 'n3', 'n5', 'n6', 'n10'], fresh: 'n16' },
-  // diciassette, diciotto, diciannove (ripasso 11–16 e qualcuno di prima), poi il venti da scoprire
-  { id: 'l27', title: 'Lezione 27', numbers: true, known: ['n17', 'n18', 'n19'], review: ['n11', 'n12', 'n13', 'n14', 'n15', 'n16', 'n7', 'n8', 'n9'], fresh: 'n20' },
-  // le decine: trenta… sessanta, in ripasso i numeri che si confondono (tredici/trenta, quattordici/quaranta…), poi il settanta da scoprire
-  { id: 'l28', title: 'Lezione 28', numbers: true, known: ['n30', 'n40', 'n50', 'n60'], review: ['n10', 'n20', 'n13', 'n14', 'n15', 'n16', 'n17'], fresh: 'n70' },
-  // ottanta e novanta (ripasso delle decine e di diciotto/diciannove), poi il cento da scoprire
-  { id: 'l29', title: 'Lezione 29', numbers: true, known: ['n80', 'n90'], review: ['n30', 'n40', 'n50', 'n60', 'n70', 'n18', 'n19', 'n8', 'n9'], fresh: 'n100' },
-  // capitolo 5: «Quanto fa…?» — addizioni con i numeri già imparati: «Quanto fa dieci più venti? Fa trenta.» (sum_it.js)
-  { id: 'l30', title: 'Lezione 30', sum: true, hilite: ['più', 'fa'], known: ['sm_10_20', 'sm_20_30', 'sm_40_40', 'sm_50_50', 'sm_3_10', 'sm_8_8'] },
-  // le centinaia: duecento… cinquecento (ripasso cento e le decine), poi il mille da scoprire
-  { id: 'l31', title: 'Lezione 31', numbers: true, known: ['n200', 'n300', 'n400', 'n500'], review: ['n100', 'n20', 'n30', 'n40', 'n50', 'n2', 'n3'], fresh: 'n1000' },
-  // capitolo 5: «Quanti chilometri ci sono…?» — il cartello verde dell'autostrada: «Da Roma a Milano ci sono cinquecentosettanta chilometri.» (km_it.js)
-  { id: 'l32', title: 'Lezione 32', km: true, hilite: ['ci sono'],
+  // capitolo 5: «I numeri da 1 a 1000» in 4 lezioni (decisione di Massi: non di più).
+  // 26: da undici a diciannove (ripasso il dieci), poi il venti da scoprire
+  { id: 'l26', title: 'Lezione 26', numbers: true, big: true, known: ['n11', 'n12', 'n13', 'n14', 'n15', 'n16', 'n17', 'n18', 'n19'], review: ['n10'], fresh: 'n20' },
+  // 27: le decine da trenta a novanta, in ripasso venti e i numeri che si confondono (tredici/trenta, quattordici/quaranta), poi il cento da scoprire
+  { id: 'l27', title: 'Lezione 27', numbers: true, big: true, known: ['n30', 'n40', 'n50', 'n60', 'n70', 'n80', 'n90'], review: ['n20', 'n13', 'n14'], fresh: 'n100' },
+  // 28: «Quanto fa…?» con le centinaia: «Quanto fa cento più cento? Fa duecento.» (sum_it.js) — si imparano duecento… mille
+  { id: 'l28', title: 'Lezione 28', sum: true, hilite: ['più', 'fa'], known: ['sm_50_50', 'sm_100_100', 'sm_200_100', 'sm_200_200', 'sm_300_200', 'sm_500_500'] },
+  // 29: «Quanti chilometri ci sono…?» — il cartello verde dell'autostrada: «Da Roma a Milano ci sono cinquecentosettanta chilometri.» (km_it.js)
+  { id: 'l29', title: 'Lezione 29', km: true, hilite: ['ci sono'],
     known: ['km_roma_milano', 'km_roma_napoli', 'km_roma_firenze', 'km_milano_torino', 'km_firenze_bologna', 'km_roma_venezia'] },
   // capitolo 5: «La famiglia» — una famiglia di sei; la freccia d'oro dice di chi si parla: «Chi è? È la nonna.» (fam_it.js)
-  { id: 'l33', title: 'Lezione 33', fam: true, known: ['f_padre', 'f_madre', 'f_figlio', 'f_figlia', 'f_nonno', 'f_nonna'] }
+  { id: 'l30', title: 'Lezione 30', fam: true, known: ['f_padre', 'f_madre', 'f_figlio', 'f_figlia', 'f_nonno', 'f_nonna'] }
 ];
 
 // Quattro insegnanti, dal più rigido al più indulgente. gender = voce maschile o femminile.

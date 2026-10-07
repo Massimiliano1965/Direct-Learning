@@ -59,8 +59,8 @@ Durante il test l'insegnante non corregge; contano solo gli errori, mostrati all
 
 ## Capitolo 5
 
-24. **Numeri da 1 a 1000**: «Quanto fa…?» «Quanti chilometri ci sono…?» — *fatto: Lezioni 26 (11–16), 27 (17–20), 28 (30–70), 29 (80–100), 30 («Quanto fa…?»), 31 (200–1000), 32 («Quanti chilometri…?»)*
-25. **La famiglia** (parole) — *fatto: Lezione 33 (padre, madre, figlio, figlia, nonno, nonna; «Chi è?»)*
+24. **Numeri da 1 a 1000**: «Quanto fa…?» «Quanti chilometri ci sono…?» — *fatto in 4 lezioni (Massi: non di più): 26 (11–20), 27 (decine fino a 100), 28 («Quanto fa…?» con le centinaia, fino a mille), 29 («Quanti chilometri…?»)*
+25. **La famiglia** (parole) — *fatto: Lezione 30 (padre, madre, figlio, figlia, nonno, nonna; «Chi è?»)*
 26. **Essere o avere**
 27. **Plurale**: o → i, a → e
 28. **C'è un, ci sono due**

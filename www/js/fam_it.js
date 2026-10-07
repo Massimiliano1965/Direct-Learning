@@ -1,6 +1,6 @@
 'use strict';
 /* =====================================================================
-   CAPITOLO 5: «La famiglia» (lezione 33). Le figure si disegnano solo quando servono (con tTorso/tHeadStill di teacher.js,
+   CAPITOLO 5: «La famiglia» (lezione 30). Le figure si disegnano solo quando servono (con tTorso/tHeadStill di teacher.js,
    che si carica dopo). Una famiglia di sei persone: i nonni e i genitori dietro,
    i due figli davanti. La persona di cui si parla ha la freccia d'oro sopra la testa, le altre sono sbiadite.
      È il padre.                      → ripete

@@ -302,6 +302,8 @@ function buildSteps(lesson) {
   const q = () => !!lesson.questo && Math.random() < 0.5;
   const st = [];
   const add = (s, phase) => { s.phase = phase; st.push(s); return s; };
+  // big = tante parole nuove insieme (lezioni 26 e 27, i numeri): meno giri per parola, la lezione resta lunga come le altre
+  const big = !!lesson.big;
 
   // Lezione 2 (questoIntro): l'insegnante indica gli oggetti, maschili e femminili mescolati,
   // e dice solo «Questo.» «Questa.»; poi il nome: «Questo è un libro.» «Questa è una sedia.»
@@ -315,14 +317,14 @@ function buildSteps(lesson) {
   // Presentazione di TUTTI gli oggetti prima della prima domanda: ognuno 2 o 3 volte (presentRounds).
   // «Questo è un libro.» solo dalla lezione 2 (dq); nella lezione 1 sempre «È un libro.»
   presentRounds(K, first).forEach((round, r) => round.forEach(x => add(S.present(x, !r && !!lesson.dq), 'present')));
-  for (let r = 0; r < 2; r++) shuffle(K).forEach(x => add(S.yes(x, q()), 'yes'));
+  for (let r = 0; r < (big ? 1 : 2); r++) shuffle(K).forEach(x => add(S.yes(x, q()), 'yes'));
   if (!R.length) {
     const pairs = [];
     K.forEach(x => K.forEach(y => { if (x !== y) pairs.push([x, y]); }));
     shuffle(pairs).slice(0, Math.max(6, K.length * 3)).forEach(p => add(S.neg(p[0], p[1], q()), 'neg'));
   } else {
     // parola nuova indicata, domanda con le parole vecchie (e viceversa)
-    K.forEach(x => shuffle(KQ.filter(y => y !== x)).slice(0, 3).forEach(y => add(S.neg(x, y, q()), 'neg')));
+    K.forEach(x => shuffle(KQ.filter(y => y !== x)).slice(0, big ? 2 : 3).forEach(y => add(S.neg(x, y, q()), 'neg')));
   }
   let prev = null;
   for (let i = 0; i < 6; i++) prev = add(mixStep(KQ, ['yes', 'neg'], prev, q()), 'yesno').show;
@@ -330,7 +332,7 @@ function buildSteps(lesson) {
   if (F) {
     // l'oggetto nuovo: no a TUTTE le parole conosciute (due giri se sono poche)
     const rounds = KQ.length > 3 ? 1 : 2;
-    for (let r = 0; r < rounds; r++) shuffle(KQ).forEach(y => { add(S.neg(F, y, q()), 'fresh').fresh = true; });
+    for (let r = 0; r < rounds; r++) shuffle(KQ).slice(0, big ? 6 : KQ.length).forEach(y => { add(S.neg(F, y, q()), 'fresh').fresh = true; });
     add(S.reveal(F), 'reveal').pause = 1500;
     add(S.reveal(K[0]), 'reveal');
     for (let i = 0; i < (R.length ? 2 : 4); i++) add(S.askQ(F), 'askq');
@@ -338,7 +340,7 @@ function buildSteps(lesson) {
     add(S.present(F), 'present');
   }
   const keyItems = F ? K.concat([F]) : K;
-  for (let r = 0; r < 2; r++) shuffle(keyItems).forEach(x => add(S.key(x), 'key'));
+  for (let r = 0; r < (big ? 1 : 2); r++) shuffle(keyItems).forEach(x => add(S.key(x), 'key'));
   // 9. imparata la key question, l'allievo comincia a fare le domande
   for (let i = 0; i < ASK_EARLY; i++) {
     const s = add({ type: 'ask', prompt: '', model: '' }, 'askfirst');

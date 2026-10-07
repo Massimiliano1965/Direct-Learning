@@ -1,6 +1,6 @@
 'use strict';
 /* =====================================================================
-   CAPITOLO 5: «Quanti chilometri ci sono…?» (lezione 32). Si carica dopo numbers_it.js e sum_it.js.
+   CAPITOLO 5: «Quanti chilometri ci sono…?» (lezione 29). Si carica dopo numbers_it.js e sum_it.js.
    Il cartello verde dell'autostrada: da una città all'altra, con i chilometri (strada, arrotondati alla decina).
      Da Roma a Milano ci sono cinquecentosettanta chilometri.        → ripete
      Da Roma a Napoli ci sono duecentoventi chilometri?              → Sì, ci sono duecentoventi chilometri.

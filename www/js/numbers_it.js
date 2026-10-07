@@ -1,7 +1,7 @@
 'use strict';
 /* =====================================================================
    LEZIONI DEI NUMERI (italiano): «Che numero è?»
-   Si carica dopo logic.js (e colors_it.js). Le figure sono cartellini n1…n20 e le decine fino a n100 (lezioni 6, 7, 26–28).
+   Si carica dopo logic.js (e colors_it.js). Le figure sono cartellini n1…n20 e le decine fino a n100 (lezioni 6, 7, 26, 27).
    Stessa sequenza delle lezioni con gli oggetti: cambiano solo le frasi.
      È il numero tre.                 → ripete
      È il numero tre?                 → Sì, è il numero tre.
@@ -12,12 +12,9 @@
    ===================================================================== */
 
 const NUMS = { n1: 'uno', n2: 'due', n3: 'tre', n4: 'quattro', n5: 'cinque', n6: 'sei', n7: 'sette', n8: 'otto', n9: 'nove', n10: 'dieci',
-  // lezione 26 (capitolo 5): da undici a venti
+  // lezione 26 (capitolo 5): da undici a venti; lezione 27: le decine
   n11: 'undici', n12: 'dodici', n13: 'tredici', n14: 'quattordici', n15: 'quindici', n16: 'sedici', n17: 'diciassette', n18: 'diciotto', n19: 'diciannove', n20: 'venti',
-  // lezione 28: le decine
-  n30: 'trenta', n40: 'quaranta', n50: 'cinquanta', n60: 'sessanta', n70: 'settanta', n80: 'ottanta', n90: 'novanta', n100: 'cento',
-  // lezione 31: le centinaia e mille
-  n200: 'duecento', n300: 'trecento', n400: 'quattrocento', n500: 'cinquecento', n1000: 'mille' };
+  n30: 'trenta', n40: 'quaranta', n50: 'cinquanta', n60: 'sessanta', n70: 'settanta', n80: 'ottanta', n90: 'novanta', n100: 'cento' };
 const NUM_ALIAS = { quatro: 'quattro', cinqu: 'cinque', sete: 'sette', diece: 'dieci', dice: 'dieci', quatordici: 'quattordici', quattordic: 'quattordici', diciasette: 'diciassette', dicianove: 'diciannove', dicinove: 'diciannove', sedic: 'sedici', quarant: 'quaranta', cinquant: 'cinquanta', sesanta: 'sessanta', setanta: 'settanta' };
 const NUM_KEY = {};
 Object.keys(NUMS).forEach(k => { NUM_KEY[NUMS[k]] = k; });

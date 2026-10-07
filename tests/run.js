@@ -361,20 +361,14 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
 {
   const S = run('S'), evalAsk = run('evalAsk'), answerAsk = run('answerAsk'), buildDrill = run('buildDrill'), isEcho = run('isEcho');
   const ok = (st, t) => evaluate(st, t).ok;
-  check('lezioni dei numeri ci sono', NUM_LESSONS.map(l => l.id).join() === 'l6,l7,l26,l27,l28,l29,l31');
-  check('cartellini 1–20', [...Array(20)].every((x, i) => FIG['n' + (i + 1)]));
-  check('lezione 26: undici… sedici', S.present('n11').prompt === 'È il numero undici.' && S.reveal('n16').prompt === 'Che numero è? È il numero sedici.');
+  check('lezioni dei numeri ci sono (1–10 e poi solo 26 e 27)', NUM_LESSONS.map(l => l.id).join() === 'l6,l7,l26,l27');
+  check('cartellini 1–20 e decine', [...Array(20)].every((x, i) => FIG['n' + (i + 1)]) && [30, 40, 50, 60, 70, 80, 90, 100].every(n => FIG['n' + n]));
+  check('lezione 26: undici… venti', S.present('n11').prompt === 'È il numero undici.' && S.reveal('n20').prompt === 'Che numero è? È il numero venti.' && S.present('n17').prompt === 'È il numero diciassette.');
   check('lezione 26: cifre del microfono e forme corte', ok(S.key('n14'), 'è il numero 14') && ok(S.key('n11'), 'È l\'undici.') && ok(S.key('n13'), 'È il tredici.') &&
-    !ok(S.key('n13'), 'È il numero tre.') && !ok(S.key('n16'), 'è il 6') && ok(S.yes('n15'), 'sì è il 15'));
-  check('lezione 27: diciassette… venti', S.present('n17').prompt === 'È il numero diciassette.' && S.reveal('n20').prompt === 'Che numero è? È il numero venti.' &&
-    ok(S.key('n18'), 'È il diciotto.') && ok(S.key('n19'), 'è il numero 19') && ok(S.key('n17'), 'È il diciasette.') && !ok(S.key('n18'), 'È l\'otto.') && ok(S.key('n20'), 'è il 20'));
-  check('lezione 28: le decine', S.present('n30').prompt === 'È il numero trenta.' && S.reveal('n70').prompt === 'Che numero è? È il numero settanta.' && !!FIG.n100 &&
+    !ok(S.key('n13'), 'È il numero tre.') && !ok(S.key('n16'), 'è il 6') && ok(S.yes('n15'), 'sì è il 15') && ok(S.key('n17'), 'È il diciasette.') && !ok(S.key('n18'), 'È l\'otto.'));
+  check('lezione 27: le decine', S.present('n30').prompt === 'È il numero trenta.' && S.reveal('n100').prompt === 'Che numero è? È il numero cento.' &&
     ok(S.key('n40'), 'è il numero 40') && ok(S.key('n13'), 'è il 13') && !ok(S.key('n30'), 'È il tredici.') && !ok(S.key('n14'), 'è il 40') && ok(S.key('n60'), 'È il sessanta.') &&
-    run('numDigits')('il 100') === 'il  cento ' && ok(S.key('n50'), 'è il numero 50'));
-  check('lezione 29: ottanta, novanta, cento', S.present('n80').prompt === 'È il numero ottanta.' && S.reveal('n100').prompt === 'Che numero è? È il numero cento.' &&
-    ok(S.key('n80'), 'È l\'ottanta.') && ok(S.key('n90'), 'è il 90') && ok(S.key('n100'), 'è il numero 100') && !ok(S.key('n18'), 'è l\'ottanta'));
-  check('lezione 31: centinaia e mille', S.present('n200').prompt === 'È il numero duecento.' && S.reveal('n1000').prompt === 'Che numero è? È il numero mille.' && !!FIG.n1000 &&
-    ok(S.key('n300'), 'è il 300') && ok(S.key('n1000'), 'è il numero 1000') && ok(S.key('n400'), 'È il quattrocento.') && !ok(S.key('n300'), 'è il 30') && !ok(S.key('n200'), 'è il numero 2'));
+    run('numDigits')('il 100') === 'il  cento ' && ok(S.key('n80'), 'È l\'ottanta.') && ok(S.key('n90'), 'è il 90') && ok(S.key('n100'), 'è il numero 100'));
   check('frasi', S.present('n3').prompt === 'È il numero tre.' && S.yes('n3').model === 'Sì, è il numero tre.' &&
     S.neg('n3', 'n2').prompt === 'È il numero due?' && S.neg('n3', 'n2').model === 'No, non è il numero due.' &&
     S.key('n3').prompt === 'Che numero è?' && S.reveal('n6').prompt === 'Che numero è? È il numero sei.');
@@ -818,34 +812,34 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
   check('lezione 25: ripetizioni giuste', models.every(s => buildDrill(s, 5, []).every(d => evaluate(d, d.model).ok)));
 }
 
-// Lezione 30: «Quanto fa…?»
+// Lezione 28: «Quanto fa…?» con le centinaia
 {
   const SM = run('SSM'), evalAsk = run('evalAsk'), answerAsk = run('answerAsk'), buildDrill = run('buildDrill'), ok = (st, t) => evaluate(st, t).ok;
-  const l30 = run('LESSONS').find(l => l.id === 'l30');
-  check('lezione 30 c\'è', !!l30 && l30.sum);
-  check('figure', l30.known.every(k => FIG[k] && FIG[k].indexOf('<svg') === 0 && FIG[k].indexOf(' id=') === -1));
+  const l28 = run('LESSONS').find(l => l.id === 'l28');
+  check('lezione 28 c\'è', !!l28 && l28.sum);
+  check('figure', l28.known.every(k => FIG[k] && FIG[k].indexOf('<svg') === 0 && FIG[k].indexOf(' id=') === -1));
   check('numeri in parole', ['ventuno', 'ventitré', 'trentotto', 'cento', 'duecentocinquanta', 'mille'].join() === [21, 23, 38, 100, 250, 1000].map(n => run('numWord(' + n + ')')).join());
-  check('frasi', SM.present('sm_10_20').prompt === 'Dieci più venti fa trenta.' && SM.key('sm_3_10').prompt === 'Quanto fa tre più dieci?' && SM.key('sm_3_10').model === 'Fa tredici.' &&
-    SM.yes('sm_50_50').model === 'Sì, fa cento.');
-  check('giusto (breve, intera, cifre e «+»)', ok(SM.key('sm_10_20'), 'Fa trenta.') && ok(SM.key('sm_10_20'), 'Dieci più venti fa trenta.') && ok(SM.key('sm_10_20'), '10 + 20 fa 30') &&
-    ok(SM.key('sm_8_8'), 'Fa 16.') && ok(SM.key('sm_10_20'), 'Venti più dieci fa trenta.') && ok(SM.askQ('sm_10_20'), 'Quanto fa 10 + 20?'));
-  const n = SM.neg('sm_40_40');
-  check('giusto: il no', ok(n, n.model) && ok(n, 'No, non fa ' + run('numWord')(n.ask) + ', fa ottanta.'));
-  check('sbagliato: risultato, «è», «fanno», addizione diversa', !ok(SM.key('sm_10_20'), 'Fa quaranta.') && !ok(SM.key('sm_10_20'), 'È trenta.') &&
-    !ok(SM.key('sm_10_20'), 'Fanno trenta.') && !ok(SM.key('sm_10_20'), 'Dieci più dieci fa trenta.') && !ok(SM.yes('sm_10_20'), 'Fa trenta.'));
-  check('allievo', evalAsk('sm_20_30', 'Quanto fa venti più trenta?').kind === 'what' && answerAsk('sm_20_30', { kind: 'what' }) === 'Fa cinquanta.' &&
-    evalAsk('sm_20_30', 'Venti più trenta fa sessanta?').kind === 'no' && answerAsk('sm_20_30', { kind: 'no', ask: 60 }) === 'No, non fa sessanta. Fa cinquanta.' &&
-    evalAsk('sm_20_30', 'Venti più trenta è cinquanta?').model === 'Venti più trenta fa cinquanta?');
-  const st = buildSteps(l30), models = st.filter(s => s.model && s.type !== 'reveal');
-  check('lezione 30: risposte modello giuste', models.every(s => evaluate(s, s.model).ok));
-  check('lezione 30: ripetizioni giuste', models.every(s => buildDrill(s, 5, []).every(d => evaluate(d, d.model).ok)));
+  check('frasi', SM.present('sm_100_100').prompt === 'Cento più cento fa duecento.' && SM.key('sm_500_500').prompt === 'Quanto fa cinquecento più cinquecento?' &&
+    SM.key('sm_500_500').model === 'Fa mille.' && SM.yes('sm_50_50').model === 'Sì, fa cento.' && SM.key('sm_300_200').model === 'Fa cinquecento.');
+  check('giusto (breve, intera, cifre e «+»)', ok(SM.key('sm_100_100'), 'Fa duecento.') && ok(SM.key('sm_100_100'), 'Cento più cento fa duecento.') && ok(SM.key('sm_100_100'), '100 + 100 fa 200') &&
+    ok(SM.key('sm_200_200'), 'Fa 400.') && ok(SM.key('sm_200_100'), 'Cento più duecento fa trecento.') && ok(SM.askQ('sm_100_100'), 'Quanto fa 100 + 100?'));
+  const n = SM.neg('sm_200_200');
+  check('giusto: il no', ok(n, n.model) && ok(n, 'No, non fa ' + run('numWord')(n.ask) + ', fa quattrocento.'));
+  check('sbagliato: risultato, «è», «fanno», addizione diversa', !ok(SM.key('sm_100_100'), 'Fa trecento.') && !ok(SM.key('sm_100_100'), 'È duecento.') &&
+    !ok(SM.key('sm_100_100'), 'Fanno duecento.') && !ok(SM.key('sm_100_100'), 'Cento più duecento fa duecento.') && !ok(SM.yes('sm_100_100'), 'Fa duecento.'));
+  check('allievo', evalAsk('sm_300_200', 'Quanto fa trecento più duecento?').kind === 'what' && answerAsk('sm_300_200', { kind: 'what' }) === 'Fa cinquecento.' &&
+    evalAsk('sm_300_200', 'Trecento più duecento fa seicento?').kind === 'no' && answerAsk('sm_300_200', { kind: 'no', ask: 600 }) === 'No, non fa seicento. Fa cinquecento.' &&
+    evalAsk('sm_300_200', 'Trecento più duecento è cinquecento?').model === 'Trecento più duecento fa cinquecento?');
+  const st = buildSteps(l28), models = st.filter(s => s.model && s.type !== 'reveal');
+  check('lezione 28: risposte modello giuste', models.every(s => evaluate(s, s.model).ok));
+  check('lezione 28: ripetizioni giuste', models.every(s => buildDrill(s, 5, []).every(d => evaluate(d, d.model).ok)));
 }
 
-// Lezione 32: «Quanti chilometri ci sono…?»
+// Lezione 29: «Quanti chilometri ci sono…?»
 {
   const SK = run('SKM'), evalAsk = run('evalAsk'), answerAsk = run('answerAsk'), buildDrill = run('buildDrill'), ok = (st, t) => evaluate(st, t).ok;
-  const l32 = run('LESSONS').find(l => l.id === 'l32');
-  check('lezione 32 c\'è', !!l32 && l32.km);
+  const l32 = run('LESSONS').find(l => l.id === 'l29');
+  check('lezione 29 c\'è', !!l32 && l32.km);
   check('figure', l32.known.every(k => FIG[k] && FIG[k].indexOf('<svg') === 0 && FIG[k].indexOf(' id=') === -1));
   check('frasi', SK.present('km_roma_milano').prompt === 'Da Roma a Milano ci sono cinquecentosettanta chilometri.' &&
     SK.key('km_milano_torino').prompt === 'Quanti chilometri ci sono da Milano a Torino?' && SK.key('km_milano_torino').model === 'Ci sono centoquaranta chilometri.' &&
@@ -861,15 +855,15 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
     evalAsk('km_roma_firenze', 'Da Roma a Firenze ci sono 300 chilometri?').kind === 'no' && answerAsk('km_roma_firenze', { kind: 'no', ask: 300 }) === 'No, non ci sono trecento chilometri. Ci sono duecentosettanta chilometri.' &&
     !evalAsk('km_roma_firenze', 'Quanti chilometri ci sono da Roma a Milano?').ok);
   const st = buildSteps(l32), models = st.filter(s => s.model && s.type !== 'reveal');
-  check('lezione 32: risposte modello giuste', models.every(s => evaluate(s, s.model).ok));
-  check('lezione 32: ripetizioni giuste', models.every(s => buildDrill(s, 5, []).every(d => evaluate(d, d.model).ok)));
+  check('lezione 29: risposte modello giuste', models.every(s => evaluate(s, s.model).ok));
+  check('lezione 29: ripetizioni giuste', models.every(s => buildDrill(s, 5, []).every(d => evaluate(d, d.model).ok)));
 }
 
-// Lezione 33: «La famiglia»
+// Lezione 30: «La famiglia»
 {
   const SF = run('SFM'), evalAsk = run('evalAsk'), answerAsk = run('answerAsk'), buildDrill = run('buildDrill'), ok = (st, t) => evaluate(st, t).ok;
-  const l33 = run('LESSONS').find(l => l.id === 'l33');
-  check('lezione 33 c\'è', !!l33 && l33.fam);
+  const l33 = run('LESSONS').find(l => l.id === 'l30');
+  check('lezione 30 c\'è', !!l33 && l33.fam);
   check('figure', l33.known.every(k => FIG[k] && FIG[k].indexOf('<svg') === 0 && FIG[k].indexOf(' id=') === -1));
   check('frasi', SF.present('f_padre').prompt === 'È il padre.' && SF.key('f_nonna').prompt === 'Chi è?' && SF.key('f_nonna').model === 'È la nonna.' && SF.yes('f_figlia').model === 'Sì, è la figlia.');
   check('giusto', ok(SF.key('f_figlio'), 'È il figlio.') && ok(SF.yes('f_madre'), 'Sì, è la madre.') && ok(SF.askQ('f_padre'), 'Chi è?'));
@@ -881,8 +875,8 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
     evalAsk('f_madre', 'È la nonna?').kind === 'no' && answerAsk('f_madre', { kind: 'no', ask: 'f_nonna' }) === 'No, non è la nonna. È la madre.' &&
     evalAsk('f_madre', 'È il madre?').model === 'È la madre?' && evalAsk('f_madre', 'È la madre o la figlia?').kind === 'alt');
   const st = buildSteps(l33), models = st.filter(s => s.model && s.type !== 'reveal');
-  check('lezione 33: risposte modello giuste', models.every(s => evaluate(s, s.model).ok));
-  check('lezione 33: ripetizioni giuste', models.every(s => buildDrill(s, 5, []).every(d => evaluate(d, d.model).ok)));
+  check('lezione 30: risposte modello giuste', models.every(s => evaluate(s, s.model).ok));
+  check('lezione 30: ripetizioni giuste', models.every(s => buildDrill(s, 5, []).every(d => evaluate(d, d.model).ok)));
 }
 
 // Parole che vanno bene tutte e due (COURSE.synonyms): il microfono le accetta tutte e due

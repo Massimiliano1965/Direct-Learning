@@ -1,18 +1,18 @@
 'use strict';
 /* =====================================================================
-   CAPITOLO 5: «Quanto fa…?» (lezione 30). Si carica dopo numbers_it.js (numWord, NUM_VAL, numNorm).
-   Cartellini con un'addizione («10 + 20») fatta con i numeri già imparati:
-     Dieci più venti fa trenta.                      → ripete
-     Dieci più venti fa trenta?                      → Sì, fa trenta.
-     Dieci più venti fa quaranta?                    → No, non fa quaranta.
-     Dieci più venti fa trenta o quaranta?           → Fa trenta.
-     Quanto fa dieci più venti?                      → Fa trenta.   (va bene anche la frase intera)
+   CAPITOLO 5: «Quanto fa…?» (lezione 28): con le centinaia si imparano duecento… mille. Si carica dopo numbers_it.js (numWord, NUM_VAL, numNorm).
+   Cartellini con un'addizione («100 + 100»):
+     Cento più cento fa duecento.                    → ripete
+     Cento più cento fa duecento?                    → Sì, fa duecento.
+     Cento più cento fa trecento?                    → No, non fa trecento.
+     Cento più cento fa duecento o trecento?         → Fa duecento.
+     Quanto fa cento più cento?                      → Fa duecento.   (va bene anche la frase intera)
    Parole nuove: più, fa, quanto. Il microfono scrive spesso le cifre e il «+» («10 + 20 fa 30»): vanno bene.
    Errori: il risultato sbagliato, «è trenta», «fanno trenta» (qui si dice «fa»).
    ===================================================================== */
 
 const SUMS = {
-  sm_10_20: [10, 20], sm_20_30: [20, 30], sm_40_40: [40, 40], sm_50_50: [50, 50], sm_3_10: [3, 10], sm_8_8: [8, 8]
+  sm_50_50: [50, 50], sm_100_100: [100, 100], sm_200_100: [200, 100], sm_200_200: [200, 200], sm_300_200: [300, 200], sm_500_500: [500, 500]
 };
 const isSum = (X) => !!SUMS[X];
 const smRes = (X) => SUMS[X][0] + SUMS[X][1];
@@ -22,9 +22,9 @@ const smOp = (X) => smW(SUMS[X][0]) + ' più ' + smW(SUMS[X][1]);               
 const smSay = (X) => smCap(smOp(X)) + ' fa ' + smW(smRes(X)) + '.';
 const smQ = (X) => 'Quanto fa ' + smOp(X) + '?';
 const smShort = (X) => 'Fa ' + smW(smRes(X)) + '.';
-// un risultato sbagliato ma vicino (dieci in più o in meno, oppure uno vicino)
+// un risultato sbagliato ma vicino (cento o dieci in più o in meno)
 function smOther(X) {
-  const r = smRes(X), c = [r + 10, r - 10, r + 1, r - 1, r + 2].filter(n => n >= 1 && n <= 100 && n !== r);
+  const r = smRes(X), d = r >= 200 ? 100 : 10, c = [r + d, r - d, r + 2 * d].filter(n => n >= 1 && n <= 1000 && n !== r);
   return pick(c);
 }
 
@@ -32,7 +32,7 @@ function smOther(X) {
 function sumFig(X) {
   const t = SUMS[X][0] + ' + ' + SUMS[X][1];
   return FLAT('<rect x="6" y="22" width="88" height="56" rx="8" fill="#2c3e66"/><rect x="10" y="26" width="80" height="48" rx="5" fill="none" stroke="#c9a45c" stroke-width="1.5"/>' +
-    '<text x="50" y="60" font-size="' + (t.length > 6 ? 21 : 26) + '" font-family="Georgia, \'Times New Roman\', serif" fill="#e0c287" text-anchor="middle">' + t + '</text>', 40);
+    '<text x="50" y="60" font-size="' + (t.length > 7 ? 17 : t.length > 6 ? 21 : 26) + '" font-family="Georgia, \'Times New Roman\', serif" fill="#e0c287" text-anchor="middle">' + t + '</text>', 40);
 }
 Object.keys(SUMS).forEach(X => { FIG[X] = sumFig(X); });
 
