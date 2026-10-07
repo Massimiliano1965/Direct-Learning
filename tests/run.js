@@ -6,7 +6,7 @@ const vm = require('vm');
 
 const ctx = { console: console };
 vm.createContext(ctx);
-['course.js', 'data.js', 'logic.js', 'colors_it.js', 'numbers_it.js', 'geo_fig.js', 'geo_it.js', 'poss_it.js', 'size_it.js', 'third_it.js', 'nat_it.js', 'essere_it.js', 'ui_lang.js'].forEach(f => {
+['course.js', 'data.js', 'logic.js', 'colors_it.js', 'numbers_it.js', 'geo_fig.js', 'geo_it.js', 'poss_it.js', 'size_it.js', 'third_it.js', 'nat_it.js', 'essere_it.js', 'altro_it.js', 'ui_lang.js'].forEach(f => {
   vm.runInContext(fs.readFileSync(path.join(__dirname, '..', 'www', 'js', f), 'utf8'), ctx, { filename: f });
 });
 const run = (code) => vm.runInContext(code, ctx);
@@ -14,7 +14,7 @@ const evaluate = run('evaluate');
 const evaluateAll = run('evaluateAll');
 const buildSteps = run('buildSteps');
 const answerSteps = run('answerSteps');
-const LESSONS = run('LESSONS').filter(l => !l.colors && !l.numbers && !l.geo && !l.poss && !l.size && !l.third && !l.nat && !l.ess);   // lezioni con gli oggetti (colori e numeri hanno i loro test)
+const LESSONS = run('LESSONS').filter(l => !l.colors && !l.numbers && !l.geo && !l.poss && !l.size && !l.third && !l.nat && !l.ess && !l.altro);   // lezioni con gli oggetti (colori e numeri hanno i loro test)
 const NUM_LESSONS = run('LESSONS').filter(l => l.numbers);
 const COLOR_LESSONS = run('LESSONS').filter(l => l.colors);
 const ITEMS = run('ITEMS');
@@ -563,6 +563,27 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
   check('lezione 14: risposte modello giuste', models.every(s => evaluate(s, s.model).ok));
   check('lezione 14: ripetizioni giuste', models.every(s => buildDrill(s, 5, []).every(d => evaluate(d, d.model).ok)));
   check('gesti: io → mano sul petto, Lei → indica l\'allievo', run('possPose')(SE.yes('e_me')) === 'me' && run('possPose')(SE.key('e_you')) === 'you' && run('possPose')(SE.yes('n_m_cina')) === null);
+}
+
+// Lezione 15: «Un altro, un'altra»
+{
+  const SA = run('SA'), buildDrill = run('buildDrill');
+  const ok = (st, t) => evaluate(st, t).ok;
+  const l15 = run('LESSONS').find(l => l.id === 'l15');
+  check('lezione 15 c\'è', !!l15 && l15.altro);
+  check('frasi', SA.present('phone_bianco', 'phone_nero').prompt === 'È un altro telefono.' && SA.present('phone_nero').prompt === 'È un telefono.' &&
+    SA.yes('suitcase_rosso', 'suitcase_nero').model === 'Sì, è un\'altra valigia.' && SA.key('cup_rosso', 'cup_bianco').model === 'È un\'altra tazza.');
+  check('giusto (anche «un altra» del microfono)', ok(SA.yes('suitcase_rosso', 'suitcase_nero'), 'Sì, è un altra valigia.') && ok(SA.key('phone_nero', 'phone_bianco'), 'È un altro telefono.') &&
+    ok(SA.key('cup_rosso'), 'È una tazza.'));
+  const n = SA.neg('phone_bianco', 'phone_nero');
+  check('giusto: il no', ok(n, n.model));
+  check('sbagliato: «un altra telefono», «un altro valigia»', !ok(SA.key('phone_nero', 'phone_bianco'), 'È un altra telefono.') && !ok(SA.key('suitcase_nero', 'suitcase_rosso'), 'È un altro valigia.'));
+  check('sbagliato: dimenticare «altro» quando c\'è il primo', !ok(SA.key('phone_nero', 'phone_bianco'), 'È un telefono.'));
+  check('sbagliato: «altro» senza il primo', !ok(SA.key('phone_nero'), 'È un altro telefono.'));
+  const st = buildSteps(l15), models = st.filter(s => s.model && s.type !== 'reveal');
+  check('lezione 15: risposte modello giuste', models.every(s => evaluate(s, s.model).ok));
+  check('lezione 15: ripetizioni giuste', models.every(s => buildDrill(s, 5, []).every(d => evaluate(d, d.model).ok)));
+  check('lezione 15: il primo è sempre l\'altro della coppia', st.filter(s => s.prev).every(s => s.prev.split('_')[0] === s.show.split('_')[0] && s.prev !== s.show));
 }
 
 // Lingua dello studente: ogni scritta c'è in tutte le lingue, con gli stessi segnaposto {…}

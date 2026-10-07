@@ -327,7 +327,7 @@ function fitLesson() {
   delete pr.dataset.room;
   pl.querySelectorAll('.place').forEach(el => el.removeAttribute('style'));
   const over = () => Math.ceil($('screen-lesson').getBoundingClientRect().bottom + window.scrollY - window.innerHeight);
-  const placeSize = (px) => { if (L && L.lesson.placeHints) { pl.style.display = 'flex'; pl.style.minHeight = px + 'px'; pl.style.setProperty('--place', px + 'px'); } };
+  const placeSize = (px) => { if (L && (L.lesson.placeHints || L.lesson.altro)) { pl.style.display = 'flex'; pl.style.minHeight = px + 'px'; pl.style.setProperty('--place', px + 'px'); } };
   // posto per la frase: quanto la più lunga, ma al massimo due righe (le più lunghe si scrivono più piccole)
   const promptRoom = () => {
     if (!L || !DB.settings.showText) return;
@@ -438,6 +438,8 @@ function setProgress(done, total) { $('progress-fill').style.width = Math.round(
    mode 'ask' = pulsano in oro (guarda qui); 'result' = il luogo vero verde, lo sbagliato rosso. */
 function showPlaces(st, mode) {
   const el = $('stage-places');
+  // «un altro»: il primo oggetto, piccolo, sotto il palco (lezione 15)
+  if (st && st.prev) { el.innerHTML = '<div class="place prev">' + FIG[st.prev] + '</div>'; return; }
   const ps = (L && L.lesson.placeHints && typeof stepPlaces === 'function') ? stepPlaces(st) : null;
   if (!ps || !ps.length || (mode === 'ask' && (st.type === 'key' || st.type === 'reveal'))) { el.innerHTML = ''; return; }
   el.innerHTML = ps.map(p => '<div class="place ' + (mode === 'ask' ? 'pulse' : (placeIsTrue(st, p) ? 'ok' : 'no')) + '">' + PLACE_FIG(p) + '</div>').join('');
