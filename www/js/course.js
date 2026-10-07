@@ -83,7 +83,9 @@ const LESSONS = [
   // capitolo 2: «Il suo, la sua» — le cose di due colleghi dell'insegnante, un uomo e una donna (third_it.js)
   { id: 'l12', title: 'Lezione 12', third: true, known: ['p3_f_phone', 'p3_m_laptop', 'p3_f_suitcase', 'p3_m_bag', 'p3_m_coat', 'p3_f_flask'] },
   // capitolo 2: «Paese e nazionalità» — un signore o una signora con la bandiera del suo paese (nat_it.js)
-  { id: 'l13', title: 'Lezione 13', nat: true, known: ['n_m_italia', 'n_f_italia', 'n_f_francia', 'n_m_inghilterra', 'n_f_america', 'n_m_cina'] }
+  { id: 'l13', title: 'Lezione 13', nat: true, known: ['n_m_italia', 'n_f_italia', 'n_f_francia', 'n_m_inghilterra', 'n_f_america', 'n_m_cina'] },
+  // capitolo 2: «Il verbo essere» — io sono / Lei è / lui è / lei è, con le persone della lezione 13 (essere_it.js)
+  { id: 'l14', title: 'Lezione 14', ess: true, known: ['e_me', 'e_you', 'n_m_inghilterra', 'n_f_francia', 'n_m_cina', 'n_f_america'] }
 ];
 
 // Quattro insegnanti, dal più rigido al più indulgente. gender = voce maschile o femminile.

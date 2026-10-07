@@ -41,14 +41,8 @@ const NAT_LOOKS = {
   n_f_america:     { man: false, skin: '#c98e62', skin2: '#b27a50', hair: '#2a1d16', hair2: '#1c140f', style: 'long', suit: '#45506a', suit2: '#3a4459', shirt: '#f5efe6', scarf: '#c9a45c' },
   n_m_cina:        { man: true, skin: '#ecc59c', skin2: '#d8ad84', hair: '#16161a', hair2: '#0c0c10', style: 'short', suit: '#2b2f3a', suit2: '#22252e', shirt: '#f0f0f2', tie: '#c9a45c' }
 };
-// «Inglese»: la bandiera del Regno Unito (quella che tutti conoscono), non la croce di San Giorgio
-const UNION_JACK = '<rect width="100" height="100" fill="#1f3f8f"/>' +
-  '<path d="M0 0 L100 100 M100 0 L0 100" stroke="#f4f4f4" stroke-width="20"/>' +
-  '<path d="M0 0 L100 100 M100 0 L0 100" stroke="#c8202f" stroke-width="7"/>' +
-  '<path d="M50 0 V100 M0 50 H100" stroke="#f4f4f4" stroke-width="30"/>' +
-  '<path d="M50 0 V100 M0 50 H100" stroke="#c8202f" stroke-width="17"/>';
 function natFig(X) {
-  const L = NAT_LOOKS[X], flag = nC(X) === 'inghilterra' ? UNION_JACK : (typeof FLAG !== 'undefined' && FLAG[nC(X)]) || '';
+  const L = NAT_LOOKS[X], flag = (typeof FLAG !== 'undefined' && FLAG[nC(X)]) || '';
   const body = (typeof tTorso === 'function') ? tTorso(L) + tArm(L, ...DOWN_L) + tArm(L, ...DOWN_R) + tHeadStill(L, { mouth: 'smile' }) : '';
   return '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">' +
     '<g transform="translate(50 100) scale(1.42) translate(-50 -68)">' + body + '</g>' +

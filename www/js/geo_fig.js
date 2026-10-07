@@ -55,12 +55,15 @@ const MON2 = {
 const FLAG = {
   italia: `<rect width="34" height="100" fill="#2e8b4f"/><rect x="33" width="34" height="100" fill="#f4f4f4"/><rect x="66" width="34" height="100" fill="#cd2a34"/>`,
   francia: `<rect width="34" height="100" fill="#1f4aa0"/><rect x="33" width="34" height="100" fill="#f4f4f4"/><rect x="66" width="34" height="100" fill="#d42a33"/>`,
-  inghilterra: `<rect width="100" height="100" fill="#f4f4f4"/><rect x="42" width="10" height="100" fill="#cf2a33"/><rect y="56" width="100" height="10" fill="#cf2a33"/>`,
+  // «Inghilterra» / «inglese»: la bandiera del Regno Unito (quella che tutti conoscono), non la croce di San Giorgio
+  inghilterra: `<rect width="100" height="100" fill="#1f3f8f"/><path d="M0 0 L100 100 M100 0 L0 100" stroke="#f4f4f4" stroke-width="20"/><path d="M0 0 L100 100 M100 0 L0 100" stroke="#c8202f" stroke-width="7"/><path d="M50 0 V100 M0 50 H100" stroke="#f4f4f4" stroke-width="30"/><path d="M50 0 V100 M0 50 H100" stroke="#c8202f" stroke-width="17"/>`,
   america: `<rect width="100" height="100" fill="#f4f4f4"/>${grange(7).map(i => `<rect y="${8 + i * 12}" width="100" height="6" fill="#c8262f"/>`).join('')}<rect width="44" height="50" fill="#2a3f7a"/>${grange(12).map(i => `<circle cx="${6 + (i % 4) * 10 + (Math.floor(i / 4) % 2) * 5}" cy="${16 + Math.floor(i / 4) * 10}" r="1.3" fill="#fff"/>`).join('')}`,
   cina: `<rect width="100" height="100" fill="#d4242c"/><path d="M30 30 l3 9 h9.4 l-7.6 5.6 l2.9 9 l-7.7 -5.5 l-7.7 5.5 l2.9 -9 l-7.6 -5.6 h9.4z" fill="#f7d23a"/>${[[46, 24], [52, 32], [52, 42], [46, 50]].map(([x, y]) => `<circle cx="${x}" cy="${y}" r="2" fill="#f7d23a"/>`).join('')}`,
   egitto: `<rect width="100" height="34" fill="#cd2a34"/><rect y="33" width="100" height="34" fill="#f4f4f4"/><rect y="66" width="100" height="34" fill="#1d1d1d"/><circle cx="50" cy="50" r="5" fill="#c9a45c"/>`
 };
-const MAP2 = (k) => `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><g filter="url(#geoShadow)"><g clip-path="url(#geoMap_${k})">${FLAG[k]}</g></g><path d="${MAPS[k]}" fill="none" stroke="#f3eee2" stroke-width=".6" opacity=".8"/></svg>`;
+// La sagoma del Regno Unito è stretta e alta: la bandiera si adatta alla sagoma, così si vede intera
+const FLAG_FIT = { inghilterra: 'translate(29.6 6) scale(.408 .82)' };
+const MAP2 = (k) => `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><g filter="url(#geoShadow)"><g clip-path="url(#geoMap_${k})">${FLAG_FIT[k] ? '<g transform="' + FLAG_FIT[k] + '">' + FLAG[k] + '</g>' : FLAG[k]}</g></g><path d="${MAPS[k]}" fill="none" stroke="#f3eee2" stroke-width=".6" opacity=".8"/></svg>`;
 // Città sulla mappa del loro paese: [x, y, paese] (stessa proiezione delle mappe)
 const CITY_DOTS = {"roma": [49.7, 48.6, "italia"], "parigi": [49.7, 26.2, "francia"], "londra": [60.7, 75.9, "inghilterra"], "newyork": [85.9, 38.5, "america"]};
 // Figura di un luogo: paese = la sua mappa; città = mappa del paese con il puntino d'oro

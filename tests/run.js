@@ -6,7 +6,7 @@ const vm = require('vm');
 
 const ctx = { console: console };
 vm.createContext(ctx);
-['course.js', 'data.js', 'logic.js', 'colors_it.js', 'numbers_it.js', 'geo_fig.js', 'geo_it.js', 'poss_it.js', 'size_it.js', 'third_it.js', 'nat_it.js', 'ui_lang.js'].forEach(f => {
+['course.js', 'data.js', 'logic.js', 'colors_it.js', 'numbers_it.js', 'geo_fig.js', 'geo_it.js', 'poss_it.js', 'size_it.js', 'third_it.js', 'nat_it.js', 'essere_it.js', 'ui_lang.js'].forEach(f => {
   vm.runInContext(fs.readFileSync(path.join(__dirname, '..', 'www', 'js', f), 'utf8'), ctx, { filename: f });
 });
 const run = (code) => vm.runInContext(code, ctx);
@@ -14,7 +14,7 @@ const evaluate = run('evaluate');
 const evaluateAll = run('evaluateAll');
 const buildSteps = run('buildSteps');
 const answerSteps = run('answerSteps');
-const LESSONS = run('LESSONS').filter(l => !l.colors && !l.numbers && !l.geo && !l.poss && !l.size && !l.third && !l.nat);   // lezioni con gli oggetti (colori e numeri hanno i loro test)
+const LESSONS = run('LESSONS').filter(l => !l.colors && !l.numbers && !l.geo && !l.poss && !l.size && !l.third && !l.nat && !l.ess);   // lezioni con gli oggetti (colori e numeri hanno i loro test)
 const NUM_LESSONS = run('LESSONS').filter(l => l.numbers);
 const COLOR_LESSONS = run('LESSONS').filter(l => l.colors);
 const ITEMS = run('ITEMS');
@@ -536,6 +536,33 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
   const st = buildSteps(l13), models = st.filter(s => s.model && s.type !== 'reveal');
   check('lezione 13: risposte modello giuste', models.every(s => evaluate(s, s.model).ok));
   check('lezione 13: ripetizioni giuste', models.every(s => buildDrill(s, 5, []).every(d => evaluate(d, d.model).ok)));
+}
+
+// Lezione 14: «Il verbo essere» (insegna Luca: «Io sono italiano.»)
+{
+  const SE = run('SE'), evalAsk = run('evalAsk'), answerAsk = run('answerAsk'), buildDrill = run('buildDrill');
+  const ok = (st, t) => evaluate(st, t).ok;
+  const l14 = run('LESSONS').find(l => l.id === 'l14');
+  check('lezione 14 c\'è', !!l14 && l14.ess);
+  check('figure', l14.known.every(k => FIG[k] && FIG[k].indexOf('<svg') === 0 && FIG[k].indexOf(' id=') === -1));
+  check('frasi', SE.present('n_m_inghilterra').prompt === 'Lui è inglese.' && SE.yes('n_f_america').model === 'Sì, lei è americana.' &&
+    SE.yes('e_me').prompt === 'Io sono italiano?' && SE.yes('e_me').model === 'Sì, Lei è italiano.' &&
+    SE.neg('e_me', 'francia').model === 'No, Lei non è francese.' && SE.key('e_me').prompt === 'Di che nazionalità sono io?' &&
+    SE.key('e_you').prompt === 'Di che nazionalità è Lei?');
+  check('giusto', ok(SE.present('n_m_inghilterra'), 'Lui è inglese.') && ok(SE.yes('n_f_america'), 'Sì, è americana.') &&
+    ok(SE.yes('e_me'), 'Sì, Lei è italiano.') && ok(SE.neg('e_me', 'cina'), 'No, Lei non è cinese.') && ok(SE.key('n_m_cina'), 'Lui è cinese.') &&
+    ok(SE.key('e_me'), 'Lei è italiano.'));
+  check('la sua nazionalità: qualunque, detta bene', ok(SE.key('e_you'), 'Io sono tedesca.') && ok(SE.key('e_you'), 'Sono giapponese.') && ok(SE.key('e_you'), 'Io sono americano.'));
+  check('sbagliato: «io sono» detto dell\'insegnante', !ok(SE.yes('e_me'), 'Sì, io sono italiano.') && !ok(SE.key('e_me'), 'Io sono italiano.'));
+  check('sbagliato: «lui sono», «tu sei», «Lei è» detto di sé', !ok(SE.key('n_m_cina'), 'Lui sono cinese.') && !ok(SE.key('e_me'), 'Tu sei italiano.') && !ok(SE.key('e_you'), 'Lei è tedesco.'));
+  check('sbagliato: lui/lei scambiati, accordo, nazionalità', !ok(SE.key('n_m_cina'), 'Lei è cinese.') && !ok(SE.key('n_f_america'), 'Lei è americano.') && !ok(SE.key('n_m_inghilterra'), 'Lui è francese.'));
+  check('allievo', evalAsk('e_me', 'Di che nazionalità è Lei?').kind === 'what' && answerAsk('e_me', { kind: 'what' }) === 'Io sono italiano.' &&
+    evalAsk('e_me', 'Lei è francese?').kind === 'no' && answerAsk('e_me', { kind: 'no', ask: 'francia' }) === 'No, io non sono francese. Io sono italiano.' &&
+    answerAsk('e_me', { kind: 'yes' }) === 'Sì, io sono italiano.');
+  const st = buildSteps(l14), models = st.filter(s => s.model && s.type !== 'reveal');
+  check('lezione 14: risposte modello giuste', models.every(s => evaluate(s, s.model).ok));
+  check('lezione 14: ripetizioni giuste', models.every(s => buildDrill(s, 5, []).every(d => evaluate(d, d.model).ok)));
+  check('gesti: io → mano sul petto, Lei → indica l\'allievo', run('possPose')(SE.yes('e_me')) === 'me' && run('possPose')(SE.key('e_you')) === 'you' && run('possPose')(SE.yes('n_m_cina')) === null);
 }
 
 // Lingua dello studente: ogni scritta c'è in tutte le lingue, con gli stessi segnaposto {…}

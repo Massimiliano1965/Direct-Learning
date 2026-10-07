@@ -114,5 +114,5 @@ function teacherFig(key, pose, half) {
 // Ritratto (solo la testa) per il menu e l'intestazione
 function teacherHead(key) {
   const L = LOOKS[key] || LOOKS.luca;
-  return `<svg viewBox="33 4 34 34" xmlns="http://www.w3.org/2000/svg"><rect x="33" y="4" width="34" height="34" fill="#1d2638"/>${tTorso(L)}${tHead(L, { mouth: 'smile' })}</svg>`;
+  return `<svg viewBox="33 4 34 34" xmlns="http://www.w3.org/2000/svg"><rect x="33" y="4" width="34" height="34" fill="#1d2638"/>${tTorso(L)}${tHeadStill(L, { mouth: 'smile' })}</svg>`;
 }
