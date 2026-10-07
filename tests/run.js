@@ -6,7 +6,7 @@ const vm = require('vm');
 
 const ctx = { console: console };
 vm.createContext(ctx);
-['course.js', 'data.js', 'logic.js', 'colors_it.js', 'numbers_it.js', 'geo_fig.js', 'geo_it.js', 'poss_it.js', 'size_it.js', 'third_it.js', 'nat_it.js', 'essere_it.js', 'altro_it.js', 'prep_it.js', 'anche_it.js', 'ora_it.js', 'appt_it.js', 'gender_it.js', 'verbs_it.js', 'perche_it.js', 'pron_it.js', 'sum_it.js', 'km_it.js', 'fam_it.js', 'ui_lang.js'].forEach(f => {
+['course.js', 'data.js', 'logic.js', 'colors_it.js', 'numbers_it.js', 'geo_fig.js', 'geo_it.js', 'poss_it.js', 'size_it.js', 'third_it.js', 'nat_it.js', 'essere_it.js', 'altro_it.js', 'prep_it.js', 'anche_it.js', 'ora_it.js', 'appt_it.js', 'gender_it.js', 'verbs_it.js', 'perche_it.js', 'pron_it.js', 'sum_it.js', 'km_it.js', 'fam_it.js', 'avere_it.js', 'ui_lang.js'].forEach(f => {
   vm.runInContext(fs.readFileSync(path.join(__dirname, '..', 'www', 'js', f), 'utf8'), ctx, { filename: f });
 });
 const run = (code) => vm.runInContext(code, ctx);
@@ -14,7 +14,7 @@ const evaluate = run('evaluate');
 const evaluateAll = run('evaluateAll');
 const buildSteps = run('buildSteps');
 const answerSteps = run('answerSteps');
-const LESSONS = run('LESSONS').filter(l => !l.colors && !l.numbers && !l.geo && !l.poss && !l.size && !l.third && !l.nat && !l.ess && !l.altro && !l.prep && !l.anche && !l.ora && !l.appt && !l.verbs && !l.purp && !l.pron && !l.sum && !l.km && !l.fam);   // lezioni con gli oggetti (colori e numeri hanno i loro test)
+const LESSONS = run('LESSONS').filter(l => !l.colors && !l.numbers && !l.geo && !l.poss && !l.size && !l.third && !l.nat && !l.ess && !l.altro && !l.prep && !l.anche && !l.ora && !l.appt && !l.verbs && !l.purp && !l.pron && !l.sum && !l.km && !l.fam && !l.ea);   // lezioni con gli oggetti (colori e numeri hanno i loro test)
 const NUM_LESSONS = run('LESSONS').filter(l => l.numbers);
 const COLOR_LESSONS = run('LESSONS').filter(l => l.colors);
 const ITEMS = run('ITEMS');
@@ -877,6 +877,33 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
   const st = buildSteps(l33), models = st.filter(s => s.model && s.type !== 'reveal');
   check('lezione 30: risposte modello giuste', models.every(s => evaluate(s, s.model).ok));
   check('lezione 30: ripetizioni giuste', models.every(s => buildDrill(s, 5, []).every(d => evaluate(d, d.model).ok)));
+}
+
+// Lezione 31: «Essere o avere»
+{
+  const SE2 = run('SEA'), evalAsk = run('evalAsk'), answerAsk = run('answerAsk'), buildDrill = run('buildDrill'), ok = (st, t) => evaluate(st, t).ok;
+  const l31 = run('LESSONS').find(l => l.id === 'l31');
+  check('lezione 31 c\'è', !!l31 && l31.ea);
+  check('figure', l31.known.every(k => FIG[k] && FIG[k].indexOf('<svg') === 0 && FIG[k].indexOf(' id=') === -1));
+  const P = run('p3People()'), M = run('TEACHERS')[P.m].name, F = run('TEACHERS')[P.f].name;
+  check('frasi', SE2.presentHa('ea_m_phone_nero').prompt === M + ' ha un telefono.' && SE2.presentE('ea_m_phone_nero').prompt === 'Il telefono è nero.' &&
+    SE2.keyHa('ea_f_suitcase_rosso').prompt === 'Che cosa ha ' + F + '?' && SE2.keyHa('ea_f_suitcase_rosso').model === F + ' ha una valigia.' &&
+    SE2.keyE('ea_f_suitcase_rosso').prompt === 'Di che colore è la valigia?' && SE2.keyE('ea_f_suitcase_rosso').model === 'La valigia è rossa.');
+  check('giusto', ok(SE2.keyHa('ea_m_laptop_bianco'), M + ' ha un portatile.') && ok(SE2.keyHa('ea_m_laptop_bianco'), 'Ha un portatile.') && ok(SE2.yesHa('ea_m_laptop_bianco'), 'Sì, ha un portatile.') &&
+    ok(SE2.keyE('ea_m_laptop_bianco'), 'Il portatile è bianco.') && ok(SE2.yesE('ea_f_cup_bianco'), 'Sì, la tazza è bianca.'));
+  const n = SE2.negHa('ea_m_phone_nero'), nE = SE2.negE('ea_m_phone_nero');
+  check('giusto: il no (ha ed è)', ok(n, n.model) && ok(nE, nE.model));
+  check('sbagliato: «è» al posto di «ha» e viceversa, «ho», persona', !ok(SE2.keyHa('ea_m_phone_nero'), M + ' è un telefono.') && !ok(SE2.keyE('ea_m_phone_nero'), 'Il telefono ha nero.') &&
+    !ok(SE2.keyHa('ea_m_phone_nero'), M + ' ho un telefono.') && !ok(SE2.keyHa('ea_m_phone_nero'), F + ' ha un telefono.') && !ok(SE2.keyHa('ea_m_phone_nero'), M + ' ha una telefono.') &&
+    !ok(SE2.keyE('ea_m_phone_nero'), 'Il telefono è nera.'));
+  check('allievo', evalAsk('ea_m_coat_rosso', 'Che cosa ha ' + M + '?').kind === 'what' && answerAsk('ea_m_coat_rosso', { kind: 'what' }) === M + ' ha un cappotto.' &&
+    evalAsk('ea_m_coat_rosso', M + ' ha una tazza?').kind === 'no' && answerAsk('ea_m_coat_rosso', { kind: 'no', ask: 'cup' }) === 'No, ' + M + ' non ha una tazza. ' + M + ' ha un cappotto.' &&
+    evalAsk('ea_m_coat_rosso', M + ' è un cappotto?').model === M + ' ha un cappotto?' &&
+    (r => r.ok && answerAsk('ea_m_coat_rosso', r) === 'Il cappotto è rosso.')(evalAsk('ea_m_coat_rosso', 'Di che colore è il cappotto?')));
+  const st = buildSteps(l31), models = st.filter(s => s.model && s.type !== 'reveal');
+  check('lezione 31: risposte modello giuste', models.every(s => evaluate(s, s.model).ok));
+  check('lezione 31: ripetizioni giuste', models.every(s => buildDrill(s, 5, []).every(d => evaluate(d, d.model).ok)));
+  check('lezione 31: lunghezza', st.length < 115);
 }
 
 // Parole che vanno bene tutte e due (COURSE.synonyms): il microfono le accetta tutte e due

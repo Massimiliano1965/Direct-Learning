@@ -143,7 +143,10 @@ const LESSONS = [
   { id: 'l29', title: 'Lezione 29', km: true, hilite: ['ci sono'],
     known: ['km_roma_milano', 'km_roma_napoli', 'km_roma_firenze', 'km_milano_torino', 'km_firenze_bologna', 'km_roma_venezia'] },
   // capitolo 5: «La famiglia» — una famiglia di sei; la freccia d'oro dice di chi si parla: «Chi è? È la nonna.» (fam_it.js)
-  { id: 'l30', title: 'Lezione 30', fam: true, known: ['f_padre', 'f_madre', 'f_figlio', 'f_figlia', 'f_nonno', 'f_nonna'] }
+  { id: 'l30', title: 'Lezione 30', fam: true, known: ['f_padre', 'f_madre', 'f_figlio', 'f_figlia', 'f_nonno', 'f_nonna'] },
+  // capitolo 5: «Essere o avere» — Max e Isa hanno una cosa colorata: «Max ha un telefono. Il telefono è nero.» (avere_it.js)
+  { id: 'l31', title: 'Lezione 31', ea: true, hilite: ['ha', 'è'],
+    known: ['ea_m_phone_nero', 'ea_f_suitcase_rosso', 'ea_m_laptop_bianco', 'ea_f_flask_nero', 'ea_m_coat_rosso', 'ea_f_cup_bianco'] }
 ];
 
 // Quattro insegnanti, dal più rigido al più indulgente. gender = voce maschile o femminile.
