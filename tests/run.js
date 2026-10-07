@@ -361,7 +361,7 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
 {
   const S = run('S'), evalAsk = run('evalAsk'), answerAsk = run('answerAsk'), buildDrill = run('buildDrill'), isEcho = run('isEcho');
   const ok = (st, t) => evaluate(st, t).ok;
-  check('lezioni dei numeri ci sono', NUM_LESSONS.map(l => l.id).join() === 'l6,l7,l26,l27,l28,l29');
+  check('lezioni dei numeri ci sono', NUM_LESSONS.map(l => l.id).join() === 'l6,l7,l26,l27,l28,l29,l31');
   check('cartellini 1–20', [...Array(20)].every((x, i) => FIG['n' + (i + 1)]));
   check('lezione 26: undici… sedici', S.present('n11').prompt === 'È il numero undici.' && S.reveal('n16').prompt === 'Che numero è? È il numero sedici.');
   check('lezione 26: cifre del microfono e forme corte', ok(S.key('n14'), 'è il numero 14') && ok(S.key('n11'), 'È l\'undici.') && ok(S.key('n13'), 'È il tredici.') &&
@@ -373,6 +373,8 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
     run('numDigits')('il 100') === 'il  cento ' && ok(S.key('n50'), 'è il numero 50'));
   check('lezione 29: ottanta, novanta, cento', S.present('n80').prompt === 'È il numero ottanta.' && S.reveal('n100').prompt === 'Che numero è? È il numero cento.' &&
     ok(S.key('n80'), 'È l\'ottanta.') && ok(S.key('n90'), 'è il 90') && ok(S.key('n100'), 'è il numero 100') && !ok(S.key('n18'), 'è l\'ottanta'));
+  check('lezione 31: centinaia e mille', S.present('n200').prompt === 'È il numero duecento.' && S.reveal('n1000').prompt === 'Che numero è? È il numero mille.' && !!FIG.n1000 &&
+    ok(S.key('n300'), 'è il 300') && ok(S.key('n1000'), 'è il numero 1000') && ok(S.key('n400'), 'È il quattrocento.') && !ok(S.key('n300'), 'è il 30') && !ok(S.key('n200'), 'è il numero 2'));
   check('frasi', S.present('n3').prompt === 'È il numero tre.' && S.yes('n3').model === 'Sì, è il numero tre.' &&
     S.neg('n3', 'n2').prompt === 'È il numero due?' && S.neg('n3', 'n2').model === 'No, non è il numero due.' &&
     S.key('n3').prompt === 'Che numero è?' && S.reveal('n6').prompt === 'Che numero è? È il numero sei.');

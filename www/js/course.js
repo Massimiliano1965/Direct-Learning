@@ -141,7 +141,9 @@ const LESSONS = [
   // ottanta e novanta (ripasso delle decine e di diciotto/diciannove), poi il cento da scoprire
   { id: 'l29', title: 'Lezione 29', numbers: true, known: ['n80', 'n90'], review: ['n30', 'n40', 'n50', 'n60', 'n70', 'n18', 'n19', 'n8', 'n9'], fresh: 'n100' },
   // capitolo 5: «Quanto fa…?» — addizioni con i numeri già imparati: «Quanto fa dieci più venti? Fa trenta.» (sum_it.js)
-  { id: 'l30', title: 'Lezione 30', sum: true, hilite: ['più', 'fa'], known: ['sm_10_20', 'sm_20_30', 'sm_40_40', 'sm_50_50', 'sm_3_10', 'sm_8_8'] }
+  { id: 'l30', title: 'Lezione 30', sum: true, hilite: ['più', 'fa'], known: ['sm_10_20', 'sm_20_30', 'sm_40_40', 'sm_50_50', 'sm_3_10', 'sm_8_8'] },
+  // le centinaia: duecento… cinquecento (ripasso cento e le decine), poi il mille da scoprire
+  { id: 'l31', title: 'Lezione 31', numbers: true, known: ['n200', 'n300', 'n400', 'n500'], review: ['n100', 'n20', 'n30', 'n40', 'n50', 'n2', 'n3'], fresh: 'n1000' }
 ];
 
 // Quattro insegnanti, dal più rigido al più indulgente. gender = voce maschile o femminile.

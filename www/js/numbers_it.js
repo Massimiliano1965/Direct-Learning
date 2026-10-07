@@ -15,7 +15,9 @@ const NUMS = { n1: 'uno', n2: 'due', n3: 'tre', n4: 'quattro', n5: 'cinque', n6:
   // lezione 26 (capitolo 5): da undici a venti
   n11: 'undici', n12: 'dodici', n13: 'tredici', n14: 'quattordici', n15: 'quindici', n16: 'sedici', n17: 'diciassette', n18: 'diciotto', n19: 'diciannove', n20: 'venti',
   // lezione 28: le decine
-  n30: 'trenta', n40: 'quaranta', n50: 'cinquanta', n60: 'sessanta', n70: 'settanta', n80: 'ottanta', n90: 'novanta', n100: 'cento' };
+  n30: 'trenta', n40: 'quaranta', n50: 'cinquanta', n60: 'sessanta', n70: 'settanta', n80: 'ottanta', n90: 'novanta', n100: 'cento',
+  // lezione 31: le centinaia e mille
+  n200: 'duecento', n300: 'trecento', n400: 'quattrocento', n500: 'cinquecento', n1000: 'mille' };
 const NUM_ALIAS = { quatro: 'quattro', cinqu: 'cinque', sete: 'sette', diece: 'dieci', dice: 'dieci', quatordici: 'quattordici', quattordic: 'quattordici', diciasette: 'diciassette', dicianove: 'diciannove', dicinove: 'diciannove', sedic: 'sedici', quarant: 'quaranta', cinquant: 'cinquanta', sesanta: 'sessanta', setanta: 'settanta' };
 const NUM_KEY = {};
 Object.keys(NUMS).forEach(k => { NUM_KEY[NUMS[k]] = k; });
