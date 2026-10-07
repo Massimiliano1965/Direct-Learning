@@ -151,7 +151,10 @@ const LESSONS = [
     known: ['ea_m_phone_nero', 'ea_f_suitcase_rosso', 'ea_m_laptop_bianco', 'ea_f_flask_nero', 'ea_m_coat_rosso', 'ea_f_cup_bianco'] },
   // capitolo 5: «Plurale: o → i, a → e» — «È un libro.» / «Sono due libri.» (plur_it.js); -o/-i azzurre, -a/-e rosa
   { id: 'l32', title: 'Lezione 32', pl: true, gender: true, hilite: ['è', 'sono'],
-    known: ['pl_book_1', 'pl_book_2', 'pl_pen_1', 'pl_pen_3', 'pl_cup_2', 'pl_notebook_3'] }
+    known: ['pl_book_1', 'pl_book_2', 'pl_pen_1', 'pl_pen_3', 'pl_cup_2', 'pl_notebook_3'] },
+  // capitolo 5: «C'è un…, ci sono due…» — sul tavolo: «Sul tavolo c'è un telefono.» «Sul tavolo ci sono due tazze.» (cece_it.js)
+  { id: 'l33', title: 'Lezione 33', ce: true, hilite: ['c\'è', 'ci sono'],
+    known: ['ce_phone_1', 'ce_cup_2', 'ce_key_1', 'ce_pen_3', 'ce_orange_1', 'ce_book_2'] }
 ];
 
 // Quattro insegnanti, dal più rigido al più indulgente. gender = voce maschile o femminile.

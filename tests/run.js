@@ -6,7 +6,7 @@ const vm = require('vm');
 
 const ctx = { console: console };
 vm.createContext(ctx);
-['course.js', 'data.js', 'logic.js', 'colors_it.js', 'numbers_it.js', 'geo_fig.js', 'geo_it.js', 'poss_it.js', 'size_it.js', 'third_it.js', 'nat_it.js', 'essere_it.js', 'altro_it.js', 'prep_it.js', 'anche_it.js', 'ora_it.js', 'appt_it.js', 'gender_it.js', 'verbs_it.js', 'perche_it.js', 'pron_it.js', 'sum_it.js', 'km_it.js', 'fam_it.js', 'avere_it.js', 'gen_it.js', 'plur_it.js', 'ui_lang.js'].forEach(f => {
+['course.js', 'data.js', 'logic.js', 'colors_it.js', 'numbers_it.js', 'geo_fig.js', 'geo_it.js', 'poss_it.js', 'size_it.js', 'third_it.js', 'nat_it.js', 'essere_it.js', 'altro_it.js', 'prep_it.js', 'anche_it.js', 'ora_it.js', 'appt_it.js', 'gender_it.js', 'verbs_it.js', 'perche_it.js', 'pron_it.js', 'sum_it.js', 'km_it.js', 'fam_it.js', 'avere_it.js', 'gen_it.js', 'plur_it.js', 'cece_it.js', 'ui_lang.js'].forEach(f => {
   vm.runInContext(fs.readFileSync(path.join(__dirname, '..', 'www', 'js', f), 'utf8'), ctx, { filename: f });
 });
 const run = (code) => vm.runInContext(code, ctx);
@@ -14,7 +14,7 @@ const evaluate = run('evaluate');
 const evaluateAll = run('evaluateAll');
 const buildSteps = run('buildSteps');
 const answerSteps = run('answerSteps');
-const LESSONS = run('LESSONS').filter(l => !l.colors && !l.numbers && !l.geo && !l.poss && !l.size && !l.third && !l.nat && !l.ess && !l.altro && !l.prep && !l.anche && !l.ora && !l.appt && !l.verbs && !l.purp && !l.pron && !l.sum && !l.km && !l.fam && !l.ea && !l.pl);   // lezioni con gli oggetti (colori e numeri hanno i loro test)
+const LESSONS = run('LESSONS').filter(l => !l.colors && !l.numbers && !l.geo && !l.poss && !l.size && !l.third && !l.nat && !l.ess && !l.altro && !l.prep && !l.anche && !l.ora && !l.appt && !l.verbs && !l.purp && !l.pron && !l.sum && !l.km && !l.fam && !l.ea && !l.pl && !l.ce);   // lezioni con gli oggetti (colori e numeri hanno i loro test)
 const NUM_LESSONS = run('LESSONS').filter(l => l.numbers);
 const COLOR_LESSONS = run('LESSONS').filter(l => l.colors);
 const ITEMS = run('ITEMS');
@@ -932,6 +932,28 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
   check('lezione 32: risposte modello giuste', models.every(s => evaluate(s, s.model).ok));
   check('lezione 32: ripetizioni giuste', models.every(s => buildDrill(s, 5, []).every(d => evaluate(d, d.model).ok)));
   check('lezione 32: domande dell\'allievo', st.filter(s => s.type === 'ask').length === 7 && st.filter(s => s.type === 'ask').every(s => s.pl));
+}
+
+// Lezione 33: «C'è / ci sono»
+{
+  const SX = run('SCE'), evalAsk = run('evalAsk'), answerAsk = run('answerAsk'), buildDrill = run('buildDrill'), ok = (st, t) => evaluate(st, t).ok;
+  const l = run('LESSONS').find(l => l.id === 'l33');
+  check('lezione 33 c\'è', !!l && l.ce);
+  check('figure', l.known.every(k => FIG[k] && FIG[k].indexOf('<svg') === 0 && FIG[k].indexOf(' id=') === -1));
+  check('frasi', SX.present('ce_phone_1').prompt === 'Sul tavolo c\'è un telefono.' && SX.present('ce_cup_2').prompt === 'Sul tavolo ci sono due tazze.' &&
+    SX.key('ce_orange_1').model === 'C\'è un\'arancia.' && SX.key('ce_pen_3').prompt === 'Che cosa c\'è sul tavolo?' && SX.yes('ce_book_2').model === 'Sì, ci sono due libri.');
+  check('giusto', ok(SX.key('ce_cup_2'), 'Ci sono due tazze.') && ok(SX.key('ce_cup_2'), 'Sul tavolo ci sono due tazze.') && ok(SX.key('ce_key_1'), 'C\'è una chiave.') &&
+    ok(SX.key('ce_key_1'), 'ce una chiave') && ok(SX.askQ('ce_key_1'), 'Che cosa c\'è sul tavolo?'));
+  const n = SX.neg('ce_pen_3');
+  check('giusto: il no', ok(n, n.model));
+  check('sbagliato: «c\'è due», «ci sono un», «è un», «due tazza»', !ok(SX.key('ce_cup_2'), 'C\'è due tazze.') && !ok(SX.key('ce_phone_1'), 'Ci sono un telefono.') &&
+    !ok(SX.key('ce_phone_1'), 'È un telefono.') && !ok(SX.key('ce_cup_2'), 'Ci sono due tazza.') && !ok(SX.key('ce_cup_2'), 'Ci sono tre tazze.'));
+  check('allievo', evalAsk('ce_cup_2', 'Che cosa c\'è sul tavolo?').kind === 'what' && answerAsk('ce_cup_2', { kind: 'what' }) === 'Ci sono due tazze.' &&
+    evalAsk('ce_cup_2', 'Sul tavolo c\'è un telefono?').kind === 'no' && answerAsk('ce_cup_2', { kind: 'no', ask: 'phone', n: 1 }) === 'No, non c\'è un telefono. Ci sono due tazze.' &&
+    evalAsk('ce_cup_2', 'Sul tavolo c\'è due tazze?').model === 'Sul tavolo ci sono due tazze?');
+  const st = buildSteps(l), models = st.filter(s => s.model && s.type !== 'reveal');
+  check('lezione 33: risposte modello giuste', models.every(s => evaluate(s, s.model).ok));
+  check('lezione 33: ripetizioni giuste', models.every(s => buildDrill(s, 5, []).every(d => evaluate(d, d.model).ok)));
 }
 
 // Parole che vanno bene tutte e due (COURSE.synonyms): il microfono le accetta tutte e due
