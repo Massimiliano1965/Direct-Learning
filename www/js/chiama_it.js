@@ -24,9 +24,10 @@ const cmOther = (X) => pick(Object.keys(CM).filter(k => k !== X && cmG(k) === cm
 // la frase: per l'insegnante «Io mi chiamo» (l'insegnante) / «Lei si chiama» (l'allievo); per gli altri «Lui / Lei si chiama»
 const cmSay = (X, n, neg) => cmMe(X) ? 'Io ' + (neg ? 'non ' : '') + 'mi chiamo ' + (n || cmName(X)) : gCap(cmPron(X)) + ' ' + (neg ? 'non ' : '') + 'si chiama ' + (n || cmName(X));
 // all'insegnante: «Lei si chiama» o, con il «tu» (regTu(), la scelta dell'allievo), «Tu ti chiami»
-const cmAns = (X, n, neg) => cmMe(X) ? (regTu() ? 'Tu ' + (neg ? 'non ' : '') + 'ti chiami ' : 'Lei ' + (neg ? 'non ' : '') + 'si chiama ') + (n || cmName(X)) : cmSay(X, n, neg);
+// senza pronome (Massi): «Si chiama Pietro.» («Lei si chiama Pietro» sembra «lei», una donna) / «Ti chiami Pietro.» («Tu ti chiami» è una ripetizione)
+const cmAns = (X, n, neg) => cmMe(X) ? (neg ? 'Non ' : '') + (regTu() ? (neg ? 'ti chiami ' : 'Ti chiami ') : (neg ? 'si chiama ' : 'Si chiama ')) + (n || cmName(X)) : cmSay(X, n, neg);
 const cmYouQ = () => regTu() ? 'Come ti chiami?' : 'Come si chiama Lei?';
-const cmQ = (X) => cmMe(X) ? 'Come mi chiamo io?' : 'Come si chiama ' + cmPron(X) + '?';
+const cmQ = (X) => cmMe(X) ? 'Come mi chiamo (io)?' : 'Come si chiama ' + cmPron(X) + '?';
 // Max e Isa: in piedi, che salutano con la mano (si presentano)
 function cmPerson(w) {
   const k = p3Key(w), LK = (typeof LOOKS !== 'undefined' && LOOKS[TEACHERS[k] ? (TEACHERS[k].look || k) : k]) || null;
@@ -69,7 +70,7 @@ const CM_LAST = ['rossi', 'bianchi'];
 const cmNameIs = (x, n) => { const p = gNorm(n).trim().split(' '); return x.name === p[0] && !(x.last && CM_LAST.indexOf(x.last) !== -1 && x.last !== p[1]); };
 function cmEvaluate(step, text) {
   const s = gNorm(text), X = step.show, echo = step.type === 'echo';
-  if (echo && step.check === 'question') return { ok: has(s, gNorm(cmQ(X)).trim()), full: true };
+  if (echo && step.check === 'question') return { ok: has(s, gNorm(cmQ(X)).trim().replace(/ io$/, '')), full: true };   // «(io)» si può dire o no
   const st = cmStatements(s), pos = st.filter(x => !x.neg), neg = st.filter(x => x.neg), yes = has(s.replace(/ si chiama /g, ' # '), 'si'), no = has(s, 'no');   // «si chiama» non è un «sì»
   const truth = (x) => cmGood(x, X, echo) && cmNameIs(x, cmName(X)), allPos = pos.every(truth);
   switch (step.type) {
@@ -100,3 +101,6 @@ function cmAnswerAsk(X, r) {
   return cmSay(X) + '.';
 }
 gInstall('cm', isCm, SCM, cmEvaluate, cmEvalAsk, cmAnswerAsk);
+
+// Gesto (Massi): quando l'insegnante parla di sé («Come mi chiamo (io)?») indica sé stesso, la mano sul petto
+if (typeof possPose === 'function') { const bPoseCm = possPose; possPose = (st) => st && st.cm && st.show === 'cm_me' ? 'me' : bPoseCm(st); }

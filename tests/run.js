@@ -553,8 +553,8 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
   check('lezione 14 c\'è', !!l14 && l14.ess);
   check('figure', l14.known.every(k => FIG[k] && FIG[k].indexOf('<svg') === 0 && FIG[k].indexOf(' id=') === -1));
   check('frasi', SE.present('n_m_inghilterra').prompt === 'Lui è inglese.' && SE.yes('n_f_america').model === 'Sì, lei è americana.' &&
-    SE.yes('e_me').prompt === 'Io sono italiano?' && SE.yes('e_me').model === 'Sì, Lei è italiano.' &&
-    SE.neg('e_me', 'francia').model === 'No, Lei non è francese.' && SE.key('e_me').prompt === 'Di che nazionalità sono io?' &&
+    SE.yes('e_me').prompt === 'Io sono italiano?' && SE.yes('e_me').model === 'Sì, è italiano.' &&
+    SE.neg('e_me', 'francia').model === 'No, non è francese.' && SE.key('e_me').prompt === 'Di che nazionalità sono (io)?' &&
     SE.key('e_you').prompt === 'Di che nazionalità è Lei?');
   check('giusto', ok(SE.present('n_m_inghilterra'), 'Lui è inglese.') && ok(SE.yes('n_f_america'), 'Sì, è americana.') &&
     ok(SE.yes('e_me'), 'Sì, Lei è italiano.') && ok(SE.neg('e_me', 'cina'), 'No, Lei non è cinese.') && ok(SE.key('n_m_cina'), 'Lui è cinese.') &&
@@ -1458,7 +1458,7 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
   const P = run('p3People()'), M = run('P3_CHARS')[P.m].name, F = run('P3_CHARS')[P.f].name, T = run('eTeacher()').name;
   check('lezione 59 c\'è', !!l && l.cm && l.level === 2);
   check('figure', l.known.every(k => FIG[k] && FIG[k].indexOf('<svg') === 0));
-  check('frasi', SX.present('cm_me').prompt === 'Io mi chiamo ' + T + '.' && SX.key('cm_me').prompt === 'Come mi chiamo io?' && SX.key('cm_me').model === 'Lei si chiama ' + T + '.' &&
+  check('frasi', SX.present('cm_me').prompt === 'Io mi chiamo ' + T + '.' && SX.key('cm_me').prompt === 'Come mi chiamo (io)?' && SX.key('cm_me').model === 'Si chiama ' + T + '.' &&
     SX.key('cm_f').prompt === 'Come si chiama lei?' && SX.key('cm_c1').model === 'Lui si chiama Carlo Rossi.');
   check('giusto', ok(SX.key('cm_m'), 'Si chiama ' + M + '.') && ok(SX.key('cm_c2'), 'Si chiama Lucia.') && ok(SX.key('cm_me'), 'Lei si chiama ' + T + '.') &&
     ok(SX.yes('cm_f'), 'Sì, si chiama ' + F + '.') && ok(SX.present('cm_me'), 'Io mi chiamo ' + T + '.'));
@@ -1479,8 +1479,8 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
   const l = run('LESSONS').find(l => l.id === 'l60');
   check('lezione 60 c\'è', !!l && l.tv && l.level === 2);
   check('figure', l.known.every(k => FIG[k] && FIG[k].indexOf('<svg') === 0 && FIG[k].indexOf(' id=') === -1));
-  check('frasi', SX.present('tv_past_read').prompt === 'Io ho letto un libro.' && SX.key('tv_now_eat').prompt === 'Che cosa faccio io?' &&
-    SX.key('tv_now_eat').model === 'Lei mangia un\'arancia.' && SX.key('tv_past_phone').prompt === 'Che cosa ho fatto io?' && SX.key('tv_past_phone').model === 'Lei ha telefonato.');
+  check('frasi', SX.present('tv_past_read').prompt === 'Io ho letto un libro.' && SX.key('tv_now_eat').prompt === 'Che cosa faccio (io)?' &&
+    SX.key('tv_now_eat').model === 'Mangia un\'arancia.' && SX.key('tv_past_phone').prompt === 'Che cosa ho fatto (io)?' && SX.key('tv_past_phone').model === 'Ha telefonato.');
   check('giusto', ok(SX.key('tv_now_read'), 'Lei legge un libro.') && ok(SX.key('tv_now_read'), 'Legge un libro.') && ok(SX.key('tv_past_read'), 'Ha letto un libro.') &&
     ok(SX.yes('tv_past_eat'), 'Sì, Lei ha mangiato un\'arancia.') && ok(SX.present('tv_now_phone'), 'Io telefono.'));
   const n = SX.neg('tv_past_read');
@@ -2061,16 +2061,18 @@ check('88: prima e ora', run("SIMPF.present('ipf_m_read').prompt") === 'Prima ' 
   const evalAsk = run('evalAsk'), buildDrill = run('buildDrill'), ok = (st, t) => evaluate(st, t).ok;
   const T = run('eTeacher()').name, it = run('eIt()');
   const both = (fn) => { run("REG_TEST = 'tu'"); const a = fn(); run("REG_TEST = null"); return a; };
-  check('Lei: come prima', run("SP.yes('o_t_phone').model") === 'Sì, è il Suo telefono.' && run("SE.key('e_me').model") === 'Lei è ' + it + '.');
+  check('Lei: come prima', run("SP.yes('o_t_phone').model") === 'Sì, è il Suo telefono.' && run("SE.key('e_me').model") === 'È ' + it + '.');
   check('tu 10: il tuo', both(() => run("SP.yes('o_t_phone').model") === 'Sì, è il tuo telefono.' && ok(run("SP.yes('o_t_phone')"), 'Sì, è il tuo telefono.') && !ok(run("SP.yes('o_t_phone')"), 'Sì, è il Suo telefono.')));
-  check('tu 14: tu sei', both(() => run("SE.key('e_me').model") === 'Tu sei ' + it + '.' && ok(run("SE.key('e_me')"), 'Sei ' + it + '.') && !ok(run("SE.key('e_me')"), 'Lei è ' + it + '.') &&
-    run("SE.key('e_you').prompt") === 'Di che nazionalità sei tu?'));
+  check('tu 14: tu sei', both(() => run("SE.key('e_me').model") === 'Sei ' + it + '.' && ok(run("SE.key('e_me')"), 'Sei ' + it + '.') && !ok(run("SE.key('e_me')"), 'Lei è ' + it + '.') &&
+    run("SE.key('e_you').prompt") === 'Di che nazionalità sei?'));
   check('tu 42: apri', both(() => run("SIM.key('im_f_open').model") === 'Apri la porta!' && ok(run("SIM.key('im_f_open')"), 'Apri la porta!') && !ok(run("SIM.key('im_f_open')"), 'Apra la porta!')));
   check('Lei 42: apra', run("SIM.key('im_f_open').model") === 'Apra la porta!' && !ok(run("SIM.key('im_f_open')"), 'Apri la porta!'));
-  check('tu 59: ti chiami', both(() => run("SCM.key('cm_me').model") === 'Tu ti chiami ' + T + '.' && ok(run("SCM.key('cm_me')"), 'Ti chiami ' + T + '.') &&
+  check('tu 59: ti chiami', both(() => run("SCM.key('cm_me').model") === 'Ti chiami ' + T + '.' && ok(run("SCM.key('cm_me')"), 'Ti chiami ' + T + '.') &&
     !ok(run("SCM.key('cm_me')"), 'Lei si chiama ' + T + '.') && evalAsk('cm_me', 'Come ti chiami?').kind === 'what'));
-  check('tu 60: leggi, hai letto', both(() => run("STV.key('tv_now_read').model") === 'Tu leggi un libro.' && run("STV.key('tv_past_read').model") === 'Tu hai letto un libro.' &&
+  check('tu 60: leggi, hai letto', both(() => run("STV.key('tv_now_read').model") === 'Leggi un libro.' && run("STV.key('tv_past_read').model") === 'Hai letto un libro.' &&
     ok(run("STV.key('tv_now_read')"), 'Leggi un libro.') && !ok(run("STV.key('tv_now_read')"), 'Lei legge un libro.') && evalAsk('tv_past_read', 'Che cosa hai fatto?').kind === 'what'));
+  check('senza «Lei» / «tu» davanti (Massi), «(io)» tra parentesi', run("SCM.key('cm_me').model") === 'Si chiama ' + T + '.' && both(() => run("SCM.key('cm_me').model")) === 'Ti chiami ' + T + '.' &&
+    ok(run("SCM.askQ('cm_me')"), 'Come mi chiamo?') && ok(run("SCM.askQ('cm_me')"), 'Come mi chiamo io?') && run("possPose(SCM.key('cm_me'))") === 'me');
   check('tu 76: ti dà', both(() => run("SMC.key('mc_m_me_book').model") === 'Ti dà il libro.' && !ok(run("SMC.key('mc_m_me_book')"), 'Le dà il libro.')));
   ['l10', 'l14', 'l42', 'l59', 'l60', 'l76'].forEach(id => {
     const good = both(() => { const st = buildSteps(run('LESSONS').find(l => l.id === id)), models = st.filter(s => s.model && s.type !== 'reveal' && s.type !== 'ask');

@@ -8,7 +8,7 @@
      Lui è inglese.                                  → ripete
      Lei è americana?                                → Sì, lei è americana.
      Io sono francese?                               → No, Lei non è francese.   (punto di vista rovesciato)
-     Di che nazionalità sono io?                     → Lei è italiano.
+     Di che nazionalità sono (io)?                   → È italiano.   (senza «Lei», Massi; con il «tu»: Sei italiano.)
      Di che nazionalità è Lei?                       → Io sono … (la sua: qualunque nazionalità va bene)
    Con il «tu» (regTu(), la scelta dell'allievo): «Tu sei italiano.», «Di che nazionalità sei tu?»; allora «Lei è» è l'errore.
    Errori: «io sono italiano» detto dell'insegnante, «lui sono», «tu sei» (si dà del Lei),
@@ -42,8 +42,9 @@ function eSelf() {
 }
 const ePron = (X) => nG(X) === 'f' ? 'lei' : 'lui';
 // l'insegnante visto dall'allievo: «Lei è» / «tu sei» (regTu() in logic.js: la scelta dell'allievo); youQ = la domanda all'allievo
-const eYou = (neg) => regTu() ? (neg ? 'tu non sei' : 'tu sei') : (neg ? 'Lei non è' : 'Lei è');
-const eYouQ = () => regTu() ? 'Di che nazionalità sei tu?' : 'Di che nazionalità è Lei?';
+// senza pronome (Massi): «È italiano.» / «Sei italiano.» — «Lei è italiano» sembra «lei», una donna; «tu sei» è una ripetizione
+const eYou = (neg) => regTu() ? (neg ? 'non sei' : 'sei') : (neg ? 'non è' : 'è');
+const eYouQ = () => regTu() ? 'Di che nazionalità sei?' : 'Di che nazionalità è Lei?';
 const eCap = (s) => s.charAt(0).toUpperCase() + s.slice(1);
 
 /* ---------- Figure: l'insegnante con la bandiera italiana, lo studente = sagoma d'oro ---------- */
@@ -78,7 +79,7 @@ const SE = {
              model: (me ? eCap(eYou()) + ' ' : eCap(ePron(X)) + ' è ') + nAdj(c, g) + '.' };
   },
   key: (X) => {
-    if (X === 'e_me') return { type: 'key', ess: true, show: X, prompt: 'Di che nazionalità sono io?', model: eCap(eYou()) + ' ' + eIt() + '.' };
+    if (X === 'e_me') return { type: 'key', ess: true, show: X, prompt: 'Di che nazionalità sono (io)?', model: eCap(eYou()) + ' ' + eIt() + '.' };
     if (X === 'e_you') return { type: 'key', ess: true, self: true, show: X, prompt: eYouQ(), model: 'Io sono ' + eSelf() + '.' };
     return { type: 'key', ess: true, show: X, prompt: 'Di che nazionalità è ' + ePron(X) + '?', model: eCap(ePron(X)) + ' è ' + nAdj(nC(X), nG(X)) + '.' };
   },
