@@ -334,7 +334,10 @@ const LESSONS = [
     known: ['spu_eat_smoke', 'spu_phone_photo', 'spu_swim_eat', 'spu_park_smoke', 'spu_photo_swim', 'spu_smoke_park'] },
   // LE COSE DELL'ITALIA (Massi: prima le cose più comuni): «Al bar» — Al bar Max prende un cappuccino. (scelta_it.js)
   { id: 'l90', title: 'Lezione 90', level: 4, bar: true, hilite: ['prende', 'al bar'],
-    known: ['bar_m_cappuccino', 'bar_f_cornetto', 'bar_m_caffe', 'bar_f_gelato', 'bar_m_tramezzino', 'bar_f_spremuta'] }
+    known: ['bar_m_cappuccino', 'bar_f_cornetto', 'bar_m_caffe', 'bar_f_gelato', 'bar_m_tramezzino', 'bar_f_spremuta'] },
+  // «I vestiti» — In negozio Isa compra una sciarpa. (scelta_it.js; la vetrina MODA)
+  { id: 'l91', title: 'Lezione 91', level: 4, moda: true, hilite: ['compra', 'in negozio'],
+    known: ['moda_f_sciarpa', 'moda_m_cravatta', 'moda_f_gonna', 'moda_m_cappello', 'moda_f_camicia', 'moda_m_maglione'] }
 ];
 
 // Quattro insegnanti, dal più rigido al più indulgente. gender = voce maschile o femminile.

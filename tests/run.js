@@ -14,7 +14,7 @@ const evaluate = run('evaluate');
 const evaluateAll = run('evaluateAll');
 const buildSteps = run('buildSteps');
 const answerSteps = run('answerSteps');
-const LESSONS = run('LESSONS').filter(l => !l.colors && !l.numbers && !l.geo && !l.poss && !l.size && !l.third && !l.nat && !l.ess && !l.altro && !l.prep && !l.anche && !l.ora && !l.appt && !l.verbs && !l.purp && !l.pron && !l.sum && !l.km && !l.fam && !l.ea && !l.pl && !l.ce && !l.co && !l.dt && !l.ct && !l.sta && !l.cl && !l.imp && !l.qd && !l.ne && !l.ps && !l.lh && !l.cv && !l.sa && !l.lm && !l.gd && !l.ms && !l.sp && !l.lo && !l.nv && !l.da && !l.qn && !l.bv && !l.lp && !l.cm && !l.tv && !l.lq && !l.cz && !l.qu && !l.fi && !l.nh && !l.rf && !l.gn && !l.vo && !l.po && !l.dv && !l.an && !l.tl && !l.dvp && !l.mc && !l.pe && !l.vi && !l.fu && !l.ge && !l.lg && !l.pc && !l.md && !l.cu && !l.pi && !l.sg && !l.tf && !l.ipf && !l.spu && !l.bar && !l.test);   // lezioni con gli oggetti (colori e numeri hanno i loro test)
+const LESSONS = run('LESSONS').filter(l => !l.colors && !l.numbers && !l.geo && !l.poss && !l.size && !l.third && !l.nat && !l.ess && !l.altro && !l.prep && !l.anche && !l.ora && !l.appt && !l.verbs && !l.purp && !l.pron && !l.sum && !l.km && !l.fam && !l.ea && !l.pl && !l.ce && !l.co && !l.dt && !l.ct && !l.sta && !l.cl && !l.imp && !l.qd && !l.ne && !l.ps && !l.lh && !l.cv && !l.sa && !l.lm && !l.gd && !l.ms && !l.sp && !l.lo && !l.nv && !l.da && !l.qn && !l.bv && !l.lp && !l.cm && !l.tv && !l.lq && !l.cz && !l.qu && !l.fi && !l.nh && !l.rf && !l.gn && !l.vo && !l.po && !l.dv && !l.an && !l.tl && !l.dvp && !l.mc && !l.pe && !l.vi && !l.fu && !l.ge && !l.lg && !l.pc && !l.md && !l.cu && !l.pi && !l.sg && !l.tf && !l.ipf && !l.spu && !l.bar && !l.moda && !l.test);   // lezioni con gli oggetti (colori e numeri hanno i loro test)
 const NUM_LESSONS = run('LESSONS').filter(l => l.numbers);
 const COLOR_LESSONS = run('LESSONS').filter(l => l.colors);
 const ITEMS = run('ITEMS');
@@ -2023,6 +2023,22 @@ check('88: prima e ora', run("SIMPF.present('ipf_m_read').prompt") === 'Prima ' 
   const st = buildSteps(l), models = st.filter(s => s.model && s.type !== 'reveal');
   check('90: risposte modello giuste', models.every(s => evaluate(s, s.model).ok));
   check('90: ripetizioni giuste', models.every(s => buildDrill(s, 5, s.reviewItems || []).every(d => evaluate(d, d.model).ok)));
+}
+
+// Lezione 91: «I vestiti» (in negozio)
+{
+  const evalAsk = run('evalAsk'), buildDrill = run('buildDrill'), ok = (st, t) => evaluate(st, t).ok, SX = run('SMODA'), M = run("vName('m')"), F = run("vName('f')");
+  const l = run('LESSONS').find(l => l.id === 'l91');
+  check('lezione 91 c\'è, livello 4', !!l && l.moda && l.level === 4);
+  check('91: frasi', SX.present('moda_f_sciarpa').prompt === 'In negozio ' + F + ' compra una sciarpa.' && SX.key('moda_m_cravatta').prompt === 'Che cosa compra ' + M + ' in negozio?');
+  check('91: giusto e sbagliato', ok(SX.key('moda_m_cappello'), M + ' compra un cappello.') && ok(SX.key('moda_m_cappello'), 'Un cappello.') &&
+    !ok(SX.key('moda_m_cappello'), M + ' compra una cappello.') && !ok(SX.key('moda_m_cappello'), M + ' compra una cravatta.') && !ok(SX.key('moda_m_cappello'), M + ' porta un cappello.'));
+  const n = SX.neg('moda_f_gonna');
+  check('91: il no', ok(n, n.model) && ok(n, n.model + ' ' + n.complete));
+  check('91: allievo', evalAsk('moda_f_gonna', 'Che cosa compra ' + F + ' in negozio?').kind === 'what' && evalAsk('moda_f_gonna', F + ' compra un maglione?').kind === 'no');
+  const st = buildSteps(l), models = st.filter(s => s.model && s.type !== 'reveal');
+  check('91: risposte modello giuste', models.every(s => evaluate(s, s.model).ok));
+  check('91: ripetizioni giuste', models.every(s => buildDrill(s, 5, s.reviewItems || []).every(d => evaluate(d, d.model).ok)));
 }
 
 // Test del livello 3: 8 che contano e 2 libere, dopo la lezione 78

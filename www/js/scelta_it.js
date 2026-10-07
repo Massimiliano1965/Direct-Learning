@@ -123,3 +123,45 @@ const SBAR = choiceLesson({
   fig: barFig,
   wrong: ['prendo', 'prendi', 'prendere', 'mangia', 'beve']
 });
+
+/* ---------- Lezione 91: i vestiti (in negozio) ---------- */
+const MODA_CH = {
+  camicia: { the: 'una camicia', alias: ['camicie'] }, cravatta: { the: 'una cravatta', alias: ['cravatte'] },
+  cappello: { the: 'un cappello', alias: ['cappelli'] }, sciarpa: { the: 'una sciarpa', alias: ['sciarpe'] },
+  gonna: { the: 'una gonna', alias: ['gonne'] }, maglione: { the: 'un maglione', alias: ['maglioni'] }
+};
+const MODA_FIG = {
+  camicia: '<path d="M30 26 l12 -6 h16 l12 6 l12 16 l-9 7 l-7 -8 v44 h-40 v-44 l-7 8 l-9 -7z" fill="#e9eef6"/><path d="M42 20 l8 10 l8 -10" fill="none" stroke="#b9c3d2" stroke-width="2"/>' +
+    '<path d="M50 30 v52" stroke="#b9c3d2" stroke-width="1.4"/><circle cx="50" cy="40" r="1.4" fill="#8d97ad"/><circle cx="50" cy="52" r="1.4" fill="#8d97ad"/><circle cx="50" cy="64" r="1.4" fill="#8d97ad"/>',
+  cravatta: '<path d="M44 14 h12 l-2 8 h-8z" fill="#3f6fb5"/><path d="M46 22 h8 l6 50 l-10 12 l-10 -12z" fill="#3f6fb5"/><path d="M47 34 l10 8 M45 48 l13 10 M44 62 l14 10" stroke="#f3d36b" stroke-width="2"/>',
+  cappello: '<ellipse cx="50" cy="66" rx="36" ry="9" fill="#8e6741"/><path d="M30 64 q0 -32 20 -32 q20 0 20 32z" fill="#a37a52"/><path d="M30 58 q20 6 40 0 v6 q-20 6 -40 0z" fill="#3a3f4a"/>',
+  sciarpa: '<path d="M26 30 q24 -10 48 0 q-4 10 -24 10 q-20 0 -24 -10z" fill="#c8323b"/><path d="M54 38 l6 44 h-12 l-4 -42z" fill="#c8323b"/>' +
+    '<path d="M48 82 v6 M52 82 v6 M56 82 v6 M60 82 v6" stroke="#c8323b" stroke-width="1.6"/><path d="M30 30 q20 -6 40 0 M50 50 l4 0 M51 62 l5 0" stroke="#f3eee2" stroke-width="1.6" fill="none"/>',
+  gonna: '<rect x="34" y="22" width="32" height="8" rx="2" fill="#5b4a8b"/><path d="M34 30 h32 l14 54 h-60z" fill="#7a63b5"/><path d="M42 30 l-6 54 M50 30 v54 M58 30 l6 54" stroke="#5b4a8b" stroke-width="1.4"/>',
+  maglione: '<path d="M32 24 q18 -8 36 0 l14 18 l-8 8 l-6 -6 v40 h-36 v-40 l-6 6 l-8 -8z" fill="#3f8f6a"/><path d="M42 22 q8 6 16 0" fill="none" stroke="#2f6f52" stroke-width="3"/>' +
+    '<path d="M32 76 h36 M32 80 h36" stroke="#2f6f52" stroke-width="2"/><path d="M38 40 l4 4 l4 -4 l4 4 l4 -4 l4 4 l4 -4" stroke="#f3eee2" stroke-width="1.4" fill="none"/>'
+};
+function modaFig(X, it) {
+  const k = p3Key(it.who), LK = (typeof LOOKS !== 'undefined' && LOOKS[TEACHERS[k] ? (TEACHERS[k].look || k) : 'luca']) || null;
+  if (!LK || typeof tTorso !== 'function') return FLAT(MODA_FIG[it.c], 20);
+  return '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">' +
+    // la vetrina del negozio: l'insegna MODA, la cosa appesa alla gruccia
+    '<rect x="54" y="4" width="44" height="13" rx="3" fill="#5b4a8b"/><text x="76" y="14" text-anchor="middle" font-family="Georgia,serif" font-size="9" font-weight="bold" letter-spacing="1.5" fill="#f3eee2">MODA</text>' +
+    '<rect x="52" y="20" width="46" height="74" rx="4" fill="#f3eee2" opacity=".14" stroke="#c9a45c" stroke-width="1"/>' +
+    '<path d="M75 22 v3 M68 30 l7 -5 l7 5" stroke="#8d93a3" stroke-width="1.4" fill="none"/>' +
+    '<g transform="translate(75 60) scale(.6) translate(-50 -50)">' + MODA_FIG[it.c] + '</g>' +
+    // la persona con la borsa del negozio
+    V_PERSON(LK, tArm(LK, ...DOWN_L) + tArm(LK, [65, 47], [70, 66], [66, 84]), { mouth: 'smile' }, -18) +
+    '<path d="M42 86 h14 l2 14 h-18z" fill="#c9a45c"/><path d="M45 86 q4 -6 8 0" stroke="#8e6a2a" stroke-width="1.4" fill="none"/></svg>';
+}
+const SMODA = choiceLesson({
+  flag: 'moda', CH: MODA_CH,
+  items: { moda_f_sciarpa: { who: 'f', c: 'sciarpa' }, moda_m_cravatta: { who: 'm', c: 'cravatta' }, moda_f_gonna: { who: 'f', c: 'gonna' },
+    moda_m_cappello: { who: 'm', c: 'cappello' }, moda_f_camicia: { who: 'f', c: 'camicia' }, moda_m_maglione: { who: 'm', c: 'maglione' } },
+  say: (X, c, neg) => vName(X.charAt(5)) + (neg ? ' non' : '') + ' compra ' + MODA_CH[c].the,
+  lead: () => 'In negozio',
+  proper: (w) => vNames()[gNorm(w).trim()] !== undefined,
+  q: (X) => 'Che cosa compra ' + vName(X.charAt(5)) + ' in negozio?',
+  fig: modaFig,
+  wrong: ['compro', 'compri', 'comprare', 'prende', 'porta']
+});
