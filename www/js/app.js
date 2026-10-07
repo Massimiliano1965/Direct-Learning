@@ -422,7 +422,36 @@ function setStatus(text, mode) {
   // Il tasto Talk lampeggia quando deve parlare lo studente (microfono acceso o «tocca Talk»)
   $('btn-talk').classList.toggle('flash', mode === 'rec' || text.indexOf(uiWord('talk')) !== -1);
 }
-function setPrompt(text) { $('prompt-text').textContent = DB.settings.showText ? shown(text) : ''; squeezePrompt(); }
+function setPrompt(text) { $('prompt-text').textContent = DB.settings.showText ? shown(text) : ''; synWrap(); squeezePrompt(); }
+/* ---------- Parole che vanno bene tutte e due (COURSE.synonyms, es. neanche / nemmeno) ----------
+   Nella frase scritta la parola, in oro, si alterna con l'altra ogni 2 secondi: si vede che sono uguali. */
+function synWrap() {
+  const el = $('prompt-text'), pairs = COURSE.synonyms || [];
+  if (!pairs.length || !el.textContent) return;
+  const esc = (t) => t.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  const other = {};
+  pairs.forEach(([a, b]) => { other[a] = b; other[b] = a; });
+  const re = new RegExp('(^|[^\\p{L}])(' + Object.keys(other).join('|') + ')(?![\\p{L}])', 'giu');
+  const txt = el.textContent;
+  if (!re.test(txt)) return;
+  re.lastIndex = 0;
+  el.innerHTML = esc(txt).replace(re, (m, pre, w) => {
+    const alt = other[w.toLowerCase()], cap = w.charAt(0) !== w.charAt(0).toLowerCase();
+    const b = cap ? alt.charAt(0).toUpperCase() + alt.slice(1) : alt;
+    return pre + '<span class="syn" data-a="' + w + '" data-b="' + b + '">' + w + '</span>';
+  });
+  // larghezza fissa (la più lunga delle due parole): la frase non salta quando la parola cambia
+  el.querySelectorAll('.syn').forEach(sp => {
+    const wa = sp.offsetWidth; sp.textContent = sp.dataset.b; const wb = sp.offsetWidth; sp.textContent = sp.dataset.a;
+    sp.style.minWidth = Math.max(wa, wb) + 'px';
+  });
+}
+setInterval(() => {
+  document.querySelectorAll('#prompt-text .syn').forEach(sp => {
+    sp.classList.add('fade');
+    setTimeout(() => { sp.textContent = sp.textContent === sp.dataset.a ? sp.dataset.b : sp.dataset.a; sp.classList.remove('fade'); }, 250);
+  });
+}, 2000);
 // Se la frase non sta nel suo posto (vedi fitLesson), si scrive un po' più piccola
 function squeezePrompt() {
   const pr = $('prompt-text'), room = +pr.dataset.room || 0;
@@ -573,7 +602,7 @@ function handleAsk(alts) {
     flashGood();
     setCue('ok');
     const answer = answerAsk(X, r);
-    if (DB.settings.showText) $('prompt-text').textContent = shown(answer);
+    if (DB.settings.showText) { $('prompt-text').textContent = shown(answer); synWrap(); }
     Mouth.speak(answer, t.modelRate, t.pitch, () => { if (alive(run)) nextStep(run, 500); });
     return;
   }
@@ -596,7 +625,7 @@ function handleAsk(alts) {
     return;
   }
   setStatus(tx('tryAgain'), 'err');
-  if (DB.settings.showText) $('prompt-text').textContent = shown(r.model);
+  if (DB.settings.showText) { $('prompt-text').textContent = shown(r.model); synWrap(); }
   Mouth.speakParts([{ text: t.wrong, rate: t.rate }, { text: r.model, rate: t.modelRate }], t.pitch, () => {
     if (!alive(run)) return;
     scr.classList.remove('tunnel');
@@ -619,7 +648,7 @@ function coachAnswer(st, run) {
   L.coached = true;
   later(() => {
     if (!alive(run)) return;
-    if (DB.settings.showText) $('prompt-text').textContent = shown(st.model);
+    if (DB.settings.showText) { $('prompt-text').textContent = shown(st.model); synWrap(); }
     Mouth.speak(st.model, t.modelRate, t.pitch, () => {
       if (!alive(run)) return;
       showYourTurn(t);
@@ -794,7 +823,7 @@ function onWrong() {
       L.drill = null;
       L.di = 0;
       setStatus(tx('movingOn'), 'err');
-      if (DB.settings.showText) $('prompt-text').textContent = shown(st.model);
+      if (DB.settings.showText) { $('prompt-text').textContent = shown(st.model); synWrap(); }
       later(() => {
         if (!alive(run)) return;
         Mouth.speak(st.model, t.modelRate, t.pitch, () => {
@@ -818,7 +847,7 @@ function onWrong() {
   setStatus(repLabel(), 'err');
   const d = cur();
   showPlaces(d, 'result');   // mentre l'insegnante dice la frase giusta: verde il luogo vero, rosso lo sbagliato
-  if (DB.settings.showText) $('prompt-text').textContent = shown(d.model);
+  if (DB.settings.showText) { $('prompt-text').textContent = shown(d.model); synWrap(); }
   Mouth.speakParts([
     { text: t.wrong, rate: t.rate },
     { text: d.model, rate: t.modelRate }

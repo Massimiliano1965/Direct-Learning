@@ -21,7 +21,7 @@ const hCol = (c, X) => colW(c, hO(X));                   // «nera»
 // frase sul primo oggetto: «Il telefono è nero.» / «Il telefono non è rosso.»
 const hFirst = (A, c, pos) => cap(hThe(A)) + (pos ? ' è ' : ' non è ') + colW(c, hO(A)) + '.';
 const hAnche = (B) => 'Anche ' + hThe(B) + ' è ' + hCol(hC(B), B) + '.';
-const hNeanche = (B, c) => 'Neanche ' + hThe(B) + ' è ' + hCol(c, B) + '.';
+const hNeanche = (B, c, w) => (w || 'Neanche') + ' ' + hThe(B) + ' è ' + hCol(c, B) + '.';
 // un colore che non hanno né A né B
 const hNone = (A, B) => pick(Object.keys(COLORS).filter(c => c !== hC(A) && c !== hC(B)));
 
@@ -78,10 +78,15 @@ function ancheEvaluate(step, text) {
   }
 }
 
+// Ripetizioni: con «neanche» la voce alterna anche «nemmeno» (vanno bene tutte e due)
 function ancheDrill(st, n) {
   const first = Object.assign({}, st, { prompt: st.model, drill: true });
   const out = [first];
-  while (out.length < n) out.push(Object.assign({}, first, { prompt: out.length % 2 ? st.prompt : st.model }));
+  while (out.length < n) {
+    const d = Object.assign({}, first, { prompt: out.length % 2 ? st.prompt : st.model });
+    if (st.form === 'neanche' && out.length % 2 === 0) { d.model = hNeanche(st.show, st.col, 'Nemmeno'); d.prompt = d.model; }
+    out.push(d);
+  }
   return out;
 }
 
