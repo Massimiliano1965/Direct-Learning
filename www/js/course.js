@@ -208,7 +208,10 @@ const LESSONS = [
     known: ['lm_m_cuoco', 'lm_f_cuoco', 'lm_m_cameriere', 'lm_f_cameriere', 'lm_m_professore', 'lm_f_professore'] },
   // capitolo 8: «Calendario: i giorni» — la settimana L M M G V S D, oggi in oro: «Che giorno è oggi? Oggi è martedì.» (giorni_it.js)
   { id: 'l50', title: 'Lezione 50', level: 2, gd: true,
-    known: ['gd_lun', 'gd_mar', 'gd_mer', 'gd_gio', 'gd_ven', 'gd_sab', 'gd_dom'] }
+    known: ['gd_lun', 'gd_mar', 'gd_mer', 'gd_gio', 'gd_ven', 'gd_sab', 'gd_dom'] },
+  // capitolo 8: «Calendario: i mesi» — l'anno G F M A M G L A S O N D con la stagione: «Che mese è? È luglio.» (mesi_it.js)
+  { id: 'l51', title: 'Lezione 51', level: 2, ms: true,
+    known: ['ms_gen', 'ms_apr', 'ms_mag', 'ms_lug', 'ms_ott', 'ms_dic'] }
 ];
 
 // Quattro insegnanti, dal più rigido al più indulgente. gender = voce maschile o femminile.
