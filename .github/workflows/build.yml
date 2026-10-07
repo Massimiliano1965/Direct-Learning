@@ -9,11 +9,11 @@ jobs:
   build:
     runs-on: ubuntu-latest
     # Un APK per ogni lingua da imparare: «CIAO» (italiano) e «CIAO English».
-    # Decisione di Massi: a ogni push solo l'italiano (l'inglese non cambia); tutti e due quando si preme «Run workflow».
+    # Decisione di Massi: a ogni push solo l'italiano; con «Run workflow» tutti (inglese, russo, arabo, cinese).
     strategy:
       fail-fast: false
       matrix:
-        course: ${{ fromJSON(github.event_name == 'workflow_dispatch' && '["it","en"]' || '["it"]') }}
+        course: ${{ fromJSON(github.event_name == 'workflow_dispatch' && '["it","en","ru","ar","zh"]' || '["it"]') }}
     steps:
       - uses: actions/checkout@v4
 
@@ -26,6 +26,7 @@ jobs:
           for f in www/js/*.js tests/*.js; do node --check "$f"; done
           node tests/run.js
           node tests/run_en.js
+          node tests/run_world.js
           node tests/run_voice.js
 
       - name: Prepara il corso (${{ matrix.course }})
@@ -64,5 +65,5 @@ jobs:
       - name: Carica APK
         uses: actions/upload-artifact@v4
         with:
-          name: CIAO-${{ matrix.course == 'en' && 'English' || 'Italiano' }}-apk
+          name: CIAO-${{ matrix.course == 'en' && 'English' || matrix.course == 'ru' && 'Russo' || matrix.course == 'ar' && 'Arabo' || matrix.course == 'zh' && 'Cinese' || 'Italiano' }}-apk
           path: platforms/android/app/build/outputs/apk/debug/app-debug.apk

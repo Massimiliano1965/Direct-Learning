@@ -42,6 +42,18 @@ Leggi questo file prima di tutto. Poi `docs/percorso.md` (l'ordine delle lezioni
 - **Test di fine livello**: storia da descrivere a voce, niente «giusto/sbagliato» durante, risultato alla fine, ripasso consigliato
   (anche con un avviso nelle lezioni dopo se gli errori continuano). Dettagli in `docs/percorso.md`.
 
+## Corsi di russo, arabo e cinese (iniziati il 7/10/2026, richiesta di Massi)
+- Lezioni 1 e 2 (libro, tavolo, sedia → penna; sedia, porta → finestra) con il motore comune `world.js`;
+  ogni lingua in `course_ru.js`, `course_ar.js`, `course_zh.js` (COURSE, ITEMS, PH = le frasi, TR = la pronuncia);
+  gli insegnanti in `teachers_world.js` (l'errore è solo «No» nella lingua del corso). Test: `node tests/run_world.js`.
+- Sotto ogni frase, più piccola, **la pronuncia scritta per la lingua dello studente** (italiano, inglese, tedesco):
+  `COURSE.translit(testo, lingua)` (app.js: addTranslit). Italiano «Èta knìga», inglese «EH-tuh KNEE-guh», tedesco «Éta kníga».
+  Cinese con i toni (segni sopra le vocali); arabo da destra a sinistra, la pronuncia da sinistra a destra.
+- Arabo: هذا / هذه (maschile / femminile) come «questo / questa»; «ليس / ليست» + la parola con «-an».
+- Build: `node tools/set_course.js ru|ar|zh`; su GitHub si costruiscono solo con «Run workflow» (a ogni push solo l'italiano).
+- Da verificare sul telefono: le voci e il microfono in russo, arabo e cinese (il telefono deve avere le lingue installate).
+- La pronuncia scritta l'ho fatta io: meglio farla controllare da chi parla quelle lingue.
+
 ## Prossimi passi
 - Lezioni 1–64 e i test caricati su `main`; 65–68 sul ramo `in-attesa`, da pushare quando Massi dice «pusha». Livello 2 dalla 39 (`level: 2` in LESSONS). I numeri fino a 1000 sono solo 4 lezioni (26–29): decisione di Massi, «non di più».
 - Test di fine livello 1 fatto (`test_it.js`, riga «t1» in LESSONS dopo la 38; risultati in `DB.settings.tests`). Avviso «Ripasso consigliato» a fine lezione: se l'allievo ha saltato il ripasso e la lezione va sotto il 70%; una lezione da ripassare rifatta con l'80% esce dalla lista. Prossimi passi: preposizioni (cap. 11), gli/le/loro/mi/ci (cap. 12) e il test del livello 3.

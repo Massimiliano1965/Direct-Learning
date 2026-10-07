@@ -146,7 +146,10 @@ const UI_TEXT = {
 const COURSE_LANG_NAME = {
   it: { en: 'Italian', de: 'italienische', ja: 'イタリア語', it: 'italiana' },
   en: { en: 'English', de: 'englische', ja: '英語', it: 'inglese' },
-  de: { en: 'German', de: 'deutsche', ja: 'ドイツ語', it: 'tedesca' }
+  de: { en: 'German', de: 'deutsche', ja: 'ドイツ語', it: 'tedesca' },
+  ru: { en: 'Russian', de: 'russische', ja: 'ロシア語', it: 'russa' },
+  ar: { en: 'Arabic', de: 'arabische', ja: 'アラビア語', it: 'araba' },
+  zh: { en: 'Chinese', de: 'chinesische', ja: '中国語', it: 'cinese' }
 };
 
 let UI_LANG = 'en';

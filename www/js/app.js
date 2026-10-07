@@ -427,7 +427,17 @@ function setStatus(text, mode) {
 function setPrompt(text) { $('prompt-text').textContent = DB.settings.showText ? shown(text) : ''; synWrap(); squeezePrompt(); }
 /* ---------- Parole che vanno bene tutte e due (COURSE.synonyms, es. neanche / nemmeno) ----------
    Nella frase scritta la parola, in oro, si alterna con l'altra ogni 2 secondi: si vede che sono uguali. */
-function synWrap() {
+function synWrap() { synWrap0(); addTranslit(); }
+// Russo, arabo, cinese: sotto la frase, più piccola, come si pronuncia (scritta per la lingua dello studente)
+function addTranslit() {
+  const el = $('prompt-text');
+  if (typeof COURSE.translit !== 'function' || !el.textContent) return;
+  const d = document.createElement('div');
+  d.className = 'translit';
+  d.textContent = COURSE.translit(el.textContent, UI_LANG);
+  el.appendChild(d);
+}
+function synWrap0() {
   const el = $('prompt-text'), pairs = COURSE.synonyms || [];
   // parole da mettere in evidenza in questa lezione (es. «è» e «sono» nella lezione 20)
   const hil = (L && L.lesson && L.lesson.hilite) || [];
@@ -712,7 +722,7 @@ function listenSoon(run) {
 function listen() {
   if (!L || L.busy || L.paused) return;
   // prove di Massi: «Rispondo: no» → niente microfono, si legge la risposta giusta e si va avanti con «Avanti»
-  if (TEST_BUTTONS && DB.settings.noAnswer) {
+  if (typeof TEST_BUTTONS !== 'undefined' && TEST_BUTTONS && DB.settings.noAnswer) {
     const st = cur();
     if (st && st.model) $('heard').textContent = '→ ' + shown(st.model);
     setStatus('Avanti ▶', 'wait');
@@ -1050,7 +1060,7 @@ $('btn-talk').onclick = () => {
 $('btn-exit').onclick = () => { if (demoActive) skipDemo(); else goHome(); };
 /* ---------- Pulsanti di prova (TEST_BUTTONS): «Avanti ▶» salta il passo, «Rispondo: sì/no» accende o spegne il microfono ---------- */
 function showTestRow() {
-  $('test-row').classList.toggle('hidden', !TEST_BUTTONS || demoActive);
+  $('test-row').classList.toggle('hidden', typeof TEST_BUTTONS === 'undefined' || !TEST_BUTTONS || demoActive);
   $('btn-mic').textContent = DB.settings.noAnswer ? 'Rispondo: no' : 'Rispondo: sì';
   $('btn-mic').classList.toggle('off', !!DB.settings.noAnswer);
 }

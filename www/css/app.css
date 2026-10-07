@@ -276,6 +276,8 @@ html[data-level] #stage { background: linear-gradient(180deg, var(--surface2), v
 .lesson-btn.lv4 { border-left: 4px solid #d49abd; }
 
 /* parole che vanno bene tutte e due: in oro, si alternano (synWrap in app.js) */
+/* russo, arabo, cinese: la pronuncia sotto la frase (sempre da sinistra a destra) */
+#prompt-text .translit { direction: ltr; unicode-bidi: isolate; font-family: var(--sans, Inter, Arial, sans-serif); font-size: .62em; color: #c9b7f0; margin-top: 6px; letter-spacing: .01em; }
 #prompt-text .syn { text-align: center; color: #e6c77e; transition: opacity .25s; }
 #prompt-text .syn.fade { opacity: 0; }
 #prompt-text .syn[style] { display: inline-block; }

@@ -1,11 +1,14 @@
-// Prepara il progetto per un corso: node tools/set_course.js it|en
+// Prepara il progetto per un corso: node tools/set_course.js it|en|ru|ar|zh
 // Scrive www/js/build.js e cambia nome e identità dell'app in config.xml
 // (ogni corso è un'app separata sul telefono e sul Play Store).
 const fs = require('fs');
 const path = require('path');
 const COURSES = {
   it: { id: 'it.metododiretto.app', name: 'CIAO', desc: 'Italian with the direct method: look, listen, answer.' },
-  en: { id: 'it.metododiretto.en', name: 'CIAO English', desc: 'Inglese con il metodo diretto: guarda, ascolta, rispondi.' }
+  en: { id: 'it.metododiretto.en', name: 'CIAO English', desc: 'Inglese con il metodo diretto: guarda, ascolta, rispondi.' },
+  ru: { id: 'it.metododiretto.ru', name: 'CIAO Русский', desc: 'Russo con il metodo diretto, con la pronuncia scritta.' },
+  ar: { id: 'it.metododiretto.ar', name: 'CIAO العربية', desc: 'Arabo con il metodo diretto, con la pronuncia scritta.' },
+  zh: { id: 'it.metododiretto.zh', name: 'CIAO 中文', desc: 'Cinese con il metodo diretto, con la pronuncia scritta.' }
 };
 const code = process.argv[2];
 const c = COURSES[code];
