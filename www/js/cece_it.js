@@ -51,7 +51,7 @@ function ceStatements(s) {
     if (!nn) { out.push({ obj: '?', neg: !!m[1], good: false }); continue; }
     const verb = m[2] === 'ce' ? 'c e' : m[2];
     const artOk = n > 1 || m[3] === (ITEMS[nn.obj].art === 'un\'' ? 'un' : ITEMS[nn.obj].art);
-    const good = artOk && nn.plural === (n > 1) && (n === 1 ? verb === 'c e' : verb === 'ci sono');
+    const good = artOk && (nn.plural === null || nn.plural === (n > 1)) && (n === 1 ? verb === 'c e' : verb === 'ci sono');
     out.push({ obj: nn.obj, n: n, neg: !!m[1], good: good });
   }
   return out;

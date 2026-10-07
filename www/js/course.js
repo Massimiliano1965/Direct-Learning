@@ -166,7 +166,10 @@ const LESSONS = [
     known: ['dd_umbrella_giallo_2', 'dd_backpack_rosso_2', 'dd_agenda_bianco_2', 'dd_label_rosso_2', 'dd_laptop_bianco_2', 'dd_key_giallo_2'] },
   // capitolo 5: «Quel, quella, quei, quegli, quelle» — le cose lontane: «Quegli zaini sono rossi.»
   { id: 'l37', title: 'Lezione 37', dt: true, gender: true,
-    known: ['dl_umbrella_giallo_1', 'dl_phone_bianco_2', 'dl_backpack_rosso_2', 'dl_suitcase_rosso_1', 'dl_cup_bianco_2', 'dl_coat_rosso_1'] }
+    known: ['dl_umbrella_giallo_1', 'dl_phone_bianco_2', 'dl_backpack_rosso_2', 'dl_suitcase_rosso_1', 'dl_cup_bianco_2', 'dl_coat_rosso_1'] },
+  // capitolo 5: «Plurali irregolari» — un uomo / due uomini, una mano / due mani, tre uova, due caffè, due computer (irr_it.js)
+  { id: 'l38', title: 'Lezione 38', pl: true, hilite: ['è', 'sono'],
+    known: ['pl_man_1', 'pl_man_2', 'pl_hand_2', 'pl_egg_3', 'pl_coffee_2', 'pl_computer_2'] }
 ];
 
 // Quattro insegnanti, dal più rigido al più indulgente. gender = voce maschile o femminile.

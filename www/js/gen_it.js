@@ -17,9 +17,14 @@ PLURAL_KEY.valige = 'suitcase';
 const gFem = (obj) => ITEMS[obj].art === 'una' || ITEMS[obj].art === 'un\'';
 const gWord = (obj, n) => n > 1 ? PLURAL[obj] : ITEMS[obj].word;
 // una parola (come la scrive norm) → { obj, plural } o null
+// (le parole che non cambiano al plurale — un caffè, due caffè; un computer, due computer — danno plural: null)
+const gBare = (w) => String(w || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 function gNoun(w) {
-  if (PLURAL_KEY[w]) return { obj: PLURAL_KEY[w], plural: true };
-  if (WORD2KEY[w]) return { obj: WORD2KEY[w], plural: false };
+  const pk = PLURAL_KEY[w] || Object.keys(PLURAL).find(k => gBare(PLURAL[k]) === w);
+  const sk = WORD2KEY[w] || Object.keys(ITEMS).find(k => gBare(ITEMS[k].word) === w);
+  if (pk && sk && pk === sk) return { obj: pk, plural: null };
+  if (pk) return { obj: pk, plural: true };
+  if (sk) return { obj: sk, plural: false };
   return null;
 }
 // articolo determinativo, singolare e plurale: il/lo/la/l', i/gli/le

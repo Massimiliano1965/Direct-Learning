@@ -6,7 +6,7 @@ const vm = require('vm');
 
 const ctx = { console: console };
 vm.createContext(ctx);
-['course.js', 'data.js', 'logic.js', 'colors_it.js', 'numbers_it.js', 'geo_fig.js', 'geo_it.js', 'poss_it.js', 'size_it.js', 'third_it.js', 'nat_it.js', 'essere_it.js', 'altro_it.js', 'prep_it.js', 'anche_it.js', 'ora_it.js', 'appt_it.js', 'gender_it.js', 'verbs_it.js', 'perche_it.js', 'pron_it.js', 'sum_it.js', 'km_it.js', 'fam_it.js', 'avere_it.js', 'gen_it.js', 'plur_it.js', 'cece_it.js', 'costa_it.js', 'det_it.js', 'ui_lang.js'].forEach(f => {
+['course.js', 'data.js', 'logic.js', 'colors_it.js', 'numbers_it.js', 'geo_fig.js', 'geo_it.js', 'poss_it.js', 'size_it.js', 'third_it.js', 'nat_it.js', 'essere_it.js', 'altro_it.js', 'prep_it.js', 'anche_it.js', 'ora_it.js', 'appt_it.js', 'gender_it.js', 'verbs_it.js', 'perche_it.js', 'pron_it.js', 'sum_it.js', 'km_it.js', 'fam_it.js', 'avere_it.js', 'gen_it.js', 'plur_it.js', 'cece_it.js', 'costa_it.js', 'det_it.js', 'irr_it.js', 'ui_lang.js'].forEach(f => {
   vm.runInContext(fs.readFileSync(path.join(__dirname, '..', 'www', 'js', f), 'utf8'), ctx, { filename: f });
 });
 const run = (code) => vm.runInContext(code, ctx);
@@ -1008,6 +1008,25 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
     check(l.id + ': risposte modello giuste', models.every(s => evaluate(s, s.model).ok));
     check(l.id + ': ripetizioni giuste', models.every(s => buildDrill(s, 5, []).every(d => evaluate(d, d.model).ok)));
   });
+}
+
+// Lezione 38: «Plurali irregolari»
+{
+  const SP2 = run('SPL'), evalAsk = run('evalAsk'), buildDrill = run('buildDrill'), ok = (st, t) => evaluate(st, t).ok;
+  const l = run('LESSONS').find(l => l.id === 'l38');
+  check('lezione 38 c\'è', !!l && l.pl);
+  check('figure', l.known.every(k => FIG[k] && FIG[k].indexOf('<svg') === 0 && FIG[k].indexOf(' id=') === -1));
+  check('frasi', SP2.present('pl_man_1').prompt === 'È un uomo.' && SP2.present('pl_man_2').prompt === 'Sono due uomini.' && SP2.present('pl_hand_2').prompt === 'Sono due mani.' &&
+    SP2.present('pl_egg_3').prompt === 'Sono tre uova.' && SP2.present('pl_coffee_2').prompt === 'Sono due caffè.' && SP2.present('pl_computer_2').prompt === 'Sono due computer.');
+  check('giusto (anche «caffe» senza accento)', ok(SP2.key('pl_man_2'), 'Sono due uomini.') && ok(SP2.key('pl_egg_3'), 'Sono tre uova.') && ok(SP2.key('pl_coffee_2'), 'Sono due caffe.') &&
+    ok(SP2.key('pl_computer_2'), 'Sono due computer.') && ok(SP2.key('pl_hand_2'), 'Sono due mani.'));
+  check('sbagliato', !ok(SP2.key('pl_man_2'), 'Sono due uomo.') && !ok(SP2.key('pl_hand_2'), 'Sono due mano.') && !ok(SP2.key('pl_egg_3'), 'Sono tre uovi.') &&
+    !ok(SP2.key('pl_man_1'), 'È una uomo.') && !ok(SP2.key('pl_hand_2'), 'Sono due manı.'));
+  check('lezione 32 non cambia', SP2.present('pl_book_2').prompt === 'Sono due libri.' && ok(SP2.key('pl_book_2'), 'Sono due libri.') && !ok(SP2.key('pl_book_2'), 'Sono due libro.'));
+  check('allievo', evalAsk('pl_egg_3', 'Che cosa sono?').kind === 'what' && evalAsk('pl_egg_3', 'Sono tre uovi?').ok === false);
+  const st = buildSteps(l), models = st.filter(s => s.model && s.type !== 'reveal');
+  check('lezione 38: risposte modello giuste', models.every(s => evaluate(s, s.model).ok));
+  check('lezione 38: ripetizioni giuste', models.every(s => buildDrill(s, 5, []).every(d => evaluate(d, d.model).ok)));
 }
 
 // Parole che vanno bene tutte e due (COURSE.synonyms): il microfono le accetta tutte e due

@@ -42,7 +42,7 @@ function plStatements(s) {
     const nn = gNoun(m[4]), n = PL_NUM[m[3]];
     if (!nn) { out.push({ obj: '?', neg: !!m[1], good: false }); continue; }
     const artOk = n > 1 || m[3] === (ITEMS[nn.obj].art === 'un\'' ? 'un' : ITEMS[nn.obj].art);
-    const good = artOk && nn.plural === (n > 1) && (m[2] === 'e') === (n === 1);
+    const good = artOk && (nn.plural === null || nn.plural === (n > 1)) && (m[2] === 'e') === (n === 1);
     out.push({ obj: nn.obj, n: n, neg: !!m[1], good: good });
   }
   return out;
