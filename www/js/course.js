@@ -265,7 +265,10 @@ const LESSONS = [
     known: ['nh_m_book_3', 'nh_f_key_2', 'nh_m_orange_1', 'nh_f_bottle_3', 'nh_m_cup_2', 'nh_f_umbrella_1'] },
   // capitolo 13: «Verbi riflessivi» — Che cosa fa Max? Max si alza. Isa si siede. (rifl_it.js)
   { id: 'l68', title: 'Lezione 68', level: 3, rf: true, hilite: ['si alza', 'si siede', 'si lava', 'si pettina'],
-    known: ['rf_m_alza', 'rf_f_siede', 'rf_m_lava', 'rf_f_pettina', 'rf_m_siede', 'rf_f_alza'] }
+    known: ['rf_m_alza', 'rf_f_siede', 'rf_m_lava', 'rf_f_pettina', 'rf_m_siede', 'rf_f_alza'] },
+  // capitolo 13: «Già — non ancora» — Max ha già mangiato? Sì, ha già mangiato. Isa ha già letto? No, non ha ancora letto. (gia_it.js)
+  { id: 'l69', title: 'Lezione 69', level: 3, gn: true, hilite: ['già', 'non ha ancora'],
+    known: ['gn_m_eat_1', 'gn_f_read_0', 'gn_m_phone_0', 'gn_f_drink_1', 'gn_m_read_1', 'gn_f_eat_0'] }
 ];
 
 // Quattro insegnanti, dal più rigido al più indulgente. gender = voce maschile o femminile.

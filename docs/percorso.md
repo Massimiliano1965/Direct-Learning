@@ -125,7 +125,7 @@ Durante il test l'insegnante non corregge; contano solo gli errori, mostrati all
 63. **Cibi del pranzo e della cena**: pasta, pesce, carne…; il menù — *fatto: Lezione 66 (a pranzo / a cena)*
 64. **«Ne»** — *fatto: Lezione 67 (Quanti libri ha Max? Ne ha tre.)*
 65. **Verbi riflessivi**: alzarsi, sedersi, fermarsi, chiamarsi — *fatto: Lezione 68 (si alza, si siede, si lava le mani, si pettina)*
-66. **Già — non ancora**
+66. **Già — non ancora** — *fatto: Lezione 69 (la clessidra azzurra = non ancora)*
 
 ## Capitolo 14
 
