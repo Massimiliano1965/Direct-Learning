@@ -6,7 +6,7 @@ const vm = require('vm');
 
 const ctx = { console: console };
 vm.createContext(ctx);
-['course.js', 'data.js', 'logic.js', 'colors_it.js', 'numbers_it.js', 'geo_fig.js', 'geo_it.js', 'poss_it.js', 'size_it.js', 'third_it.js', 'nat_it.js', 'essere_it.js', 'altro_it.js', 'prep_it.js', 'anche_it.js', 'ora_it.js', 'appt_it.js', 'ui_lang.js'].forEach(f => {
+['course.js', 'data.js', 'logic.js', 'colors_it.js', 'numbers_it.js', 'geo_fig.js', 'geo_it.js', 'poss_it.js', 'size_it.js', 'third_it.js', 'nat_it.js', 'essere_it.js', 'altro_it.js', 'prep_it.js', 'anche_it.js', 'ora_it.js', 'appt_it.js', 'gender_it.js', 'ui_lang.js'].forEach(f => {
   vm.runInContext(fs.readFileSync(path.join(__dirname, '..', 'www', 'js', f), 'utf8'), ctx, { filename: f });
 });
 const run = (code) => vm.runInContext(code, ctx);
@@ -707,6 +707,25 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
   const st = buildSteps(l21), models = st.filter(s => s.model && s.type !== 'reveal');
   check('lezione 21: risposte modello giuste', models.every(s => evaluate(s, s.model).ok));
   check('lezione 21: ripetizioni giuste', models.every(s => buildDrill(s, 5, []).every(d => evaluate(d, d.model).ok)));
+}
+
+// Lezione 22: «Il, la o l'?» (lezione dei colori con parole che vogliono l')
+{
+  const SC = run('SC'), buildDrill = run('buildDrill'), ok = (st, t) => evaluate(st, t).ok;
+  const l22 = run('LESSONS').find(l => l.id === 'l22');
+  check('lezione 22 c\'è', !!l22 && l22.colors && l22.gender);
+  check('figure', l22.known.every(k => FIG[k] && FIG[k].indexOf('<svg') === 0 && FIG[k].indexOf(' id=') === -1));
+  check('frasi con l\'', SC.present('umbrella_nero').prompt === 'L\'ombrello è nero.' && SC.present('agenda_nero').prompt === 'L\'agenda è nera.' &&
+    SC.present('label_rosso').prompt === 'L\'etichetta è rossa.' && SC.present('ambulance_bianco').prompt === 'L\'ambulanza è bianca.' &&
+    SC.key('plane_bianco').prompt === 'Di che colore è l\'aereo?' && SC.present('clock_bianco').prompt === 'L\'orologio è bianco.');
+  check('giusto (anche «l agenda» del microfono)', ok(SC.key('agenda_nero'), 'L\'agenda è nera.') && ok(SC.key('agenda_nero'), 'L agenda è nera.') && ok(SC.yes('plane_bianco'), 'Sì, l\'aereo è bianco.'));
+  check('sbagliato: «lo ombrello», «la agenda», «il aereo»', !ok(SC.key('umbrella_nero'), 'Lo ombrello è nero.') && !ok(SC.key('agenda_nero'), 'La agenda è nera.') && !ok(SC.key('plane_bianco'), 'Il aereo è bianco.'));
+  check('sbagliato: accordo «l\'agenda è nero», «l\'aereo è bianca»', !ok(SC.key('agenda_nero'), 'L\'agenda è nero.') && !ok(SC.key('plane_bianco'), 'L\'aereo è bianca.'));
+  check('parole con -o / -a in evidenza', (w => ['ombrello', 'orologio', 'aereo', 'agenda', 'etichetta', 'ambulanza', 'nero', 'nera'].every(x => w.indexOf(x) !== -1))(run('genderWords')(l22)));
+  check('lezioni 5 e 19 non cambiano', SC.present('phone_nero').prompt === 'Il telefono è nero.' && SC.present('suitcase_nero').prompt === 'La valigia è nera.');
+  const st = buildSteps(l22), models = st.filter(s => s.model && s.type !== 'reveal');
+  check('lezione 22: risposte modello giuste', models.every(s => evaluate(s, s.model).ok));
+  check('lezione 22: ripetizioni giuste', models.every(s => buildDrill(s, 5, []).every(d => evaluate(d, d.model).ok)));
 }
 
 // Parole che vanno bene tutte e due (COURSE.synonyms): il microfono le accetta tutte e due

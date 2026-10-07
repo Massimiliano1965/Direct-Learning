@@ -20,9 +20,11 @@ function combo(X) {
   const [obj, col] = X.split('_');
   return ITEMS[obj] && COLORS[col] ? { obj: obj, col: col } : null;
 }
-const isFem = (obj) => ITEMS[obj].art === 'una';
-const defArt = (obj) => isFem(obj) ? 'la' : 'il';
-const theObj = (obj) => defArt(obj) + ' ' + ITEMS[obj].word;                    // «il telefono»
+const isFem = (obj) => ITEMS[obj].art === 'una' || ITEMS[obj].art === "un'";
+// il, la, lo, l' (lezione 22: l'ombrello, l'agenda); defArtN = come lo scrive norm() («l»)
+const defArt = (obj) => /^[aeiou]/.test(ITEMS[obj].word) ? 'l\'' : ITEMS[obj].art === 'uno' ? 'lo' : isFem(obj) ? 'la' : 'il';
+const defArtN = (obj) => defArt(obj).replace('\'', '');
+const theObj = (obj) => defArt(obj) + (defArt(obj) === 'l\'' ? '' : ' ') + ITEMS[obj].word;   // «il telefono», «l'ombrello»
 const colW = (col, obj) => COLORS[col][isFem(obj) ? 'f' : 'm'];                  // «nera»
 const cap = (s) => s.charAt(0).toUpperCase() + s.slice(1);
 const colSay = (X) => { const c = combo(X); return cap(theObj(c.obj)) + ' è ' + colW(c.col, c.obj) + '.'; };   // «Il telefono è nero.»
@@ -57,7 +59,7 @@ function colStatements(s) {
   let m;
   while ((m = re.exec(s)) !== null) {
     const obj = WORD2KEY[m[2]], cw = COLOR_WORD[m[4]];
-    const okArt = obj && m[1] === defArt(obj);
+    const okArt = obj && m[1] === defArtN(obj);
     const okAgr = obj && cw && cw.g === (isFem(obj) ? 'f' : 'm');
     out.push({ obj: obj, col: cw ? cw.col : null, neg: !!m[3], good: !!(okArt && okAgr) });
   }
@@ -100,14 +102,14 @@ function colEvalAsk(X, text) {
   if (has(s, 'che cosa e') && !/ e (?:il|la) /.test(s)) return { ok: true, kind: 'thing' };
   const q = / di che colore e (il|la|lo|l) ([a-z]+)(?= )/.exec(s);
   if (q) {
-    if (WORD2KEY[q[2]] !== c.obj || q[1] !== defArt(c.obj)) return bad();
+    if (WORD2KEY[q[2]] !== c.obj || q[1] !== defArtN(c.obj)) return bad();
     return { ok: true, kind: 'what' };
   }
   if (has(s, 'di che colore e')) return { ok: true, kind: 'what' };
   const alt = / (il|la|lo|l) ([a-z]+) e ([a-z]+) (?:o|oppure) ([a-z]+)(?= )/.exec(s);
   if (alt) {
     const a = COLOR_WORD[alt[3]], b = COLOR_WORD[alt[4]];
-    if (WORD2KEY[alt[2]] === c.obj && alt[1] === defArt(c.obj) && a && b && a.col !== b.col && a.g === b.g && a.g === (isFem(c.obj) ? 'f' : 'm'))
+    if (WORD2KEY[alt[2]] === c.obj && alt[1] === defArtN(c.obj) && a && b && a.col !== b.col && a.g === b.g && a.g === (isFem(c.obj) ? 'f' : 'm'))
       return { ok: true, kind: 'alt', ask: a.col, ask2: b.col };
     return bad();
   }

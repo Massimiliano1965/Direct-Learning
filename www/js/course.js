@@ -52,7 +52,11 @@ const ITEMS = {
   agenda:   { word: 'agenda',    art: "un'", alias: ['agende'] },
   orange:   { word: 'arancia',   art: "un'", alias: ['arance', 'arancio', 'aranci'] },
   backpack: { word: 'zaino',     art: 'uno', alias: ['zaini'] },
-  mirror:   { word: 'specchio',  art: 'uno', alias: ['specchi'] }
+  mirror:   { word: 'specchio',  art: 'uno', alias: ['specchi'] },
+  // lezione 22 («Il, la o l'?»): parole con l' che finiscono in -o o in -a
+  plane:     { word: 'aereo',     art: 'un',  alias: ['aerei', 'areo'] },
+  label:     { word: 'etichetta', art: "un'", alias: ['etichette', 'etichetto'] },
+  ambulance: { word: 'ambulanza', art: "un'", alias: ['ambulanze'] }
 };
 
 // Colori (lezione 5): forma maschile e femminile. Il rosso è il colore nuovo, da scoprire.
@@ -112,7 +116,10 @@ const LESSONS = [
   // «è» (l'una, mezzogiorno, mezzanotte) e «sono» (le due, le tre…) in evidenza nella frase scritta
   { id: 'l20', title: 'Lezione 20', ora: true, hilite: ['è', 'sono'], known: ['h1', 'h2', 'h3', 'h5', 'h8', 'h10', 'h12d', 'h12n'] },
   // capitolo 4: «A che ora?» — gli impegni (l'aereo, la riunione, la cena…) con il loro orologio: «alle tre», «all'una» (appt_it.js)
-  { id: 'l21', title: 'Lezione 21', appt: true, known: ['a_plane', 'a_meeting', 'a_dinner', 'a_lunch', 'a_taxi', 'a_breakfast'] }
+  { id: 'l21', title: 'Lezione 21', appt: true, known: ['a_plane', 'a_meeting', 'a_dinner', 'a_lunch', 'a_taxi', 'a_breakfast'] },
+  // capitolo 4: «Il, la o l'?» — con l' non si sente se è maschile o femminile: lo dice la -o / la -a (in colore) del nome e del colore
+  { id: 'l22', title: 'Lezione 22', colors: true, gender: true,
+    known: ['umbrella_nero', 'clock_bianco', 'plane_bianco', 'agenda_nero', 'label_rosso', 'ambulance_bianco'] }
 ];
 
 // Quattro insegnanti, dal più rigido al più indulgente. gender = voce maschile o femminile.

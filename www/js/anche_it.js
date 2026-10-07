@@ -53,7 +53,7 @@ function ancheStatements(s) {
   let m;
   while ((m = re.exec(s)) !== null) {
     const obj = WORD2KEY[m[3]], cw = COLOR_WORD[m[5]];
-    const good = !!obj && !!cw && m[2] === defArt(obj) && cw.g === (isFem(obj) ? 'f' : 'm');
+    const good = !!obj && !!cw && m[2] === defArtN(obj) && cw.g === (isFem(obj) ? 'f' : 'm');
     out.push({ pre: m[1] ? (NEANCHE[m[1]] ? 'neanche' : 'anche') : null, obj: obj, col: cw ? cw.col : null, neg: !!m[4], good: good });
   }
   return out;
