@@ -36,8 +36,23 @@ const SN = {
   askQ: (X) => ({ type: 'echo', check: 'question', num: true, show: X, prompt: QN, model: QN })
 };
 
+// Tutti i numeri da 1 a 1000 in parole (lezioni 30 e seguenti): «ventuno», «trentotto», «ventitré», «duecentocinquanta», «mille»
+const NUM_U = ['', 'uno', 'due', 'tre', 'quattro', 'cinque', 'sei', 'sette', 'otto', 'nove', 'dieci', 'undici', 'dodici', 'tredici', 'quattordici', 'quindici', 'sedici', 'diciassette', 'diciotto', 'diciannove'];
+const NUM_T = ['', '', 'venti', 'trenta', 'quaranta', 'cinquanta', 'sessanta', 'settanta', 'ottanta', 'novanta'];
+function numWord(n) {
+  if (n === 1000) return 'mille';
+  if (n >= 100) { const h = Math.floor(n / 100), r = n % 100; return (h === 1 ? '' : NUM_U[h]) + 'cento' + (r ? numWord(r) : ''); }
+  if (n < 20) return NUM_U[n];
+  const t = NUM_T[Math.floor(n / 10)], u = n % 10;
+  return (u === 1 || u === 8 ? t.slice(0, -1) : t) + (u === 3 ? 'tré' : NUM_U[u]);
+}
+// parola (come la scrive norm(), senza accenti) → numero
+const NUM_VAL = {};
+for (let n = 1; n <= 1000; n++) NUM_VAL[numWord(n).replace('é', 'e')] = n;
+NUM_VAL.centotto = 108;
+
 // Cifre → parole («3» → «tre»), poi la solita pulizia; alias del microfono
-const numDigits = (text) => String(text || '').replace(/\b(100|[2-9]0|1[0-9]|[1-9])\b/g, (d) => ' ' + NUMS['n' + d] + ' ');
+const numDigits = (text) => String(text || '').replace(/(\d)\s*\+\s*(\d)/g, '$1 più $2').replace(/\b(\d{1,4})\b/g, (d) => +d >= 1 && +d <= 1000 ? ' ' + numWord(+d) + ' ' : d);
 function numNorm(text) {
   let s = norm(numDigits(text));
   Object.keys(NUM_ALIAS).forEach(a => { s = s.replace(new RegExp(' ' + a + '(?= )', 'g'), ' ' + NUM_ALIAS[a]); });
