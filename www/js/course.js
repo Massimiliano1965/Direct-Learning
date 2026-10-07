@@ -283,7 +283,10 @@ const LESSONS = [
     known: ['an_m_read_1', 'an_f_eat_0', 'an_m_phone_0', 'an_f_drink_1', 'an_m_eat_1', 'an_f_read_0'] },
   // capitolo 14: «Al telefono» — Pronto, sono Max. Chi parla? Parla Max. (telef_it.js)
   { id: 'l74', title: 'Lezione 74', level: 3, tl: true, hilite: ['Pronto', 'parla'],
-    known: ['tl_m', 'tl_f', 'tl_marco', 'tl_anna', 'tl_nonno', 'tl_nonna'] }
+    known: ['tl_m', 'tl_f', 'tl_marco', 'tl_anna', 'tl_nonno', 'tl_nonna'] },
+  // capitolo 11: «Preposizioni» — Dov'è la valigia? La valigia è sotto il tavolo / davanti al tavolo / dietro il tavolo… (dove_it.js)
+  { id: 'l75', title: 'Lezione 75', level: 3, dvp: true, hilite: ['sul', 'sotto', 'davanti al', 'dietro', 'accanto al'],
+    known: ['dvp_suitcase_sotto', 'dvp_book_sul', 'dvp_suitcase_davanti', 'dvp_book_accanto', 'dvp_suitcase_dietro', 'dvp_book_sotto'] }
 ];
 
 // Quattro insegnanti, dal più rigido al più indulgente. gender = voce maschile o femminile.

@@ -110,7 +110,7 @@ Durante il test l'insegnante non corregge; contano solo gli errori, mostrati all
 
 55. **L'ho, li ho, le ho** — *fatto: Lezione 61 (li ha presi, le ha prese), livello 3*
 56. **Il contrario** — *fatto: Lezione 62 (calda/fredda, nuovo/vecchio, alta/bassa)*
-57. **Preposizioni**
+57. **Preposizioni** — *fatto: Lezione 75 (sul, sotto il, davanti al, dietro il, accanto al tavolo)*
 
 ## Capitolo 12
 
