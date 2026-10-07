@@ -2,9 +2,9 @@
 /* =====================================================================
    TEST DI FINE LIVELLO 1: «La giornata di Max» (deciso con Massi).
    Si carica dopo tutte le lezioni del livello 1. Circa 8 minuti (Massi: non di più): 12 scene che contano
-   e 4 figure da descrivere liberamente. Una storia di scene: in ognuna l'insegnante fa una domanda
+   e 2 figure da descrivere liberamente. Una storia di scene: in ognuna l'insegnante fa una domanda
    (la domanda chiave di una lezione, con le sue regole); una volta è l'allievo che fa la domanda;
-   alla fine quattro figure da descrivere liberamente, che NON contano nel punteggio.
+   alla fine due figure da descrivere liberamente, che NON contano nel punteggio.
    Durante il test non si dice mai giusto o sbagliato: gli errori si vedono solo alla fine, con la frase giusta
    accanto, e le lezioni da ripassare (il ripasso si può fare o saltare; il test non blocca il livello 2).
    ===================================================================== */
@@ -24,11 +24,9 @@ const TEST1 = [
   { lesson: 'l35', step: () => SDT.key('dq_cup_bianco_2') },         // Di che colore sono queste tazze? Queste tazze sono bianche.
   { lesson: 'l21', step: () => SA2.key('a_dinner') }                 // A che ora è la cena? La cena è alle otto.
 ];
-// Le quattro figure da descrivere (non contano): la frase d'esempio si mostra alla fine
+// Le due figure da descrivere (non contano): la frase d'esempio si mostra alla fine
 const TEST1_FREE = [
-  { fig: 'v_f_drink', example: () => SV.present('v_f_drink').model },
-  { fig: 'ce_pen_3', example: () => SCE.present('ce_pen_3').model },
-  { fig: 'f_nonno', example: () => SFM.present('f_nonno').model },
-  { fig: 'pl_egg_3', example: () => SPL.present('pl_egg_3').model }
+  { fig: 'ce_pen_3', example: () => SCE.present('ce_pen_3').model },   // Sul tavolo ci sono tre penne. (c'è / ci sono)
+  { fig: 'pl_egg_3', example: () => SPL.present('pl_egg_3').model }    // Sono tre uova. (il plurale)
 ];
 const TEST_FREE_Q = 'Che cosa vede?';
