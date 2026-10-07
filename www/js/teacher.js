@@ -88,6 +88,8 @@ function tHead(L, f) {
   return back + head + front + feat + '<g class="tmouth">' + m[f.mouth] + '</g>' +
     '<ellipse class="tlips" cx="50" cy="31.2" rx="2.9" ry="2.2" fill="#5a2424"/>';
 }
+// Faccia che non parla (figure e bollini): senza le labbra mobili, che fuori dal palco si vedrebbero sempre
+function tHeadStill(L, f) { return tHead(L, f).replace(/<ellipse class="tlips"[^>]*\/>/, '').replace('<g class="tmouth">', '<g>'); }
 const DOWN_L = [[35, 47], [32, 70], [34, 90]], DOWN_R = [[65, 47], [68, 70], [66, 90]];
 const POSES = {
   show:  { f: { mouth: 'talk' }, arms: L => tArm(L, ...DOWN_L) + tArm(L, [65, 47], [80, 60], [95, 55]) },

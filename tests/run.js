@@ -6,7 +6,7 @@ const vm = require('vm');
 
 const ctx = { console: console };
 vm.createContext(ctx);
-['course.js', 'data.js', 'logic.js', 'colors_it.js', 'numbers_it.js', 'geo_fig.js', 'geo_it.js', 'poss_it.js', 'size_it.js', 'third_it.js', 'ui_lang.js'].forEach(f => {
+['course.js', 'data.js', 'logic.js', 'colors_it.js', 'numbers_it.js', 'geo_fig.js', 'geo_it.js', 'poss_it.js', 'size_it.js', 'third_it.js', 'nat_it.js', 'ui_lang.js'].forEach(f => {
   vm.runInContext(fs.readFileSync(path.join(__dirname, '..', 'www', 'js', f), 'utf8'), ctx, { filename: f });
 });
 const run = (code) => vm.runInContext(code, ctx);
@@ -14,7 +14,7 @@ const evaluate = run('evaluate');
 const evaluateAll = run('evaluateAll');
 const buildSteps = run('buildSteps');
 const answerSteps = run('answerSteps');
-const LESSONS = run('LESSONS').filter(l => !l.colors && !l.numbers && !l.geo && !l.poss && !l.size && !l.third);   // lezioni con gli oggetti (colori e numeri hanno i loro test)
+const LESSONS = run('LESSONS').filter(l => !l.colors && !l.numbers && !l.geo && !l.poss && !l.size && !l.third && !l.nat);   // lezioni con gli oggetti (colori e numeri hanno i loro test)
 const NUM_LESSONS = run('LESSONS').filter(l => l.numbers);
 const COLOR_LESSONS = run('LESSONS').filter(l => l.colors);
 const ITEMS = run('ITEMS');
@@ -511,6 +511,31 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
   const st = buildSteps(l12), models = st.filter(s => s.model && s.type !== 'reveal');
   check('lezione 12: risposte modello giuste', models.every(s => evaluate(s, s.model).ok));
   check('lezione 12: ripetizioni giuste', models.every(s => buildDrill(s, 5, []).every(d => evaluate(d, d.model).ok)));
+}
+
+// Lezione 13: «Paese e nazionalità»
+{
+  const SN2 = run('SN2'), evalAsk = run('evalAsk'), answerAsk = run('answerAsk'), buildDrill = run('buildDrill');
+  const ok = (st, t) => evaluate(st, t).ok;
+  const l13 = run('LESSONS').find(l => l.id === 'l13');
+  check('lezione 13 c\'è', !!l13 && l13.nat);
+  check('figure con la bandiera', l13.known.every(k => FIG[k] && FIG[k].indexOf('<svg') === 0 && FIG[k].indexOf(' id=') === -1));
+  check('frasi', SN2.present('n_m_italia').prompt === 'Questo signore è italiano.' && SN2.yes('n_f_america').prompt === 'Questa signora è americana?' &&
+    SN2.neg('n_m_italia', 'francia').model === 'No, questo signore non è francese.' && SN2.key('n_m_cina').prompt === 'Di che nazionalità è questo signore?' &&
+    SN2.present('n_f_francia').prompt === 'Questa signora è francese.');
+  check('giusto', ok(SN2.yes('n_f_italia'), 'Sì, questa signora è italiana.') && ok(SN2.key('n_m_inghilterra'), 'Questo signore è inglese.') &&
+    ok(SN2.neg('n_f_america', 'cina'), 'No, questa signora non è cinese.') && ok(SN2.alt('n_f_francia', 'italia'), 'Questa signora è francese.'));
+  check('sbagliato: «questa signore», «questo signora»', !ok(SN2.key('n_m_cina'), 'Questa signore è cinese.') && !ok(SN2.key('n_f_america'), 'Questo signora è americana.'));
+  check('sbagliato: «questa signora è italiano»', !ok(SN2.yes('n_f_italia'), 'Sì, questa signora è italiano.'));
+  check('sbagliato: nazionalità sbagliata', !ok(SN2.key('n_m_italia'), 'Questo signore è francese.'));
+  check('ripete «Di che nazionalità è?»', ok(SN2.askQ('n_m_italia'), 'Di che nazionalità è?'));
+  check('allievo', evalAsk('n_m_cina', 'Di che nazionalità è questo signore?').kind === 'what' && answerAsk('n_m_cina', { kind: 'what' }) === 'Questo signore è cinese.' &&
+    evalAsk('n_f_italia', 'Questa signora è francese?').kind === 'no' && answerAsk('n_f_italia', { kind: 'no', ask: 'francia' }) === 'No, questa signora non è francese. Questa signora è italiana.' &&
+    evalAsk('n_f_america', 'Questa signora è americano?').model === 'Questa signora è americana?' &&
+    evalAsk('n_m_italia', 'Questo signore è italiano o inglese?').kind === 'alt');
+  const st = buildSteps(l13), models = st.filter(s => s.model && s.type !== 'reveal');
+  check('lezione 13: risposte modello giuste', models.every(s => evaluate(s, s.model).ok));
+  check('lezione 13: ripetizioni giuste', models.every(s => buildDrill(s, 5, []).every(d => evaluate(d, d.model).ok)));
 }
 
 // Lingua dello studente: ogni scritta c'è in tutte le lingue, con gli stessi segnaposto {…}

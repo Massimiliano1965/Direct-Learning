@@ -35,7 +35,7 @@ const p3OtherW = (w) => w === 'm' ? 'f' : 'm';
 function thirdFig(X) {
   const base = (FIG[p3Obj(X)] || '').replace(/^<svg[^>]*>/, '').replace(/<\/svg>$/, '');
   const k = p3Key(p3Who(X)), look = TEACHERS[k] ? (TEACHERS[k].look || k) : 'luca';
-  const head = (typeof tHead === 'function' && typeof LOOKS !== 'undefined') ? tHead(LOOKS[look] || LOOKS.luca, { mouth: 'smile' }) : '';
+  const head = (typeof tHeadStill === 'function' && typeof LOOKS !== 'undefined') ? tHeadStill(LOOKS[look] || LOOKS.luca, { mouth: 'smile' }) : '';
   const badge = '<circle cx="80" cy="80" r="16" fill="#1d2638"/><g transform="translate(80 79) scale(.62) translate(-50 -26)">' + head + '</g><circle cx="80" cy="80" r="15" fill="none" stroke="#c9a45c" stroke-width="2.6"/>';
   return '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">' + base + badge + '</svg>';
 }

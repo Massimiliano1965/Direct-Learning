@@ -81,7 +81,9 @@ const LESSONS = [
   // capitolo 2: «Questo o questa? Piccolo o piccola?» — lo stesso oggetto grande e piccolo (size_it.js)
   { id: 'l11', title: 'Lezione 11', size: true, known: ['z_big_book', 'z_small_book', 'z_big_suitcase', 'z_small_suitcase', 'z_big_cup', 'z_small_cup'] },
   // capitolo 2: «Il suo, la sua» — le cose di due colleghi dell'insegnante, un uomo e una donna (third_it.js)
-  { id: 'l12', title: 'Lezione 12', third: true, known: ['p3_f_phone', 'p3_m_laptop', 'p3_f_suitcase', 'p3_m_bag', 'p3_m_coat', 'p3_f_flask'] }
+  { id: 'l12', title: 'Lezione 12', third: true, known: ['p3_f_phone', 'p3_m_laptop', 'p3_f_suitcase', 'p3_m_bag', 'p3_m_coat', 'p3_f_flask'] },
+  // capitolo 2: «Paese e nazionalità» — un signore o una signora con la bandiera del suo paese (nat_it.js)
+  { id: 'l13', title: 'Lezione 13', nat: true, known: ['n_m_italia', 'n_f_italia', 'n_f_francia', 'n_m_inghilterra', 'n_f_america', 'n_m_cina'] }
 ];
 
 // Quattro insegnanti, dal più rigido al più indulgente. gender = voce maschile o femminile.
