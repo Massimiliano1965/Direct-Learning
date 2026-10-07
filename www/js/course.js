@@ -352,7 +352,10 @@ const LESSONS = [
     known: ['cibo_m_pizza', 'cibo_f_risotto', 'cibo_m_lasagne', 'cibo_f_bistecca', 'cibo_m_spaghetti', 'cibo_f_tiramisu'] },
   // capitolo 20: «Vorrei…» — il cameriere: Che cosa desidera? Che cosa Le porto? (tu: desideri? ti porto?) — Vorrei un cappuccino / il conto… (scelta_it.js)
   { id: 'l96', title: 'Lezione 96', level: 4, vor: true, hilite: ['Vorrei', 'vorrei', 'desidera', 'desideri', 'Desidera', 'Desideri', 'Le porto', 'ti porto'],
-    known: ['vor_cappuccino', 'vor_conto', 'vor_acqua', 'vor_biglietto', 'vor_camera', 'vor_gelato'] }
+    known: ['vor_cappuccino', 'vor_conto', 'vor_acqua', 'vor_biglietto', 'vor_camera', 'vor_gelato'] },
+  // capitolo 19: «Presente, passato, futuro» con il calendario — Ieri Mario ha nuotato. Oggi Anna cucina. Domani Mario ballerà. (calendario_it.js)
+  { id: 'l97', title: 'Lezione 97', level: 4, cal: true, hilite: ['ieri', 'oggi', 'domani', 'ha nuotato', 'cucina', 'ballerà', 'ha cantato', 'gioca', 'dormirà'],
+    known: ['cal_m_swim_past_2', 'cal_f_cook_pres_4', 'cal_m_dance_fut_3', 'cal_f_sing_past_1', 'cal_m_tennis_pres_3', 'cal_f_sleep_fut_0'] }
 ];
 
 // Quattro insegnanti, dal più rigido al più indulgente. gender = voce maschile o femminile.
