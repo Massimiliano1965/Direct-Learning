@@ -270,6 +270,7 @@ function startLesson(id) {
   $('l-level').classList.remove('hidden');
   setStageTeacher(teacher.look || teacher.key);
   setPose('show');
+  showTestRow();
   fitLesson();
   runStep();
 }
@@ -703,6 +704,13 @@ function listenSoon(run) {
 
 function listen() {
   if (!L || L.busy || L.paused) return;
+  // prove di Massi: «Rispondo: no» → niente microfono, si legge la risposta giusta e si va avanti con «Avanti»
+  if (TEST_BUTTONS && DB.settings.noAnswer) {
+    const st = cur();
+    if (st && st.model) $('heard').textContent = '→ ' + shown(st.model);
+    setStatus('Avanti ▶', 'wait');
+    return;
+  }
   const run = L.run;
   L.busy = true;
   L.listenStart = Date.now();
@@ -948,6 +956,22 @@ $('btn-talk').onclick = () => {
   listen();
 };
 $('btn-exit').onclick = () => { if (demoActive) skipDemo(); else goHome(); };
+/* ---------- Pulsanti di prova (TEST_BUTTONS): «Avanti ▶» salta il passo, «Rispondo: sì/no» accende o spegne il microfono ---------- */
+function showTestRow() {
+  $('test-row').classList.toggle('hidden', !TEST_BUTTONS || demoActive);
+  $('btn-mic').textContent = DB.settings.noAnswer ? 'Rispondo: no' : 'Rispondo: sì';
+  $('btn-mic').classList.toggle('off', !!DB.settings.noAnswer);
+}
+$('btn-skip').onclick = () => {
+  if (!L || L.paused) return;
+  Mouth.cancel(); Ears.abort(); clearLessonTimers(); hideFinger(); setPickable(false);
+  L.busy = true;
+  nextStep(L.run, 30);
+};
+$('btn-mic').onclick = () => {
+  DB.settings.noAnswer = !DB.settings.noAnswer; saveDB(); showTestRow();
+  if (L && !L.busy && !L.paused && !DB.settings.noAnswer && cur() && cur().type !== 'ask') listen();
+};
 $('btn-again').onclick = once(() => { if (lastLessonId) startLesson(lastLessonId); });
 $('btn-end-home').onclick = () => goHome();
 

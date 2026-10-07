@@ -16,6 +16,7 @@ function startDemo(next) {
   DEMO++;
   const run = DEMO;
   demoActive = true;
+  $('test-row').classList.add('hidden');   // pulsanti di prova: non nella lezione dimostrativa
   demoNext = next;
   const t = TEACHERS[selectedTeacherKey()];
   $('l-title').textContent = tx('demoLesson');

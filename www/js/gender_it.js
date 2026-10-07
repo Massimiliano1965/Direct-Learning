@@ -4,7 +4,7 @@
    È la lezione dei colori (lesson.colors) con parole che vogliono «l'»: con l' non si sente se la parola
    è maschile o femminile; lo dicono la -o e la -a finali, del nome e del colore (metodo di Massi):
      L'ombrello è nero.  L'orologio è bianco.  L'aereo è bianco.
-     L'agenda è nera.    L'etichetta è rossa.  L'ambulanza è bianca.
+     L'agenda è nera.    L'etichetta è rossa.  L'ambulanza è bianca.  L'aranciata è rossa.
    Nella frase scritta la -o finale è azzurra e la -a finale rosa (lesson.gender, vedi synWrap in app.js).
    Errori (dalla lezione dei colori): «lo ombrello», «la agenda», «l'agenda è nero», «l'aereo è bianca».
    ===================================================================== */
@@ -20,6 +20,10 @@ FIG.ambulance = FLAT('<path d="M8 40 h52 v-6 h14 l16 18 v24 h-82z" fill="#eceef2
   '<path d="M66 38 h8 l12 14 h-20z" fill="#9fbcd0"/><rect x="28" y="28" width="12" height="6" rx="2" fill="#3a6fd8"/>' +
   '<path d="M30 45 h6 v-5 h6 v5 h6 v6 h-6 v5 h-6 v-5 h-6z" fill="#c8262f"/>' +
   '<circle cx="26" cy="78" r="8" fill="#1d2638"/><circle cx="72" cy="78" r="8" fill="#1d2638"/><circle cx="26" cy="78" r="3" fill="#8d93a3"/><circle cx="72" cy="78" r="3" fill="#8d93a3"/>', 40);
+// la lattina di aranciata (rossa: «l'aranciata è rossa»)
+FIG.soda = FLAT('<path d="M34 16 h32 l3 6 v60 l-3 6 h-32 l-3 -6 v-60z" fill="#c8262f"/><path d="M34 16 h32 l3 6 h-38z" fill="#c9ccd4"/><path d="M31 82 h38 l-3 6 h-32z" fill="#c9ccd4"/>' +
+  '<rect x="44" y="12" width="12" height="4" rx="2" fill="#9aa1ae"/><path d="M31 38 h38 v26 h-38z" fill="#f3eee2"/><circle cx="50" cy="51" r="9" fill="#e8862a"/>' +
+  '<path d="M46 47 q4 -4 8 0" stroke="#c96f1e" stroke-width="1.4" fill="none"/><path d="M38 24 v54" stroke="#e26a6f" stroke-width="3" opacity=".5"/>', 22);
 // le versioni colorate per la lezione 22 (oggetto_colore, come nella lezione 5)
 FIG.umbrella_nero = recolor(FIG.umbrella, { '#2c3e66': '#2b2e36', '#3a4f7e': '#40434e' });
 FIG.clock_bianco = recolor(clockFig(10), { '#c9a45c': '#e3e6ec', '#f3eee2': '#fbfbfd' });
@@ -27,6 +31,7 @@ FIG.plane_bianco = FIG.plane;
 FIG.agenda_nero = FIG.agenda;
 FIG.label_rosso = FIG.label;
 FIG.ambulance_bianco = FIG.ambulance;
+FIG.soda_rosso = FIG.soda;
 
 // parole che in questa lezione mostrano la -o / -a finale (nomi degli oggetti e colori)
 function genderWords(lesson) {

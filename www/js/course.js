@@ -56,7 +56,8 @@ const ITEMS = {
   // lezione 22 («Il, la o l'?»): parole con l' che finiscono in -o o in -a
   plane:     { word: 'aereo',     art: 'un',  alias: ['aerei', 'areo'] },
   label:     { word: 'etichetta', art: "un'", alias: ['etichette', 'etichetto'] },
-  ambulance: { word: 'ambulanza', art: "un'", alias: ['ambulanze'] }
+  ambulance: { word: 'ambulanza', art: "un'", alias: ['ambulanze'] },
+  soda:      { word: 'aranciata', art: "un'", alias: ['aranciate', 'arancia ta'] }
 };
 
 // Colori (lezione 5): forma maschile e femminile. Il rosso è il colore nuovo, da scoprire.
@@ -119,7 +120,7 @@ const LESSONS = [
   { id: 'l21', title: 'Lezione 21', appt: true, known: ['a_plane', 'a_meeting', 'a_dinner', 'a_lunch', 'a_taxi', 'a_breakfast'] },
   // capitolo 4: «Il, la o l'?» — con l' non si sente se è maschile o femminile: lo dice la -o / la -a (in colore) del nome e del colore
   { id: 'l22', title: 'Lezione 22', colors: true, gender: true,
-    known: ['umbrella_nero', 'clock_bianco', 'plane_bianco', 'agenda_nero', 'label_rosso', 'ambulance_bianco'] }
+    known: ['umbrella_nero', 'clock_bianco', 'plane_bianco', 'agenda_nero', 'label_rosso', 'ambulance_bianco', 'soda_rosso'] }
 ];
 
 // Quattro insegnanti, dal più rigido al più indulgente. gender = voce maschile o femminile.
@@ -162,6 +163,9 @@ const TRIAL_ROTATION = ['mass', 'giulia', 'luca', 'sara'];
 // Prova per Papa: tutti gli insegnanti liberi, la scelta resta finché non la cambia.
 // Per la prova di 8 giorni con rotazione: false.
 const TEST_MODE = true;
+// Pulsanti di prova sotto la lezione («Avanti» e «Rispondo: sì/no»), solo per le prove di Massi.
+// A progetto finito: false (spariscono).
+const TEST_BUTTONS = true;
 const TRIAL_DAYS = 8;   // due giorni per insegnante, poi il consiglio
 const MIN_ANSWERS_FOR_VERDICT = 20;
 

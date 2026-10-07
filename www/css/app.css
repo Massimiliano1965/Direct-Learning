@@ -279,3 +279,7 @@ html[data-level] #stage { background: linear-gradient(180deg, var(--surface2), v
 /* lezione 22: -o maschile azzurra, -a femminile rosa (metodo di Massi) */
 #prompt-text .go { color: #8fb4ff; border-bottom: 2px solid #8fb4ff; font-weight: 700; }
 #prompt-text .ga { color: #e7a3c4; border-bottom: 2px solid #e7a3c4; font-weight: 700; }
+/* pulsanti di prova (solo per Massi) */
+.test-row { margin-top: 8px; }
+.test-row button { min-height: 40px; padding: 8px 10px; font-size: 15px; border-style: dashed; }
+.test-row button.off { color: var(--muted); }
