@@ -63,27 +63,33 @@ function gMany(fig, n, far) {
 
 /* ---------- La sequenza della lezione (come nelle lezioni 23–33) ---------- */
 // SX = le frasi della lezione; ognuna riceve X (la figura). altFn/negFn possono mancare.
+// Dal livello 2 (fast) l'allievo è già pratico (deciso con Massi): ogni figura si presenta una volta, niente giri di sì e di no
+// per ogni figura (solo 4 sì/no mescolati), meno domande «o», un giro di domande chiave, 2 blocchi misti, voce un po' più veloce.
 function gBuildSteps(lesson, SX, flag) {
-  const K = lesson.known.slice(), st = [];
-  const add = (s, phase) => { s.phase = phase; st.push(s); return s; };
-  presentRounds(K).forEach(round => round.forEach(x => add(SX.present(x), 'present')));
+  const K = lesson.known.slice(), st = [], fast = (lesson.level || 1) >= 2, base = fast ? 1.08 : 1;
+  const add = (s, phase) => { s.phase = phase; if (base !== 1) s.speed = base; st.push(s); return s; };
+  (fast ? [K.slice()] : presentRounds(K)).forEach(round => round.forEach(x => add(SX.present(x), 'present')));
   if (SX.revealFirst) { add(SX.revealFirst(K[0]), 'reveal').pause = 1200; }
-  shuffle(K).forEach(x => add(SX.yes(x), 'yes'));
-  shuffle(K).forEach(x => add(SX.neg(x), 'neg'));
   let prev = null;
-  for (let i = 0; i < 6; i++) { const X = pick(K.filter(x => x !== prev)); add(Math.random() < 0.5 ? SX.yes(X) : SX.neg(X), 'yesno'); prev = X; }
-  if (SX.alt) shuffle(K).slice(0, 4).forEach(x => add(SX.alt(x), 'alt'));
+  if (fast) {
+    shuffle(['yes', 'neg', 'yes', 'neg']).forEach(t => { const X = pick(K.filter(x => x !== prev)); add(SX[t](X), 'yesno'); prev = X; });
+  } else {
+    shuffle(K).forEach(x => add(SX.yes(x), 'yes'));
+    shuffle(K).forEach(x => add(SX.neg(x), 'neg'));
+    for (let i = 0; i < 6; i++) { const X = pick(K.filter(x => x !== prev)); add(Math.random() < 0.5 ? SX.yes(X) : SX.neg(X), 'yesno'); prev = X; }
+  }
+  if (SX.alt) shuffle(K).slice(0, fast ? 2 : 4).forEach(x => add(SX.alt(x), 'alt'));
   add(SX.reveal(K[0]), 'reveal').pause = 1200;
-  add(SX.reveal(K[K.length - 1]), 'reveal');
+  if (!fast) add(SX.reveal(K[K.length - 1]), 'reveal');
   add(SX.askQ(K[0]), 'askq');
-  add(SX.askQ(K[K.length - 1]), 'askq');
-  for (let r = 0; r < 2; r++) shuffle(K).forEach(x => add(SX.key(x), 'key'));
+  if (!fast) add(SX.askQ(K[K.length - 1]), 'askq');
+  for (let r = 0; r < (fast ? 1 : 2); r++) shuffle(K).forEach(x => add(SX.key(x), 'key'));
   for (let i = 0; i < ASK_EARLY; i++) { const s = add({ type: 'ask', prompt: '', model: '' }, 'askfirst'); s[flag] = true; if (!i) s.intro = true; }
   prev = null;
   const kinds = SX.alt ? ['yes', 'neg', 'alt', 'key'] : ['yes', 'neg', 'key'];
-  for (let b = 0; b < MIX_BLOCKS; b++) for (let i = 0; i < MIX_BLOCK_SIZE; i++) {
+  for (let b = 0; b < (fast ? 2 : MIX_BLOCKS); b++) for (let i = 0; i < MIX_BLOCK_SIZE; i++) {
     const X = pick(K.filter(x => x !== prev)), t = pick(kinds);
-    const s = add(SX[t](X), 'mix'); s.speed = 1 + 0.06 * (b + 1); prev = X;
+    const s = add(SX[t](X), 'mix'); s.speed = base + 0.06 * (b + 1); prev = X;
   }
   for (let i = 0; i < ASK_TURNS; i++) { const s = add({ type: 'ask', prompt: '', model: '' }, 'ask'); s[flag] = true; if (!i) s.intro = true; }
   return st;

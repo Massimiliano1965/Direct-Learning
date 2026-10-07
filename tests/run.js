@@ -1108,6 +1108,16 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
   check('lezione 42: ripetizioni giuste', models.every(s => buildDrill(s, 5, []).every(d => evaluate(d, d.model).ok)));
 }
 
+// Dal livello 2 le lezioni sono più veloci (Massi): una sola presentazione, 4 sì/no mescolati, sempre 7 domande dell'allievo
+{
+  const L = run('LESSONS'), l38 = L.find(l => l.id === 'l38'), l39 = L.find(l => l.id === 'l39');
+  const a = buildSteps(l38), b = buildSteps(l39), cnt = (st, ph) => st.filter(s => s.phase === ph).length;
+  check('livello 2 veloce: una presentazione per figura', cnt(b, 'present') === l39.known.length && cnt(a, 'present') > l38.known.length);
+  check('livello 2 veloce: niente giri di sì e di no', !cnt(b, 'yes') && !cnt(b, 'neg') && cnt(b, 'yesno') === 4);
+  check('livello 2 veloce: 7 domande dell\'allievo', b.filter(s => s.type === 'ask').length === 7);
+  check('livello 2 veloce: più corta e voce più veloce', b.length < a.length * 0.6 && b.filter(s => s.prompt).every(s => s.speed >= 1.08));
+}
+
 // Test del livello 1: 8 domande che contano e 2 descrizioni libere (regole delle lezioni)
 {
   const t1 = run('LESSONS').find(l => l.id === 't1');
