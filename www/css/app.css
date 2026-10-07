@@ -100,7 +100,7 @@ html.fisso body { min-height: 0; height: 100%; }
 #progress > div { height: 100%; width: 0; background: var(--accent); }
 #l-teacher { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--muted); margin: 0 2px 8px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; }
 #stage {
-  position: relative; display: flex; align-items: flex-end; justify-content: space-between; gap: 0;
+  position: relative; isolation: isolate; display: flex; align-items: flex-end; justify-content: space-between; gap: 0;
   background: linear-gradient(180deg, #1b2333, #141a27);
   border: 1px solid var(--line); border-radius: 14px; padding: 0 16px 0 4px; height: 212px; overflow: hidden;
 }
@@ -108,7 +108,7 @@ html.fisso body { min-height: 0; height: 100%; }
 #stage.bad { box-shadow: inset 0 0 0 2px var(--err); }
 @keyframes glowGood { 0% { box-shadow: inset 0 0 0 2px var(--accent); } 100% { box-shadow: inset 0 0 0 0 var(--accent); } }
 /* l'insegnante (dalla vita in su) */
-#stage-hand { width: 180px; height: 180px; flex: none; align-self: flex-end; }
+#stage-hand { width: 164px; height: 164px; flex: none; align-self: flex-end; }
 #stage-hand.move { animation: tmove .35s ease-out; }
 @keyframes tmove { 0% { transform: translateY(5px); } 100% { transform: none; } }
 #stage-hand[data-pose="you"] svg { animation: tpoke .9s ease-in-out infinite; transform-origin: 50% 100%; }
@@ -117,8 +117,12 @@ html.fisso body { min-height: 0; height: 100%; }
 @keyframes tjump { 50% { transform: translateY(-6px); } }
 #stage-hand[data-pose="nod"] svg { animation: tnod .45s ease-in-out 2; transform-origin: 50% 100%; }
 @keyframes tnod { 50% { transform: translateY(2px) rotate(1deg); } }
-#stage-figure { width: 128px; height: 128px; flex: none; margin: 0 22px 34px 0; }
-#stage-figure.pop { animation: pop .35s ease-out; }
+/* la figura: più grande, con una luce morbida sotto (come un riflettore) ed entra da destra con un piccolo rimbalzo */
+#stage-figure { position: relative; width: 168px; height: 168px; flex: none; margin: 0 -4px 14px -12px; }
+#stage-figure::before { content: ''; position: absolute; left: 6%; right: 6%; bottom: -6px; height: 34%; z-index: -1;
+  background: radial-gradient(ellipse at 50% 70%, rgba(201,164,92,.22), rgba(201,164,92,0) 70%); }
+#stage-figure.pop { animation: figIn .5s cubic-bezier(.2,.9,.3,1.2); }
+@keyframes figIn { 0% { transform: translateX(26px) scale(.86); opacity: 0; } 60% { transform: translateX(-2px) scale(1.03); opacity: 1; } 100% { transform: none; opacity: 1; } }
 @keyframes pop { 0% { transform: scale(.92); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
 #stage svg { width: 100%; height: 100%; display: block; }
 #stage-mark { display: none; }
@@ -191,8 +195,8 @@ html.fisso body { min-height: 0; height: 100%; }
 @media (max-height: 720px) {
   .screen { padding-top: 10px; }
   #stage { height: 172px; }
-  #stage-hand { width: 150px; height: 150px; }
-  #stage-figure { width: 104px; height: 104px; margin-bottom: 28px; }
+  #stage-hand { width: 138px; height: 138px; }
+  #stage-figure { width: 140px; height: 140px; margin-bottom: 10px; }
   #prompt-text { font-size: 23px; margin-top: 10px; min-height: 30px; }
   #objects-grid { gap: 8px; margin: 8px 0; }
   .object-box { padding: 7px; }
