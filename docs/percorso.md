@@ -130,7 +130,7 @@ Durante il test l'insegnante non corregge; contano solo gli errori, mostrati all
 ## Capitolo 14
 
 67. **Volere, potere, dovere** — *fatto: Lezioni 70 (vuole, cuore rosa), 71 (può / non può), 72 (deve, punto esclamativo arancione)*
-68. **Ancora — non più**
+68. **Ancora — non più** — *fatto: Lezione 73*
 69. **Al telefono**
 
 ## Capitolo 15

@@ -277,7 +277,10 @@ const LESSONS = [
     known: ['po_m_key_1', 'po_f_key_0', 'po_m_phone_1', 'po_f_phone_0', 'po_m_book_1', 'po_f_book_0'] },
   // capitolo 14: «Dovere» — Che cosa deve fare Isa? Isa deve aprire la porta. (volere_it.js: il punto esclamativo arancione)
   { id: 'l72', title: 'Lezione 72', level: 3, dv: true, hilite: ['deve'],
-    known: ['dv_f_open', 'dv_m_close', 'dv_f_phone', 'dv_m_read', 'dv_f_eat', 'dv_m_drink'] }
+    known: ['dv_f_open', 'dv_m_close', 'dv_f_phone', 'dv_m_read', 'dv_f_eat', 'dv_m_drink'] },
+  // capitolo 14: «Ancora — non più» — Max legge ancora? Sì, legge ancora. Isa mangia ancora? No, non mangia più. (ancora_it.js)
+  { id: 'l73', title: 'Lezione 73', level: 3, an: true, hilite: ['ancora', 'più'],
+    known: ['an_m_read_1', 'an_f_eat_0', 'an_m_phone_0', 'an_f_drink_1', 'an_m_eat_1', 'an_f_read_0'] }
 ];
 
 // Quattro insegnanti, dal più rigido al più indulgente. gender = voce maschile o femminile.
