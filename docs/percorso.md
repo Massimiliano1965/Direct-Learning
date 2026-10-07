@@ -188,6 +188,8 @@ Durante il test l'insegnante non corregge; contano solo gli errori, mostrati all
 
 ## Test di fine livello (deciso da Massi)
 
+- **Sempre la stessa lunghezza** (Massi): 8 domande che contano + 2 descrizioni libere che non contano, circa 5 minuti, a ogni livello.
+  Le 8 domande si scelgono fra tutti gli argomenti fatti, soprattutto quelli del livello appena finito. Il test non blocca il livello dopo.
 - Una **storia** con oggetti e persone già noti: l'allievo **descrive a voce** quello che succede (a volte tocca qualcosa).
 - L'app controlla le risposte ma **durante il test non dice giusto o sbagliato**: gli errori si contano solo alla fine.
 - Alla fine: il risultato e, se ci sono lacune, **si consiglia un ripasso** delle lezioni con gli errori. Il ripasso si può fare o saltare (molto consigliato).
