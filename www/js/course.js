@@ -170,6 +170,8 @@ const LESSONS = [
   // capitolo 5: «Plurali irregolari» — un uomo / due uomini, una mano / due mani, tre uova, due caffè, due computer (irr_it.js)
   { id: 'l38', title: 'Lezione 38', pl: true, hilite: ['è', 'sono'],
     known: ['pl_man_1', 'pl_man_2', 'pl_hand_2', 'pl_egg_3', 'pl_coffee_2', 'pl_computer_2'] },
+  // TEST DI FINE LIVELLO 1 (test_it.js): 8 domande che contano e 2 descrizioni libere, circa 5 minuti; non blocca il livello 2
+  { id: 't1', title: 'Test del livello 1', test: 1, level: 1, known: [] },
   // ===== LIVELLO 2 (capitoli 6–10) =====
   // capitolo 6: «Il contrario» — aperto / chiuso, pieno / vuoto, lungo / corto: «Com'è il libro? Il libro è aperto.» (contr_it.js)
   { id: 'l39', title: 'Lezione 39', level: 2, ct: true, gender: true,

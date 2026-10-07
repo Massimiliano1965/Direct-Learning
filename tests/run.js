@@ -14,7 +14,7 @@ const evaluate = run('evaluate');
 const evaluateAll = run('evaluateAll');
 const buildSteps = run('buildSteps');
 const answerSteps = run('answerSteps');
-const LESSONS = run('LESSONS').filter(l => !l.colors && !l.numbers && !l.geo && !l.poss && !l.size && !l.third && !l.nat && !l.ess && !l.altro && !l.prep && !l.anche && !l.ora && !l.appt && !l.verbs && !l.purp && !l.pron && !l.sum && !l.km && !l.fam && !l.ea && !l.pl && !l.ce && !l.co && !l.dt && !l.ct && !l.sta && !l.cl && !l.imp);   // lezioni con gli oggetti (colori e numeri hanno i loro test)
+const LESSONS = run('LESSONS').filter(l => !l.colors && !l.numbers && !l.geo && !l.poss && !l.size && !l.third && !l.nat && !l.ess && !l.altro && !l.prep && !l.anche && !l.ora && !l.appt && !l.verbs && !l.purp && !l.pron && !l.sum && !l.km && !l.fam && !l.ea && !l.pl && !l.ce && !l.co && !l.dt && !l.ct && !l.sta && !l.cl && !l.imp && !l.test);   // lezioni con gli oggetti (colori e numeri hanno i loro test)
 const NUM_LESSONS = run('LESSONS').filter(l => l.numbers);
 const COLOR_LESSONS = run('LESSONS').filter(l => l.colors);
 const ITEMS = run('ITEMS');
@@ -1106,6 +1106,19 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
   const st = buildSteps(l), models = st.filter(s => s.model && s.type !== 'reveal');
   check('lezione 42: risposte modello giuste', models.every(s => evaluate(s, s.model).ok));
   check('lezione 42: ripetizioni giuste', models.every(s => buildDrill(s, 5, []).every(d => evaluate(d, d.model).ok)));
+}
+
+// Test del livello 1: 8 domande che contano e 2 descrizioni libere (regole delle lezioni)
+{
+  const t1 = run('LESSONS').find(l => l.id === 't1');
+  const st = buildSteps(t1);
+  check('test 1 c\'è, dopo la lezione 38', !!t1 && t1.test && run('LESSONS').indexOf(t1) === run('LESSONS').findIndex(l => l.id === 'l38') + 1);
+  check('test 1: 8 che contano + 2 libere', st.filter(s => s.type !== 'free').length === 8 && st.filter(s => s.type === 'free').length === 2 && st.every(s => s.test));
+  check('test 1: le risposte giuste sono giuste', st.filter(s => s.type !== 'free' && s.type !== 'ask').every(s => evaluate(s, s.model).ok));
+  check('test 1: la domanda dell\'allievo', (s => run('evalAsk')(s.askFig, s.model).ok)(st.find(s => s.type === 'ask')));
+  check('test 1: figure', st.every(s => FIG[s.show] && FIG[s.show].indexOf('<svg') === 0));
+  check('test 1: lezioni da ripassare', run('testReviewLessons')([{ ok: false, tlesson: 'l28' }, { ok: true, tlesson: 'l20' }, { ok: false, tlesson: 'l17' }, { ok: null, tlesson: 'l5' }]).join() === 'l17,l28');
+  check('numero delle lezioni: il test non conta', run('lessonNumber')(run('LESSONS').find(l => l.id === 'l39')) === 39);
 }
 
 // Parole che vanno bene tutte e due (COURSE.synonyms): il microfono le accetta tutte e due

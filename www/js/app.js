@@ -116,11 +116,11 @@ function renderHome() {
       lastLevel = lv;
     }
     const b = document.createElement('button');
-    b.className = 'lesson-btn lv' + lv;
-    // nel menu solo le parole nuove della lezione
-    const icons = (l.colors ? l.known.concat(l.reds || []) : l.known.concat(l.fresh ? [l.fresh] : [])).map(w => FIG[w]).join('');
+    b.className = 'lesson-btn lv' + lv + (l.test ? ' test' : '');
+    // nel menu solo le parole nuove della lezione (il test: la coppa d'oro)
+    const icons = l.test ? TEST_ICON : (l.colors ? l.known.concat(l.reds || []) : l.known.concat(l.fresh ? [l.fresh] : [])).map(w => FIG[w]).join('');
     const best = DB.lessons[l.id];
-    const name = tx('lesson', { n: LESSONS.indexOf(l) + 1 });
+    const name = l.test ? tx('levelTest', { n: lv }) : tx('lesson', { n: typeof lessonNumber === 'function' ? lessonNumber(l) : LESSONS.indexOf(l) + 1 });
     b.innerHTML = '<span>' + name + '</span><span class="icons">' + icons + '</span>' +
                   '<span class="score' + (best >= 80 ? ' top' : '') + '">' + (best != null ? best + '%' : '') + '</span>';
     b.onclick = once(() => startLesson(l.id));
@@ -248,7 +248,8 @@ function startLesson(id) {
     i: 0, attempts: 0, noSpeech: 0, first: 0, busy: false, paused: false,
     drill: null, di: 0, repFails: 0, errCount: 0,
     coach: true, coached: false,
-    start: Date.now(), listenStart: 0
+    start: Date.now(), listenStart: 0,
+    test: !!lesson.test, results: []   // test di fine livello: le risposte si registrano, i giudizi solo alla fine
   };
   lastLessonId = id;
 
@@ -258,7 +259,7 @@ function startLesson(id) {
   if (ts.days.indexOf(todayKey()) === -1) ts.days.push(todayKey());
   saveDB();
 
-  $('l-title').textContent = lesson.title;
+  $('l-title').textContent = lesson.test ? tx('levelTest', { n: lesson.level || 1 }) : lesson.title;
   $('l-teacher').innerHTML = avatarHtml(teacher, 'small') + '<span>' + teacher.name + '</span>';
   buildGrid(items);
   applyUiWords();
@@ -531,6 +532,7 @@ function askStep() {
   const run = L.run;
   L.busy = true;
   setStatus(tx('listen'), '');
+  if (st.type === 'ask' && L.test) { testAskTurn(st, run); return; }
   if (st.type === 'ask') { askTurn(st, run); return; }
   setCue(cueFor(st));
   // frase che dice dov'è (o l'insegnante che risponde da solo): il luogo è già verde; domanda: pulsa in oro
@@ -757,6 +759,7 @@ function handleAnswer(alts) {
       return;
     }
   }
+  if (L.test) { testRecord(alts); return; }
   if (st.type === 'ask') {
     $('heard').textContent = alts[0] ? tx('heard') + ': “' + (COURSE.heard ? COURSE.heard(alts[0]) : alts[0]) + '”' : '';
     handleAsk(alts);
@@ -928,7 +931,78 @@ function setCue(kind) {
 }
 function hideMark() { $('stage-mark').classList.add('hidden'); }
 
+/* ---------- Test di fine livello (test_it.js) ----------
+   Durante il test l'insegnante non dice mai giusto o sbagliato: registra la risposta, fa un cenno e va avanti.
+   Alla fine: il punteggio, le risposte da rivedere con la frase giusta accanto, le descrizioni libere con un esempio,
+   le lezioni da ripassare (si possono fare o saltare). Il test non blocca il livello dopo. */
+const TEST_ICON = '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M30 14 h40 v18 a20 20 0 0 1 -40 0z" fill="#c9a45c"/>' +
+  '<path d="M30 20 h-10 a10 10 0 0 0 10 16 M70 20 h10 a10 10 0 0 1 -10 16" fill="none" stroke="#c9a45c" stroke-width="4"/><rect x="45" y="50" width="10" height="16" fill="#b8923f"/>' +
+  '<rect x="32" y="66" width="36" height="10" rx="2" fill="#c9a45c"/><path d="M40 22 l4 8 l8 1 l-6 5 l2 8 l-8 -4 l-8 4 l2 -8 l-6 -5 l8 -1z" fill="#fff" opacity=".5" transform="translate(6 -4) scale(.9)"/></svg>';
+// il turno dell'allievo nel test: la figura è già scelta, lui fa la domanda
+function testAskTurn(st, run) {
+  L.pick = st.askFig;
+  showIndicated(st.askFig);
+  setCue('q');
+  setPose('you');
+  L.busy = false;
+  setStatus(tx('testAsk'), 'wait');
+  listenSoon(run);
+}
+function testRecord(alts) {
+  const st = cur(), run = L.run, heard = alts[0] || '';
+  let ok;
+  if (st.type === 'free') ok = null;                                   // non conta
+  else if (st.type === 'ask') ok = alts.slice(0, 5).some(a => evalAsk(st.askFig, a).ok);
+  else ok = evaluateAll(st, alts).ok;
+  L.results[L.i] = { ok: ok, heard: heard, step: st, tlesson: st.tlesson };
+  $('heard').textContent = heard ? tx('heard') + ': “' + heard + '”' : '';
+  L.busy = true;
+  setCue('');
+  setPose('show');                                                     // nessun giudizio: solo un cenno, e avanti
+  setStatus('', '');
+  nextStep(run, 700);
+}
+function finishTest() {
+  const lesson = L.lesson, t = L.teacher;
+  // un passo saltato (o senza risposta) conta come sbagliato
+  const res = L.steps.map((st, i) => L.results[i] || { ok: st.type === 'free' ? null : false, heard: '', step: st, tlesson: st.tlesson });
+  const scored = res.filter(r => r.ok !== null), right = scored.filter(r => r.ok).length;
+  const review = testReviewLessons(res);
+  DB.lessons[lesson.id] = Math.max(DB.lessons[lesson.id] || 0, Math.round(right / scored.length * 100));
+  DB.settings.tests = DB.settings.tests || {};
+  DB.settings.tests[lesson.id] = { right: right, total: scored.length, review: review, day: todayKey(), skipped: false };
+  saveDB();
+  stopLesson();
+  const esc = (x) => String(x || '').replace(/&/g, '&amp;').replace(/</g, '&lt;');
+  const row = (r) => '<div class="t-row"><div class="t-fig">' + (FIG[r.step.show] || '') + '</div><div class="t-txt">' +
+    '<div class="t-you">' + tx('testYou') + ': ' + (r.heard ? '“' + esc(r.heard) + '”' : tx('testNoAnswer')) + '</div>' +
+    (r.step.type === 'free' ? '<div class="t-right">' + tx('testExample') + ': ' + esc(r.step.example) + '</div>'
+                            : '<div class="t-q">' + esc(r.step.prompt || '') + '</div><div class="t-right">' + tx('testRight') + ': ' + esc(r.step.model) + '</div>') + '</div></div>';
+  const C = 427, pct = right / scored.length;
+  let html = '<div class="ring"><svg viewBox="0 0 160 160"><circle class="track" cx="80" cy="80" r="68"/>' +
+    '<circle class="val" cx="80" cy="80" r="68" stroke-dasharray="' + C + '" stroke-dashoffset="' + Math.round(C * (1 - pct)) + '"/></svg>' +
+    '<div class="num">' + right + '/' + scored.length + '</div></div><p>' + tx('testScore', { n: right, t: scored.length }) + '</p>';
+  const wrong = res.filter(r => r.ok === false), free = res.filter(r => r.ok === null);
+  html += wrong.length ? '<h3 class="t-head">' + tx('testMistakes') + '</h3>' + wrong.map(row).join('') : '<p class="t-all">' + tx('testAllRight') + '</p>';
+  html += '<h3 class="t-head">' + tx('testFree') + '</h3>' + free.map(row).join('');
+  if (review.length) {
+    html += '<h3 class="t-head">' + tx('testReview') + '</h3><div class="t-review">' +
+      review.map(id => { const l = LESSONS.find(x => x.id === id); return '<button class="lesson-btn t-go" data-id="' + id + '">' + tx('lesson', { n: lessonNumber(l) }) + '</button>'; }).join('') +
+      '</div><div class="row"><button id="t-do">' + tx('testDoReview') + '</button><button id="t-skip" class="secondary">' + tx('testSkip') + '</button></div>';
+  }
+  $('end-body').innerHTML = html;
+  $('end-body').querySelectorAll('.t-go').forEach(b => { b.onclick = () => startLesson(b.dataset.id); });
+  if (review.length) {
+    $('t-do').onclick = () => startLesson(review[0]);
+    $('t-skip').onclick = () => { DB.settings.tests[lesson.id].skipped = true; saveDB(); goHome(); };
+  }
+  document.body.classList.add('test-end');
+  showScreen('end', true);
+  document.querySelector('#screen-end h2').textContent = tx('levelTest', { n: lesson.level || 1 });
+}
+
 function finishLesson() {
+  if (L.test) { finishTest(); return; }
   const total = answerSteps(L.steps);
   const pct = Math.round(L.first / total * 100);
   const id = L.lesson.id;
@@ -938,6 +1012,8 @@ function finishLesson() {
   if (id === MENU_LESSON && !DB.settings.menuDay) DB.settings.menuDay = todayKey();
   saveDB();
   stopLesson();
+  document.body.classList.remove('test-end');
+  document.querySelector('#screen-end h2').textContent = tx('lessonComplete');
   Mouth.speak(t.done, t.rate, t.pitch, null);
   const C = 427;   // circonferenza del cerchio (raggio 68)
   $('end-body').innerHTML =

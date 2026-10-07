@@ -40,6 +40,6 @@ Leggi questo file prima di tutto. Poi `docs/percorso.md` (l'ordine delle lezioni
 
 ## Prossimi passi
 - Lezioni 1–42 caricate su `main`. Livello 2 dalla 39 (`level: 2` in LESSONS). I numeri fino a 1000 sono solo 4 lezioni (26–29): decisione di Massi, «non di più».
-- Da fare: il **test di fine livello 1** (manca ancora: va progettato con Massi). Prossime lezioni: capitolo 7 (Qual è la domanda?, né… né…, passato prossimo…).
+- Test di fine livello 1 fatto (`test_it.js`, riga «t1» in LESSONS dopo la 38; risultati in `DB.settings.tests`). Ancora da fare: l'avviso «si consiglia il ripasso» nelle lezioni dopo, se l'allievo ha saltato il ripasso e sbaglia ancora le stesse cose. Prossime lezioni: capitolo 7 (Qual è la domanda?, né… né…, passato prossimo…).
 - Più avanti: preposizioni «a» e «di»; il test di fine livello; CIAO English quando le lezioni italiane sono strutturate.
 - Stima: circa 100 lezioni in tutto (ne mancano circa 58), in 4 livelli, più i 4 test.

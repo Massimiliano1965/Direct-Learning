@@ -14,7 +14,7 @@ const TEST1 = [
   { lesson: 'l20', step: () => SO.key('h8') },                       // Che ore sono? Sono le otto.
   { lesson: 'l23', step: () => SV.key('v_m_read') },                 // Cosa fa Max? Max legge un libro.
   { lesson: 'l17', step: () => SW.key('p3_f_umbrella') },            // Di chi è questo ombrello? È l'ombrello di Isa.
-  { lesson: 'l23', ask: 'v_f_phone' },                               // l'allievo fa la domanda («Cosa fa Isa?»)
+  { lesson: 'l23', ask: 'v_f_phone', q: () => SV.key('v_f_phone').prompt },   // l'allievo fa la domanda («Cosa fa Isa?»)
   { lesson: 'l24', step: () => SPU.key('pp_m_key') },                // Perché Max prende la chiave? Per aprire la porta.
   { lesson: 'l28', step: () => SSM.key('sm_20_8') },                 // Quanto fa venti più otto? Fa ventotto.
   { lesson: 'l34', step: () => SCO.key('co_book_1') },               // Quanto costa il libro? Costa dodici euro.
@@ -26,3 +26,28 @@ const TEST1_FREE = [
   { fig: 'pl_egg_3', example: () => SPL.present('pl_egg_3').model }    // Sono tre uova. (il plurale)
 ];
 const TEST_FREE_Q = 'Che cosa vede?';
+
+// I passi del test: le domande delle lezioni (con le loro regole), il turno dell'allievo, le descrizioni libere
+function buildTestSteps(lesson) {
+  const st = [];
+  TEST1.forEach(s => {
+    if (s.step) { const x = s.step(); x.test = true; x.tlesson = s.lesson; st.push(x); return; }
+    // l'allievo fa la domanda sulla figura (già scelta): va bene una domanda giusta qualsiasi su quella figura
+    st.push({ type: 'ask', test: true, askFig: s.ask, show: s.ask, tlesson: s.lesson, prompt: '', model: s.q() });
+  });
+  TEST1_FREE.forEach(f => st.push({ type: 'free', test: true, free: true, show: f.fig, prompt: TEST_FREE_Q, model: '', example: f.example() }));
+  return st;
+}
+// Le lezioni da ripassare dopo il test: quelle delle risposte sbagliate (senza doppioni, nell'ordine del corso)
+function testReviewLessons(results) {
+  const ids = results.filter(r => r.ok === false).map(r => r.tlesson);
+  return LESSONS.filter(l => ids.indexOf(l.id) !== -1).map(l => l.id);
+}
+// Numero della lezione nel menu (i test non contano)
+const lessonNumber = (l) => LESSONS.filter(x => !x.test).indexOf(l) + 1;
+
+(function () {
+  const bBuild = buildSteps, bWords = lessonWords;
+  buildSteps = (lesson) => lesson.test ? buildTestSteps(lesson) : bBuild(lesson);
+  lessonWords = (l) => l.test ? [] : bWords(l);
+})();

@@ -293,3 +293,19 @@ html[data-level] #stage { background: linear-gradient(180deg, var(--surface2), v
 .test-row { margin-top: 8px; }
 .test-row button { min-height: 40px; padding: 8px 10px; font-size: 15px; border-style: dashed; }
 .test-row button.off { color: var(--muted); }
+
+/* Test di fine livello: riga nel menu e risultati */
+.lesson-btn.test { border: 1.5px solid var(--accent); background: linear-gradient(90deg, rgba(201,164,92,.16), rgba(201,164,92,.04)); }
+.lesson-btn.test .icons svg { width: 30px; height: 30px; }
+body.test-end #btn-again { display: none; }
+#end-body .t-head { font-size: 15px; color: var(--accent); letter-spacing: .5px; margin: 18px 0 6px; text-align: left; }
+#end-body .t-row { display: flex; gap: 10px; align-items: center; text-align: left; padding: 8px 0; border-top: 1px solid var(--line); }
+#end-body .t-fig { width: 56px; height: 56px; flex: none; background: var(--surface); border-radius: 10px; padding: 3px; }
+#end-body .t-fig svg { width: 100%; height: 100%; display: block; }
+#end-body .t-txt { font-size: 14px; line-height: 1.35; }
+#end-body .t-q { color: var(--muted); }
+#end-body .t-you { color: #e7a3c4; }
+#end-body .t-right { color: #8fd19e; }
+#end-body .t-all { color: #8fd19e; font-weight: 700; }
+#end-body .t-review { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
+#end-body .t-review .lesson-btn { width: auto; padding: 8px 14px; }
