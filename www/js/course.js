@@ -244,7 +244,10 @@ const LESSONS = [
   // ===== LIVELLO 3 (capitoli 11–15) =====
   // capitolo 11: «L'ho, li ho, le ho» — Max ha preso i libri? Sì, li ha presi. Isa ha preso le chiavi? Sì, le ha prese. (liha_it.js)
   { id: 'l61', title: 'Lezione 61', level: 3, lq: true, hilite: ['li ha', 'le ha'],
-    known: ['lq_m_book', 'lq_f_key', 'lq_m_orange', 'lq_f_pen', 'lq_m_cup', 'lq_f_umbrella'] }
+    known: ['lq_m_book', 'lq_f_key', 'lq_m_orange', 'lq_f_pen', 'lq_m_cup', 'lq_f_umbrella'] },
+  // capitolo 11: «Il contrario» — la tazza calda / fredda, il libro nuovo / vecchio, la sedia alta / bassa (contr2_it.js, regole della lezione 39)
+  { id: 'l62', title: 'Lezione 62', level: 3, ct: true, gender: true,
+    known: ['ct_cup_caldo', 'ct_cup_freddo', 'ct_book_nuovo', 'ct_book_vecchio', 'ct_chair_alto', 'ct_chair_basso'] }
 ];
 
 // Quattro insegnanti, dal più rigido al più indulgente. gender = voce maschile o femminile.
