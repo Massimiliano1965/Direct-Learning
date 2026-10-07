@@ -96,15 +96,15 @@ Durante il test l'insegnante non corregge; contano solo gli errori, mostrati all
 
 ## Capitolo 9
 
-49. **Complemento indiretto**
-50. **Qualcuno / nessuno, qualche cosa / niente**
-51. **Biglietto da visita**: nome, indirizzo, lavoro
+49. **Complemento indiretto** — *fatto: Lezione 55 (Che cosa dà Max a Isa? Le dà il libro.)*
+50. **Qualcuno / nessuno, qualche cosa / niente** — *fatto: Lezione 56*
+51. **Biglietto da visita**: nome, indirizzo, lavoro — *fatto: Lezione 57 (Come si chiama? Dove abita? Che lavoro fa?)*
 
 ## Capitolo 10
 
 52. **Verbi al presente e al passato** (tabella completa)
-53. **Il verbo «chiamarsi»**
-54. **Lo, la, li, le** (complemento diretto)
+53. **Il verbo «chiamarsi»** — *in parte: «si chiama» nella Lezione 57*
+54. **Lo, la, li, le** (complemento diretto) — *fatto: Lezione 58 (li prende, le prende)*
 
 ## Capitolo 11
 

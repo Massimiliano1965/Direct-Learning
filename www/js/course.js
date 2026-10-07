@@ -229,7 +229,10 @@ const LESSONS = [
     known: ['qn_p_m', 'qn_t_book', 'qn_p_0', 'qn_t_0', 'qn_p_f', 'qn_t_cup'] },
   // capitolo 9: «Biglietto da visita» — Come si chiama? Dove abita? Che lavoro fa? (bigl_it.js)
   { id: 'l57', title: 'Lezione 57', level: 2, bv: true, gender: true, hilite: ['si chiama', 'abita'],
-    known: ['bv_1_nome', 'bv_1_citta', 'bv_1_lavoro', 'bv_2_nome', 'bv_2_citta', 'bv_2_lavoro'] }
+    known: ['bv_1_nome', 'bv_1_citta', 'bv_1_lavoro', 'bv_2_nome', 'bv_2_citta', 'bv_2_lavoro'] },
+  // capitolo 10: «Lo, la, li, le» — Max prende i libri? Sì, li prende. Isa prende le chiavi? Sì, le prende. (lile_it.js)
+  { id: 'l58', title: 'Lezione 58', level: 2, lp: true, hilite: ['li', 'le'],
+    known: ['lp_m_book', 'lp_f_key', 'lp_m_orange', 'lp_f_pen', 'lp_m_cup', 'lp_f_umbrella'] }
 ];
 
 // Quattro insegnanti, dal più rigido al più indulgente. gender = voce maschile o femminile.
