@@ -88,6 +88,13 @@ function choiceLesson(cfg) {
   return SX;
 }
 
+// il cartellino con il nome sotto il cibo (Massi: chi guarda non deve indovinare che cos'è)
+function foodTag(word, cx, y) {
+  const w = Math.max(24, word.length * 4.6 + 8);
+  return '<rect x="' + (cx - w / 2) + '" y="' + y + '" width="' + w + '" height="11" rx="2.5" fill="#f3eee2" stroke="#c9a45c" stroke-width="1"/>' +
+    '<text x="' + cx + '" y="' + (y + 8.2) + '" text-anchor="middle" font-family="Georgia,serif" font-size="7.6" font-style="italic" font-weight="bold" fill="#2a3346">' + word + '</text>';
+}
+
 /* ---------- Lezione 90: al bar ---------- */
 const BAR_CH = {
   cappuccino: { the: 'un cappuccino', alias: ['cappuccini'] }, caffe: { the: 'un caffè', alias: ['caffe', 'espresso'] },
@@ -113,7 +120,7 @@ function barFig(X, it) {
     '<rect x="62" y="4" width="34" height="13" rx="3" fill="#2f5d4a"/><text x="79" y="14" text-anchor="middle" font-family="Georgia,serif" font-size="9" font-weight="bold" fill="#f3d36b">BAR</text>' +
     V_PERSON(LK, tArm(LK, ...DOWN_L) + tArm(LK, [65, 47], [72, 64], [80, 66]), { mouth: 'smile' }, -14) +
     '<rect x="52" y="70" width="48" height="27" rx="2" fill="#7a5735"/><rect x="50" y="66" width="50" height="5" rx="1.5" fill="#a87a4e"/>' +
-    '<g transform="translate(77 48) scale(.52) translate(-50 -60)">' + BAR_FIG[it.c] + '</g></svg>';
+    '<g transform="translate(77 48) scale(.52) translate(-50 -60)">' + BAR_FIG[it.c] + '</g>' + foodTag(BAR_CH[it.c].the.split(' ').pop(), 76, 82) + '</svg>';
 }
 const SBAR = choiceLesson({
   flag: 'bar', CH: BAR_CH,
@@ -352,7 +359,7 @@ function ciboFig(X, it) {
     // la tovaglia a quadretti bianchi e rossi (la trattoria)
     '<rect x="50" y="72" width="50" height="24" fill="#f3eee2"/>' + [0, 1, 2, 3, 4].map(i => '<rect x="' + (50 + i * 10) + '" y="72" width="5" height="24" fill="#c8323b" opacity=".75"/>').join('') +
     [0, 1, 2].map(i => '<rect x="50" y="' + (72 + i * 8) + '" width="50" height="4" fill="#c8323b" opacity=".45"/>').join('') +
-    '<g transform="translate(75 60) scale(.66) translate(-50 -60)">' + CIBO_FIG[it.c] + '</g></svg>';
+    '<g transform="translate(75 58) scale(.66) translate(-50 -60)">' + CIBO_FIG[it.c] + '</g>' + foodTag(CIBO_CH[it.c].the.split(' ').pop(), 75, 84) + '</svg>';
 }
 const SCIBO = choiceLesson({
   flag: 'cibo', CH: CIBO_CH,
