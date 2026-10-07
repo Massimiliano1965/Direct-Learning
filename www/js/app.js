@@ -83,6 +83,7 @@ function renderHome() {
       DB.settings.pickedDay = todayKey();
       saveDB();
       renderHome();
+      saySpeedSample();   // toccando l'insegnante, si presenta: «Ciao, sono Max.» (Massi)
     };
     tl.appendChild(b);
   });

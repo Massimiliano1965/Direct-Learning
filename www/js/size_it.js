@@ -17,7 +17,7 @@ const SIZES = { big: { m: 'grande', f: 'grande' }, small: { m: 'piccolo', f: 'pi
 const isSize = (X) => typeof X === 'string' && /^z_(big|small)_/.test(X);
 const zSize = (X) => X.split('_')[1];
 const zObj = (X) => X.split('_').slice(2).join('_');
-const zFem = (k) => ITEMS[k].art === 'una';
+const zFem = (k) => ITEMS[k].art === 'una' || ITEMS[k].art === 'un\'';   // un'agenda, un'arancia: femminili (Massi: «la sua agenda»)
 const zDem = (k) => zFem(k) ? 'questa' : 'questo';
 const zAdj = (size, k) => SIZES[size][zFem(k) ? 'f' : 'm'];
 const zThis = (k) => zDem(k) + ' ' + ITEMS[k].word;                        // «questo libro»

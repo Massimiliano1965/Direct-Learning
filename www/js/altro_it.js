@@ -15,7 +15,7 @@
 
 const ALTRO_PAIRS = [['phone_nero', 'phone_bianco'], ['suitcase_nero', 'suitcase_rosso'], ['cup_bianco', 'cup_rosso']];
 const aObj = (X) => X.split('_')[0];
-const aFem = (k) => ITEMS[k].art === 'una';
+const aFem = (k) => ITEMS[k].art === 'una' || ITEMS[k].art === 'un\'';   // un'agenda, un'arancia: femminili (Massi: «la sua agenda»)
 const aAltro = (k) => (aFem(k) ? 'un\'altra ' : 'un altro ') + ITEMS[k].word;     // «un altro telefono», «un'altra valigia»
 const aSay = (k, other) => other ? aAltro(k) : np(k);
 const aMate = (X) => { const p = ALTRO_PAIRS.find(p => p.indexOf(X) !== -1); return p ? (p[0] === X ? p[1] : p[0]) : null; };

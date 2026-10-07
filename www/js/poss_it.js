@@ -17,7 +17,7 @@ const POSS_OBJ = ['phone', 'laptop', 'suitcase', 'bag'];
 const isPoss = (X) => typeof X === 'string' && /^o_[ts]_/.test(X);
 const pOwner = (X) => X.charAt(2);                // 't' = dell'insegnante, 's' = dello studente
 const pObj = (X) => X.slice(4);
-const pFem = (k) => ITEMS[k].art === 'una';
+const pFem = (k) => ITEMS[k].art === 'una' || ITEMS[k].art === 'un\'';   // un'agenda, un'arancia: femminili (Massi: «la sua agenda»)
 // possessivo detto da chi parla: «il mio telefono», «la Sua valigia»
 const pPoss = (k, mine) => (pFem(k) ? 'la ' : 'il ') + (mine ? (pFem(k) ? 'mia' : 'mio') : (pFem(k) ? 'Sua' : 'Suo')) + ' ' + ITEMS[k].word;
 // frase dell'insegnante (suo punto di vista) e dello studente (punto di vista rovesciato)

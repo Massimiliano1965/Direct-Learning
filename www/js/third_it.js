@@ -16,7 +16,7 @@ const THIRD_OBJ = { m: ['laptop', 'bag', 'coat', 'backpack', 'agenda', 'key'], f
 const isThird = (X) => typeof X === 'string' && /^p3_[mf]_/.test(X);
 const p3Who = (X) => X.charAt(3);                 // 'm' = il collega, 'f' = la collega
 const p3Obj = (X) => X.slice(5);
-const p3Fem = (k) => ITEMS[k].art === 'una';
+const p3Fem = (k) => ITEMS[k].art === 'una' || ITEMS[k].art === 'un\'';   // un'agenda, un'arancia: femminili (Massi: «la sua agenda»)
 // articolo determinativo: il telefono, la borsa, lo zaino, l'agenda, l'ombrello (lezione 17)
 const p3Art = (k) => /^[aeiou]/.test(ITEMS[k].word) ? 'l\'' : ITEMS[k].art === 'uno' ? 'lo' : p3Fem(k) ? 'la' : 'il';
 const p3The = (k) => (p3Art(k) === 'l\'' ? 'l\'' : p3Art(k) + ' ') + ITEMS[k].word;                // «l'agenda», «lo zaino»
