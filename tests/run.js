@@ -595,6 +595,26 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
   check('sbagliato: «un zaino», «una agenda», «uno ombrello»', !ok(S_.yes('backpack'), 'Sì, è un zaino.') && !ok(S_.yes('agenda'), 'Sì, è una agenda.') && !ok(S_.yes('umbrella'), 'Sì, è uno ombrello.'));
 }
 
+// Lezione 17: «Il, la, l', lo» (insegna Pietro: le cose di Max e di Giulia)
+{
+  const SW = run('SW'), evalAsk = run('evalAsk'), buildDrill = run('buildDrill'), ok = (st, t) => evaluate(st, t).ok;
+  const l17 = run('LESSONS').find(l => l.id === 'l17');
+  check('lezione 17 c\'è', !!l17 && l17.third && l17.def);
+  check('figure', l17.known.every(k => FIG[k] && FIG[k].indexOf('<svg') === 0 && FIG[k].indexOf(' id=') === -1));
+  check('frasi: lo, l\', il, la', SW.present('p3_m_backpack').prompt === 'È lo zaino di Max.' && SW.present('p3_m_agenda').prompt === 'È l\'agenda di Max.' &&
+    SW.present('p3_f_umbrella').prompt === 'È l\'ombrello di Giulia.' && SW.present('p3_f_book').prompt === 'È il libro di Giulia.' && SW.present('p3_m_key').prompt === 'È la chiave di Max.' &&
+    SW.yes('p3_f_mirror', true).model === 'Sì, è lo specchio di Giulia.' && SW.neg('p3_m_backpack', true).model === 'No, non è lo zaino di Giulia.');
+  check('giusto (anche «l agenda» del microfono)', ok(SW.key('p3_m_agenda'), 'È l\'agenda di Max.') && ok(SW.key('p3_m_agenda'), 'È l agenda di Max.') &&
+    ok(SW.yes('p3_m_backpack', true), 'Sì, è lo zaino di Max.') && ok(SW.yes('p3_m_backpack', true), 'Sì, è il suo zaino.'));
+  check('sbagliato: «il zaino», «la agenda», «lo ombrello», «lo suo zaino»', !ok(SW.key('p3_m_backpack'), 'È il zaino di Max.') && !ok(SW.key('p3_m_agenda'), 'È la agenda di Max.') &&
+    !ok(SW.key('p3_f_umbrella'), 'È lo ombrello di Giulia.') && !ok(SW.yes('p3_m_backpack', true), 'Sì, è lo suo zaino.'));
+  check('lezione 12 non cambia', SW.yes('p3_m_bag').model === 'Sì, è la sua borsa.' && SW.present('p3_f_phone').prompt === 'È il telefono di Giulia.');
+  const st = buildSteps(l17), models = st.filter(s => s.model && s.type !== 'reveal');
+  check('lezione 17: risposte modello giuste', models.every(s => evaluate(s, s.model).ok));
+  check('lezione 17: ripetizioni giuste', models.every(s => buildDrill(s, 5, []).every(d => evaluate(d, d.model).ok)));
+  check('lezione 17: risposte con il nome', st.filter(s => s.type === 'yes').every(s => / di (Max|Giulia)\.$/.test(s.model)));
+}
+
 // Lingua dello studente: ogni scritta c'è in tutte le lingue, con gli stessi segnaposto {…}
 {
   const T = run('UI_TEXT'), langs = Object.keys(T), keys = Object.keys(T.en);

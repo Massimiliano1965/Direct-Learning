@@ -12,12 +12,15 @@
    Errori: «il sua telefono», «la suo borsa», la persona sbagliata.
    ===================================================================== */
 
-const THIRD_OBJ = { m: ['laptop', 'bag', 'coat'], f: ['phone', 'suitcase', 'flask'] };
+const THIRD_OBJ = { m: ['laptop', 'bag', 'coat', 'backpack', 'agenda', 'key'], f: ['phone', 'suitcase', 'flask', 'mirror', 'umbrella', 'book'] };   // lezioni 12 e 17
 const isThird = (X) => typeof X === 'string' && /^p3_[mf]_/.test(X);
 const p3Who = (X) => X.charAt(3);                 // 'm' = il collega, 'f' = la collega
 const p3Obj = (X) => X.slice(5);
 const p3Fem = (k) => ITEMS[k].art === 'una';
-const p3Art = (k) => p3Fem(k) ? 'la' : 'il';
+// articolo determinativo: il telefono, la borsa, lo zaino, l'agenda, l'ombrello (lezione 17)
+const p3Art = (k) => /^[aeiou]/.test(ITEMS[k].word) ? 'l\'' : ITEMS[k].art === 'uno' ? 'lo' : p3Fem(k) ? 'la' : 'il';
+const p3The = (k) => (p3Art(k) === 'l\'' ? 'l\'' : p3Art(k) + ' ') + ITEMS[k].word;                // «l'agenda», «lo zaino»
+const p3ArtN = (k) => p3Art(k) === 'l\'' ? 'l' : p3Art(k);                                          // come lo scrive norm()
 const p3Dem = (k) => p3Fem(k) ? 'questa' : 'questo';
 // I due colleghi: un uomo e una donna tra gli altri insegnanti (non quello che fa lezione)
 function p3People() {
@@ -27,8 +30,8 @@ function p3People() {
 }
 const p3Key = (w) => p3People()[w];
 const p3Name = (w) => TEACHERS[p3Key(w)].name;
-const p3Of = (k, w) => p3Art(k) + ' ' + ITEMS[k].word + ' di ' + p3Name(w);          // «il telefono di Giulia»
-const p3Suo = (k) => p3Art(k) + ' ' + (p3Fem(k) ? 'sua' : 'suo') + ' ' + ITEMS[k].word;   // «il suo telefono»
+const p3Of = (k, w) => p3The(k) + ' di ' + p3Name(w);          // «il telefono di Giulia»
+const p3Suo = (k) => (p3Fem(k) ? 'la sua ' : 'il suo ') + ITEMS[k].word;   // «il suo zaino»: davanti a «suo» sempre il/la   // «il suo telefono»
 const p3OtherW = (w) => w === 'm' ? 'f' : 'm';
 
 /* ---------- Figure: l'oggetto con la faccia di chi lo possiede ---------- */
@@ -46,10 +49,11 @@ function thirdFig(X) {
 /* ---------- Frasi (third = true: valutate con queste regole) ---------- */
 const SW = {
   present: (X) => { const p = 'È ' + p3Of(p3Obj(X), p3Who(X)) + '.'; return { type: 'echo', check: 'claim', third: true, show: X, prompt: p, model: p }; },
-  yes: (X) => { const k = p3Obj(X); return { type: 'yes', third: true, show: X, prompt: 'È ' + p3Of(k, p3Who(X)) + '?', model: 'Sì, è ' + p3Suo(k) + '.' }; },
-  neg: (X) => {
+  // def = lezione 17 (il, la, l', lo): la risposta ripete «lo zaino di Max» invece di «il suo zaino»
+  yes: (X, def) => { const k = p3Obj(X); return { type: 'yes', third: true, def: !!def, show: X, prompt: 'È ' + p3Of(k, p3Who(X)) + '?', model: 'Sì, è ' + (def ? p3Of(k, p3Who(X)) : p3Suo(k)) + '.' }; },
+  neg: (X, def) => {
     const k = p3Obj(X), o = p3OtherW(p3Who(X));
-    return { type: 'neg', third: true, show: X, ask: o, prompt: 'È ' + p3Of(k, o) + '?', model: 'No, non è ' + p3Suo(k) + '.', complete: 'È ' + p3Of(k, p3Who(X)) + '.' };
+    return { type: 'neg', third: true, def: !!def, show: X, ask: o, prompt: 'È ' + p3Of(k, o) + '?', model: 'No, non è ' + (def ? p3Of(k, o) : p3Suo(k)) + '.', complete: 'È ' + p3Of(k, p3Who(X)) + '.' };
   },
   alt: (X) => {
     const k = p3Obj(X), o = Math.random() < 0.5 ? ['m', 'f'] : ['f', 'm'];
@@ -70,13 +74,13 @@ function thirdStatements(s) {
   let m, re = / (non )?e (il|la|lo|l) ([a-z]+) di ([a-z]+)(?= )/g;
   while ((m = re.exec(s)) !== null) {
     const k = WORD2KEY[m[3]];
-    out.push({ obj: k, who: byName[m[4]] || '?', neg: !!m[1], suo: false, good: !!k && m[2] === p3Art(k) });
+    out.push({ obj: k, who: byName[m[4]] || '?', neg: !!m[1], suo: false, good: !!k && m[2] === p3ArtN(k) });
   }
   // «è il suo telefono» (anche «suoi», «tuo»: sbagliati)
   re = / (non )?e (il|la|lo|l) (suo|sua|tuo|tua|mio|mia) ([a-z]+)(?= )/g;
   while ((m = re.exec(s)) !== null) {
     const k = WORD2KEY[m[4]];
-    const good = !!k && m[2] === p3Art(k) && m[3] === (p3Fem(k) ? 'sua' : 'suo');
+    const good = !!k && m[2] === (p3Fem(k) ? 'la' : 'il') && m[3] === (p3Fem(k) ? 'sua' : 'suo');
     out.push({ obj: k, who: null, neg: !!m[1], suo: true, good: good });
   }
   return out;
@@ -119,8 +123,9 @@ function thirdAnswerAsk(X, r) {
   const k = p3Obj(X), say = 'È ' + p3Of(k, p3Who(X)) + '.';
   if (r.kind === 'thing') return 'È ' + np(k) + '.';
   if (r.kind === 'what') return say;
-  if (r.kind === 'yes') return 'Sì, è ' + p3Suo(k) + '.';
-  return 'No, non è ' + p3Suo(k) + '. ' + say;
+  const def = typeof L !== 'undefined' && L && L.lesson && L.lesson.def;
+  if (r.kind === 'yes') return 'Sì, è ' + (def ? p3Of(k, p3Who(X)) : p3Suo(k)) + '.';
+  return 'No, non è ' + (def ? p3Of(k, r.ask) : p3Suo(k)) + '. ' + say;
 }
 
 function thirdDrill(st, n) {
@@ -128,7 +133,7 @@ function thirdDrill(st, n) {
   const out = [first];
   const X = st.show, kinds = ['present', 'yes', 'neg'];
   for (let i = st.type === 'echo' ? 1 : 0; out.length < n; i++) {
-    const s = SW[kinds[i % 3]](X);
+    const s = SW[kinds[i % 3]](X, st.def);
     if (kinds[i % 3] === 'present') s.prompt = s.model;
     s.drill = true; s.phase = st.phase; out.push(s);
   }
@@ -143,12 +148,13 @@ function buildThirdSteps(lesson) {
   const K = lesson.known.slice(), st = [];
   const add = (s, phase) => { s.phase = phase; st.push(s); return s; };
   presentRounds(K).forEach(round => round.forEach(x => add(SW.present(x), 'present')));
-  shuffle(K).forEach(x => add(SW.yes(x), 'yes'));
-  shuffle(K).forEach(x => add(SW.neg(x), 'neg'));
+  const D = !!lesson.def;
+  shuffle(K).forEach(x => add(SW.yes(x, D), 'yes'));
+  shuffle(K).forEach(x => add(SW.neg(x, D), 'neg'));
   let prev = null;
   for (let i = 0; i < 6; i++) {
     const X = pick(K.filter(x => x !== prev));
-    add(Math.random() < 0.5 ? SW.yes(X) : SW.neg(X), 'yesno');
+    add(Math.random() < 0.5 ? SW.yes(X, D) : SW.neg(X, D), 'yesno');
     prev = X;
   }
   shuffle(K).slice(0, 4).forEach(x => add(SW.alt(x), 'alt'));
@@ -159,7 +165,7 @@ function buildThirdSteps(lesson) {
   prev = null;
   for (let b = 0; b < MIX_BLOCKS; b++) for (let i = 0; i < MIX_BLOCK_SIZE; i++) {
     const X = pick(K.filter(x => x !== prev)), t = pick(['yes', 'neg', 'alt', 'key']);
-    const s = add(SW[t](X), 'mix'); s.speed = 1 + 0.06 * (b + 1); prev = X;
+    const s = add(SW[t](X, D), 'mix'); s.speed = 1 + 0.06 * (b + 1); prev = X;
   }
   for (let i = 0; i < ASK_TURNS; i++) { const s = add({ type: 'ask', third: true, prompt: '', model: '' }, 'ask'); if (!i) s.intro = true; }
   return st;

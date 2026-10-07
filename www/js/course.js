@@ -96,7 +96,10 @@ const LESSONS = [
   { id: 'l15', title: 'Lezione 15', altro: true, known: ['phone_nero', 'phone_bianco', 'suitcase_nero', 'suitcase_rosso', 'cup_bianco', 'cup_rosso'] },
   // capitolo 3: «Un, una, un', uno» — un ombrello, un'agenda, uno zaino, uno specchio; l'arancia da scoprire
   { id: 'l16', title: 'Lezione 16', known: ['umbrella', 'agenda', 'backpack', 'mirror'], review: ['key', 'book'],
-    fresh: 'orange', questo: true, dq: true }
+    fresh: 'orange', questo: true, dq: true },
+  // capitolo 3: «Il, la, l', lo» — le cose dei due colleghi, come nella lezione 12: «lo zaino di Max», «l'agenda di Giulia»
+  { id: 'l17', title: 'Lezione 17', third: true, def: true,
+    known: ['p3_m_backpack', 'p3_f_mirror', 'p3_m_agenda', 'p3_f_umbrella', 'p3_m_key', 'p3_f_book'] }
 ];
 
 // Quattro insegnanti, dal più rigido al più indulgente. gender = voce maschile o femminile.
