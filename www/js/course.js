@@ -124,7 +124,10 @@ const LESSONS = [
   // capitolo 4: «Verbi al presente: Cosa fa…?» — i due colleghi della lezione 12 fanno qualcosa: «Max legge un libro.» (verbs_it.js)
   // il verbo (legge, apre, mangia…) sottolineato in oro nella frase scritta
   { id: 'l23', title: 'Lezione 23', verbs: true, hilite: ['legge', 'apre', 'mangia', 'beve', 'chiude', 'telefona'],
-    known: ['v_m_read', 'v_m_open', 'v_m_eat', 'v_f_drink', 'v_f_close', 'v_f_phone'] }
+    known: ['v_m_read', 'v_m_open', 'v_m_eat', 'v_f_drink', 'v_f_close', 'v_f_phone'] },
+  // capitolo 4: «Perché? Per…» — Max e Isa prendono una cosa; nella nuvoletta si vede perché: «Per leggere.» (perche_it.js)
+  { id: 'l24', title: 'Lezione 24', purp: true, hilite: ['perché', 'per'],
+    known: ['pp_m_book', 'pp_f_phone', 'pp_m_orange', 'pp_f_soda', 'pp_m_key', 'pp_f_pen'] }
 ];
 
 // Quattro insegnanti, dal più rigido al più indulgente. gender = voce maschile o femminile.

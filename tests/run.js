@@ -6,7 +6,7 @@ const vm = require('vm');
 
 const ctx = { console: console };
 vm.createContext(ctx);
-['course.js', 'data.js', 'logic.js', 'colors_it.js', 'numbers_it.js', 'geo_fig.js', 'geo_it.js', 'poss_it.js', 'size_it.js', 'third_it.js', 'nat_it.js', 'essere_it.js', 'altro_it.js', 'prep_it.js', 'anche_it.js', 'ora_it.js', 'appt_it.js', 'gender_it.js', 'verbs_it.js', 'ui_lang.js'].forEach(f => {
+['course.js', 'data.js', 'logic.js', 'colors_it.js', 'numbers_it.js', 'geo_fig.js', 'geo_it.js', 'poss_it.js', 'size_it.js', 'third_it.js', 'nat_it.js', 'essere_it.js', 'altro_it.js', 'prep_it.js', 'anche_it.js', 'ora_it.js', 'appt_it.js', 'gender_it.js', 'verbs_it.js', 'perche_it.js', 'ui_lang.js'].forEach(f => {
   vm.runInContext(fs.readFileSync(path.join(__dirname, '..', 'www', 'js', f), 'utf8'), ctx, { filename: f });
 });
 const run = (code) => vm.runInContext(code, ctx);
@@ -14,7 +14,7 @@ const evaluate = run('evaluate');
 const evaluateAll = run('evaluateAll');
 const buildSteps = run('buildSteps');
 const answerSteps = run('answerSteps');
-const LESSONS = run('LESSONS').filter(l => !l.colors && !l.numbers && !l.geo && !l.poss && !l.size && !l.third && !l.nat && !l.ess && !l.altro && !l.prep && !l.anche && !l.ora && !l.appt && !l.verbs);   // lezioni con gli oggetti (colori e numeri hanno i loro test)
+const LESSONS = run('LESSONS').filter(l => !l.colors && !l.numbers && !l.geo && !l.poss && !l.size && !l.third && !l.nat && !l.ess && !l.altro && !l.prep && !l.anche && !l.ora && !l.appt && !l.verbs && !l.purp);   // lezioni con gli oggetti (colori e numeri hanno i loro test)
 const NUM_LESSONS = run('LESSONS').filter(l => l.numbers);
 const COLOR_LESSONS = run('LESSONS').filter(l => l.colors);
 const ITEMS = run('ITEMS');
@@ -752,6 +752,32 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
   const st = buildSteps(l23), models = st.filter(s => s.model && s.type !== 'reveal');
   check('lezione 23: risposte modello giuste', models.every(s => evaluate(s, s.model).ok));
   check('lezione 23: ripetizioni giuste', models.every(s => buildDrill(s, 5, []).every(d => evaluate(d, d.model).ok)));
+}
+
+// Lezione 24: «Perché? Per…»
+{
+  const SP = run('SPU'), evalAsk = run('evalAsk'), answerAsk = run('answerAsk'), buildDrill = run('buildDrill'), ok = (st, t) => evaluate(st, t).ok;
+  const l24 = run('LESSONS').find(l => l.id === 'l24');
+  check('lezione 24 c\'è', !!l24 && l24.purp);
+  check('figure', l24.known.every(k => FIG[k] && FIG[k].indexOf('<svg') === 0 && FIG[k].indexOf(' id=') === -1));
+  const P = run('p3People()'), M = run('TEACHERS')[P.m].name, F = run('TEACHERS')[P.f].name;
+  check('frasi', SP.present('pp_m_book').prompt === M + ' prende il libro per leggere.' && SP.present('pp_m_key').prompt === M + ' prende la chiave per aprire la porta.' &&
+    SP.present('pp_m_orange').prompt === M + ' prende l\'arancia per mangiare.' && SP.key('pp_f_pen').prompt === 'Perché ' + F + ' prende la penna?' && SP.key('pp_f_pen').model === 'Per scrivere.');
+  check('giusto (breve e intera)', ok(SP.key('pp_f_soda'), 'Per bere.') && ok(SP.key('pp_f_soda'), F + ' prende l\'aranciata per bere.') && ok(SP.key('pp_m_key'), 'Per aprire la porta.') &&
+    ok(SP.key('pp_m_key'), 'Per aprire.') && ok(SP.yes('pp_m_book'), 'Sì, per leggere.'));
+  const n = SP.neg('pp_m_book');
+  check('giusto: il no (anche «No, per leggere.»)', ok(n, n.model) && ok(n, 'No, per leggere.') && !ok(n, 'No, per ' + run('P_INF')[n.ask] + '.'));
+  check('sbagliato: «per legge», «perché leggere», scopo, persona, «prendo»', !ok(SP.key('pp_m_book'), 'Per legge.') && !ok(SP.key('pp_m_book'), 'Perché leggere.') &&
+    !ok(SP.key('pp_m_book'), 'Per leggo.') && !ok(SP.key('pp_m_book'), 'Per mangiare.') && !ok(SP.key('pp_m_book'), F + ' prende il libro per leggere.') &&
+    !ok(SP.key('pp_m_book'), M + ' prendo il libro per leggere.') && !ok(SP.key('pp_m_key'), 'Per aprire la finestra.'));
+  check('ripete «Perché…?»', ok(SP.askQ('pp_m_book'), 'Perché ' + M + ' prende il libro?') && !ok(SP.askQ('pp_m_book'), 'Per leggere.'));
+  check('allievo', evalAsk('pp_f_phone', 'Perché ' + F + ' prende il telefono?').kind === 'what' && answerAsk('pp_f_phone', { kind: 'what' }) === 'Per telefonare.' &&
+    evalAsk('pp_f_phone', F + ' prende il telefono per bere?').kind === 'no' && answerAsk('pp_f_phone', { kind: 'no', ask: 'drink' }) === 'No, ' + F + ' non prende il telefono per bere. Per telefonare.' &&
+    evalAsk('pp_m_book', M + ' prende il libro per legge?').model === M + ' prende il libro per leggere?');
+  check('lezione 23 non cambia', run('SV').present('v_m_read').prompt === M + ' legge un libro.' && run('Object.keys(ACTS)').indexOf('write') === -1);
+  const st = buildSteps(l24), models = st.filter(s => s.model && s.type !== 'reveal');
+  check('lezione 24: risposte modello giuste', models.every(s => evaluate(s, s.model).ok));
+  check('lezione 24: ripetizioni giuste', models.every(s => buildDrill(s, 5, []).every(d => evaluate(d, d.model).ok)));
 }
 
 // Parole che vanno bene tutte e due (COURSE.synonyms): il microfono le accetta tutte e due
