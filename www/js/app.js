@@ -485,7 +485,13 @@ function setStatus(text, mode) {
   // Il tasto Talk lampeggia quando deve parlare lo studente (microfono acceso o «tocca Talk»)
   $('btn-talk').classList.toggle('flash', mode === 'rec' || text.indexOf(uiWord('talk')) !== -1);
 }
-function setPrompt(text) { $('prompt-text').textContent = DB.settings.showText ? shown(text) : ''; synWrap(); squeezePrompt(); }
+let promptShown = '';
+function setPrompt(text) {
+  const el = $('prompt-text'), t = DB.settings.showText ? shown(text) : '';
+  el.textContent = t; synWrap(); squeezePrompt();
+  if (t && t !== promptShown) restartAnim(el, 'in');   // la frase nuova entra con una dissolvenza (stile2026.css)
+  promptShown = t;
+}
 /* ---------- Parole che vanno bene tutte e due (COURSE.synonyms, es. neanche / nemmeno) ----------
    Nella frase scritta la parola, in oro, si alterna con l'altra ogni 2 secondi: si vede che sono uguali. */
 function synWrap() { synWrap0(); addTranslit(); }
