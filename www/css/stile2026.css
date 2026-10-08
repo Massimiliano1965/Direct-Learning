@@ -63,7 +63,8 @@ button, .object-box, .chap > summary, .lv-group > summary {
   transition: transform .2s var(--ease), background-color .3s var(--ease), border-color .3s var(--ease), box-shadow .3s var(--ease), opacity .3s var(--ease);
 }
 button { border-radius: 14px; font-weight: 700; }
-button:not(.secondary):not(.ghost):not(.choice):not(.lesson-btn):not(.lang-choice):not(.fav-star) {
+/* :where = peso zero: i tasti con uno stile loro (velocità, lingua…) restano come sono */
+:where(button:not(.secondary):not(.ghost):not(.choice):not(.lesson-btn):not(.lang-choice):not(.fav-star)) {
   background: linear-gradient(180deg, #d8b878, #c9a45c); box-shadow: 0 8px 20px -8px rgba(201, 164, 92, .55);
 }
 button:active, .object-box:active, .lv-group > summary:active, .chap > summary:active { transform: scale(.97); }

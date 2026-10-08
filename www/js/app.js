@@ -133,7 +133,7 @@ function renderHome() {
     const next = LESSONS.find(l => !l.test && DB.lessons[l.id] == null) || LESSONS[LESSONS.length - 1];
     const theme = (lv) => { const t = LEVEL_THEMES[lv] || {}; return t[UI_LANG] || t.en || ''; };
     const chName = (i) => { const t = CHAPTERS[i][1]; return t[UI_LANG] || t.en; };
-    [1, 2, 3, 4].forEach(lv => {
+    [1, 2, 3, 4, 5].forEach(lv => {
       const ls = LESSONS.filter(l => (l.level || 1) === lv);
       if (!ls.length) return;
       const done = ls.filter(l => !l.test && DB.lessons[l.id] != null).length, total = ls.filter(l => !l.test).length;
@@ -344,6 +344,7 @@ function stopLesson() {
   setLevel(1);
   RUN++;
   quiet();
+  stopStageAnim(); shownObj = undefined;
   Awake.allow();
   if (L) {
     const ts = DB.teachers[L.teacher.key];
@@ -451,10 +452,14 @@ function setStageTeacher(key) { stageTeacher = key; stagePose = ''; }
 // Chiamata dalla voce (voice.js): mentre l'insegnante parla, le labbra si muovono
 function onTeacherTalk(on) { const st = $('stage'); if (st) st.classList.toggle('talking', !!on); }
 
-let shownObj;
+let shownObj, stageAnim = null;
+function stopStageAnim() { if (stageAnim) { stageAnim(); stageAnim = null; } }
 function showIndicated(obj, right) {
   if (obj !== shownObj) {
+    stopStageAnim();
     $('stage-figure').innerHTML = obj && FIG[obj] ? FIG[obj] : UNKNOWN;
+    // i verbi di movimento: sul palco il cartone animato (azioni_fig.js, movimento_it.js)
+    if (obj && typeof AZ_ANIM !== 'undefined' && AZ_ANIM[obj]) stageAnim = playAction($('stage-figure'), AZ_ANIM[obj][0], AZ_ANIM[obj][1], true);
     restartAnim($('stage-figure'), 'pop');
     shownObj = obj;
     setPose('show');

@@ -8,11 +8,11 @@
    Si legge da sinistra a destra; la freccia d'oro in basso dice la direzione.
    ===================================================================== */
 const ACT_GROUND = 104, ACT_S = 0.5;
-const rad = d => d * Math.PI / 180;
+const actRad = d => d * Math.PI / 180;
 // gamba o braccio da angoli: a = angolo del primo pezzo (0 = giù, + = avanti/destra), b = piega del secondo
-function limb(p, a, b, l1, l2) {
-  const k = [p[0] + l1 * Math.sin(rad(a)), p[1] + l1 * Math.cos(rad(a))];
-  const e = [k[0] + l2 * Math.sin(rad(a + b)), k[1] + l2 * Math.cos(rad(a + b))];
+function actLimb(p, a, b, l1, l2) {
+  const k = [p[0] + l1 * Math.sin(actRad(a)), p[1] + l1 * Math.cos(actRad(a))];
+  const e = [k[0] + l2 * Math.sin(actRad(a + b)), k[1] + l2 * Math.cos(actRad(a + b))];
   return [k, e];
 }
 /* ---------- I vestiti di oggi (Massi: «niente giacca e cravatta verde anni '60, tutti alla moda, ognuno diverso;
@@ -33,7 +33,7 @@ const LOOK26 = {
 };
 function actLeg(L, a, b, back) {
   const hip = [50, 92];
-  const [k, f] = limb(hip, a, -b, 29, 29);
+  const [k, f] = actLimb(hip, a, -b, 29, 29);
   const d = `M${hip[0]} ${hip[1]} L${k[0]} ${k[1]} L${f[0]} ${f[1]}`;
   if (L.heels) {   // gambe nude, scarpa col tacco
     const sk = back ? L.skin2 : L.skin;
@@ -84,13 +84,13 @@ function actSkirt(L) {
 }
 function actArm(L, side, a, b, finger) {
   const s = side < 0 ? [36, 47] : [64, 47];
-  const [e, h] = limb(s, a, b, 23, 20);
+  const [e, h] = actLimb(s, a, b, 23, 20);
   return tArm(L, s, e, h, finger);
 }
-function actHand(side, a, b) { return limb(side < 0 ? [36, 47] : [64, 47], a, b, 23, 20)[1]; }
+function actHand(side, a, b) { return actLimb(side < 0 ? [36, 47] : [64, 47], a, b, 23, 20)[1]; }
 
 /* ---------- gli oggetti ---------- */
-const AP = {
+const ACT_AP = {
   stone: x => `<path d="M${x - 6} ${ACT_GROUND} q1 -6 6 -6 q6 0 6 6z" fill="#8b93a7"/>`,
   box: (x, y) => `<g transform="translate(${x} ${y === undefined ? ACT_GROUND : y})"><rect x="-13" y="-24" width="26" height="24" rx="2" fill="#c98a4b"/>
     <path d="M-13 -16 h26 M0 -24 v8" stroke="#a96f35" stroke-width="2"/><rect x="-13" y="-24" width="26" height="24" rx="2" fill="none" stroke="#8a5a2a" stroke-width="1.2"/></g>`,
@@ -115,82 +115,82 @@ const AP = {
   }
 };
 // segni del movimento: linee della velocità, arco della traiettoria
-const speed = (x, y) => `<path d="M${x} ${y} h-12 M${x + 2} ${y + 8} h-16 M${x} ${y + 16} h-10" stroke="#8fb4ff" stroke-width="2" stroke-linecap="round" opacity=".7"/>`;
-const arc = d => `<path d="${d}" fill="none" stroke="#e6c77e" stroke-width="1.6" stroke-dasharray="3 3" opacity=".8"/>`;
-const dust = x => `<path d="M${x - 8} ${ACT_GROUND - 1} q-3 -4 -7 -2 M${x + 8} ${ACT_GROUND - 1} q3 -4 7 -2" stroke="#8b93a7" stroke-width="1.5" fill="none" stroke-linecap="round"/>`;
+const actSpeed = (x, y) => `<path d="M${x} ${y} h-12 M${x + 2} ${y + 8} h-16 M${x} ${y + 16} h-10" stroke="#8fb4ff" stroke-width="2" stroke-linecap="round" opacity=".7"/>`;
+const actArc = d => `<path d="${d}" fill="none" stroke="#e6c77e" stroke-width="1.6" stroke-dasharray="3 3" opacity=".8"/>`;
+const actDust = x => `<path d="M${x - 8} ${ACT_GROUND - 1} q-3 -4 -7 -2 M${x + 8} ${ACT_GROUND - 1} q3 -4 7 -2" stroke="#8b93a7" stroke-width="1.5" fill="none" stroke-linecap="round"/>`;
 
 /* ---------- le pose: x = dove sono i piedi, y = quanto è in alto, r = inclinazione (+ = in avanti),
    legs = [anca, piega del ginocchio] gamba dietro e gamba davanti (0 = giù, + = avanti),
    arms = [spalla, piega del gomito] braccio dietro e braccio davanti (+ = avanti / in su),
    reach = [x, y] dove va la mano davanti (la piega la calcola reachArm), reach2 = anche l'altra ---------- */
-const W1 = { legs: [[-22, 8], [22, 4]], arms: [[22, 20], [-22, 10]] };       // passo lungo
-const W2 = { legs: [[-4, 18], [4, 2]], arms: [[6, 8], [-6, 8]] };            // piedi vicini
-const STAND = { legs: [[-3, 0], [3, 0]], arms: [[-4, 6], [4, 6]] };
-const UP_L = [[-170, 0], [170, 0]];
+const ACT_W1 = { legs: [[-22, 8], [22, 4]], arms: [[22, 20], [-22, 10]] };       // passo lungo
+const ACT_W2 = { legs: [[-4, 18], [4, 2]], arms: [[6, 8], [-6, 8]] };            // piedi vicini
+const ACT_STAND = { legs: [[-3, 0], [3, 0]], arms: [[-4, 6], [4, 6]] };
+const ACT_UP = [[-170, 0], [170, 0]];
 const ACTIONS = {
   camminare: { arrow: 1, frames: [
-    { x: 24, ...W1 }, { x: 44, ...W2 }, { x: 64, legs: [[22, 4], [-22, 8]], arms: [[-22, 10], [22, 20]] }, { x: 84, ...W2 } ] },
+    { x: 24, ...ACT_W1 }, { x: 44, ...ACT_W2 }, { x: 64, legs: [[22, 4], [-22, 8]], arms: [[-22, 10], [22, 20]] }, { x: 84, ...ACT_W2 } ] },
   correre: { arrow: 1, frames: [
-    { x: 32, r: 12, legs: [[-40, 70], [40, 50]], arms: [[45, 90], [-45, 70]], face: 'open', fx: speed },
-    { x: 52, y: 6, r: 12, legs: [[-20, 100], [20, 80]], arms: [[-20, 80], [20, 90]], face: 'open', fx: speed },
-    { x: 72, r: 12, legs: [[40, 50], [-40, 70]], arms: [[-45, 70], [45, 90]], face: 'open', fx: speed },
-    { x: 90, y: 6, r: 12, legs: [[20, 80], [-20, 100]], arms: [[20, 90], [-20, 80]], face: 'open', fx: speed } ] },
+    { x: 32, r: 12, legs: [[-40, 70], [40, 50]], arms: [[45, 90], [-45, 70]], face: 'open', fx: actSpeed },
+    { x: 52, y: 6, r: 12, legs: [[-20, 100], [20, 80]], arms: [[-20, 80], [20, 90]], face: 'open', fx: actSpeed },
+    { x: 72, r: 12, legs: [[40, 50], [-40, 70]], arms: [[-45, 70], [45, 90]], face: 'open', fx: actSpeed },
+    { x: 90, y: 6, r: 12, legs: [[20, 80], [-20, 100]], arms: [[20, 90], [-20, 80]], face: 'open', fx: actSpeed } ] },
   saltare: { arrow: 0, frames: [
     { x: 60, y: -9, r: 14, legs: [[70, 120], [70, 120]], arms: [[-50, 20], [-50, 20]] },
-    { x: 60, y: 8, legs: [[-4, 0], [4, 0]], arms: UP_L, face: 'open', fx: () => arc('M60 106 V94') },
-    { x: 60, y: 22, legs: [[60, 110], [70, 120]], arms: [[-150, 0], [150, 0]], face: 'open', happy: 1, fx: () => arc('M60 104 V84') },
-    { x: 60, y: -5, legs: [[40, 70], [40, 70]], arms: [[60, 20], [60, 20]], happy: 1, fx: () => dust(60) } ] },
+    { x: 60, y: 8, legs: [[-4, 0], [4, 0]], arms: ACT_UP, face: 'open', fx: () => actArc('M60 106 V94') },
+    { x: 60, y: 22, legs: [[60, 110], [70, 120]], arms: [[-150, 0], [150, 0]], face: 'open', happy: 1, fx: () => actArc('M60 104 V84') },
+    { x: 60, y: -5, legs: [[40, 70], [40, 70]], arms: [[60, 20], [60, 20]], happy: 1, fx: () => actDust(60) } ] },
   cadere: { arrow: 1, frames: [
-    { x: 30, ...W1, stone: 60 },
+    { x: 30, ...ACT_W1, stone: 60 },
     { x: 54, r: 22, legs: [[-40, 30], [20, 10]], arms: [[80, 20], [70, 20]], face: 'o', stone: 60 },
     { x: 66, r: 55, y: -8, legs: [[-50, 20], [-30, 10]], arms: [[120, 0], [110, 10]], face: 'o', stone: 52 },
-    { x: 46, r: 90, y: -22, legs: [[-4, 0], [4, 0]], arms: [[150, 0], [140, 10]], face: 'flat', stone: 20, fx: () => dust(62) } ] },
-  salire: { arrow: 1, scene: () => AP.stairs(false), frames: [
-    { x: 16, ...W2 },
+    { x: 46, r: 90, y: -22, legs: [[-4, 0], [4, 0]], arms: [[150, 0], [140, 10]], face: 'flat', stone: 20, fx: () => actDust(62) } ] },
+  salire: { arrow: 1, scene: () => ACT_AP.stairs(false), frames: [
+    { x: 16, ...ACT_W2 },
     { x: 37, y: 6, legs: [[-30, 10], [40, 80]], arms: [[20, 10], [-20, 10]] },
     { x: 55, y: 12, legs: [[-30, 10], [40, 80]], arms: [[-20, 10], [20, 10]] },
-    { x: 91, y: 24, ...W2, happy: 1 } ] },
-  scendere: { arrow: 1, scene: () => AP.stairs(true), frames: [
-    { x: 37, y: 24, ...W2 },
+    { x: 91, y: 24, ...ACT_W2, happy: 1 } ] },
+  scendere: { arrow: 1, scene: () => ACT_AP.stairs(true), frames: [
+    { x: 37, y: 24, ...ACT_W2 },
     { x: 55, y: 18, legs: [[-10, 30], [30, 0]], arms: [[20, 10], [-20, 10]] },
     { x: 73, y: 12, legs: [[-10, 30], [30, 0]], arms: [[-20, 10], [20, 10]] },
-    { x: 106, ...W2, happy: 1 } ] },
-  prendere: { arrow: 0, scene: () => AP.table(94), frames: [
-    { x: 40, ...W2, cup: 94 },
-    { x: 62, ...W2, reach: [86, ACT_GROUND - 52], cup: 94 },
-    { x: 70, r: 8, ...W2, reach: [92, ACT_GROUND - 38], hold: 'cup' },
-    { x: 62, ...W2, reach: [76, ACT_GROUND - 58], happy: 1, hold: 'cup' } ] },
+    { x: 106, ...ACT_W2, happy: 1 } ] },
+  prendere: { arrow: 0, scene: () => ACT_AP.table(94), frames: [
+    { x: 40, ...ACT_W2, cup: 94 },
+    { x: 62, ...ACT_W2, reach: [86, ACT_GROUND - 52], cup: 94 },
+    { x: 70, r: 8, ...ACT_W2, reach: [92, ACT_GROUND - 38], hold: 'cup' },
+    { x: 62, ...ACT_W2, reach: [76, ACT_GROUND - 58], happy: 1, hold: 'cup' } ] },
   lanciare: { arrow: 1, frames: [
-    { x: 34, ...W2, arms: [[10, 10], [-30, 60]], hold: 'ball' },
+    { x: 34, ...ACT_W2, arms: [[10, 10], [-30, 60]], hold: 'ball' },
     { x: 34, r: -8, legs: [[-24, 8], [22, 4]], arms: [[40, 30], [-150, -30]], hold: 'ball' },
-    { x: 40, r: 10, legs: [[-24, 8], [24, 4]], arms: [[-30, 20], [110, 10]], face: 'open', ball: [80, 44], fx: () => arc('M62 52 Q72 40 80 44') },
-    { x: 40, r: 8, legs: [[-24, 8], [24, 4]], arms: [[-20, 20], [40, 30]], happy: 1, ball: [108, 98], fx: () => arc('M62 52 Q88 22 107 94') } ] },
+    { x: 40, r: 10, legs: [[-24, 8], [24, 4]], arms: [[-30, 20], [110, 10]], face: 'open', ball: [80, 44], fx: () => actArc('M62 52 Q72 40 80 44') },
+    { x: 40, r: 8, legs: [[-24, 8], [24, 4]], arms: [[-20, 20], [40, 30]], happy: 1, ball: [108, 98], fx: () => actArc('M62 52 Q88 22 107 94') } ] },
   aprire: { arrow: 0, frames: [
-    { x: 36, ...W2, door: 0 },
-    { x: 60, ...W2, reach: 'door', door: 0 },
-    { x: 58, ...W2, reach: 'door', door: .5 },
-    { x: 56, ...STAND, happy: 1, door: 1 } ] },
+    { x: 36, ...ACT_W2, door: 0 },
+    { x: 60, ...ACT_W2, reach: 'door', door: 0 },
+    { x: 58, ...ACT_W2, reach: 'door', door: .5 },
+    { x: 56, ...ACT_STAND, happy: 1, door: 1 } ] },
   chiudere: { arrow: 0, frames: [
-    { x: 56, ...STAND, door: 1 },
-    { x: 58, ...W2, reach: 'door', door: .9 },
-    { x: 60, ...W2, reach: 'door', door: .45 },
-    { x: 60, ...W2, reach: 'door', door: 0 } ] },
+    { x: 56, ...ACT_STAND, door: 1 },
+    { x: 58, ...ACT_W2, reach: 'door', door: .9 },
+    { x: 60, ...ACT_W2, reach: 'door', door: .45 },
+    { x: 60, ...ACT_W2, reach: 'door', door: 0 } ] },
   spingere: { arrow: 1, frames: [
     { x: 28, r: 20, legs: [[-34, 10], [20, 40]], reach: [46, ACT_GROUND - 18], reach2: [46, ACT_GROUND - 14], box: 60 },
-    { x: 40, r: 24, legs: [[-40, 10], [24, 40]], reach: [58, ACT_GROUND - 18], reach2: [58, ACT_GROUND - 14], box: 72, fx: () => speed(56, 86) },
-    { x: 58, r: 24, legs: [[-40, 10], [24, 40]], reach: [76, ACT_GROUND - 18], reach2: [76, ACT_GROUND - 14], box: 90, fx: () => speed(74, 86) },
-    { x: 70, ...STAND, happy: 1, box: 100 } ] },
+    { x: 40, r: 24, legs: [[-40, 10], [24, 40]], reach: [58, ACT_GROUND - 18], reach2: [58, ACT_GROUND - 14], box: 72, fx: () => actSpeed(56, 86) },
+    { x: 58, r: 24, legs: [[-40, 10], [24, 40]], reach: [76, ACT_GROUND - 18], reach2: [76, ACT_GROUND - 14], box: 90, fx: () => actSpeed(74, 86) },
+    { x: 70, ...ACT_STAND, happy: 1, box: 100 } ] },
   tirare: { arrow: -1, frames: [
     { x: 30, r: -16, legs: [[-30, 10], [30, 10]], reach: [50, ACT_GROUND - 46], reach2: [48, ACT_GROUND - 44], box: 100, rope: 1 },
-    { x: 26, r: -20, legs: [[-30, 10], [34, 10]], reach: [44, ACT_GROUND - 46], reach2: [42, ACT_GROUND - 44], box: 84, rope: 1, fx: () => speed(110, 86) },
-    { x: 22, r: -20, legs: [[-30, 10], [34, 10]], reach: [40, ACT_GROUND - 46], reach2: [38, ACT_GROUND - 44], box: 68, rope: 1, fx: () => speed(94, 86) },
-    { x: 20, ...STAND, happy: 1, box: 52 } ] }
+    { x: 26, r: -20, legs: [[-30, 10], [34, 10]], reach: [44, ACT_GROUND - 46], reach2: [42, ACT_GROUND - 44], box: 84, rope: 1, fx: () => actSpeed(110, 86) },
+    { x: 22, r: -20, legs: [[-30, 10], [34, 10]], reach: [40, ACT_GROUND - 46], reach2: [38, ACT_GROUND - 44], box: 68, rope: 1, fx: () => actSpeed(94, 86) },
+    { x: 20, ...ACT_STAND, happy: 1, box: 52 } ] }
 };
 // dov'è la maniglia della porta (i cardini sono a destra, la maniglia a sinistra)
 function doorKnob(x, open) { return [x + 23 - 22 * (1 - open * 0.75) + 4, ACT_GROUND - 36 + open * 2]; }
 
 // dal disegno del personaggio al fotogramma e ritorno (spostamento, scala, inclinazione intorno alle anche)
-function frameT(p) { return { tx: p.x - 50 * ACT_S, ty: ACT_GROUND - (p.y || 0) - 150 * ACT_S, r: rad(p.r || 0) }; }
+function frameT(p) { return { tx: p.x - 50 * ACT_S, ty: ACT_GROUND - (p.y || 0) - 150 * ACT_S, r: actRad(p.r || 0) }; }
 function toFrame(p, q) {
   const T = frameT(p), dx = q[0] - 50, dy = q[1] - 92, c = Math.cos(T.r), s = Math.sin(T.r);
   return [T.tx + ACT_S * (50 + dx * c - dy * s), T.ty + ACT_S * (92 + dx * s + dy * c)];
@@ -205,15 +205,15 @@ function reachArm(p, side, t) {
   const dx = T[0] - S[0], dy = T[1] - S[1], d = Math.min(Math.hypot(dx, dy), 42.5);
   const th = Math.atan2(dx, dy) * 180 / Math.PI;
   const al = Math.acos(Math.max(-1, Math.min(1, (23 * 23 + d * d - 20 * 20) / (2 * 23 * d)))) * 180 / Math.PI;
-  const a = th - al, e = limb(S, a, 0, 23, 0)[0];
+  const a = th - al, e = actLimb(S, a, 0, 23, 0)[0];
   return [a, Math.atan2(T[0] - e[0], T[1] - e[1]) * 180 / Math.PI - a];
 }
 
 // una posa con tutti i numeri: la mano che «va verso» diventa angoli di spalla e gomito
 function actResolve(p) {
   const q = Object.assign({ y: 0, r: 0 }, p);
-  q.legs = (p.legs || W2.legs).map(l => l.slice());
-  q.arms = (p.arms || W2.arms).map(a => a.slice());
+  q.legs = (p.legs || ACT_W2.legs).map(l => l.slice());
+  q.arms = (p.arms || ACT_W2.arms).map(a => a.slice());
   const reach = p.reach === 'door' ? doorKnob(80, p.door) : p.reach;
   if (reach) q.arms[1] = reachArm(q, 1, reach);
   if (p.reach2) q.arms[0] = reachArm(q, -1, p.reach2);
@@ -237,21 +237,24 @@ function actFigure(L, q) {
     actLeg(L, legs[1][0], legs[1][1]) + actSkirt(L) + actArm(L, 1, arms[1][0], arms[1][1]);
   if (q.hold) {
     const h = actHand(1, arms[1][0], arms[1][1]);
-    body += `<g transform="translate(${h[0]} ${h[1]}) rotate(${-q.r}) scale(${1 / ACT_S})">${q.hold === 'cup' ? AP.cup(1, 3) : AP.ball(0, -3)}</g>`;
+    body += `<g transform="translate(${h[0]} ${h[1]}) rotate(${-q.r}) scale(${1 / ACT_S})">${q.hold === 'cup' ? ACT_AP.cup(1, 3) : ACT_AP.ball(0, -3)}</g>`;
   }
   return body;
 }
 // un fotogramma (SVG 120×120) da una posa già risolta; label = il numerino in alto (solo nelle strisce)
-function actionPose(verb, q, look, label) {
+function actionPose(verb, q, look, label, bare) {
   const A = ACTIONS[verb], L = LOOK26[look || 'mario'] || LOOKS[look], T = frameT(q);
-  let s = `<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><rect width="120" height="120" rx="10" fill="#1b2333"/>
+  // bare = sul palco della lezione: senza il riquadro scuro, e un po' più grande
+  let s = bare ? `<svg viewBox="4 4 112 112" xmlns="http://www.w3.org/2000/svg">`
+    : `<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><rect width="120" height="120" rx="10" fill="#1b2333"/>`;
+  s += `
     <path d="M6 ${ACT_GROUND} H114" stroke="#3a4a66" stroke-width="2" stroke-linecap="round"/>`;
   if (A.scene) s += A.scene();
-  if (q.door !== undefined) s += AP.door(80, q.door);
-  if (q.stone !== undefined) s += AP.stone(q.stone);
-  if (q.cup !== undefined && !q.hold) s += AP.cup(q.cup, ACT_GROUND - 34);
-  if (q.box !== undefined) s += AP.box(q.box);
-  if (q.ball) s += AP.ball(q.ball[0], q.ball[1]);
+  if (q.door !== undefined) s += ACT_AP.door(80, q.door);
+  if (q.stone !== undefined) s += ACT_AP.stone(q.stone);
+  if (q.cup !== undefined && !q.hold) s += ACT_AP.cup(q.cup, ACT_GROUND - 34);
+  if (q.box !== undefined) s += ACT_AP.box(q.box);
+  if (q.ball) s += ACT_AP.ball(q.ball[0], q.ball[1]);
   if (q.fx) s += q.fx(q.x - 12, ACT_GROUND - 50 - q.y);
   s += `<g transform="translate(${T.tx} ${T.ty}) scale(${ACT_S}) rotate(${q.r} 50 92)">${actFigure(L, q)}</g>`;
   if (q.rope) {   // la corda: dalla mano davanti alla scatola
@@ -275,20 +278,20 @@ const ACT_STEP = 520, ACT_HOLD = 800;
 const actEase = t => t < .5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
 function actionLoopMs(verb) { return (ACTIONS[verb].frames.length - 1) * ACT_STEP + ACT_HOLD; }
 // la posa al tempo ms (sempre la stessa per lo stesso ms: serve anche alle prove)
-function actionAt(verb, ms, look) {
+function actionAt(verb, ms, look, bare) {
   const F = ACTIONS[verb].frames, cache = ACTIONS[verb]._res || (ACTIONS[verb]._res = F.map(actResolve));
   const t = ms % actionLoopMs(verb), k = Math.floor(t / ACT_STEP);
-  if (k >= F.length - 1) return actionPose(verb, cache[F.length - 1], look);
-  return actionPose(verb, actLerp(cache[k], cache[k + 1], actEase(t / ACT_STEP - k)), look);
+  if (k >= F.length - 1) return actionPose(verb, cache[F.length - 1], look, 0, bare);
+  return actionPose(verb, actLerp(cache[k], cache[k + 1], actEase(t / ACT_STEP - k)), look, 0, bare);
 }
 // fa partire il cartone dentro el; restituisce la funzione per fermarlo
-function playAction(el, verb, look) {
+function playAction(el, verb, look, bare) {
   let on = true, t0 = 0, last = -1;
   const tick = now => {
     if (!on) return;
     if (!t0) t0 = now;
     const f = Math.floor((now - t0) / 33);        // circa 30 immagini al secondo: leggero per il telefono
-    if (f !== last) { last = f; el.innerHTML = actionAt(verb, now - t0, look); }
+    if (f !== last) { last = f; el.innerHTML = actionAt(verb, now - t0, look, bare); }
     requestAnimationFrame(tick);
   };
   requestAnimationFrame(tick);

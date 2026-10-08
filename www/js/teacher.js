@@ -23,7 +23,7 @@ const LOOKS = {
   // Pietro: abito blu notte stretto, camicia bianca, cravatta sottile, fazzoletto bianco nel taschino
   luca:   { man: true, skin: '#eab892', skin2: '#d9a27c', hair: '#4a3326', hair2: '#38261c', style: 'short',
             modern: true, under: 'shirt', suit: '#1f2b4d', suit2: '#18223e', shirt: '#f7f8fb', tie: '#6a7aa3', btn: '#18223e', pocket: '#f7f8fb', shoe: '#2a1d16' },
-  // Sara: Versace, giacca avorio con i bottoni d'oro, top e gonna neri, collana d'oro
+  // Erika (chiave sara: era Sara): Versace, giacca avorio con i bottoni d'oro, top e gonna neri, collana d'oro
   sara:   { man: false, skin: '#f1c7a5', skin2: '#e0b08c', hair: '#a8522a', hair2: '#8a4020', style: 'long',
             modern: true, under: 'silk', suit: '#efe8dc', suit2: '#d6ccbb', shirt: '#1c1c22', btn: '#c9a45c', necklace: '#e6c77e', skirt: '#1c1c22', legs: '#e0b08c', shoe: '#1b1b22' },
   // i personaggi delle frasi (NON insegnanti, Massi): il signor Mario e la signora Anna

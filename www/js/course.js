@@ -365,6 +365,11 @@ const LESSONS = [
   // capitolo 20: «Espressioni per il turista» — Mario dice: «Scusi, dov'è la stazione?» (turista_it.js; nel fumetto il disegno, non le parole)
   { id: 'l100', title: 'Lezione 100', level: 4, tu: true, hilite: ['Scusi', 'Quanto costa', 'per favore', 'Parla inglese', 'Mi può aiutare'],
     known: ['tu_m_stazione', 'tu_f_costa', 'tu_m_conto', 'tu_f_inglese', 'tu_m_aiuto', 'tu_f_biglietto'] },
+  // PROVA (Massi: «voglio vedere i filmati delle azioni»): i verbi di movimento con il cartone animato (movimento_it.js, azioni_fig.js)
+  { id: 'l101', title: 'Lezione 101', mov: true, hilite: ['Che cosa fa'],
+    known: ['mov_m_cammina', 'mov_f_corre', 'mov_m_salta', 'mov_f_cade', 'mov_m_sale', 'mov_f_scende'] },
+  { id: 'l102', title: 'Lezione 102', mani: true, hilite: ['Che cosa fa'],
+    known: ['mani_f_prende', 'mani_m_lancia', 'mani_f_apre', 'mani_m_chiude', 'mani_f_spinge', 'mani_m_tira'] },
   // TEST DI FINE LIVELLO 4 (test_it.js): 8 domande che contano e 2 descrizioni libere
   { id: 't4', title: 'Test del livello 4', test: 4, level: 4, known: [] }
 ];
@@ -377,7 +382,8 @@ const LEVEL_THEMES = {
   1: { it: 'Le prime parole', en: 'First words', de: 'Die ersten Wörter', ja: 'はじめのことば' },
   2: { it: 'La vita di tutti i giorni', en: 'Everyday life', de: 'Der Alltag', ja: '毎日の生活' },
   3: { it: 'Parlare con gli altri', en: 'Talking with people', de: 'Mit anderen sprechen', ja: '人と話す' },
-  4: { it: 'In viaggio in Italia', en: 'Travelling in Italy', de: 'Unterwegs in Italien', ja: 'イタリアを旅する' }
+  4: { it: 'In viaggio in Italia', en: 'Travelling in Italy', de: 'Unterwegs in Italien', ja: 'イタリアを旅する' },
+  5: { it: 'Le azioni (prova)', en: 'Actions (preview)', de: 'Handlungen (Vorschau)', ja: '動作（試し）' }
 };
 // i capitoli: [prima lezione, nome] — 5 lezioni ciascuno
 const CHAPTERS = [
@@ -400,10 +406,11 @@ const CHAPTERS = [
   [81, { it: 'Le lingue, i materiali, piace', en: 'Languages, materials, liking', de: 'Sprachen, Materialien, gefallen', ja: '言語・素材・好き' }],
   [86, { it: 'Stagioni, tempo, al bar', en: 'Seasons, weather, at the bar', de: 'Jahreszeiten, Wetter, an der Bar', ja: '季節・天気・バール' }],
   [91, { it: 'Moda, trasporti, albergo, città', en: 'Fashion, transport, hotel, cities', de: 'Mode, Verkehr, Hotel, Städte', ja: 'ファッション・交通・ホテル・町' }],
-  [96, { it: 'Al ristorante e in viaggio', en: 'At the restaurant, travelling', de: 'Im Restaurant, auf Reisen', ja: 'レストランと旅' }]
+  [96, { it: 'Al ristorante e in viaggio', en: 'At the restaurant, travelling', de: 'Im Restaurant, auf Reisen', ja: 'レストランと旅' }],
+  [101, { it: 'I verbi di movimento (prova)', en: 'Verbs of movement (preview)', de: 'Bewegungsverben (Vorschau)', ja: '動きの動詞（試し）' }]
 ];
 const lessonNum = (l) => +String(l.id).replace(/^l/, '');
-const levelOfNum = (n) => Math.min(4, Math.ceil(n / LEVEL_SIZE));
+const levelOfNum = (n) => Math.min(5, Math.ceil(n / LEVEL_SIZE));   // 5 = il livello nuovo (per ora le prove dei verbi di movimento)
 const chapterOf = (n) => { let c = 0; CHAPTERS.forEach((ch, i) => { if (n >= ch[0]) c = i; }); return c; };
 (function () {
   const tests = LESSONS.filter(l => l.test), lessons = LESSONS.filter(l => !l.test && /^l\d+$/.test(l.id));
@@ -448,7 +455,7 @@ const TEACHERS = {
     done: ''
   },
   sara: {
-    key: 'sara', name: 'Sara', gender: 'f', style: 'Easygoing', mark: 'pity',
+    key: 'sara', name: 'Erika', gender: 'f', style: 'Easygoing', mark: 'pity',
     rate: 0.95, pitch: 1.3, voice: 1, modelRate: 0.85, praiseEvery: 2, repeats: [1, 2, 1, 3, 2],
     praise: [],
     wrong: 'No.',
