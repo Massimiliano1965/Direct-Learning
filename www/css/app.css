@@ -404,3 +404,9 @@ body.test-end #btn-again { display: none; }
 .guide-steps { margin: 0; padding-left: 22px; font-size: 17px; line-height: 1.5; }
 .guide-steps li + li { margin-top: 8px; }
 .guide-more { margin: 14px 0 0; font-size: 14px; line-height: 1.45; }
+
+/* La velocità della voce sotto gli insegnanti: una riga sola, stretta */
+.speed-row { display: flex; align-items: center; gap: 10px; margin: 10px 0 0; }
+.speed-row .speed-label { margin: 0; font-size: 13px; line-height: 1.2; color: var(--muted); max-width: 34%; }
+.seg.seg-small { flex: 1; }
+.seg.seg-small button { min-height: 40px; padding: 6px 4px; font-size: 14px; }

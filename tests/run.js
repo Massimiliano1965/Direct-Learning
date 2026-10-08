@@ -396,7 +396,7 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
         check(l.id + ': il numero nuovo non si dice prima dello sfogo', st.slice(0, st.findIndex(s => s.type === 'reveal')).every(s => (s.prompt + ' ' + s.model).indexOf(' ' + run('NUMS')[l.fresh] + '.') === -1));
         check(l.id + ': tutte le risposte modello giuste', st.filter(s => s.model && s.type !== 'reveal').every(s => evaluate(s, s.model).ok));
         check(l.id + ': ripetizioni giuste', st.filter(s => s.model && s.type !== 'reveal').every(s => buildDrill(s, 5, s.reviewItems || l.known.concat(l.review || [], [l.fresh])).every(d => evaluate(d, d.model).ok)));
-        check(l.id + ': lunghezza ragionevole', st.length < 110);
+        check(l.id + ': lunghezza ragionevole', st.length < 115);   // di solito 103–110: il ripasso cambia ogni volta (con 110 falliva per caso, 1 volta su 150)
       }
       if (st.some(s => s.type === 'neg' && s.ask === s.show)) { check(l.id + ': niente domanda impossibile', false); break; }
     }
