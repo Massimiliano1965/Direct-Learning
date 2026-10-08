@@ -11,7 +11,7 @@
   if (typeof document === 'undefined' || !document.body || !window.requestAnimationFrame) return;
   const NS = 'http://www.w3.org/2000/svg';
   const W = 360, H = 640;
-  const EAR = [156, 305], MOUTH = [279, 355], VORTEX = [196, 282], RING = [190, 300], R = 148;
+  const EAR = [168, 310], MOUTH = [266, 356], VORTEX = [186, 270], RING = [186, 300], R = 148;
   const GLYPHS = '中文語書字愛話あいうえおカタナのを한글말عربيةشلمخحДЖЯЩЮЛБГЫЭШЦΩΣλΨßñçéøåèФ'.split('');
   const HELLO = ['Ciao', 'Hello', 'Привет', '你好', 'مرحبا', 'こんにちは', 'Hallo', 'Hola', 'Bonjour', 'Olá', '안녕', 'Γειά'];
   const N = 44;
@@ -31,44 +31,30 @@
   const svg = el('svg', { viewBox: '0 0 ' + W + ' ' + H, width: '100%', height: '100%', preserveAspectRatio: 'xMidYMid meet' }, null);
   box.appendChild(svg);
 
-  // la testa di profilo (guarda a destra), disegnata a tratto come un'illustrazione: prima il contorno, poi i dettagli
+  // la testa di profilo (guarda a destra), a tratto: cranio chiuso, viso con le proporzioni vere, la bocca aperta
+  // (scelta di Massi: il modello 7 «Aperto» con il cranio chiuso e la bocca aperta). Disegnata in 280×300 e spostata al centro.
   const LINE = (d, w, at, dur) => ({ d: d, w: w, at: at, dur: dur });
   const PARTS = [
-    // il contorno: la nuca, poi il viso dalla fronte al collo (sopra ci sono i capelli, non il cranio liscio)
-    LINE('M138 432 C140 400 122 372 116 340', 3.2, 0, 400),
-    LINE('M263 262 C265 280 269 292 275 301 L288 324 C290 330 283 334 276 335 C279 341 280 345 276 349 C280 353 280 359 274 363 C272 374 269 384 258 388 C242 392 232 394 226 402 C229 410 232 416 227 422 L225 432', 3.2, 0, 900),
-    // i capelli mossi: il contorno a onde, il ciuffo sulla fronte, le ciocche, la basetta
-    LINE('M116 340 C104 318 103 290 110 266 C105 250 112 234 124 225 C127 209 142 199 158 197 C169 187 189 185 203 190 C219 183 239 189 249 201 C263 205 273 221 270 239 C274 251 269 260 263 262', 3, 150, 850),
-    LINE('M263 262 C252 256 247 244 251 233 C243 242 238 252 241 263', 1.8, 750, 350),
-    LINE('M150 207 C170 200 190 199 207 204', 1.5, 600, 400),
-    LINE('M134 233 C150 222 168 218 186 220 C200 212 218 212 233 219', 1.5, 650, 450),
-    LINE('M124 262 C136 246 152 238 170 236', 1.5, 700, 400),
-    LINE('M119 300 C125 282 137 270 153 264', 1.5, 750, 400),
-    LINE('M180 250 C184 264 183 278 178 290', 1.6, 800, 300),
-    LINE('M116 340 C121 349 126 353 133 356', 1.6, 850, 250),
-    // il sopracciglio, l'occhio con la pupilla e le ciglia
-    LINE('M234 268 C244 261 257 261 267 267', 2.4, 850, 300),
-    LINE('M244 285 C250 279 258 279 264 284 C258 288 250 289 244 285', 2, 950, 300),
-    LINE('M262 281 L267 278', 1.4, 1100, 150),
-    // la narice, la bocca, lo zigomo
-    LINE('M270 326 C274 323 279 325 280 329', 1.8, 1000, 250),
-    LINE('M261 350 C266 352 271 351 277 349', 1.8, 1050, 250),
-    LINE('M236 312 C244 324 248 336 246 348', 1.2, 1100, 300),
-    // l'orecchio con il padiglione, la mascella
-    LINE('M162 286 C146 284 141 318 158 326 C166 329 170 321 167 314 C164 309 160 309 160 304', 2.6, 400, 400),
-    LINE('M160 294 C153 298 152 310 157 315', 1.4, 800, 250),
-    LINE('M170 330 C182 356 200 378 226 400', 1.4, 950, 400),
-    // il colletto: camicia e revers di una giacca sartoriale
-    LINE('M128 436 C160 450 204 450 238 438', 2.2, 900, 400),
-    LINE('M178 448 L194 470 L210 448', 2, 1050, 350)
+    // la nuca e il cranio
+    LINE('M70 292 C72 264 64 242 52 224 C32 198 22 154 30 112 C40 62 86 26 140 26 C178 26 202 56 204 94', 3, 0, 800),
+    // il viso: fronte, naso, labbro di sopra, la bocca aperta, labbro di sotto, mento, collo
+    LINE('M204 94 C205 110 203 120 203 128 C203 134 200 137 199 141 C206 152 216 164 225 175 C227 180 222 184 214 184 L207 185 C209 189 211 193 209 197 C207 199 202 200 197 201 C200 209 205 211 208 215 C206 220 200 222 200 226 C203 232 206 238 205 244 C203 252 198 256 190 258 C176 260 166 260 160 262 C158 272 157 282 157 292', 3, 500, 800),
+    LINE('M197 201 C201 205 205 208 208 215', 1, 1200, 200),
+    // l'orecchio, il sopracciglio, l'occhio, la narice
+    LINE('M118 134 C102 126 92 150 98 168 C102 181 113 185 117 176 C119 170 113 166 113 160', 2.2, 450, 400),
+    LINE('M112 144 C104 148 104 160 110 165', 1.4, 800, 250),
+    LINE('M174 125 C184 120 194 121 202 126', 2.2, 900, 300),
+    LINE('M181 137 C187 133 193 135 197 140 C192 144 186 145 181 143', 1.8, 1000, 300),
+    LINE('M206 177 C209 173 215 174 216 179', 1.6, 1050, 250)
   ];
+  const headG = el('g', { transform: 'translate(62 150)' }, svg);
   const lines = PARTS.map(P => {
-    const p = el('path', { d: P.d, fill: 'none', stroke: '#111', 'stroke-width': P.w, 'stroke-linecap': 'round', 'stroke-linejoin': 'round' }, svg);
+    const p = el('path', { d: P.d, fill: 'none', stroke: '#111', 'stroke-width': P.w, 'stroke-linecap': 'round', 'stroke-linejoin': 'round' }, headG);
     const L = p.getTotalLength ? p.getTotalLength() : 600;
     p.style.strokeDasharray = L; p.style.strokeDashoffset = L;
     return { p: p, L: L, at: P.at, dur: P.dur };
   });
-  const pupil = el('circle', { cx: 257, cy: 284, r: 2.4, fill: '#111', opacity: 0 }, svg);
+  const pupil = el('circle', { cx: 190, cy: 139.5, r: 2.6, fill: '#111', opacity: 0 }, headG);
 
   // le lettere: ognuna parte da sinistra, entra nell'orecchio, gira nel vortice, esce dalla bocca
   const glyphs = [];
