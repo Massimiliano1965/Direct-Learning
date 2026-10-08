@@ -16,15 +16,20 @@ const remindN = () => { const c = window.cordova; return (c && c.plugins && c.pl
 // la lezione che tocca: la prima non ancora fatta
 function remindNext() { return LESSONS.find(l => !l.test && DB.lessons[l.id] == null) || LESSONS.find(l => !l.test); }
 // frasi già imparate (le domande chiave delle lezioni fatte); all'inizio la prima frase della lezione che tocca
+// (si calcolano poche volte: costruire le lezioni pesa sui telefoni economici; si rifanno solo quando cambiano le lezioni fatte)
+let remindCache = null;
 function remindSentences(n) {
-  const done = LESSONS.filter(l => !l.test && DB.lessons[l.id] != null), out = [];
-  shuffle(done.slice()).slice(0, n * 2).forEach(l => {
+  const done = LESSONS.filter(l => !l.test && DB.lessons[l.id] != null), key = done.length;
+  if (remindCache && remindCache.key === key) return remindCache.out;
+  const out = [];
+  shuffle(done.slice()).slice(0, 4).forEach(l => {
     try { const st = buildSteps(l).find(s => s.type === 'key' && s.model); if (st && out.indexOf(shown(st.model)) === -1) out.push(shown(st.model)); } catch (e) {}
   });
   if (!out.length) {
     try { const st = buildSteps(remindNext()).find(s => s.model); if (st) out.push(shown(st.model)); } catch (e) {}
   }
-  return out.length ? out : [''];
+  remindCache = { key: key, out: out.length ? out : [''] };
+  return remindCache.out;
 }
 function remindText(sentence) {
   const l = remindNext(), num = typeof lessonNumber === 'function' ? lessonNumber(l) : LESSONS.indexOf(l) + 1;
@@ -99,9 +104,9 @@ document.addEventListener('deviceready', () => {
       actions: [{ id: 'remind_later', title: tx('fav_in1h') }], allowWhileIdle: true, foreground: true });
   });
   if (typeof N.fireQueuedEvents === 'function') N.fireQueuedEvents();
-  remindRefresh();
+  setTimeout(remindRefresh, 6000);   // dopo l'avvio: prima l'app deve essere pronta e fluida
 }, false);
-document.addEventListener('resume', () => { remindRefresh(); }, false);
+document.addEventListener('resume', () => { setTimeout(remindRefresh, 3000); }, false);
 remindShow();
 
 /* =====================================================================
@@ -192,5 +197,5 @@ function unlockResume() {
     if (st.overlay) { unlockSync(() => { unlockShow(); if (currentScreen === 'guide') { renderHome(); showScreen('home'); unlockShow(tx('unlockReady')); } }); }
   });
 }
-document.addEventListener('deviceready', () => { unlockResume(); }, false);
+document.addEventListener('deviceready', () => { unlockTake(); setTimeout(unlockResume, 7000); }, false);
 document.addEventListener('resume', () => { setTimeout(unlockResume, 300); }, false);

@@ -134,5 +134,4 @@ function searchByVoice() {
   $('search-q').addEventListener('keydown', (e) => { if (e.key === 'Enter') { clearTimeout(t); runSearch(); try { e.target.blur(); } catch (x) {} } });
   $('search-mic').onclick = searchByVoice;
   $('btn-search-home').onclick = () => { Ears.abort(); renderHome(); showScreen('home'); };
-  if (typeof currentScreen !== 'undefined' && currentScreen === 'home' && typeof renderHome === 'function') renderHome();   // il tasto della ricerca nel menu
 })();

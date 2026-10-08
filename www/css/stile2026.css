@@ -12,8 +12,8 @@
 :root {
   --bg: #0f172a;                 /* ardesia profonda, mai nero */
   --bg2: #111b31;
-  --surface: rgba(30, 41, 59, .55);
-  --surface2: rgba(51, 65, 85, .55);
+  --surface: #18213a;
+  --surface2: #222c46;
   --line: rgba(255, 255, 255, .1);
   --text: #f8fafc;
   --muted: #94a3b8;
@@ -22,11 +22,10 @@
   --sans: 'Plus Jakarta Sans', system-ui, -apple-system, Roboto, Arial, sans-serif;
   --ease: cubic-bezier(.4, 0, .2, 1);
   --shadow: 0 10px 25px -5px rgba(0, 0, 0, .3);
-  --glass: blur(12px);
 }
-html[data-level="2"] { --surface: rgba(25, 48, 74, .6); --surface2: rgba(34, 65, 95, .6); --line: rgba(255, 255, 255, .1); }
-html[data-level="3"] { --surface: rgba(40, 27, 71, .6); --surface2: rgba(52, 37, 91, .6); --line: rgba(255, 255, 255, .1); }
-html[data-level="4"] { --surface: rgba(58, 32, 52, .6); --surface2: rgba(74, 42, 67, .6); --line: rgba(255, 255, 255, .1); }
+html[data-level="2"] { --surface: #19304a; --surface2: #22415f; --line: rgba(255, 255, 255, .1); }
+html[data-level="3"] { --surface: #281b47; --surface2: #34255b; --line: rgba(255, 255, 255, .1); }
+html[data-level="4"] { --surface: #3a2034; --surface2: #4a2a43; --line: rgba(255, 255, 255, .1); }
 
 /* fondo con due luci morbide: così il vetro delle schede si vede */
 body {
@@ -35,23 +34,19 @@ body {
     radial-gradient(120% 60% at 0% 0%, rgba(201, 164, 92, .08), transparent 60%),
     radial-gradient(120% 70% at 100% 100%, var(--lvglow, rgba(99, 102, 241, .10)), transparent 60%),
     var(--bg);
-  background-attachment: fixed;
   padding-left: 16px; padding-right: 16px;
 }
 html[data-level] body { background:
     radial-gradient(120% 60% at 0% 0%, rgba(201, 164, 92, .08), transparent 60%),
     radial-gradient(120% 70% at 100% 100%, var(--lvglow, rgba(99, 102, 241, .10)), transparent 60%),
-    var(--bg); background-attachment: fixed; }
+    var(--bg); }
 html[data-level="2"] { --lvglow: rgba(93, 143, 196, .16); }
 html[data-level="3"] { --lvglow: rgba(154, 127, 214, .16); }
 html[data-level="4"] { --lvglow: rgba(212, 154, 189, .16); }
 .screen { padding-top: 20px; }
 .label { font-weight: 700; letter-spacing: 1.4px; margin: 28px 0 10px 2px; }
 
-/* ---------- Schede di vetro: sfondo traslucido, bordo finissimo, ombra morbida ---------- */
-.card, .choice, .lesson-btn, .switch, .seg, .lv-group, .lang-choice, .fav-card, .object-box, #stage, button.secondary, button.ghost {
-  -webkit-backdrop-filter: var(--glass); backdrop-filter: var(--glass);
-}
+/* ---------- Schede: sfondo pieno e bordo finissimo (niente vetro sfocato: sui telefoni economici va a scatti) ---------- */
 .card, .lv-group, .switch, .fav-card { box-shadow: var(--shadow); border-radius: 18px; }
 .card { padding: 20px; }
 .choice, .lesson-btn, .lang-choice { border-radius: 14px; }
@@ -86,8 +81,8 @@ button.ghost { border-color: var(--line); }
 #teacher-list .choice.selected { border-color: rgba(201, 164, 92, .8); box-shadow: 0 0 0 1px rgba(201, 164, 92, .35), var(--shadow); }
 #teacher-list .choice .avatar.photo { width: 64px; height: 64px; box-shadow: 0 6px 16px -6px rgba(0, 0, 0, .5); }
 #teacher-list .choice.selected::after { content: ''; position: absolute; top: 12px; left: 12px; width: 9px; height: 9px; border-radius: 50%;
-  background: var(--good); box-shadow: 0 0 0 0 rgba(52, 211, 153, .7); animation: ready 1.8s var(--ease) infinite; }
-@keyframes ready { 0% { box-shadow: 0 0 0 0 rgba(52, 211, 153, .65); } 70% { box-shadow: 0 0 0 8px rgba(52, 211, 153, 0); } 100% { box-shadow: 0 0 0 0 rgba(52, 211, 153, 0); } }
+  background: var(--good); animation: ready 1.8s ease-in-out infinite; }
+@keyframes ready { 0%, 100% { opacity: 1; } 50% { opacity: .35; } }
 
 /* ---------- Lezione ---------- */
 #progress { height: 4px; border-radius: 4px; background: rgba(255, 255, 255, .08); }
@@ -114,8 +109,8 @@ html[data-level] #stage { background: linear-gradient(180deg, var(--surface2), v
 @keyframes avErr { 0%, 60% { box-shadow: 0 0 0 2px var(--soft-err); } 100% { box-shadow: 0 0 0 0 rgba(248, 113, 113, 0); } }
 
 /* «Tocca a te»: le figure respirano piano, il dito ha un cerchio che pulsa */
-.object-box.pickable { border-color: rgba(201, 164, 92, .7); animation: breathe 1.4s var(--ease) infinite; }
-@keyframes breathe { 0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(201, 164, 92, 0); } 50% { transform: scale(1.03); box-shadow: 0 0 18px -2px rgba(201, 164, 92, .55); } }
+.object-box.pickable { border-color: rgba(201, 164, 92, .8); animation: breathe 1.4s ease-in-out infinite; }
+@keyframes breathe { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.03); } }
 #pick-finger { transition: left .45s var(--ease), top .45s var(--ease); }
 #pick-finger::before { content: ''; position: absolute; left: 50%; top: 6px; width: 34px; height: 34px; margin-left: -17px; border-radius: 50%;
   border: 2px solid rgba(255, 255, 255, .8); animation: fingerRing 1s var(--ease) infinite; }
@@ -124,8 +119,8 @@ html[data-level] #stage { background: linear-gradient(180deg, var(--surface2), v
 /* Microfono acceso: il pallino diventa un'onda che pulsa, e il tasto Parla ha un anello */
 #mic-dot.rec { width: 12px; height: 12px; }
 #mic-dot.rec::before { content: ''; position: absolute; inset: -12px; border-radius: 50%; border: 2px solid var(--err); opacity: 0; animation: ring 1.1s ease-out .55s infinite; }
-#btn-talk.flash { animation: talkRing 1.2s var(--ease) infinite; }
-@keyframes talkRing { 0%, 100% { box-shadow: 0 0 0 0 rgba(201, 164, 92, .6); } 50% { box-shadow: 0 0 0 10px rgba(201, 164, 92, 0); } }
+#btn-talk.flash { animation: talkRing 1.2s ease-in-out infinite; }
+@keyframes talkRing { 0%, 100% { opacity: 1; } 50% { opacity: .75; } }
 
 /* Il menu: i livelli in schede di vetro */
 .lv-group { border-radius: 20px; }

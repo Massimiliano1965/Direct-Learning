@@ -173,7 +173,10 @@ function renderHome() {
         ch.open = Object.keys(DB.lessons).length > 0 && next.chapter === ci && !next.test;
         ch.innerHTML = '<summary><span class="ch-name">' + chName(ci) + '</span><span class="ch-range">' + lessonNum(cl[0]) + '–' + lessonNum(cl[cl.length - 1]) + '</span>' +
           '<span class="ch-done' + (cdone === cl.length ? ' all' : '') + '">' + cdone + ' / ' + cl.length + '</span></summary>';
-        cl.forEach(l => ch.appendChild(lessonBtn(l)));
+        // le righe delle lezioni (con i disegni) si fanno solo quando il capitolo si apre: il menu resta leggero
+        // sui telefoni economici (prima: 25.000 elementi e 646 disegni tutti insieme)
+        const fill = () => { if (ch.dataset.filled) return; ch.dataset.filled = 1; cl.forEach(l => ch.appendChild(lessonBtn(l))); };
+        if (ch.open) fill(); else ch.addEventListener('toggle', () => { if (ch.open) fill(); });
         lvBox.appendChild(ch);
       });
       ls.filter(l => l.test).forEach(t => lvBox.appendChild(lessonBtn(t)));
@@ -1275,11 +1278,15 @@ if (COURSE.brand) document.querySelectorAll('.brand-name').forEach(h => { h.text
 // Una sola lingua dello studente (es. CIAO English: italiano): niente domanda
 if (!DB.settings.uiLang && (COURSE.students || []).length === 1) { DB.settings.uiLang = COURSE.students[0]; saveDB(); }
 if (DB.settings.uiLang && (COURSE.students || []).indexOf(DB.settings.uiLang) !== -1) setUiLang(DB.settings.uiLang);
-renderHome();
-if (!DB.settings.uiLang || (COURSE.students || []).indexOf(DB.settings.uiLang) === -1) showLangChoice();
-// le parti caricate dopo app.js (la ricerca, il promemoria, le storie) aggiungono le loro righe al menu:
-// quando la pagina è tutta pronta, il menu si ridisegna (prima mancavano «Cerca» e «Le storie» all'avvio)
-document.addEventListener('DOMContentLoaded', () => { if (currentScreen === 'home') renderHome(); });
+// il menu si disegna una volta sola, quando tutte le parti dell'app sono caricate (la ricerca, il promemoria, le storie)
+let appStarted = false;
+function appStart() {
+  if (appStarted) return;
+  appStarted = true;
+  renderHome();
+  if (!DB.settings.uiLang || (COURSE.students || []).indexOf(DB.settings.uiLang) === -1) showLangChoice();
+}
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', appStart); else setTimeout(appStart, 0);
 ttsWarmUp();
 document.addEventListener('deviceready', () => {
   document.addEventListener('backbutton', (e) => { if (e && e.preventDefault) e.preventDefault(); onBack(); }, false);
