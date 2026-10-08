@@ -29,8 +29,11 @@ html.giorno #progress { background: rgba(0, 0, 0, .08); }
 /* pulsanti chiari */
 html.giorno button.secondary { background: #ffffff; border-color: var(--line); color: var(--text); }
 html.giorno button.ghost { color: var(--muted); }
-html.giorno .seg button { background: #ffffff; color: var(--muted); }
-html.giorno .seg button.on { background: var(--accent); color: #fff; }
+/* Pillola come di notte (Massi): binario chiaro, scelta bianca con la lineetta d'oro, niente blocco marrone */
+html.giorno .seg.seg { border: 0; background: rgba(40, 30, 10, .07); padding: 4px; border-radius: 14px; gap: 4px; }
+html.giorno .seg.seg button { border: 0; border-radius: 10px; background: transparent; box-shadow: none; color: var(--muted); min-height: 40px; padding: 6px 2px; min-width: 0; }
+html.giorno .seg.seg button.on { background: #ffffff; color: var(--text); box-shadow: inset 0 -3px 0 var(--accent), 0 1px 4px rgba(60, 40, 10, .18); }
+html.giorno .seg.seg-small button { font-size: 13px; }
 html.giorno .object-box { background: #ffffff; }
 html.giorno .object-box.indicated, html.giorno .object-box.right { background: #fbf3df; }
 

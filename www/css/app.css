@@ -89,7 +89,7 @@ button .hint { display: block; font-size: 12px; font-weight: 600; opacity: .7; m
 .seg button.on { background: var(--accent); color: var(--accent-ink); }
 /* Velocità e colori (Massi, scelta B): pillola blu e lineetta d'oro, niente blocco d'oro pieno */
 html:not(.giorno) .seg.seg { border: 0; background: rgba(0,0,0,.22); padding: 4px; border-radius: 14px; gap: 4px; }
-html:not(.giorno) .seg.seg button { border: 0; border-radius: 10px; background: transparent; min-height: 40px; padding: 6px 2px; min-width: 0; }
+html:not(.giorno) .seg.seg button { border: 0; border-radius: 10px; background: transparent; box-shadow: none; min-height: 40px; padding: 6px 2px; min-width: 0; }
 html:not(.giorno) .seg.seg button.on { background: var(--surface2); color: var(--text); box-shadow: inset 0 -3px 0 var(--accent), 0 1px 3px rgba(0,0,0,.4); }
 html:not(.giorno) .seg.seg-small button { font-size: 13px; }
 .switch input { -webkit-appearance: none; appearance: none; flex: none; width: 26px; height: 26px; margin: 0; border: 2px solid var(--line); border-radius: 7px; background: transparent; display: grid; place-content: center; }
