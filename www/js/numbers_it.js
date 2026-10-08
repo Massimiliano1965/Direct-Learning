@@ -76,7 +76,9 @@ function numParts(word) {
 // Cifre → parole («3» → «tre»), poi la solita pulizia; alias del microfono
 const numDigits = (text) => String(text || '').replace(/(\d)\s*\+\s*(\d)/g, '$1 più $2').replace(/\b(\d{1,4})\b/g, (d) => +d >= 1 && +d <= 1000 ? ' ' + numWord(+d) + ' ' : d);
 function numNorm(text) {
-  let s = norm(numDigits(text));
+  // il microfono di Google: «è l8» (lettera attaccata alla cifra), «è lotto» / «è il lotto» (= è l'otto), «l'undici» → «lundici»
+  let s = norm(numDigits(String(text || '').replace(/([a-zà-ù])(\d)/gi, '$1 $2')));
+  s = s.replace(/ (?:il )?l(otto|undici|uno)(?= )/g, ' l $1');
   Object.keys(NUM_ALIAS).forEach(a => { s = s.replace(new RegExp(' ' + a + '(?= )', 'g'), ' ' + NUM_ALIAS[a]); });
   return s;
 }
@@ -86,6 +88,11 @@ function numStatements(s) {
   const re = / (non )?e (?:il numero |il |l |lo )([a-z]+)(?= )/g;
   let m;
   while ((m = re.exec(s)) !== null) out.push({ k: NUM_KEY[m[2]] || ('?' + m[2]), neg: !!m[1] });
+  // il microfono a volte perde «il» / «l'» (si sente appena): «è otto» vale come «è l'otto» (il numero da solo, «otto», resta un errore: ci vuole la frase)
+  if (!out.length) {
+    const b = / (non )?e ([a-z]+)(?= )/g;
+    while ((m = b.exec(s)) !== null) if (NUM_KEY[m[2]]) out.push({ k: NUM_KEY[m[2]], neg: !!m[1] });
+  }
   return out;
 }
 function numEvaluate(step, text) {

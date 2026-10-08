@@ -2375,5 +2375,12 @@ check('88: prima e ora', run("SIMPF.present('ipf_m_read').prompt") === 'Prima ' 
   check('storie: una storia «in arrivo» non si può scegliere', run('DB.settings.story = "commedia"; kjStory().id') === 'giallo');
 }
 
+// I numeri e il microfono di Google (Massi: «mi chiede che numero è 8 e non sente i numeri»)
+{
+  const L7 = run('LESSONS').find(l => l.id === 'l7'), k8 = buildSteps(L7).find(s => s.type === 'key' && s.show === 'n8');
+  check('numeri: «è lotto», «è il lotto», «è l8», «è 8» = è l\'otto', ['è lotto', 'è il lotto', 'è l8', 'è 8', "È l'8.", 'è il numero 8'].every(t => evaluate(k8, t).ok));
+  check('numeri: «è il sette», «non è l\'otto», il numero da solo («8», «otto») restano sbagliati', !evaluate(k8, 'è il sette').ok && !evaluate(k8, '8').ok && !evaluate(k8, 'otto').ok && !evaluate(k8, "non è l'otto").ok);
+}
+
 console.log(count - fails + ' / ' + count + ' test passati');
 process.exit(fails ? 1 : 0);
