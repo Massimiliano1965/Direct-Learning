@@ -15,14 +15,30 @@ function limb(p, a, b, l1, l2) {
   const e = [k[0] + l2 * Math.sin(rad(a + b)), k[1] + l2 * Math.cos(rad(a + b))];
   return [k, e];
 }
+// i vestiti del 2026 (Massi: «niente giacca e cravatta verde anni '60»): giubbotto blu, maglietta bianca, jeans, scarpe da ginnastica
+const LOOK26 = { mario: { man: true, skin: '#e2ae86', skin2: '#cc9670', hair: '#2a1d16', hair2: '#1c140f', style: 'short',
+  suit: '#26334d', suit2: '#1d283d', shirt: '#1d283d', tee: '#f2f2f4', pants: '#3f5f8a', pants2: '#33507a', shoe: '#f4f4f6', sole: '#b9c0cc' } };
 function actLeg(L, a, b, back) {
   const hip = [50, 92];
   const [k, f] = limb(hip, a, -b, 29, 29);
   const d = `M${hip[0]} ${hip[1]} L${k[0]} ${k[1]} L${f[0]} ${f[1]}`;
-  const col = back ? L.suit2 : L.suit;
+  const col = L.pants ? (back ? L.pants2 : L.pants) : (back ? L.suit2 : L.suit);
+  const shoe = L.sole   // scarpa da ginnastica: bianca con la suola grigia
+    ? `<path d="M${f[0] - 5} ${f[1] + 1} q0 -7 6 -6 l7 2.5 q3.5 1.2 2.5 3.5z" fill="${L.shoe}"/><path d="M${f[0] - 5} ${f[1] + 1} h15.5" stroke="${L.sole}" stroke-width="2" stroke-linecap="round"/>`
+    : `<path d="M${f[0] - 4} ${f[1] + 1} q0 -6 6 -5 l6 2 q3 1 2 4z" fill="${L.shoe}"/>`;
   return `<path d="${d}" fill="none" stroke="#1a1824" stroke-width="12.5" stroke-linecap="round" stroke-linejoin="round" opacity=".45"/>
-    <path d="${d}" fill="none" stroke="${col}" stroke-width="10.5" stroke-linecap="round" stroke-linejoin="round"/>
-    <path d="M${f[0] - 4} ${f[1] + 1} q0 -6 6 -5 l6 2 q3 1 2 4z" fill="${L.shoe}"/>`;
+    <path d="${d}" fill="none" stroke="${col}" stroke-width="10.5" stroke-linecap="round" stroke-linejoin="round"/>` + shoe;
+}
+// il busto con il giubbotto aperto e la maglietta (al posto di tTorso, che è giacca e cravatta)
+function actTorso(L) {
+  if (!L.tee) return tTorso(L);
+  return `<path d="M34 46 q0 -5 7 -6 L50 38 L59 40 q7 1 7 6 L65 86 q-15 4 -30 0z" fill="${L.suit}"/>
+    <path d="M44 40 q6 4 12 0 L57 86 q-7 1.5 -14 0z" fill="${L.tee}"/>
+    <path d="M44.5 40.5 q5.5 3.5 11 0" stroke="#d9d9de" stroke-width="1.2" fill="none"/>
+    <path d="M44 40 L43 86 M56 40 L57 86" stroke="${L.suit2}" stroke-width="1.6"/>
+    <path d="M35 84 q15 4.5 30 0 l.3 4 q-15.3 4.5 -30.6 0z" fill="${L.suit2}"/>
+    <path d="M41 39.5 q9 -3 18 0 l-1 2.5 q-8 -2.5 -16 0z" fill="${L.suit2}"/>
+    <path d="M37 89 h26 v4 h-26z" fill="${L.pants2}"/>`;
 }
 function actArm(L, side, a, b, finger) {
   const s = side < 0 ? [36, 47] : [64, 47];
@@ -174,7 +190,7 @@ function actLerp(a, b, t) {
 }
 function actFigure(L, q) {
   const f = { mouth: q.face || 'smile', happy: !!q.happy }, legs = q.legs, arms = q.arms;
-  let body = actArm(L, -1, arms[0][0], arms[0][1]) + actLeg(L, legs[0][0], legs[0][1], true) + tTorso(L) + tHeadStill(L, f) +
+  let body = actArm(L, -1, arms[0][0], arms[0][1]) + actLeg(L, legs[0][0], legs[0][1], true) + actTorso(L) + tHeadStill(L, f) +
     actLeg(L, legs[1][0], legs[1][1]) + actArm(L, 1, arms[1][0], arms[1][1]);
   if (q.hold) {
     const h = actHand(1, arms[1][0], arms[1][1]);
@@ -184,7 +200,7 @@ function actFigure(L, q) {
 }
 // un fotogramma (SVG 120×120) da una posa già risolta; label = il numerino in alto (solo nelle strisce)
 function actionPose(verb, q, look, label) {
-  const A = ACTIONS[verb], L = LOOKS[look || 'mario'], T = frameT(q);
+  const A = ACTIONS[verb], L = LOOK26[look || 'mario'] || LOOKS[look], T = frameT(q);
   let s = `<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><rect width="120" height="120" rx="10" fill="#1b2333"/>
     <path d="M6 ${ACT_GROUND} H114" stroke="#3a4a66" stroke-width="2" stroke-linecap="round"/>`;
   if (A.scene) s += A.scene();
