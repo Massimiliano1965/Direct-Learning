@@ -139,15 +139,19 @@ function renderHome() {
       const done = ls.filter(l => !l.test && DB.lessons[l.id] != null).length, total = ls.filter(l => !l.test).length;
       const lvBox = document.createElement('details');
       lvBox.className = 'lv-group lv' + lv;
-      lvBox.open = (next.level || 1) === lv;
+      // Massi: all'inizio (nessuna lezione fatta) tutti chiusi; poi aperto il livello dove l'allievo è arrivato;
+      // se l'allievo apre o chiude un livello, l'app se lo ricorda (DB.settings.lvOpen)
+      const started = Object.keys(DB.lessons).length > 0, mem = (DB.settings.lvOpen || {})[lv];
+      lvBox.open = mem != null ? mem : started && (next.level || 1) === lv;
       lvBox.innerHTML = '<summary class="level-head lv' + lv + '"><span class="lv-name">' + tx('level', { n: lv }) + '</span><span class="lv-theme">' + theme(lv) + '</span>' +
         '<span class="lv-done">' + done + ' / ' + total + '</span></summary>';
+      lvBox.querySelector('summary').addEventListener('click', () => { DB.settings.lvOpen = DB.settings.lvOpen || {}; DB.settings.lvOpen[lv] = !lvBox.open; saveDB(); });   // solo il tocco dell'allievo
       const chs = [...new Set(ls.filter(l => !l.test).map(l => l.chapter))];
       chs.forEach(ci => {
         const cl = ls.filter(l => !l.test && l.chapter === ci), cdone = cl.filter(l => DB.lessons[l.id] != null).length;
         const ch = document.createElement('details');
         ch.className = 'chap';
-        ch.open = next.chapter === ci && !next.test;
+        ch.open = Object.keys(DB.lessons).length > 0 && next.chapter === ci && !next.test;
         ch.innerHTML = '<summary><span class="ch-name">' + chName(ci) + '</span><span class="ch-range">' + lessonNum(cl[0]) + '–' + lessonNum(cl[cl.length - 1]) + '</span>' +
           '<span class="ch-done' + (cdone === cl.length ? ' all' : '') + '">' + cdone + ' / ' + cl.length + '</span></summary>';
         cl.forEach(l => ch.appendChild(lessonBtn(l)));
