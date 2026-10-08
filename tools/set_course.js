@@ -20,6 +20,7 @@ const x = path.join(root, 'config.xml');
 let s = fs.readFileSync(x, 'utf8');
 s = s.replace(/<widget id="[^"]+"/, '<widget id="' + c.id + '"')
      .replace(/<name>[^<]*<\/name>/, '<name>' + c.name + '</name>')
+     .replace(/(AndroidWindowSplashScreenAnimatedIcon" value=")[^"]+"/, '$1res/splash-' + code + '.png"')
      .replace(/<description>[^<]*<\/description>/, '<description>CIAO – Communicator for Immersive Audio-Oral learning. ' + c.desc + '</description>');
 fs.writeFileSync(x, s);
 console.log('Corso ' + code + ': ' + c.name + ' (' + c.id + ')');

@@ -1,5 +1,5 @@
 // Splash per ogni corso (fumetto + bandierina). Uso: NODE_PATH=$(npm root -g) node res/build_splash.js res  → res/splash-<corso>.png e res/anteprima.png
-// DA FARE: in tools/set_course.js cambiare AndroidWindowSplashScreenAnimatedIcon in config.xml a res/splash-<corso>.png
+// tools/set_course.js mette in config.xml lo splash del corso.
 const { chromium } = require('playwright');
 const emblem = '<path d="M58 44 H142 a28 28 0 0 1 28 28 V112 a28 28 0 0 1 -28 28 H96 L62 168 L68 140 H58 a28 28 0 0 1 -28 -28 V72 a28 28 0 0 1 28 -28 Z" fill="#eef1f6"/>' +
   '<g fill="#c9a45c"><rect x="62" y="80" width="14" height="32" rx="7"/><rect x="85" y="66" width="14" height="60" rx="7"/>' +

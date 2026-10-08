@@ -32,6 +32,6 @@ const ada = { mdpi: 108, hdpi: 162, xhdpi: 216, xxhdpi: 324, xxxhdpi: 432 };
   for (const [d, S] of Object.entries(leg)) await shot(legacy(S), S, `${OUT}/icon-${d}.png`);
   for (const [d, S] of Object.entries(ada)) { await shot(fg(S), S, `${OUT}/fg-${d}.png`); await shot(bg(S), S, `${OUT}/bg-${d}.png`); }
   await shot(legacy(512), 512, path.join(__dirname, 'icon-512.png'));
-  await shot(splash(432), 432, path.join(__dirname, 'splash-icon.png'));
+  // splash: ora in build_splash.js
   await b.close();
 })();
