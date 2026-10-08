@@ -21,9 +21,9 @@ const LOOK26 = {
   // Mario: giubbotto blu aperto, maglietta bianca, jeans, scarpe da ginnastica
   mario: { man: true, outfit: 'bomber', skin: '#e2ae86', skin2: '#cc9670', hair: '#2a1d16', hair2: '#1c140f', style: 'short',
     suit: '#26334d', suit2: '#1d283d', shirt: '#1d283d', tee: '#f2f2f4', pants: '#3f5f8a', pants2: '#33507a', shoe: '#f4f4f6', sole: '#b9c0cc' },
-  // Carlo Rossi: maglione color cammello a V sulla camicia azzurra, pantaloni grigi, mocassini
-  carlo: { man: true, outfit: 'knit', skin: '#eab892', skin2: '#d9a27c', hair: '#3a2a20', hair2: '#2a1d16', style: 'short',
-    suit: '#c49a6c', suit2: '#a87f55', shirt: '#a87f55', tee: '#bcd4ee', pants: '#4a4f5a', pants2: '#3d424c', shoe: '#6a3d22' },
+  // Carlo Rossi: giacca grigia all'italiana, camicia bianca aperta (niente cravatta), fazzoletto azzurro, pantaloni blu, mocassini
+  carlo: { man: true, outfit: 'tailor', modern: true, under: 'shirt', skin: '#eab892', skin2: '#d9a27c', hair: '#3a2a20', hair2: '#2a1d16', style: 'short',
+    suit: '#8c929b', suit2: '#767c86', shirt: '#f7f8fb', btn: '#5d636d', pocket: '#9cc3e6', pants: '#2a3550', pants2: '#222c44', shoe: '#7a4a2a' },
   // Anna: giacca corta rosa, top nero, minigonna nera, tacchi alti
   anna: { man: false, outfit: 'blazer', skin: '#f0c4a2', skin2: '#dcab86', hair: '#3a2418', hair2: '#2a1810', style: 'long',
     suit: '#d46a8c', suit2: '#b8577a', shirt: '#b8577a', tee: '#1d1d24', skirt: '#1d1d24', skirtLen: 18, shoe: '#1d1d24', heels: true, earrings: '#e6c77e' },
@@ -50,6 +50,7 @@ function actLeg(L, a, b, back) {
 }
 // il busto (al posto di tTorso, che è giacca e cravatta)
 function actTorso(L) {
+  if (L.outfit === 'tailor') return tTorsoModern(L);
   if (L.outfit === 'bomber') return `<path d="M34 46 q0 -5 7 -6 L50 38 L59 40 q7 1 7 6 L65 86 q-15 4 -30 0z" fill="${L.suit}"/>
     <path d="M44 40 q6 4 12 0 L57 86 q-7 1.5 -14 0z" fill="${L.tee}"/>
     <path d="M44.5 40.5 q5.5 3.5 11 0" stroke="#d9d9de" stroke-width="1.2" fill="none"/>
