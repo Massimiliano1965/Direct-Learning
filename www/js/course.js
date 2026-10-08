@@ -369,6 +369,55 @@ const LESSONS = [
   { id: 't4', title: 'Test del livello 4', test: 4, level: 4, known: [] }
 ];
 
+/* ---------- I 4 livelli da 25 lezioni (Massi: 100 lezioni in fila spaventano) ----------
+   Ogni livello ha un tema e un colore; dentro, 5 capitoli da 5 lezioni (nel menu si aprono e si chiudono).
+   Il livello si calcola dal numero della lezione; il test di ogni livello viene dopo la sua 25ª lezione. */
+const LEVEL_SIZE = 25;
+const LEVEL_THEMES = {
+  1: { it: 'Le prime parole', en: 'First words', de: 'Die ersten Wörter', ja: 'はじめのことば' },
+  2: { it: 'La vita di tutti i giorni', en: 'Everyday life', de: 'Der Alltag', ja: '毎日の生活' },
+  3: { it: 'Parlare con gli altri', en: 'Talking with people', de: 'Mit anderen sprechen', ja: '人と話す' },
+  4: { it: 'In viaggio in Italia', en: 'Travelling in Italy', de: 'Unterwegs in Italien', ja: 'イタリアを旅する' }
+};
+// i capitoli: [prima lezione, nome] — 5 lezioni ciascuno
+const CHAPTERS = [
+  [1, { it: 'Le cose e i colori', en: 'Things and colours', de: 'Dinge und Farben', ja: 'ものと色' }],
+  [6, { it: 'Numeri, città e paesi', en: 'Numbers, cities, countries', de: 'Zahlen, Städte, Länder', ja: '数・町・国' }],
+  [11, { it: 'Io, Lei, lui, lei', en: 'I, you, he, she', de: 'Ich, Sie, er, sie', ja: 'わたし・あなた・彼・彼女' }],
+  [16, { it: 'Gli articoli, sul e nel, l\'ora', en: 'Articles, on and in, the time', de: 'Artikel, auf und in, die Uhrzeit', ja: '冠詞・上と中・時刻' }],
+  [21, { it: 'Gli impegni e che cosa fa', en: 'Appointments and actions', de: 'Termine und Tätigkeiten', ja: '予定と動作' }],
+  [26, { it: 'I numeri grandi e la famiglia', en: 'Big numbers and the family', de: 'Große Zahlen und die Familie', ja: '大きな数と家族' }],
+  [31, { it: 'Avere, i plurali, i prezzi', en: 'Having, plurals, prices', de: 'Haben, Plural, Preise', ja: '持つ・複数・値段' }],
+  [36, { it: 'Plurali e contrari', en: 'Plurals and opposites', de: 'Plural und Gegensätze', ja: '複数と反対' }],
+  [41, { it: 'Ce l\'ha, l\'imperativo, il passato', en: 'Having it, commands, the past', de: 'Haben, Befehle, Vergangenheit', ja: '持っている・命令・過去' }],
+  [46, { it: 'Il passato, i saluti, i giorni', en: 'The past, greetings, days', de: 'Vergangenheit, Grüße, Tage', ja: '過去・あいさつ・曜日' }],
+  [51, { it: 'I mesi, loro, noi e voi', en: 'Months, they, we and you', de: 'Monate, sie, wir und ihr', ja: '月・彼ら・私たち' }],
+  [56, { it: 'Presentarsi', en: 'Introducing yourself', de: 'Sich vorstellen', ja: '自己紹介' }],
+  [61, { it: 'Il passato e la colazione', en: 'The past and breakfast', de: 'Vergangenheit und Frühstück', ja: '過去と朝ごはん' }],
+  [66, { it: 'I pasti, ne, i riflessivi, volere', en: 'Meals, «ne», reflexives, wanting', de: 'Mahlzeiten, «ne», Reflexiv, wollen', ja: '食事・ne・再帰動詞・したい' }],
+  [71, { it: 'Potere, dovere, al telefono', en: 'Can, must, on the phone', de: 'Können, müssen, am Telefon', ja: 'できる・しなければ・電話' }],
+  [76, { it: 'Mi dà, è andato, il futuro', en: 'Gives me, went, the future', de: 'Gibt mir, ist gegangen, Zukunft', ja: 'くれる・行った・未来' }],
+  [81, { it: 'Le lingue, i materiali, piace', en: 'Languages, materials, liking', de: 'Sprachen, Materialien, gefallen', ja: '言語・素材・好き' }],
+  [86, { it: 'Stagioni, tempo, al bar', en: 'Seasons, weather, at the bar', de: 'Jahreszeiten, Wetter, an der Bar', ja: '季節・天気・バール' }],
+  [91, { it: 'Moda, trasporti, albergo, città', en: 'Fashion, transport, hotel, cities', de: 'Mode, Verkehr, Hotel, Städte', ja: 'ファッション・交通・ホテル・町' }],
+  [96, { it: 'Al ristorante e in viaggio', en: 'At the restaurant, travelling', de: 'Im Restaurant, auf Reisen', ja: 'レストランと旅' }]
+];
+const lessonNum = (l) => +String(l.id).replace(/^l/, '');
+const levelOfNum = (n) => Math.min(4, Math.ceil(n / LEVEL_SIZE));
+const chapterOf = (n) => { let c = 0; CHAPTERS.forEach((ch, i) => { if (n >= ch[0]) c = i; }); return c; };
+(function () {
+  const tests = LESSONS.filter(l => l.test), lessons = LESSONS.filter(l => !l.test && /^l\d+$/.test(l.id));
+  lessons.forEach(l => { l.level = levelOfNum(lessonNum(l)); l.chapter = chapterOf(lessonNum(l)); });
+  // l'ordine: le lezioni per numero, il test di ogni livello dopo la sua ultima lezione
+  const out = [];
+  lessons.sort((a, b) => lessonNum(a) - lessonNum(b)).forEach(l => {
+    out.push(l);
+    const n = lessonNum(l);
+    if (n % LEVEL_SIZE === 0) { const t = tests.find(x => x.test === n / LEVEL_SIZE); if (t) out.push(t); }
+  });
+  LESSONS.length = 0; out.forEach(l => LESSONS.push(l));
+})();
+
 // Quattro insegnanti, dal più rigido al più indulgente. gender = voce maschile o femminile.
 // wrong = solo «No.» quando l'allievo sbaglia (con la sua icona, mark in data.js); praise vuoto: quando è giusto
 // l'insegnante esulta col corpo, senza parole nuove; praiseEvery = ogni quante risposte giuste esulta;

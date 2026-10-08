@@ -16,33 +16,33 @@ const TEST1 = [
   { lesson: 'l17', step: () => SW.key('p3_f_umbrella') },            // Di chi è questo ombrello? È l'ombrello di Isa.
   { lesson: 'l23', ask: 'v_f_phone', q: () => SV.key('v_f_phone').prompt },   // l'allievo fa la domanda («Cosa fa Isa?»)
   { lesson: 'l24', step: () => SPU.key('pp_m_key') },                // Perché Max prende la chiave? Per aprire la porta.
-  { lesson: 'l28', step: () => SSM.key('sm_20_8') },                 // Quanto fa venti più otto? Fa ventotto.
-  { lesson: 'l34', step: () => SCO.key('co_book_1') },               // Quanto costa il libro? Costa dodici euro.
-  { lesson: 'l35', step: () => SDT.key('dq_cup_bianco_2') }          // Di che colore sono queste tazze? Queste tazze sono bianche.
+  { lesson: 'l13', step: () => SN2.key('n_m_cina') },                // Di che nazionalità è questo signore? È cinese.
+  { lesson: 'l14', step: () => SE.key('e_me') },                     // Di che nazionalità sono (io)? È italiano.
+  { lesson: 'l8', step: () => SG.key('g_roma') }                    // Che cosa è Roma? È una città.
 ];
 // Le due figure da descrivere (non contano): la frase d'esempio si mostra alla fine
 const TEST1_FREE = [
-  { fig: 'ce_pen_3', example: () => SCE.present('ce_pen_3').model },   // Sul tavolo ci sono tre penne. (c'è / ci sono)
-  { fig: 'pl_egg_3', example: () => SPL.present('pl_egg_3').model }    // Sono tre uova. (il plurale)
+  { fig: 'v_f_drink', example: () => SV.present('v_f_drink').model },      // Anna beve un'aranciata.
+  { fig: 'n_f_germania', example: () => SN2.present('n_f_germania').model } // Questa signora è tedesca.
 ];
 const TEST_FREE_Q = 'Che cosa vede?';
 
-// TEST DI FINE LIVELLO 2 (capitoli 6–10): stessa regola, 8 scene che contano e 2 figure libere (dopo la lezione 60)
+// TEST DI FINE LIVELLO 2 (lezioni 26–50): stessa regola, 8 scene che contano e 2 figure libere (dopo la lezione 50)
 const TEST2 = [
   { lesson: 'l45', step: () => SPS.key('ps_m_read') },               // Che cosa ha fatto Max? Max ha letto un libro.
   { lesson: 'l40', step: () => SST.key('st_f_male') },               // Come sta Isa? Isa sta male.
   { lesson: 'l41', step: () => SCL.key('cl_m_phone_1') },            // Max ha il telefono? Sì, ce l'ha.
-  { lesson: 'l53', ask: 'lo_read', q: () => SLO.key('lo_read').prompt },   // l'allievo fa la domanda («Che cosa fanno Max e Isa?»)
+  { lesson: 'l34', ask: 'co_book_1', q: () => SCO.key('co_book_1').prompt },   // l'allievo fa la domanda («Quanto costa il libro?»)
   { lesson: 'l44', step: () => SNE.key('ne_phone_giallo') },         // Il telefono è … o …? Non è né … né …. È giallo.
-  { lesson: 'l55', step: () => SDA.key('da_m_book') },               // Che cosa dà Max a Isa? Le dà il libro.
+  { lesson: 'l28', step: () => SSM.key('sm_20_8') },                 // Quanto fa venti più otto? Fa ventotto.
   { lesson: 'l46', step: () => SLH.key('lh_f_window') },             // Che cosa ha fatto Isa con la finestra? L'ha chiusa.
   { lesson: 'l50', step: () => SGD.key('gd_mar') }                   // Che giorno è oggi? Oggi è martedì.
 ];
 const TEST2_FREE = [
   { fig: 'sa_m_giorno', example: () => SSA.present('sa_m_giorno').model },   // Max dice: «Buongiorno!»
-  { fig: 'lp_f_key', example: () => SLP.present('lp_f_key').model }          // Isa prende le chiavi. Le prende.
+  { fig: 'pl_egg_3', example: () => SPL.present('pl_egg_3').model }          // Sono tre uova.
 ];
-// TEST DI FINE LIVELLO 3 (capitoli 11–15): dopo la lezione 78
+// TEST DI FINE LIVELLO 3 (lezioni 51–75): dopo la lezione 75
 const TEST3 = [
   { lesson: 'l61', step: () => SLQ.key('lq_f_key') },                    // Che cosa ha fatto Isa con le chiavi? Le ha prese.
   { lesson: 'l63', step: () => SCZ.key('cz_m_cornetto') },               // Che cosa mangia Max a colazione? Max mangia un cornetto.
@@ -54,7 +54,7 @@ const TEST3 = [
   { lesson: 'l75', step: () => SDVP.key('dvp_suitcase_sotto') }          // Dov'è la valigia? La valigia è sotto il tavolo.
 ];
 const TEST3_FREE = [
-  { fig: 'pe_f_parigi', example: () => SPE.present('pe_f_parigi').model },   // Isa è andata a Parigi.
+  { fig: 'lp_f_key', example: () => SLP.present('lp_f_key').model },         // Anna prende le chiavi. Le prende.
   { fig: 'an_m_read_1', example: () => SAN.present('an_m_read_1').model }    // Max legge ancora.
 ];
 // Livello 4 (le lezioni 79–100: si chiamano quando parte il test, i file sono caricati dopo)

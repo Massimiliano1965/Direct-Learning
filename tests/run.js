@@ -1286,7 +1286,7 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
 {
   const SX = run('SMS'), evalAsk = run('evalAsk'), answerAsk = run('answerAsk'), buildDrill = run('buildDrill'), ok = (st, t) => evaluate(st, t).ok;
   const l = run('LESSONS').find(l => l.id === 'l51');
-  check('lezione 51 c\'è', !!l && l.ms && l.level === 2);
+  check('lezione 51 c\'è', !!l && l.ms && l.level === 3);
   check('figure', l.known.every(k => FIG[k] && FIG[k].indexOf('<svg') === 0 && FIG[k].indexOf(' id=') === -1));
   check('frasi', SX.present('ms_lug').prompt === 'È luglio.' && SX.key('ms_dic').prompt === 'Che mese è?' && SX.key('ms_dic').model === 'È dicembre.');
   check('giusto', ok(SX.key('ms_apr'), 'È aprile.') && ok(SX.key('ms_apr'), 'Aprile.') && ok(SX.yes('ms_gen'), 'Sì, è gennaio.'));
@@ -1304,7 +1304,7 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
   const SX = run('SSP'), evalAsk = run('evalAsk'), answerAsk = run('answerAsk'), buildDrill = run('buildDrill'), ok = (st, t) => evaluate(st, t).ok;
   const l = run('LESSONS').find(l => l.id === 'l52');
   const P = run('p3People()'), M = run('P3_CHARS')[P.m].name, F = run('P3_CHARS')[P.f].name;
-  check('lezione 52 c\'è', !!l && l.sp && l.level === 2);
+  check('lezione 52 c\'è', !!l && l.sp && l.level === 3);
   check('figure', l.known.every(k => FIG[k] && FIG[k].indexOf('<svg') === 0 && FIG[k].indexOf(' id=') === -1));
   check('frasi', SX.present('sp_m_umbrella').prompt === 'Sono gli ombrelli di ' + M + '. Sono i suoi ombrelli.' && SX.key('sp_f_key').prompt === 'Di chi sono queste chiavi?' &&
     SX.key('sp_f_key').model === 'Sono le chiavi di ' + F + '.' && SX.yes('sp_f_book').model === 'Sì, sono i suoi libri.');
@@ -1326,7 +1326,7 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
   const SX = run('SLO'), evalAsk = run('evalAsk'), answerAsk = run('answerAsk'), buildDrill = run('buildDrill'), ok = (st, t) => evaluate(st, t).ok;
   const l = run('LESSONS').find(l => l.id === 'l53');
   const P = run('p3People()'), M = run('P3_CHARS')[P.m].name, F = run('P3_CHARS')[P.f].name, W = M + ' e ' + F;
-  check('lezione 53 c\'è', !!l && l.lo && l.level === 2);
+  check('lezione 53 c\'è', !!l && l.lo && l.level === 3);
   check('figure', l.known.every(k => FIG[k] && FIG[k].indexOf('<svg') === 0 && FIG[k].indexOf(' id=') === -1));
   check('frasi', SX.present('lo_read').prompt === W + ' leggono un libro.' && SX.key('lo_eat').prompt === 'Che cosa fanno ' + W + '?' && SX.key('lo_phone').model === W + ' telefonano.');
   check('giusto', ok(SX.key('lo_read'), W + ' leggono un libro.') && ok(SX.key('lo_read'), 'Leggono un libro.') && ok(SX.key('lo_write'), 'Loro scrivono.') &&
@@ -1347,7 +1347,7 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
   const SX = run('SNV'), evalAsk = run('evalAsk'), answerAsk = run('answerAsk'), buildDrill = run('buildDrill'), ok = (st, t) => evaluate(st, t).ok;
   const l = run('LESSONS').find(l => l.id === 'l54');
   const P = run('p3People()'), M = run('P3_CHARS')[P.m].name;
-  check('lezione 54 c\'è', !!l && l.nv && l.level === 2);
+  check('lezione 54 c\'è', !!l && l.nv && l.level === 3);
   check('figure', l.known.every(k => FIG[k] && FIG[k].indexOf('<svg') === 0 && FIG[k].indexOf(' id=') === -1));
   check('frasi', SX.present('nv_read').prompt === 'Io e ' + M + ' leggiamo un libro.' && SX.key('nv_eat').prompt === 'Che cosa facciamo io e ' + M + '?' &&
     SX.key('nv_eat').model === 'Voi mangiate un\'arancia.' && SX.yes('nv_phone').model === 'Sì, voi telefonate.');
@@ -1369,7 +1369,7 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
   const SX = run('SDA'), evalAsk = run('evalAsk'), answerAsk = run('answerAsk'), buildDrill = run('buildDrill'), ok = (st, t) => evaluate(st, t).ok;
   const l = run('LESSONS').find(l => l.id === 'l55');
   const P = run('p3People()'), M = run('P3_CHARS')[P.m].name, F = run('P3_CHARS')[P.f].name;
-  check('lezione 55 c\'è', !!l && l.da && l.level === 2);
+  check('lezione 55 c\'è', !!l && l.da && l.level === 3);
   check('figure', l.known.every(k => FIG[k] && FIG[k].indexOf('<svg') === 0 && FIG[k].indexOf(' id=') === -1));
   check('frasi', SX.present('da_m_book').prompt === M + ' dà il libro a ' + F + '. Le dà il libro.' && SX.key('da_f_pen').prompt === 'Che cosa dà ' + F + ' a ' + M + '?' &&
     SX.key('da_f_pen').model === 'Gli dà la penna.' && SX.yes('da_f_umbrella').model === 'Sì, gli dà l\'ombrello.');
@@ -1390,7 +1390,7 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
   const SX = run('SQN'), evalAsk = run('evalAsk'), answerAsk = run('answerAsk'), buildDrill = run('buildDrill'), ok = (st, t) => evaluate(st, t).ok;
   const l = run('LESSONS').find(l => l.id === 'l56');
   const P = run('p3People()'), M = run('P3_CHARS')[P.m].name, F = run('P3_CHARS')[P.f].name;
-  check('lezione 56 c\'è', !!l && l.qn && l.level === 2);
+  check('lezione 56 c\'è', !!l && l.qn && l.level === 3);
   check('figure', l.known.every(k => FIG[k] && FIG[k].indexOf('<svg') === 0 && FIG[k].indexOf(' id=') === -1));
   check('frasi', SX.present('qn_p_m').prompt === 'Nella stanza c\'è qualcuno. C\'è ' + M + '.' && SX.present('qn_t_0').prompt === 'Sul tavolo non c\'è niente.' &&
     SX.key('qn_p_0').prompt === 'Chi c\'è nella stanza?' && SX.key('qn_p_0').model === 'Non c\'è nessuno.' && SX.yes('qn_t_book').model === 'Sì, c\'è qualche cosa.');
@@ -1412,7 +1412,7 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
 {
   const SX = run('SBV'), evalAsk = run('evalAsk'), answerAsk = run('answerAsk'), buildDrill = run('buildDrill'), ok = (st, t) => evaluate(st, t).ok;
   const l = run('LESSONS').find(l => l.id === 'l57');
-  check('lezione 57 c\'è', !!l && l.bv && l.level === 2);
+  check('lezione 57 c\'è', !!l && l.bv && l.level === 3);
   check('figure', l.known.every(k => FIG[k] && FIG[k].indexOf('<svg') === 0 && FIG[k].indexOf(' id=') === -1));
   check('frasi', SX.key('bv_1_nome').prompt === 'Come si chiama?' && SX.key('bv_1_nome').model === 'Si chiama Carlo Rossi.' && SX.key('bv_2_citta').model === 'Abita a Parigi.' &&
     SX.key('bv_2_lavoro').prompt === 'Che lavoro fa?' && SX.key('bv_2_lavoro').model === 'È una professoressa.');
@@ -1434,7 +1434,7 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
   const SX = run('SLP'), evalAsk = run('evalAsk'), answerAsk = run('answerAsk'), buildDrill = run('buildDrill'), ok = (st, t) => evaluate(st, t).ok;
   const l = run('LESSONS').find(l => l.id === 'l58');
   const P = run('p3People()'), M = run('P3_CHARS')[P.m].name, F = run('P3_CHARS')[P.f].name;
-  check('lezione 58 c\'è', !!l && l.lp && l.level === 2);
+  check('lezione 58 c\'è', !!l && l.lp && l.level === 3);
   check('figure', l.known.every(k => FIG[k] && FIG[k].indexOf('<svg') === 0 && FIG[k].indexOf(' id=') === -1));
   check('frasi', SX.present('lp_f_umbrella').prompt === F + ' prende gli ombrelli. Li prende.' && SX.key('lp_f_key').prompt === 'Che cosa fa ' + F + ' con le chiavi?' &&
     SX.key('lp_f_key').model === 'Le prende.' && SX.yes('lp_m_orange').model === 'Sì, le mangia.' && SX.neg('lp_m_book').model === 'No, non li prende.');
@@ -1456,7 +1456,7 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
   const SX = run('SCM'), evalAsk = run('evalAsk'), answerAsk = run('answerAsk'), buildDrill = run('buildDrill'), ok = (st, t) => evaluate(st, t).ok;
   const l = run('LESSONS').find(l => l.id === 'l59');
   const P = run('p3People()'), M = run('P3_CHARS')[P.m].name, F = run('P3_CHARS')[P.f].name, T = run('eTeacher()').name;
-  check('lezione 59 c\'è', !!l && l.cm && l.level === 2);
+  check('lezione 59 c\'è', !!l && l.cm && l.level === 3);
   check('figure', l.known.every(k => FIG[k] && FIG[k].indexOf('<svg') === 0));
   check('frasi', SX.present('cm_me').prompt === 'Io mi chiamo ' + T + '.' && SX.key('cm_me').prompt === 'Come mi chiamo (io)?' && SX.key('cm_me').model === 'Si chiama ' + T + '.' &&
     SX.key('cm_f').prompt === 'Come si chiama lei?' && SX.key('cm_c1').model === 'Lui si chiama Carlo Rossi.');
@@ -1477,7 +1477,7 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
 {
   const SX = run('STV'), evalAsk = run('evalAsk'), answerAsk = run('answerAsk'), buildDrill = run('buildDrill'), ok = (st, t) => evaluate(st, t).ok;
   const l = run('LESSONS').find(l => l.id === 'l60');
-  check('lezione 60 c\'è', !!l && l.tv && l.level === 2);
+  check('lezione 60 c\'è', !!l && l.tv && l.level === 3);
   check('figure', l.known.every(k => FIG[k] && FIG[k].indexOf('<svg') === 0 && FIG[k].indexOf(' id=') === -1));
   check('frasi', SX.present('tv_past_read').prompt === 'Io ho letto un libro.' && SX.key('tv_now_eat').prompt === 'Che cosa faccio (io)?' &&
     SX.key('tv_now_eat').model === 'Mangia un\'arancia.' && SX.key('tv_past_phone').prompt === 'Che cosa ho fatto (io)?' && SX.key('tv_past_phone').model === 'Ha telefonato.');
@@ -1499,7 +1499,7 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
 // Test del livello 2: 8 che contano e 2 libere, dopo la lezione 60
 {
   const t2 = run('LESSONS').find(l => l.id === 't2'), st = buildSteps(t2);
-  check('test 2 c\'è, dopo la lezione 60', !!t2 && t2.test === 2 && t2.level === 2 && run('LESSONS').indexOf(t2) === run('LESSONS').findIndex(l => l.id === 'l60') + 1);
+  check('test 2 c\'è, dopo la lezione 50', !!t2 && t2.test === 2 && t2.level === 2 && run('LESSONS').indexOf(t2) === run('LESSONS').findIndex(l => l.id === 'l50') + 1);
   check('test 2: 8 che contano + 2 libere', st.filter(s => s.type !== 'free').length === 8 && st.filter(s => s.type === 'free').length === 2 && st.every(s => s.test));
   check('test 2: le risposte giuste sono giuste', st.filter(s => s.type !== 'free' && s.type !== 'ask').every(s => evaluate(s, s.model).ok));
   check('test 2: la domanda dell\'allievo', (s => run('evalAsk')(s.askFig, s.model).ok)(st.find(s => s.type === 'ask')));
@@ -1513,7 +1513,7 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
   const SX = run('SLQ'), evalAsk = run('evalAsk'), answerAsk = run('answerAsk'), buildDrill = run('buildDrill'), ok = (st, t) => evaluate(st, t).ok;
   const l = run('LESSONS').find(l => l.id === 'l61');
   const P = run('p3People()'), M = run('P3_CHARS')[P.m].name, F = run('P3_CHARS')[P.f].name;
-  check('lezione 61 c\'è, livello 3, dopo il test 2', !!l && l.lq && l.level === 3 && run('LESSONS').indexOf(l) === run('LESSONS').findIndex(x => x.id === 't2') + 1);
+  check('lezione 61 c\'è, livello 3', !!l && l.lq && l.level === 3);
   check('figure', l.known.every(k => FIG[k] && FIG[k].indexOf('<svg') === 0 && FIG[k].indexOf(' id=') === -1));
   check('frasi', SX.present('lq_m_book').prompt === M + ' ha preso i libri. Li ha presi.' && SX.key('lq_f_key').model === 'Le ha prese.' &&
     SX.key('lq_m_orange').model === 'Le ha mangiate.' && SX.key('lq_f_umbrella').prompt === 'Che cosa ha fatto ' + F + ' con gli ombrelli?');
@@ -1798,7 +1798,7 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
   const SX = run('SMC'), evalAsk = run('evalAsk'), answerAsk = run('answerAsk'), buildDrill = run('buildDrill'), ok = (st, t) => evaluate(st, t).ok;
   const l = run('LESSONS').find(l => l.id === 'l76');
   const P = run('p3People()'), M = run('P3_CHARS')[P.m].name, F = run('P3_CHARS')[P.f].name;
-  check('lezione 76 c\'è', !!l && l.mc && l.level === 3);
+  check('lezione 76 c\'è', !!l && l.mc && l.level === 4);
   check('figure', l.known.every(k => FIG[k] && FIG[k].indexOf('<svg') === 0 && FIG[k].indexOf(' id=') === -1));
   check('frasi', SX.present('mc_m_me_book').prompt === M + ' mi dà il libro.' && SX.key('mc_m_me_book').prompt === 'Che cosa mi dà ' + M + '?' && SX.key('mc_m_me_book').model === 'Le dà il libro.' &&
     SX.key('mc_f_us_cup').model === 'Ci dà la tazza.');
@@ -1818,7 +1818,7 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
   const SX = run('SPE'), evalAsk = run('evalAsk'), buildDrill = run('buildDrill'), ok = (st, t) => evaluate(st, t).ok;
   const l = run('LESSONS').find(l => l.id === 'l77');
   const P = run('p3People()'), M = run('P3_CHARS')[P.m].name, F = run('P3_CHARS')[P.f].name;
-  check('lezione 77 c\'è', !!l && l.pe && l.level === 3);
+  check('lezione 77 c\'è', !!l && l.pe && l.level === 4);
   check('figure', l.known.every(k => FIG[k] && FIG[k].indexOf('<svg') === 0 && FIG[k].indexOf(' id=') === -1));
   check('frasi', SX.present('pe_f_parigi').prompt === F + ' è andata a Parigi.' && SX.key('pe_m_roma').prompt === 'Dove è andato ' + M + '?' && SX.key('pe_m_newyork').model === M + ' è andato a New York.');
   check('giusto', ok(SX.key('pe_m_roma'), 'È andato a Roma.') && ok(SX.key('pe_m_roma'), 'A Roma.') && ok(SX.key('pe_f_londra'), F + ' è andata a Londra.') && ok(SX.yes('pe_f_roma'), 'Sì, è andata a Roma.'));
@@ -1837,7 +1837,7 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
   const SX = run('SVI'), evalAsk = run('evalAsk'), buildDrill = run('buildDrill'), ok = (st, t) => evaluate(st, t).ok;
   const l = run('LESSONS').find(l => l.id === 'l78');
   const P = run('p3People()'), M = run('P3_CHARS')[P.m].name, F = run('P3_CHARS')[P.f].name;
-  check('lezione 78 c\'è', !!l && l.vi && l.level === 3);
+  check('lezione 78 c\'è', !!l && l.vi && l.level === 4);
   check('figure', l.known.every(k => FIG[k] && FIG[k].indexOf('<svg') === 0 && FIG[k].indexOf(' id=') === -1));
   check('frasi', SX.present('vi_m_colosseo').prompt === M + ' ha visto il Colosseo. L\'ha visto.' && SX.yes('vi_f_eiffel').model === 'Sì, l\'ha vista.' &&
     SX.key('vi_f_liberta').model === F + ' ha visto la Statua della Libertà.');
@@ -2126,6 +2126,17 @@ check('88: prima e ora', run("SIMPF.present('ipf_m_read').prompt") === 'Prima ' 
   check('95: ripetizioni giuste', models.every(s => buildDrill(s, 5, s.reviewItems || []).every(d => evaluate(d, d.model).ok)));
 }
 
+// I 4 livelli da 25 lezioni (Massi): tema, capitoli da 5, il test dopo la 25ª lezione di ogni livello
+{
+  const L = run('LESSONS'), lv = (n) => L.find(l => l.id === 'l' + n).level, idx = (id) => L.findIndex(l => l.id === id);
+  check('livelli da 25: 1–25, 26–50, 51–75, 76–100', lv(1) === 1 && lv(25) === 1 && lv(26) === 2 && lv(50) === 2 && lv(51) === 3 && lv(75) === 3 && lv(76) === 4 && lv(100) === 4 &&
+    [1, 2, 3, 4].every(v => L.filter(l => l.level === v && !l.test).length === 25));
+  check('i test dopo la 25ª, 50ª, 75ª, 100ª lezione', idx('t1') === idx('l25') + 1 && idx('t2') === idx('l50') + 1 && idx('t3') === idx('l75') + 1 && idx('t4') === idx('l100') + 1);
+  check('20 capitoli da 5 lezioni, con il nome in 4 lingue', run('CHAPTERS').length === 20 && [0, 5, 19].every(c => L.filter(l => l.chapter === c && !l.test).length === 5) &&
+    run('CHAPTERS').every(c => c[1].it && c[1].en && c[1].de && c[1].ja) && [1, 2, 3, 4].every(v => run('LEVEL_THEMES')[v].ja));
+  check('i test chiedono solo le lezioni del loro livello', [1, 2, 3, 4].every(v => { const st = buildSteps(L.find(l => l.id === 't' + v)); return st.filter(s => s.tlesson).every(s => L.find(l => l.id === s.tlesson).level === v); }));
+}
+
 // Lezione 96: «Vorrei…» (Lei / tu)
 {
   const evalAsk = run('evalAsk'), buildDrill = run('buildDrill'), ok = (st, t) => evaluate(st, t).ok, SX = run('SVOR');
@@ -2214,7 +2225,7 @@ check('88: prima e ora', run("SIMPF.present('ipf_m_read').prompt") === 'Prima ' 
 // Test del livello 3: 8 che contano e 2 libere, dopo la lezione 78
 {
   const t3 = run('LESSONS').find(l => l.id === 't3'), st = buildSteps(t3);
-  check('test 3 c\'è, dopo la lezione 78', !!t3 && t3.test === 3 && t3.level === 3 && run('LESSONS').indexOf(t3) === run('LESSONS').findIndex(l => l.id === 'l78') + 1);
+  check('test 3 c\'è, dopo la lezione 75', !!t3 && t3.test === 3 && t3.level === 3 && run('LESSONS').indexOf(t3) === run('LESSONS').findIndex(l => l.id === 'l75') + 1);
   check('test 3: 8 che contano + 2 libere', st.filter(s => s.type !== 'free').length === 8 && st.filter(s => s.type === 'free').length === 2 && st.every(s => s.test));
   check('test 3: le risposte giuste sono giuste', st.filter(s => s.type !== 'free' && s.type !== 'ask').every(s => evaluate(s, s.model).ok));
   check('test 3: la domanda dell\'allievo', (s => run('evalAsk')(s.askFig, s.model).ok)(st.find(s => s.type === 'ask')));
@@ -2225,7 +2236,8 @@ check('88: prima e ora', run("SIMPF.present('ipf_m_read').prompt") === 'Prima ' 
 // Dal livello 2 le lezioni sono più veloci (Massi): una sola presentazione, 4 sì/no mescolati, sempre 7 domande dell'allievo
 {
   const L = run('LESSONS'), l38 = L.find(l => l.id === 'l38'), l39 = L.find(l => l.id === 'l39');
-  const a = buildSteps(l38), b = buildSteps(l39), cnt = (st, ph) => st.filter(s => s.phase === ph).length;
+  // la lezione 38 come se fosse del livello 1 (con i livelli da 25 è del livello 2)
+  const a = buildSteps(Object.assign({}, l38, { level: 1 })), b = buildSteps(l39), cnt = (st, ph) => st.filter(s => s.phase === ph).length;
   check('livello 2 veloce: una presentazione per figura', cnt(b, 'present') === l39.known.length && cnt(a, 'present') > l38.known.length);
   check('livello 2 veloce: niente giri di sì e di no', !cnt(b, 'yes') && !cnt(b, 'neg') && cnt(b, 'yesno') === 4);
   check('livello 2 veloce: 7 domande dell\'allievo', b.filter(s => s.type === 'ask').length === 7);
@@ -2247,7 +2259,7 @@ check('88: prima e ora', run("SIMPF.present('ipf_m_read').prompt") === 'Prima ' 
 {
   const t1 = run('LESSONS').find(l => l.id === 't1');
   const st = buildSteps(t1);
-  check('test 1 c\'è, dopo la lezione 38', !!t1 && t1.test && run('LESSONS').indexOf(t1) === run('LESSONS').findIndex(l => l.id === 'l38') + 1);
+  check('test 1 c\'è, dopo la lezione 25', !!t1 && t1.test && run('LESSONS').indexOf(t1) === run('LESSONS').findIndex(l => l.id === 'l25') + 1);
   check('test 1: 8 che contano + 2 libere', st.filter(s => s.type !== 'free').length === 8 && st.filter(s => s.type === 'free').length === 2 && st.every(s => s.test));
   check('test 1: le risposte giuste sono giuste', st.filter(s => s.type !== 'free' && s.type !== 'ask').every(s => evaluate(s, s.model).ok));
   check('test 1: la domanda dell\'allievo', (s => run('evalAsk')(s.askFig, s.model).ok)(st.find(s => s.type === 'ask')));

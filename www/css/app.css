@@ -345,3 +345,23 @@ body.test-end #btn-again { display: none; }
 .reg-word { font-family: Georgia, serif; font-size: 22px; }
 .reg-sub { font-size: 13px; opacity: .8; text-align: left; }
 .reg-note { font-size: 13px; min-height: 1em; margin: 6px 2px 0; }
+
+/* ===== Il menu: 4 livelli da 25 (tema e colore) e i capitoli che si aprono e si chiudono ===== */
+.lv-group { margin: 14px 0 6px; border-radius: 16px; background: var(--surface, #182133); border: 1px solid var(--line, #2a3550); overflow: hidden; }
+.lv-group > summary { list-style: none; cursor: pointer; display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; margin: 0; padding: 14px 16px; border-left: 6px solid var(--lvcol, #3a5280); }
+.lv-group > summary::-webkit-details-marker, .chap > summary::-webkit-details-marker { display: none; }
+.lv-group.lv1 { --lvcol: #5a72a8; } .lv-group.lv2 { --lvcol: #5d8fc4; } .lv-group.lv3 { --lvcol: #9a7fd6; } .lv-group.lv4 { --lvcol: #d49abd; }
+.lv-group .lv-name { color: var(--lvcol); font-weight: 800; }
+.lv-group .lv-theme { font-family: Georgia, serif; font-size: 18px; letter-spacing: 0; text-transform: none; color: var(--text, #eef1f6); font-weight: 400; flex: 1; min-width: 0; }
+.lv-group .lv-done, .chap .ch-done { font-size: 13px; color: #8d97ad; font-variant-numeric: tabular-nums; letter-spacing: 0; }
+.lv-group > summary::after { content: '▾'; color: var(--lvcol); transition: transform .2s; }
+.lv-group:not([open]) > summary::after { transform: rotate(-90deg); }
+.chap { margin: 0 10px 8px; border-radius: 12px; background: rgba(255,255,255,.03); }
+.chap > summary { list-style: none; cursor: pointer; display: flex; align-items: center; gap: 10px; padding: 10px 12px; font-weight: 600; }
+.chap > summary::before { content: '▸'; color: var(--lvcol); transition: transform .2s; }
+.chap[open] > summary::before { transform: rotate(90deg); }
+.chap .ch-name { flex: 1; min-width: 0; }
+.chap .ch-range { font-size: 12px; color: #8d97ad; font-variant-numeric: tabular-nums; }
+.chap .ch-done.all { color: #c9a45c; }
+.chap .lesson-btn { margin-left: 6px; margin-right: 6px; width: calc(100% - 12px); }
+.lv-group > .lesson-btn.test { margin: 6px 10px 12px; width: calc(100% - 20px); }

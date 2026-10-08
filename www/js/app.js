@@ -113,18 +113,10 @@ function renderHome() {
   fb.innerHTML = '<span>★ ' + tx('favs') + '</span><span class="score">' + ((DB.settings.favs || []).length || '') + '</span>';
   fb.onclick = () => showFavs();
   ll.appendChild(fb);
-  let lastLevel = 0;
-  LESSONS.forEach(l => {
-    // lezioni divise per livello, ognuno con il suo colore
-    const lv = l.level || 1;
-    if (lv !== lastLevel) {
-      const h = document.createElement('div');
-      h.className = 'level-head lv' + lv;
-      h.textContent = tx('level', { n: lv });
-      ll.appendChild(h);
-      lastLevel = lv;
-    }
-    const b = document.createElement('button');
+  // i livelli (4 da 25, ognuno con il suo tema e colore) e dentro i capitoli da 5 lezioni (si aprono e si chiudono):
+  // è aperto solo il capitolo dove l'allievo è arrivato (la prima lezione non ancora fatta)
+  const lessonBtn = (l) => {
+    const lv = l.level || 1, b = document.createElement('button');
     b.className = 'lesson-btn lv' + lv + (l.test ? ' test' : '');
     // nel menu solo le parole nuove della lezione (il test: la coppa d'oro)
     const icons = l.test ? TEST_ICON : (l.colors ? l.known.concat(l.reds || []) : l.known.concat(l.fresh ? [l.fresh] : [])).map(w => FIG[w]).join('');
@@ -133,8 +125,38 @@ function renderHome() {
     b.innerHTML = '<span>' + name + '</span><span class="icons">' + icons + '</span>' +
                   '<span class="score' + (best >= 80 ? ' top' : '') + '">' + (best != null ? best + '%' : '') + '</span>';
     b.onclick = once(() => startLesson(l.id));
-    ll.appendChild(b);
-  });
+    return b;
+  };
+  const grouped = typeof CHAPTERS !== 'undefined';
+  if (!grouped) { LESSONS.forEach(l => ll.appendChild(lessonBtn(l))); }
+  else {
+    const next = LESSONS.find(l => !l.test && DB.lessons[l.id] == null) || LESSONS[LESSONS.length - 1];
+    const theme = (lv) => { const t = LEVEL_THEMES[lv] || {}; return t[UI_LANG] || t.en || ''; };
+    const chName = (i) => { const t = CHAPTERS[i][1]; return t[UI_LANG] || t.en; };
+    [1, 2, 3, 4].forEach(lv => {
+      const ls = LESSONS.filter(l => (l.level || 1) === lv);
+      if (!ls.length) return;
+      const done = ls.filter(l => !l.test && DB.lessons[l.id] != null).length, total = ls.filter(l => !l.test).length;
+      const lvBox = document.createElement('details');
+      lvBox.className = 'lv-group lv' + lv;
+      lvBox.open = (next.level || 1) === lv;
+      lvBox.innerHTML = '<summary class="level-head lv' + lv + '"><span class="lv-name">' + tx('level', { n: lv }) + '</span><span class="lv-theme">' + theme(lv) + '</span>' +
+        '<span class="lv-done">' + done + ' / ' + total + '</span></summary>';
+      const chs = [...new Set(ls.filter(l => !l.test).map(l => l.chapter))];
+      chs.forEach(ci => {
+        const cl = ls.filter(l => !l.test && l.chapter === ci), cdone = cl.filter(l => DB.lessons[l.id] != null).length;
+        const ch = document.createElement('details');
+        ch.className = 'chap';
+        ch.open = next.chapter === ci && !next.test;
+        ch.innerHTML = '<summary><span class="ch-name">' + chName(ci) + '</span><span class="ch-range">' + lessonNum(cl[0]) + '–' + lessonNum(cl[cl.length - 1]) + '</span>' +
+          '<span class="ch-done' + (cdone === cl.length ? ' all' : '') + '">' + cdone + ' / ' + cl.length + '</span></summary>';
+        cl.forEach(l => ch.appendChild(lessonBtn(l)));
+        lvBox.appendChild(ch);
+      });
+      ls.filter(l => l.test).forEach(t => lvBox.appendChild(lessonBtn(t)));
+      ll.appendChild(lvBox);
+    });
+  }
 
   $('opt-text').checked = !!DB.settings.showText;
   showSpeed();
