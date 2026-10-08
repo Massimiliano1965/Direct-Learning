@@ -69,6 +69,18 @@ const PH = {
   negCore: (k) => 'это не ' + ITEMS[k].word,
   askCore: (k) => 'это ' + ITEMS[k].word,           // in russo la domanda è la stessa frase, con la voce che sale
   yesW: ['да'], noW: ['нет'], orW: ['или'],
+  // la frase in suoni semplici, per il confronto a orecchio (world.js): cirillico e latino danno gli stessi suoni,
+  // le vocali non accentate si confondono (о/а, е/и/э/ы), le consonanti finali sorde, niente segni molli/duri
+  sound: (text) => {
+    const RU2L = { а: 'a', б: 'b', в: 'v', г: 'g', д: 'd', е: 'i', ё: 'o', ж: 'zh', з: 'z', и: 'i', й: 'i', к: 'k', л: 'l', м: 'm', н: 'n', о: 'a',
+      п: 'p', р: 'r', с: 's', т: 't', у: 'u', ф: 'f', х: 'h', ц: 'ts', ч: 'ch', ш: 'sh', щ: 'sh', ъ: '', ы: 'i', ь: '', э: 'i', ю: 'u', я: 'a' };
+    let t = String(text || '').toLowerCase().replace(/[^\p{L}\s]/gu, ' ');
+    t = t.replace(/[а-яё]/g, c => RU2L[c] !== undefined ? RU2L[c] : c)
+      .replace(/o/g, 'a').replace(/[eyj]/g, 'i').replace(/kh/g, 'h').replace(/w/g, 'v').replace(/c(?=[iea])/g, 's').replace(/c/g, 'k').replace(/q/g, 'k').replace(/x/g, 'ks')
+      .replace(/b(?=\s|$)/g, 'p').replace(/d(?=\s|$)/g, 't').replace(/g(?=\s|$)/g, 'k').replace(/v(?=\s|$)/g, 'f').replace(/z(?=\s|$)/g, 's')
+      .replace(/([a-z])\1+/g, '$1');
+    return t.replace(/\s+/g, '').split('');
+  },
   bareOk: true, notW: ['не'],   // il microfono a volte perde il piccolo «это»: «стол» da solo vale «это стол» (world.js)
   // per riconoscere: minuscole, ё = е, senza punteggiatura, gli alias
   tokens: (text) => {

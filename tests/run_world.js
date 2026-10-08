@@ -34,6 +34,10 @@ function check(name, cond) { count++; if (!cond) { fails++; console.log('FALLITO
     check(C + 'parlata normale: «да стол», «нет не книга»', ok(S.yes('table'), 'да стол') && ok(S.neg('table', 'book'), 'нет не книга'));
     check(C + 'parlata normale: ma «стул» non è «стол», «не стол» non è «стол»', !ok(S.key('table'), 'это стул') && !ok(S.key('table'), 'не стол') && !ok(S.yes('table'), 'да стул'));
   }
+  if (code === 'ru') {   // a orecchio: quello che il microfono scrive con l'accento straniero
+    check(C + 'a orecchio: «eta stol», «это сталь», «ето стол», «эта столб» = «это стол»', ['eta stol', 'это сталь', 'ето стол', 'эта столб'].every(t => ok(S.key('table'), t)));
+    check(C + 'a orecchio: ma «стул», «книга», «да это стул» restano sbagliati', !ok(S.key('table'), 'это стул') && !ok(S.key('table'), 'это книга') && !ok(S.yes('table'), 'да это стул') && !ok(S.yes('table'), 'нет это не стол'));
+  }
   if (code === 'zh') {   // i toni dell'accento italiano: caratteri che suonano uguali, il «这» perso
     check(C + 'parlata normale: «这是树», «书», «这事书», «是书»', ['这是树', '书', '这事书', '是书'].every(t => ok(S.key('book'), t)));
     check(C + 'parlata normale: «对，书», «不是笔»', ok(S.yes('book'), '对，书') && ok(S.neg('book', 'pen'), '不是笔'));

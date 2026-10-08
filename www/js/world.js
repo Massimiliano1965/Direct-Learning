@@ -53,6 +53,49 @@ evaluate = function (step, text) {
     default: return { ok: c.indexOf(X) !== -1 && onlyX && !n.length && !PH.orW.some(w => has(s, w)), full: true };
   }
 };
+// A ORECCHIO (Massi: «quel tavolo non me lo riconosce proprio, ci vogliono molti tentativi»): se le parole esatte non tornano,
+// si confronta come SUONA quello che ha scritto il microfono con tutte le frasi possibili del passo, giuste e sbagliate
+// (PH.sound = la frase in suoni semplici). Vince la più vicina: se è giusta e abbastanza vicina, va bene. Come in inglese.
+function wSim(a, b) {
+  if (!a.length || !b.length) return 0;
+  const d = [];
+  for (let i = 0; i <= a.length; i++) { d[i] = [i]; for (let j = 1; j <= b.length; j++) d[i][j] = i ? 0 : j; }
+  for (let i = 1; i <= a.length; i++) for (let j = 1; j <= b.length; j++)
+    d[i][j] = Math.min(d[i - 1][j] + 1, d[i][j - 1] + 1, d[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1));
+  return 1 - d[a.length][b.length] / Math.max(a.length, b.length);
+}
+function wCandidates(step) {
+  const all = W_ALL(), X = step.show, out = [];
+  const add = (t, ok, full) => out.push({ snd: PH.sound(t), ok: ok, full: !!full });
+  if (step.type === 'echo' && step.check === 'question') { add(PH.what, true); all.forEach(k => add(PH.is(k), false)); return out; }
+  if (step.type === 'yes') { all.forEach(k => { add(PH.yes(k), k === X); add(PH.no(k), false); }); return out; }
+  if (step.type === 'neg') {
+    all.forEach(k => { add(PH.no(k), k === step.ask); add(PH.yes(k), false); add(PH.is(k), false); });
+    all.forEach(k => { if (k !== step.ask) add(PH.no(step.ask) + ' ' + PH.is(k), k === X, true); });
+    return out;
+  }
+  all.forEach(k => { add(PH.is(k), k === X); add(PH.no(k), false); });
+  return out;
+}
+const W_TOL = 0.7;
+function wBySound(step, text) {
+  if (!PH.sound) return null;
+  const heard = PH.sound(text);
+  if (heard.length < 2) return null;
+  let best = null, bestWrong = 0;
+  wCandidates(step).forEach(c => {
+    const s = wSim(heard, c.snd);
+    if (c.ok) { if (!best || s > best.s) best = { s: s, full: c.full }; }
+    else bestWrong = Math.max(bestWrong, s);
+  });
+  if (!best || best.s < W_TOL || best.s <= bestWrong) return null;
+  return { ok: true, full: best.full || step.type !== 'neg', bySound: true };
+}
+{
+  const exact = evaluate;
+  evaluate = function (step, text) { const r = exact(step, text); return r.ok ? r : (wBySound(step, text) || r); };
+}
+
 // Le domande dell'allievo: «Che cos'è?», «È un libro?», «È un libro o una penna?»
 evalAsk = function (X, text) {
   const s = norm(text), bad = (model) => ({ ok: false, model: model || PH.what });
