@@ -88,10 +88,15 @@ function numStatements(s) {
   const re = / (non )?e (?:il numero |il |l |lo )([a-z]+)(?= )/g;
   let m;
   while ((m = re.exec(s)) !== null) out.push({ k: NUM_KEY[m[2]] || ('?' + m[2]), neg: !!m[1] });
-  // il microfono a volte perde «il» / «l'» (si sente appena): «è otto» vale come «è l'otto» (il numero da solo, «otto», resta un errore: ci vuole la frase)
+  // il microfono a volte perde «il» / «l'» (si sente appena): «è otto» vale come «è l'otto»
   if (!out.length) {
     const b = / (non )?e ([a-z]+)(?= )/g;
     while ((m = b.exec(s)) !== null) if (NUM_KEY[m[2]]) out.push({ k: NUM_KEY[m[2]], neg: !!m[1] });
+  }
+  // il numero da solo («otto», «8») va bene anche lui (Massi: «deve accettare anche quello»)
+  if (!out.length) {
+    const w = s.trim().split(' ').filter(x => x && x !== 'si' && x !== 'no');
+    if (w.length === 1 && NUM_KEY[w[0]]) out.push({ k: NUM_KEY[w[0]], neg: false });
   }
   return out;
 }

@@ -381,7 +381,7 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
   check('giusto: ripete «Che numero è?»', ok(S.askQ('n6'), 'Che numero è?'));
   check('sbagliato: numero sbagliato', !ok(k3, 'È il numero quattro.') && !ok(k3, 'è il 4'));
   check('sbagliato: manca il sì', !ok(y3, 'È il numero tre.'));
-  check('sbagliato: solo il numero', !ok(k3, 'tre'));
+  check('giusto anche il numero da solo (Massi)', ok(k3, 'tre') && ok(k3, '3'));
   check('sbagliato: domanda ripetuta', !ok(S.alt('n3', 'n5'), S.alt('n3', 'n5').prompt));
   check('eco con le cifre', isEcho(y3, 'è il numero 3') && evaluateAll(y3, ['è il numero 3']).ok === false);
   check('domanda attaccata davanti', evaluateAll(k3, ['che numero è è il numero 3']).ok);
@@ -2378,8 +2378,8 @@ check('88: prima e ora', run("SIMPF.present('ipf_m_read').prompt") === 'Prima ' 
 // I numeri e il microfono di Google (Massi: «mi chiede che numero è 8 e non sente i numeri»)
 {
   const L7 = run('LESSONS').find(l => l.id === 'l7'), k8 = buildSteps(L7).find(s => s.type === 'key' && s.show === 'n8');
-  check('numeri: «è lotto», «è il lotto», «è l8», «è 8» = è l\'otto', ['è lotto', 'è il lotto', 'è l8', 'è 8', "È l'8.", 'è il numero 8'].every(t => evaluate(k8, t).ok));
-  check('numeri: «è il sette», «non è l\'otto», il numero da solo («8», «otto») restano sbagliati', !evaluate(k8, 'è il sette').ok && !evaluate(k8, '8').ok && !evaluate(k8, 'otto').ok && !evaluate(k8, "non è l'otto").ok);
+  check('numeri: «8», «otto», «è 8», «8 è l\'8», «è l\'8», «è il numero 8», «è lotto», «è l8» = giusto', ['8', 'otto', 'è 8', "8 è l'8", "È l'8.", 'è il numero 8', 'è lotto', 'è il lotto', 'è l8'].every(t => evaluate(k8, t).ok));
+  check('numeri: «è il sette», «7», «non è l\'otto» restano sbagliati', !evaluate(k8, 'è il sette').ok && !evaluate(k8, '7').ok && !evaluate(k8, "non è l'otto").ok);
 }
 
 console.log(count - fails + ' / ' + count + ' test passati');

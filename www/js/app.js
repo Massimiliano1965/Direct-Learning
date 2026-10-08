@@ -374,6 +374,7 @@ function startLesson(id, obj) {
 function setLevel(n) { if (n > 1) document.documentElement.dataset.level = n; else delete document.documentElement.dataset.level; }
 
 function stopLesson() {
+  if (DB.settings.resumeLesson) { delete DB.settings.resumeLesson; saveDB(); }   // uscita vera dalla lezione: niente da riprendere
   stopDemo();
   setLevel(1);
   RUN++;
@@ -1197,7 +1198,25 @@ $('btn-end-home').onclick = () => goHome();
 /* ---------- App in background e ritorno ---------- */
 
 let demoToResume;   // undefined = nessuna demo da riprendere
+// La lezione in corso si ricorda (Massi: «quando passo da un'app all'altra torna alla schermata principale»):
+// i telefoni con poca memoria chiudono l'app in sottofondo; al ritorno si riparte dalla stessa lezione, dallo stesso punto.
+function saveLessonState() {
+  if (!L || L.test || L.lesson.fav || !L.lesson.id) return;
+  DB.settings.resumeLesson = { id: L.lesson.id, i: L.answered ? L.i + 1 : L.i, steps: L.steps, first: L.first, errCount: L.errCount, t: Date.now() };
+  saveDB();
+}
+function resumeSavedLesson() {
+  const R = DB.settings.resumeLesson;
+  if (!R) return false;
+  delete DB.settings.resumeLesson;
+  const lesson = LESSONS.find(l => l.id === R.id);
+  if (!lesson || Date.now() - R.t > 3 * 3600e3 || !Array.isArray(R.steps) || R.i >= R.steps.length) { saveDB(); return false; }
+  startLesson(lesson.id, { lesson: lesson, items: lessonItems(lesson), steps: R.steps, at: R.i });
+  if (L) { L.first = R.first || 0; L.errCount = R.errCount || 0; }
+  return true;
+}
 function onPause() {
+  saveLessonState();
   quiet();
   Awake.allow();
   if (demoActive) {
@@ -1311,7 +1330,9 @@ function appStart() {
   if (appStarted) return;
   appStarted = true;
   renderHome();
-  if (!DB.settings.uiLang || (COURSE.students || []).indexOf(DB.settings.uiLang) === -1) showLangChoice();
+  if (!DB.settings.uiLang || (COURSE.students || []).indexOf(DB.settings.uiLang) === -1) { showLangChoice(); return; }
+  // l'app era stata chiusa dal telefono durante una lezione: si riprende da lì
+  resumeSavedLesson();
 }
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', appStart); else setTimeout(appStart, 0);
 ttsWarmUp();
