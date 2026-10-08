@@ -1279,6 +1279,23 @@ $('btn-reset').onclick = () => {
   renderReport();
 };
 
+/* ---------- Il tema: Notte (blu notte e oro), Giorno (crema), Automatico (giorno dalle 7 alle 19) ---------- */
+function themeNow() {
+  const t = DB.settings.theme || 'notte';
+  if (t === 'auto') { const h = new Date().getHours(); return h >= 7 && h < 19 ? 'giorno' : 'notte'; }
+  return t;
+}
+function applyTheme() {
+  const day = themeNow() === 'giorno';
+  document.documentElement.classList.toggle('giorno', day);
+  const m = document.querySelector('meta[name="theme-color"]');
+  if (m) m.setAttribute('content', day ? '#f6f1e7' : '#0f172a');
+  document.querySelectorAll('#opt-theme button').forEach(b => b.classList.toggle('on', b.dataset.theme === (DB.settings.theme || 'notte')));
+}
+document.querySelectorAll('#opt-theme button').forEach(b => { b.onclick = () => { DB.settings.theme = b.dataset.theme; saveDB(); applyTheme(); }; });
+document.addEventListener('resume', applyTheme, false);   // in automatico: tornando all'app, il colore giusto per l'ora
+applyTheme();
+
 /* ---------- Avvio ---------- */
 
 document.body.insertAdjacentHTML('afterbegin', SVG_DEFS);
