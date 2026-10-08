@@ -1,0 +1,63 @@
+/* =====================================================================
+   TEMA GIORNO (Massi: «troppo scuro, cupo»): sfondo crema, schede bianche, testi scuri, lo stesso oro.
+   Si accende con <html class="giorno"> (applyTheme in app.js: Notte / Giorno / Automatico 7–19).
+   ===================================================================== */
+html.giorno {
+  --bg: #f6f1e7; --bg2: #efe7d8;
+  --surface: #ffffff; --surface2: #f3ecdf;
+  --line: rgba(40, 30, 10, .12);
+  --text: #1d2433; --muted: #6b7385;
+  --accent: #b8913f; --accent-hi: #caa456; --accent-lo: #9c7a33; --accent-ink: #1a1408;
+  --shadow: 0 8px 22px -10px rgba(60, 40, 10, .25);
+}
+html.giorno[data-level="2"] { --bg: #eef3f8; --surface: #ffffff; --surface2: #e6eef7; --line: rgba(20, 50, 90, .14); }
+html.giorno[data-level="3"] { --bg: #f3effa; --surface: #ffffff; --surface2: #ebe4f7; --line: rgba(60, 30, 110, .14); }
+html.giorno[data-level="4"] { --bg: #faf0f4; --surface: #ffffff; --surface2: #f5e4ec; --line: rgba(110, 30, 70, .14); }
+html.giorno, html.giorno body { background: var(--bg); }
+html.giorno body {
+  background: radial-gradient(120% 60% at 0% 0%, rgba(201, 164, 92, .14), transparent 60%),
+              radial-gradient(120% 70% at 100% 100%, rgba(63, 184, 168, .10), transparent 60%), var(--bg);
+}
+html.giorno .brand .tagline { color: #9c7a33; }
+
+/* il palco della lezione e delle storie: luce calda */
+html.giorno #stage, html.giorno[data-level] #stage { background: linear-gradient(180deg, #fbf6ec, #efe4cf); border-color: var(--line); }
+html.giorno #kj-stage { background: #efe4cf; }
+html.giorno #stage-figure::before { background: radial-gradient(ellipse at 50% 70%, rgba(156, 122, 51, .22), rgba(156, 122, 51, 0) 70%); }
+html.giorno #progress { background: rgba(0, 0, 0, .08); }
+
+/* pulsanti chiari */
+html.giorno button.secondary { background: #ffffff; border-color: var(--line); color: var(--text); }
+html.giorno button.ghost { color: var(--muted); }
+html.giorno .seg button { background: #ffffff; color: var(--muted); }
+html.giorno .seg button.on { background: var(--accent); color: #fff; }
+html.giorno .object-box { background: #ffffff; }
+html.giorno .object-box.indicated, html.giorno .object-box.right { background: #fbf3df; }
+
+/* il menu: livelli e capitoli */
+html.giorno .lv-group { background: linear-gradient(160deg, var(--lvtint), rgba(255,255,255,0) 60%), #ffffff; }
+html.giorno .lv-group.lv1 { --lvtint: rgba(63,184,168,.22); } html.giorno .lv-group.lv2 { --lvtint: rgba(93,143,196,.24); }
+html.giorno .lv-group.lv3 { --lvtint: rgba(154,127,214,.24); } html.giorno .lv-group.lv4 { --lvtint: rgba(212,154,189,.28); } html.giorno .lv-group.lv5 { --lvtint: rgba(230,199,126,.3); }
+html.giorno .lv-group .lv-theme { color: var(--text); }
+html.giorno .lv-badge { color: #ffffff; }
+html.giorno .lv-bar, html.giorno .ch-bar { background: rgba(0, 0, 0, .08); }
+html.giorno .chap { background: rgba(255, 255, 255, .7); border-color: rgba(0, 0, 0, .06); }
+html.giorno .chap[open] { background: #fffdf8; border-color: var(--lvcol); }
+html.giorno .lv-group .lv-done, html.giorno .chap .ch-done { filter: brightness(.8); }
+html.giorno .lesson-btn.kj-btn { background: linear-gradient(90deg, rgba(201,164,92,.25), rgba(201,164,92,.06)), #fff; color: #8a6a2a; }
+html.giorno .lesson-btn.favs-btn { color: #9c7a33; }
+html.giorno .fav-star { color: #9c7a33; }
+html.giorno .s-row { background: rgba(0, 0, 0, .025); }
+html.giorno .s-hit, html.giorno #kj-text.q { color: #9c7a33; }
+html.giorno .choice.selected { background: #fbf3df; }
+html.giorno #teacher-list .choice .avatar.photo { box-shadow: 0 6px 14px -6px rgba(0, 0, 0, .3); }
+
+/* le parole in colore delle frasi: più scure, per leggerle sul chiaro */
+html.giorno #prompt-text .syn { color: #9c7a33; }
+html.giorno #prompt-text .translit { color: #6a4fb0; }
+html.giorno #prompt-text .go, html.giorno #prompt-text .gi { color: #2f6fd0; border-bottom-color: #2f6fd0; }
+html.giorno #prompt-text .ge, html.giorno #prompt-text .ga, html.giorno #prompt-text .nu { color: #c2477a; border-bottom-color: #c2477a; }
+html.giorno .level-tag { color: var(--lvc, #2f8f84); border-color: var(--lvc, #2f8f84); }
+/* le facce degli insegnanti: il fondo del ritratto chiaro */
+html.giorno .avatar.photo svg > rect:first-child { fill: #e9dfcc; }
+html.giorno .avatar.photo { background: #e9dfcc; }

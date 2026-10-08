@@ -6,7 +6,7 @@ const vm = require('vm');
 
 const ctx = { console: console };
 vm.createContext(ctx);
-['course.js', 'data.js', 'logic.js', 'colors_it.js', 'numbers_it.js', 'geo_fig.js', 'geo_it.js', 'poss_it.js', 'size_it.js', 'third_it.js', 'nat_it.js', 'essere_it.js', 'altro_it.js', 'prep_it.js', 'anche_it.js', 'ora_it.js', 'appt_it.js', 'gender_it.js', 'verbs_it.js', 'perche_it.js', 'pron_it.js', 'sum_it.js', 'km_it.js', 'fam_it.js', 'avere_it.js', 'gen_it.js', 'plur_it.js', 'cece_it.js', 'costa_it.js', 'det_it.js', 'irr_it.js', 'test_it.js', 'contr_it.js', 'stare_it.js', 'celha_it.js', 'imper_it.js', 'qual_it.js', 'ne_it.js', 'passato_it.js', 'lho_it.js', 'ci_it.js', 'saluti_it.js', 'lui_it.js', 'giorni_it.js', 'mesi_it.js', 'suoi_it.js', 'loro_it.js', 'noi_it.js', 'dare_it.js', 'qualc_it.js', 'bigl_it.js', 'lile_it.js', 'chiama_it.js', 'tempi_it.js', 'liha_it.js', 'contr2_it.js', 'colaz_it.js', 'quale_it.js', 'fiori_it.js', 'nehai_it.js', 'rifl_it.js', 'gia_it.js', 'volere_it.js', 'potere_it.js', 'ancora_it.js', 'telef_it.js', 'dove_it.js', 'mici_it.js', 'essere2_it.js', 'visto_it.js', 'forme_it.js', 'lingua_it.js', 'parlacon_it.js', 'fatto_it.js', 'civuole_it.js', 'piace_it.js', 'stagioni_it.js', 'tempofa_it.js', 'sipuo_it.js', 'scelta_it.js', 'calendario_it.js', 'congiuntivo_it.js', 'turista_it.js', 'ripasso_it.js', 'ui_lang.js'].forEach(f => {
+['course.js', 'data.js', 'logic.js', 'colors_it.js', 'numbers_it.js', 'geo_fig.js', 'geo_it.js', 'poss_it.js', 'size_it.js', 'third_it.js', 'nat_it.js', 'essere_it.js', 'altro_it.js', 'prep_it.js', 'anche_it.js', 'ora_it.js', 'appt_it.js', 'gender_it.js', 'verbs_it.js', 'perche_it.js', 'pron_it.js', 'sum_it.js', 'km_it.js', 'fam_it.js', 'avere_it.js', 'gen_it.js', 'plur_it.js', 'cece_it.js', 'costa_it.js', 'det_it.js', 'irr_it.js', 'test_it.js', 'contr_it.js', 'stare_it.js', 'celha_it.js', 'imper_it.js', 'qual_it.js', 'ne_it.js', 'passato_it.js', 'lho_it.js', 'ci_it.js', 'saluti_it.js', 'lui_it.js', 'giorni_it.js', 'mesi_it.js', 'suoi_it.js', 'loro_it.js', 'noi_it.js', 'dare_it.js', 'qualc_it.js', 'bigl_it.js', 'lile_it.js', 'chiama_it.js', 'tempi_it.js', 'liha_it.js', 'contr2_it.js', 'colaz_it.js', 'quale_it.js', 'fiori_it.js', 'nehai_it.js', 'rifl_it.js', 'gia_it.js', 'volere_it.js', 'potere_it.js', 'ancora_it.js', 'telef_it.js', 'dove_it.js', 'mici_it.js', 'essere2_it.js', 'visto_it.js', 'forme_it.js', 'lingua_it.js', 'parlacon_it.js', 'fatto_it.js', 'civuole_it.js', 'piace_it.js', 'stagioni_it.js', 'tempofa_it.js', 'sipuo_it.js', 'scelta_it.js', 'calendario_it.js', 'congiuntivo_it.js', 'turista_it.js', 'movimento_it.js', 'persone_it.js', 'ripasso_it.js', 'ui_lang.js'].forEach(f => {
   vm.runInContext(fs.readFileSync(path.join(__dirname, '..', 'www', 'js', f), 'utf8'), ctx, { filename: f });
 });
 const run = (code) => vm.runInContext(code, ctx);
@@ -14,7 +14,7 @@ const evaluate = run('evaluate');
 const evaluateAll = run('evaluateAll');
 const buildSteps = run('buildSteps');
 const answerSteps = run('answerSteps');
-const LESSONS = run('LESSONS').filter(l => !l.colors && !l.numbers && !l.geo && !l.poss && !l.size && !l.third && !l.nat && !l.ess && !l.altro && !l.prep && !l.anche && !l.ora && !l.appt && !l.verbs && !l.purp && !l.pron && !l.sum && !l.km && !l.fam && !l.ea && !l.pl && !l.ce && !l.co && !l.dt && !l.ct && !l.sta && !l.cl && !l.imp && !l.qd && !l.ne && !l.ps && !l.lh && !l.cv && !l.sa && !l.lm && !l.gd && !l.ms && !l.sp && !l.lo && !l.nv && !l.da && !l.qn && !l.bv && !l.lp && !l.cm && !l.tv && !l.lq && !l.cz && !l.qu && !l.fi && !l.nh && !l.rf && !l.gn && !l.vo && !l.po && !l.dv && !l.an && !l.tl && !l.dvp && !l.mc && !l.pe && !l.vi && !l.fu && !l.ge && !l.lg && !l.pc && !l.md && !l.cu && !l.pi && !l.sg && !l.tf && !l.ipf && !l.spu && !l.bar && !l.moda && !l.via && !l.hot && !l.mit && !l.cibo && !l.vor && !l.cal && !l.casa && !l.cg && !l.tu && !l.test);   // lezioni con gli oggetti (colori e numeri hanno i loro test)
+const LESSONS = run('LESSONS').filter(l => !l.colors && !l.numbers && !l.geo && !l.poss && !l.size && !l.third && !l.nat && !l.ess && !l.altro && !l.prep && !l.anche && !l.ora && !l.appt && !l.verbs && !l.purp && !l.pron && !l.sum && !l.km && !l.fam && !l.ea && !l.pl && !l.ce && !l.co && !l.dt && !l.ct && !l.sta && !l.cl && !l.imp && !l.qd && !l.ne && !l.ps && !l.lh && !l.cv && !l.sa && !l.lm && !l.gd && !l.ms && !l.sp && !l.lo && !l.nv && !l.da && !l.qn && !l.bv && !l.lp && !l.cm && !l.tv && !l.lq && !l.cz && !l.qu && !l.fi && !l.nh && !l.rf && !l.gn && !l.vo && !l.po && !l.dv && !l.an && !l.tl && !l.dvp && !l.mc && !l.pe && !l.vi && !l.fu && !l.ge && !l.lg && !l.pc && !l.md && !l.cu && !l.pi && !l.sg && !l.tf && !l.ipf && !l.spu && !l.bar && !l.moda && !l.via && !l.hot && !l.mit && !l.cibo && !l.vor && !l.cal && !l.casa && !l.cg && !l.tu && !l.mov && !l.mani && !l.eta && !l.dove && !l.test);   // lezioni con gli oggetti (colori e numeri hanno i loro test)
 const NUM_LESSONS = run('LESSONS').filter(l => l.numbers);
 const COLOR_LESSONS = run('LESSONS').filter(l => l.colors);
 const ITEMS = run('ITEMS');
@@ -381,7 +381,7 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
   check('giusto: ripete «Che numero è?»', ok(S.askQ('n6'), 'Che numero è?'));
   check('sbagliato: numero sbagliato', !ok(k3, 'È il numero quattro.') && !ok(k3, 'è il 4'));
   check('sbagliato: manca il sì', !ok(y3, 'È il numero tre.'));
-  check('sbagliato: solo il numero', !ok(k3, 'tre'));
+  check('giusto anche il numero da solo (Massi)', ok(k3, 'tre') && ok(k3, '3'));
   check('sbagliato: domanda ripetuta', !ok(S.alt('n3', 'n5'), S.alt('n3', 'n5').prompt));
   check('eco con le cifre', isEcho(y3, 'è il numero 3') && evaluateAll(y3, ['è il numero 3']).ok === false);
   check('domanda attaccata davanti', evaluateAll(k3, ['che numero è è il numero 3']).ok);
@@ -396,7 +396,7 @@ check('parole dell\'errore', ['mass', 'giulia', 'luca', 'sara'].every(k => TEACH
         check(l.id + ': il numero nuovo non si dice prima dello sfogo', st.slice(0, st.findIndex(s => s.type === 'reveal')).every(s => (s.prompt + ' ' + s.model).indexOf(' ' + run('NUMS')[l.fresh] + '.') === -1));
         check(l.id + ': tutte le risposte modello giuste', st.filter(s => s.model && s.type !== 'reveal').every(s => evaluate(s, s.model).ok));
         check(l.id + ': ripetizioni giuste', st.filter(s => s.model && s.type !== 'reveal').every(s => buildDrill(s, 5, s.reviewItems || l.known.concat(l.review || [], [l.fresh])).every(d => evaluate(d, d.model).ok)));
-        check(l.id + ': lunghezza ragionevole', st.length < 110);
+        check(l.id + ': lunghezza ragionevole', st.length < 115);   // di solito 103–110: il ripasso cambia ogni volta (con 110 falliva per caso, 1 volta su 150)
       }
       if (st.some(s => s.type === 'neg' && s.ask === s.show)) { check(l.id + ': niente domanda impossibile', false); break; }
     }
@@ -2129,10 +2129,10 @@ check('88: prima e ora', run("SIMPF.present('ipf_m_read').prompt") === 'Prima ' 
 // I 4 livelli da 25 lezioni (Massi): tema, capitoli da 5, il test dopo la 25ª lezione di ogni livello
 {
   const L = run('LESSONS'), lv = (n) => L.find(l => l.id === 'l' + n).level, idx = (id) => L.findIndex(l => l.id === id);
-  check('livelli da 25: 1–25, 26–50, 51–75, 76–100', lv(1) === 1 && lv(25) === 1 && lv(26) === 2 && lv(50) === 2 && lv(51) === 3 && lv(75) === 3 && lv(76) === 4 && lv(100) === 4 &&
-    [1, 2, 3, 4].every(v => L.filter(l => l.level === v && !l.test).length === 25));
+  check('livelli da 25: 1–25, 26–50, 51–75, 76–100 (101 e oltre: livello 5)', lv(101) === 5 && lv(1) === 1 && lv(25) === 1 && lv(26) === 2 && lv(50) === 2 && lv(51) === 3 && lv(75) === 3 && lv(76) === 4 && lv(100) === 4 &&
+    [1, 2, 3, 4].every(v => L.filter(l => l.level === v && !l.test && /^l\d+$/.test(l.id)).length === 25));
   check('i test dopo la 25ª, 50ª, 75ª, 100ª lezione', idx('t1') === idx('l25') + 1 && idx('t2') === idx('l50') + 1 && idx('t3') === idx('l75') + 1 && idx('t4') === idx('l100') + 1);
-  check('20 capitoli da 5 lezioni, con il nome in 4 lingue', run('CHAPTERS').length === 20 && [0, 5, 19].every(c => L.filter(l => l.chapter === c && !l.test).length === 5) &&
+  check('20 capitoli da 5 lezioni (più quello di prova del livello 5), con il nome in 4 lingue', run('CHAPTERS').length === 21 && [0, 5, 19].every(c => L.filter(l => l.chapter === c && !l.test && /^l\d+$/.test(l.id)).length === 5) &&
     run('CHAPTERS').every(c => c[1].it && c[1].en && c[1].de && c[1].ja) && [1, 2, 3, 4].every(v => run('LEVEL_THEMES')[v].ja));
   check('i test chiedono solo le lezioni del loro livello', [1, 2, 3, 4].every(v => { const st = buildSteps(L.find(l => l.id === 't' + v)); return st.filter(s => s.tlesson).every(s => L.find(l => l.id === s.tlesson).level === v); }));
 }
@@ -2290,6 +2290,96 @@ check('88: prima e ora', run("SIMPF.present('ipf_m_read').prompt") === 'Prima ' 
   check('tx con segnaposto', run('tx("practice", { i: 2, n: 5 })') === 'Übung 2 / 5');
   run('setUiLang("xx")');
   check('lingua sconosciuta → inglese', run('tx("talk")') === 'Talk');
+}
+
+// Lezioni 101 e 102 (prova): i verbi di movimento con il cartone animato (movimento_it.js)
+{
+  ['l101', 'l102'].forEach(id => {
+    const st = buildSteps(run('LESSONS').find(l => l.id === id)), models = st.filter(s => s.model && s.type !== 'reveal');
+    check(id + ': risposte modello giuste', models.length > 20 && models.every(s => evaluate(s, s.model).ok));
+    check(id + ': ripetizioni giuste', models.every(s => buildDrill(s, 5, s.reviewItems || []).every(d => evaluate(d, d.model).ok)));
+  });
+  const keyOf = (id, X) => buildSteps(run('LESSONS').find(l => l.id === id)).find(s => s.type === 'key' && s.show === X);
+  const k = keyOf('l101', 'mov_m_cammina'), k2 = keyOf('l102', 'mani_f_apre');
+  check('101: «Mario cammina.» giusto, «Mario corre.» e «Mario camminare.» sbagliati', evaluate(k, 'Mario cammina.').ok && evaluate(k, 'Cammina.').ok &&
+    !evaluate(k, 'Mario corre.').ok && !evaluate(k, 'Mario camminare.').ok);
+  check('102: «Anna apre la porta.» giusto, «chiude» sbagliato', evaluate(k2, 'Anna apre la porta.').ok && !evaluate(k2, 'Anna chiude la porta.').ok);
+  check('101, 102: il cartone animato per ogni figura', run('Object.keys(AZ_ANIM).length') === 12);
+}
+// Lezioni 13b e 13c: le persone (giovane / anziano, di dov'è), subito dopo la 13
+{
+  const L13 = run('LESSONS'), at = (id) => L13.findIndex(l => l.id === id);
+  check('13b e 13c dopo la 13, prima della 14, nel livello 1', at('l13b') === at('l13') + 1 && at('l13c') === at('l13') + 2 && at('l14') === at('l13') + 3 &&
+    L13[at('l13b')].level === 1 && run('lessonNumber')(L13[at('l13b')]) === '13b' && run('lessonNumber')(L13[at('l14')]) === 14);
+  ['l13b', 'l13c'].forEach(id => {
+    const st = buildSteps(L13.find(l => l.id === id)), models = st.filter(s => s.model && s.type !== 'reveal');
+    check(id + ': risposte modello giuste', models.length > 20 && models.every(s => evaluate(s, s.model).ok));
+    check(id + ': ripetizioni giuste', models.every(s => buildDrill(s, 5, s.reviewItems || []).every(d => evaluate(d, d.model).ok)));
+    check(id + ': «no» con la parola giusta (anziana per lei)', st.filter(s => s.type === 'neg').every(s => !/la signora non è anziano|la bambina non è anziano|la ragazza non è anziano/.test(s.model)));
+  });
+  const key = (id, X) => buildSteps(L13.find(l => l.id === id)).find(s => s.type === 'key' && s.show === X);
+  const a = key('l13b', 'eta_signora'), b = key('l13c', 'dove_ragazzo');
+  check('13b: «La signora è anziana.» giusto, «giovane» e «anziano» sbagliati', evaluate(a, 'La signora è anziana.').ok && evaluate(a, 'È anziana.').ok &&
+    !evaluate(a, 'La signora è giovane.').ok && !evaluate(a, 'La signora è anziano.').ok);
+  check('13c: «È di New York.» giusto, «di Londra» e «a New York» sbagliati', evaluate(b, 'Il ragazzo è di New York.').ok && evaluate(b, 'È di New York.').ok &&
+    !evaluate(b, 'Il ragazzo è di Londra.').ok && !evaluate(b, 'Il ragazzo è a New York.').ok);
+}
+
+// La ricerca (cerca.js): la parola → le lezioni e il punto dove c'è
+{
+  vm.runInContext(fs.readFileSync(path.join(__dirname, '..', 'www', 'js', 'cerca.js'), 'utf8'), ctx, { filename: 'cerca.js' });
+  const ids = (q) => run('searchFind(' + JSON.stringify(q) + ')').hits.map(h => h.lesson.id);
+  check('ricerca: «vecchio» → la lezione 62', ids('vecchio').indexOf('l62') !== -1);
+  check('ricerca: «anziana» → la lezione 13b, e la frase', ids('anziana')[0] === 'l13b' && run('searchFind("anziana")').hits[0].rows[0].text.indexOf('anziana') !== -1);
+  check('ricerca: senza accenti e maiuscole («CAFFE» → caffè)', ids('CAFFE').length > 0);
+  check('ricerca: il verbo dall\'infinito («leggere» → legge, lezione 23)', ids('leggere').indexOf('l23') !== -1);
+  check('ricerca: più parole («ce l\'ha» → lezione 41)', ids('ce l\'ha').indexOf('l41') !== -1);
+  check('ricerca: l\'inizio della parola («passeg»… «camm» → cammina, lezione 101)', ids('camm').indexOf('l101') !== -1);
+  check('ricerca: niente → «Forse:» con la parola vicina («giovene» → giovane)', ids('giovene').length === 0 && run('searchFind("giovene")').maybe.indexOf('giovane') !== -1);
+  check('ricerca: il passo esiste nella sequenza salvata', run('(() => { const h = searchFind("porta").hits[0], r = h.rows[0]; return SEARCH_STEPS[r.id][r.i] && SEARCH_STEPS[r.id][r.i].show === r.show; })()'));
+  check('ricerca: niente domande di ripasso di altre lezioni', run('SEARCH_IX.every(r => !SEARCH_STEPS[r.id][r.i].review)'));
+}
+
+// Il promemoria per studiare (promemoria.js): con un finto plugin delle notifiche
+{
+  const sched = [];
+  run('var DB = { lessons: { l1: 90, l2: 80 }, settings: {} }; var saveDB = () => {}; var todayKey = () => "2026-10-08"; var selectedTeacherKey = () => "mass";' +
+      'var $ = () => null; var document = { addEventListener: () => {} };');
+  ctx.__sched = sched;
+  run('var window = { cordova: { plugins: { notification: { local: { cancel: (ids, cb) => cb(), schedule: (l) => __sched.push(...[].concat(l)), requestPermission: (cb) => cb(true), on: () => {} } } } } };');
+  vm.runInContext(fs.readFileSync(path.join(__dirname, '..', 'www', 'js', 'promemoria.js'), 'utf8'), ctx, { filename: 'promemoria.js' });
+  run('DB.settings.remind = 23; remindRefresh();');
+  const now = new Date(), late = now.getHours() >= 23;
+  check('promemoria: 7 giorni di notifiche (oggi compreso, se l\'ora non è passata)', sched.length === (late ? 6 : 7));
+  check('promemoria: l\'insegnante, una frase già imparata, la lezione che tocca (la 3)', sched.every(n => n.title.indexOf('Max') === 0 && /▶ .*3$/.test(n.text) && n.text.split('\n')[0].length > 3 && n.data.study === 1));
+  check('promemoria: il tasto «Tra un\'ora»', sched[0].actions[0].id === 'remind_later');
+  sched.length = 0;
+  run('DB.settings.lastStudy = "2026-10-08"; remindRefresh();');
+  check('promemoria: oggi ha già studiato → niente notifica oggi', sched.length === 6 && sched.every(n => n.id !== 7001));
+  sched.length = 0;
+  run('DB.settings.remind = null; remindRefresh();');
+  check('promemoria: spento → nessuna notifica', sched.length === 0);
+}
+
+// Le storie (storie.js): il giallo «La chiave di Venezia», puntate dopo le lezioni 1–5
+{
+  vm.runInContext(fs.readFileSync(path.join(__dirname, '..', 'www', 'js', 'storie.js'), 'utf8'), ctx, { filename: 'storie.js' });
+  run('DB.settings.story = undefined');
+  const K = run('kjEps()');
+  check('storie: 3 storie da scegliere, il giallo con le puntate di tutto il livello 1 (una per lezione, 13b e 13c comprese), solo nel corso di italiano', run('STORIES.length') === 3 && run('kjStory().id') === 'giallo' &&
+    K.length === 27 && K.map(E => E.lesson).join() === run('LESSONS').filter(l => l.level === 1 && !l.test).map(l => l.id).join() && run('KJ_ON') === true && run('kjIndexOf("l3")') === 2);
+  check('storie: ogni scena si disegna, ogni puntata finisce con «Continua…»', K.every(E => E.scenes.every(sc => typeof sc[0]() === 'string' && sc[0]().indexOf('undefined') === -1 && sc[0]().indexOf('NaN') === -1) && E.scenes[E.scenes.length - 1][1].indexOf('Continua') === 0));
+  check('storie: la risposta modello è giusta, quella sbagliata no', K.every(E => E.questions.every(Q => run('kjCheck')(Q, Q.model) && E.scenes[Q.show])) &&
+    !run('kjCheck')(K[0].questions[0], 'È un tavolo.') && !run('kjCheck')(K[4].questions[0], 'Il cappotto è bianco.'));
+  check('storie: si sblocca con la lezione fatta', run('DB.lessons = { l1: 80 }; [kjOpen(0), kjOpen(1)]').join() === 'true,false');
+  check('storie: una storia «in arrivo» non si può scegliere', run('DB.settings.story = "commedia"; kjStory().id') === 'giallo');
+}
+
+// I numeri e il microfono di Google (Massi: «mi chiede che numero è 8 e non sente i numeri»)
+{
+  const L7 = run('LESSONS').find(l => l.id === 'l7'), k8 = buildSteps(L7).find(s => s.type === 'key' && s.show === 'n8');
+  check('numeri: «8», «otto», «è 8», «8 è l\'8», «è l\'8», «è il numero 8», «è lotto», «è l8» = giusto', ['8', 'otto', 'è 8', "8 è l'8", "È l'8.", 'è il numero 8', 'è lotto', 'è il lotto', 'è l8'].every(t => evaluate(k8, t).ok));
+  check('numeri: «è il sette», «7», «non è l\'otto» restano sbagliati', !evaluate(k8, 'è il sette').ok && !evaluate(k8, '7').ok && !evaluate(k8, "non è l'otto").ok);
 }
 
 console.log(count - fails + ' / ' + count + ' test passati');

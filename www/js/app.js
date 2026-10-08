@@ -9,7 +9,7 @@ const $ = (id) => document.getElementById(id);
 const IS_CORDOVA = !!window.cordova;
 let currentScreen = 'home';
 function showScreen(name, replace) {
-  ['lang', 'home', 'lesson', 'end', 'report', 'favs'].forEach(n => $('screen-' + n).classList.toggle('hidden', n !== name));
+  ['lang', 'home', 'lesson', 'end', 'report', 'favs', 'search', 'guide', 'story', 'storylist'].forEach(n => $('screen-' + n) && $('screen-' + n).classList.toggle('hidden', n !== name));
   const wasHome = currentScreen === 'home';
   currentScreen = name;
   document.documentElement.classList.toggle('fisso', name === 'lesson');   // la lezione non scorre mai
@@ -100,6 +100,25 @@ function renderHome() {
 
   renderReg();
 
+  // in cima al menu: le storie e la ricerca (si vedono subito, Massi)
+  const hq = $('home-quick');
+  hq.innerHTML = '';
+  // le storie a puntate (storie.js): sopra tutto, sono il motivo per tornare
+  if (typeof showStoryList === 'function' && KJ_ON) {
+    const kb = document.createElement('button'), S = kjStory(), n = S.episodes.filter((E, i) => kjOpen(i)).length;
+    kb.className = 'lesson-btn kj-btn';
+    kb.innerHTML = '<span>📖 ' + tx('stories') + '<small class="hint">' + S.icon + ' ' + S.title + '</small></span><span class="score">' + n + ' / ' + S.episodes.length + '</span>';
+    kb.onclick = () => showStoryList();
+    hq.appendChild(kb);
+  }
+  // la ricerca (cerca.js): una parola, un verbo, un articolo, scritta o a voce → la lezione, dal punto giusto
+  if (typeof showSearch === 'function') {
+    const sb = document.createElement('button');
+    sb.className = 'lesson-btn search-btn';
+    sb.innerHTML = '<span class="search-ico">' + LENS + '</span><span>' + tx('searchBtn') + '</span>';
+    sb.onclick = () => showSearch();
+    hq.appendChild(sb);
+  }
   const ll = $('lesson-list');
   ll.innerHTML = '';
   const db = document.createElement('button');
@@ -133,7 +152,7 @@ function renderHome() {
     const next = LESSONS.find(l => !l.test && DB.lessons[l.id] == null) || LESSONS[LESSONS.length - 1];
     const theme = (lv) => { const t = LEVEL_THEMES[lv] || {}; return t[UI_LANG] || t.en || ''; };
     const chName = (i) => { const t = CHAPTERS[i][1]; return t[UI_LANG] || t.en; };
-    [1, 2, 3, 4].forEach(lv => {
+    [1, 2, 3, 4, 5].forEach(lv => {
       const ls = LESSONS.filter(l => (l.level || 1) === lv);
       if (!ls.length) return;
       const done = ls.filter(l => !l.test && DB.lessons[l.id] != null).length, total = ls.filter(l => !l.test).length;
@@ -143,8 +162,14 @@ function renderHome() {
       // se l'allievo apre o chiude un livello, l'app se lo ricorda (DB.settings.lvOpen)
       const started = Object.keys(DB.lessons).length > 0, mem = (DB.settings.lvOpen || {})[lv];
       lvBox.open = mem != null ? mem : started && (next.level || 1) === lv;
-      lvBox.innerHTML = '<summary class="level-head lv' + lv + '"><span class="lv-name">' + tx('level', { n: lv }) + '</span><span class="lv-theme">' + theme(lv) + '</span>' +
-        '<span class="lv-done">' + done + ' / ' + total + '</span></summary>';
+      // la testata del livello: il numero nel cerchio colorato, il tema, i disegni del livello, la barra di avanzamento (Massi: «troppo cupo, troppo uguale»)
+      // cinque disegni diversi, presi lungo il livello (uno per gruppo di lezioni)
+      const used = [], lsn = ls.filter(l => !l.test), step = Math.max(1, Math.floor(lsn.length / 5));
+      for (let i = 0; i < lsn.length && used.length < 5; i += step) { const w = (lsn[i].known || []).concat(lsn[i].fresh ? [lsn[i].fresh] : []).find(k => FIG[k] && used.indexOf(k) === -1 && !/^n\d/.test(k)); if (w) used.push(w); }
+      const pics = used.map(w => '<span class="lv-pic">' + FIG[w] + '</span>').join('');
+      lvBox.innerHTML = '<summary class="level-head lv' + lv + '"><span class="lv-badge">' + lv + '</span><span class="lv-text"><span class="lv-name">' + tx('level', { n: lv }) + '</span>' +
+        '<span class="lv-theme">' + theme(lv) + '</span></span><span class="lv-done">' + done + ' / ' + total + '</span>' +
+        '<span class="lv-pics">' + pics + '</span><span class="lv-bar"><i style="width:' + Math.round(done / total * 100) + '%"></i></span></summary>';
       lvBox.querySelector('summary').addEventListener('click', () => { DB.settings.lvOpen = DB.settings.lvOpen || {}; DB.settings.lvOpen[lv] = !lvBox.open; saveDB(); });   // solo il tocco dell'allievo
       const chs = [...new Set(ls.filter(l => !l.test).map(l => l.chapter))];
       chs.forEach(ci => {
@@ -152,9 +177,16 @@ function renderHome() {
         const ch = document.createElement('details');
         ch.className = 'chap';
         ch.open = Object.keys(DB.lessons).length > 0 && next.chapter === ci && !next.test;
-        ch.innerHTML = '<summary><span class="ch-name">' + chName(ci) + '</span><span class="ch-range">' + lessonNum(cl[0]) + '–' + lessonNum(cl[cl.length - 1]) + '</span>' +
-          '<span class="ch-done' + (cdone === cl.length ? ' all' : '') + '">' + cdone + ' / ' + cl.length + '</span></summary>';
-        cl.forEach(l => ch.appendChild(lessonBtn(l)));
+        // il capitolo: i disegni delle sue prime parole, il nome, la barra di avanzamento
+        const thumbs = cl.slice(0, 2).reduce((a, l) => a.concat((l.known || []).slice(0, 2)), []).filter(w => FIG[w]).slice(0, 3).map(w => '<span class="ch-pic">' + FIG[w] + '</span>').join('');
+        ch.innerHTML = '<summary><span class="ch-pics">' + thumbs + '</span><span class="ch-text"><span class="ch-name">' + chName(ci) + '</span>' +
+          '<span class="ch-range">' + tx('lessonsRange', { a: lessonNumber(cl[0]), b: lessonNumber(cl[cl.length - 1]) }) + '</span></span>' +
+          '<span class="ch-done' + (cdone === cl.length ? ' all' : '') + '">' + (cdone === cl.length ? '✓' : cdone + ' / ' + cl.length) + '</span>' +
+          '<span class="ch-bar"><i style="width:' + Math.round(cdone / cl.length * 100) + '%"></i></span></summary>';
+        // le righe delle lezioni (con i disegni) si fanno solo quando il capitolo si apre: il menu resta leggero
+        // sui telefoni economici (prima: 25.000 elementi e 646 disegni tutti insieme)
+        const fill = () => { if (ch.dataset.filled) return; ch.dataset.filled = 1; cl.forEach(l => ch.appendChild(lessonBtn(l))); };
+        if (ch.open) fill(); else ch.addEventListener('toggle', () => { if (ch.open) fill(); });
         lvBox.appendChild(ch);
       });
       ls.filter(l => l.test).forEach(t => lvBox.appendChild(lessonBtn(t)));
@@ -164,6 +196,7 @@ function renderHome() {
 
   $('opt-text').checked = !!DB.settings.showText;
   showSpeed();
+  if (typeof remindShow === 'function') { remindShow(); unlockShow(); }
   applyStaticText();
   applyUiWords();
 }
@@ -215,6 +248,7 @@ function showLangChoice() {
 // Scritte fisse della pagina (data-t = chiave della traduzione)
 function applyStaticText() {
   document.querySelectorAll('[data-t]').forEach(el => { el.textContent = tx(el.dataset.t, el.dataset.n ? { n: el.dataset.n } : undefined); });
+  document.querySelectorAll('[data-tp]').forEach(el => { el.placeholder = tx(el.dataset.tp); });
 }
 
 function avatarHtml(t, size) {
@@ -239,6 +273,16 @@ $('opt-text').onchange = (e) => { DB.settings.showText = e.target.checked; saveD
 function showSpeed() {
   const cur = SPEEDS[DB.settings.speed] ? DB.settings.speed : 'normal';
   document.querySelectorAll('#opt-speed button').forEach(b => b.classList.toggle('on', b.dataset.speed === cur));
+  setSum();
+}
+// sulla riga «Impostazioni» (chiusa) si vede com'è adesso: la velocità e i colori
+function setSum() {
+  const el = $('set-sum');
+  if (!el) return;
+  try {
+    const sp = SPEEDS[DB.settings.speed] ? DB.settings.speed : 'normal', th = DB.settings.theme || 'auto';
+    el.textContent = tx('speed' + sp[0].toUpperCase() + sp.slice(1)) + ' · ' + tx({ notte: 'themeNight', giorno: 'themeDay', auto: 'themeAuto' }[th]);
+  } catch (e) {}
 }
 // Toccando una velocità, l'insegnante scelto si presenta («Ciao, sono Pietro.» … «Parliamo italiano insieme.»), con la pausa in mezzo
 let speedDemo = null;
@@ -305,7 +349,7 @@ function startLesson(id, obj) {
   L = {
     run: RUN, lesson: lesson, items: items, teacher: teacher,
     steps: obj ? obj.steps : buildSteps(lesson), streak: 0,
-    i: 0, attempts: 0, noSpeech: 0, first: 0, busy: false, paused: false,
+    i: obj && obj.at ? obj.at : 0, attempts: 0, noSpeech: 0, first: 0, busy: false, paused: false,   // obj.at: dalla ricerca si parte da quel passo
     drill: null, di: 0, repFails: 0, errCount: 0,
     coach: true, coached: false,
     start: Date.now(), listenStart: 0,
@@ -340,10 +384,12 @@ function startLesson(id, obj) {
 function setLevel(n) { if (n > 1) document.documentElement.dataset.level = n; else delete document.documentElement.dataset.level; }
 
 function stopLesson() {
+  if (DB.settings.resumeLesson) { delete DB.settings.resumeLesson; saveDB(); }   // uscita vera dalla lezione: niente da riprendere
   stopDemo();
   setLevel(1);
   RUN++;
   quiet();
+  stopStageAnim(); shownObj = undefined;
   Awake.allow();
   if (L) {
     const ts = DB.teachers[L.teacher.key];
@@ -352,7 +398,7 @@ function stopLesson() {
   }
   L = null;
   if (typeof favUpdateStar === 'function') favUpdateStar();
-  $('screen-lesson').classList.remove('tunnel');
+  $('screen-lesson').classList.remove('tunnel', 'role-you');
   hideMark();
   hideYourTurn();
   $('stage-places').innerHTML = '';
@@ -451,10 +497,14 @@ function setStageTeacher(key) { stageTeacher = key; stagePose = ''; }
 // Chiamata dalla voce (voice.js): mentre l'insegnante parla, le labbra si muovono
 function onTeacherTalk(on) { const st = $('stage'); if (st) st.classList.toggle('talking', !!on); }
 
-let shownObj;
+let shownObj, stageAnim = null;
+function stopStageAnim() { if (stageAnim) { stageAnim(); stageAnim = null; } }
 function showIndicated(obj, right) {
   if (obj !== shownObj) {
+    stopStageAnim();
     $('stage-figure').innerHTML = obj && FIG[obj] ? FIG[obj] : UNKNOWN;
+    // i verbi di movimento: sul palco il cartone animato (azioni_fig.js, movimento_it.js)
+    if (obj && typeof AZ_ANIM !== 'undefined' && AZ_ANIM[obj]) stageAnim = playAction($('stage-figure'), AZ_ANIM[obj][0], AZ_ANIM[obj][1], true);
     restartAnim($('stage-figure'), 'pop');
     shownObj = obj;
     setPose('show');
@@ -485,7 +535,13 @@ function setStatus(text, mode) {
   // Il tasto Talk lampeggia quando deve parlare lo studente (microfono acceso o «tocca Talk»)
   $('btn-talk').classList.toggle('flash', mode === 'rec' || text.indexOf(uiWord('talk')) !== -1);
 }
-function setPrompt(text) { $('prompt-text').textContent = DB.settings.showText ? shown(text) : ''; synWrap(); squeezePrompt(); }
+let promptShown = '';
+function setPrompt(text) {
+  const el = $('prompt-text'), t = DB.settings.showText ? shown(text) : '';
+  el.textContent = t; synWrap(); squeezePrompt();
+  if (t && t !== promptShown) restartAnim(el, 'in');   // la frase nuova entra con una dissolvenza (stile2026.css)
+  promptShown = t;
+}
 /* ---------- Parole che vanno bene tutte e due (COURSE.synonyms, es. neanche / nemmeno) ----------
    Nella frase scritta la parola, in oro, si alterna con l'altra ogni 2 secondi: si vede che sono uguali. */
 function synWrap() { synWrap0(); addTranslit(); }
@@ -595,8 +651,33 @@ function runStep() {
   L.attempts = 0;
   L.noSpeech = 0;
   drawStep();
+  roleSwitch(cur());
   if (typeof favUpdateStar === 'function') favUpdateStar();
   askStep();
+}
+// I ruoli invertiti (Massi): quando è l'allievo a fare la domanda la scena cambia colore, si sente un suono pulito
+// e compare «Adesso chiedi tu»; quando torna a chiedere l'insegnante, tutto torna come prima
+function roleSwitch(st) {
+  try {
+    const scr = $('screen-lesson'), you = !!(st && st.type === 'ask' && L && !L.test), was = scr.classList.contains('role-you');
+    scr.classList.toggle('role-you', you);
+    if (you && !was) { $('role-badge').textContent = tx('roleYou'); roleChime(); }
+  } catch (e) {}
+}
+let roleCtx = null;
+function roleChime() {
+  try {
+    const C = window.AudioContext || window.webkitAudioContext;
+    if (!C) return;
+    const a = roleCtx || (roleCtx = new C());
+    if (a.state === 'suspended') a.resume();
+    [[660, 0], [990, .13]].forEach(([f, d]) => {   // due note brevi, piano: «din-din»
+      const o = a.createOscillator(), g = a.createGain(), t = a.currentTime + d;
+      o.type = 'sine'; o.frequency.value = f;
+      g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(.16, t + .015); g.gain.exponentialRampToValueAtTime(.0001, t + .38);
+      o.connect(g); g.connect(a.destination); o.start(t); o.stop(t + .42);
+    });
+  } catch (e) {}
 }
 
 function askStep() {
@@ -1085,6 +1166,7 @@ function finishLesson() {
   const id = L.lesson.id;
   const t = L.teacher;
   if (DB.lessons[id] == null || pct > DB.lessons[id]) DB.lessons[id] = pct;
+  if (typeof remindStudied === 'function') remindStudied();   // oggi ha studiato: il promemoria di oggi non arriva (promemoria.js)
   // dopo un test: la lezione da ripassare rifatta bene (80% o più) esce dalla lista del ripasso
   const tests = DB.settings.tests || {};
   Object.keys(tests).forEach(k => { if (pct >= 80) tests[k].review = (tests[k].review || []).filter(x => x !== id); });
@@ -1107,6 +1189,12 @@ function finishLesson() {
     (pct < 70 && toReview.length ? '<div class="t-notice"><h3 class="t-head">' + tx('testReview') + '</h3><div class="t-review">' +
       toReview.map(rid => '<button class="lesson-btn t-go" data-id="' + rid + '">' + tx('lesson', { n: lessonNumber(LESSONS.find(x => x.id === rid)) }) + '</button>').join('') + '</div></div>' : '');
   $('end-body').querySelectorAll('.t-go').forEach(b => { b.onclick = () => startLesson(b.dataset.id); });
+  // la puntata della storia scelta che questa lezione ha appena sbloccato (storie.js)
+  const ki = typeof kjIndexOf === 'function' ? kjIndexOf(id) : -1;
+  if (ki >= 0) {
+    $('end-body').insertAdjacentHTML('afterbegin', '<button class="kj-watch">📖 ' + tx('storyWatch', { n: ki + 1 }) + '<span class="hint">' + kjStory().title + ' · ' + kjEps()[ki].title + '</span></button>');
+    $('end-body').querySelector('.kj-watch').onclick = once(() => startEpisode(ki));
+  }
   showScreen('end', true);
 }
 
@@ -1145,7 +1233,25 @@ $('btn-end-home').onclick = () => goHome();
 /* ---------- App in background e ritorno ---------- */
 
 let demoToResume;   // undefined = nessuna demo da riprendere
+// La lezione in corso si ricorda (Massi: «quando passo da un'app all'altra torna alla schermata principale»):
+// i telefoni con poca memoria chiudono l'app in sottofondo; al ritorno si riparte dalla stessa lezione, dallo stesso punto.
+function saveLessonState() {
+  if (!L || L.test || L.lesson.fav || !L.lesson.id) return;
+  DB.settings.resumeLesson = { id: L.lesson.id, i: L.answered ? L.i + 1 : L.i, steps: L.steps, first: L.first, errCount: L.errCount, t: Date.now() };
+  saveDB();
+}
+function resumeSavedLesson() {
+  const R = DB.settings.resumeLesson;
+  if (!R) return false;
+  delete DB.settings.resumeLesson;
+  const lesson = LESSONS.find(l => l.id === R.id);
+  if (!lesson || Date.now() - R.t > 3 * 3600e3 || !Array.isArray(R.steps) || R.i >= R.steps.length) { saveDB(); return false; }
+  startLesson(lesson.id, { lesson: lesson, items: lessonItems(lesson), steps: R.steps, at: R.i });
+  if (L) { L.first = R.first || 0; L.errCount = R.errCount || 0; }
+  return true;
+}
 function onPause() {
+  saveLessonState();
   quiet();
   Awake.allow();
   if (demoActive) {
@@ -1227,6 +1333,24 @@ $('btn-reset').onclick = () => {
   renderReport();
 };
 
+/* ---------- Il tema: Notte (blu notte e oro), Giorno (crema), Automatico (giorno dalle 7 alle 19) ---------- */
+function themeNow() {
+  const t = DB.settings.theme || 'auto';   // all'inizio automatico (Massi): chiaro di giorno, scuro la sera
+  if (t === 'auto') { const h = new Date().getHours(); return h >= 7 && h < 19 ? 'giorno' : 'notte'; }
+  return t;
+}
+function applyTheme() {
+  const day = themeNow() === 'giorno';
+  document.documentElement.classList.toggle('giorno', day);
+  const m = document.querySelector('meta[name="theme-color"]');
+  if (m) m.setAttribute('content', day ? '#f6f1e7' : '#0f172a');
+  document.querySelectorAll('#opt-theme button').forEach(b => b.classList.toggle('on', b.dataset.theme === (DB.settings.theme || 'auto')));
+  setSum();
+}
+document.querySelectorAll('#opt-theme button').forEach(b => { b.onclick = () => { DB.settings.theme = b.dataset.theme; saveDB(); applyTheme(); }; });
+document.addEventListener('resume', applyTheme, false);   // in automatico: tornando all'app, il colore giusto per l'ora
+applyTheme();
+
 /* ---------- Avvio ---------- */
 
 document.body.insertAdjacentHTML('afterbegin', SVG_DEFS);
@@ -1236,8 +1360,17 @@ if (COURSE.brand) document.querySelectorAll('.brand-name').forEach(h => { h.text
 // Una sola lingua dello studente (es. CIAO English: italiano): niente domanda
 if (!DB.settings.uiLang && (COURSE.students || []).length === 1) { DB.settings.uiLang = COURSE.students[0]; saveDB(); }
 if (DB.settings.uiLang && (COURSE.students || []).indexOf(DB.settings.uiLang) !== -1) setUiLang(DB.settings.uiLang);
-renderHome();
-if (!DB.settings.uiLang || (COURSE.students || []).indexOf(DB.settings.uiLang) === -1) showLangChoice();
+// il menu si disegna una volta sola, quando tutte le parti dell'app sono caricate (la ricerca, il promemoria, le storie)
+let appStarted = false;
+function appStart() {
+  if (appStarted) return;
+  appStarted = true;
+  renderHome();
+  if (!DB.settings.uiLang || (COURSE.students || []).indexOf(DB.settings.uiLang) === -1) { showLangChoice(); return; }
+  // l'app era stata chiusa dal telefono durante una lezione: si riprende da lì
+  resumeSavedLesson();
+}
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', appStart); else setTimeout(appStart, 0);
 ttsWarmUp();
 document.addEventListener('deviceready', () => {
   document.addEventListener('backbutton', (e) => { if (e && e.preventDefault) e.preventDefault(); onBack(); }, false);

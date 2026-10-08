@@ -18,7 +18,7 @@ const splash = c => `<svg xmlns="http://www.w3.org/2000/svg" width="${S}" height
   `<svg x="86" y="70" width="250" height="250" viewBox="0 0 200 200">${emblem}</svg>` +
   `<clipPath id="c"><circle cx="50" cy="50" r="50"/></clipPath>` +
   `<g transform="translate(246 220) scale(0.8)"><circle cx="50" cy="50" r="56" fill="#0e131d"/><circle cx="50" cy="50" r="53" fill="#c9a45c"/><g clip-path="url(#c)">${FLAG[c]}</g></g></svg>`;
-module.exports = { splash, S };
+module.exports = { splash, S, FLAG };
 if (require.main === module) (async () => {
   const b = await chromium.launch();
   const p = await b.newPage({ viewport: { width: S, height: S } });

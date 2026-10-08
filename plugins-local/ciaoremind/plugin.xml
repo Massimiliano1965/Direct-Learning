@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  id="cordova-plugin-ciaoremind"
+  version="1.0.0">
+
+  <name>CiaoRemind</name>
+  <description>Promemoria allo sblocco: quando si sblocca il telefono appare l'insegnante (Studio adesso / Più tardi / Basta per oggi). Ripreso dal blocco di StudyGame, ma non blocca niente: un solo permesso («Mostra sopra le altre app»).</description>
+  <license>MIT</license>
+
+  <js-module src="www/ciaoremind.js" name="CiaoRemind">
+    <clobbers target="CiaoRemind" />
+  </js-module>
+
+  <platform name="android">
+    <config-file target="res/xml/config.xml" parent="/*">
+      <feature name="CiaoRemind">
+        <param name="android-package" value="it.metododiretto.ciaoremind.CiaoRemind" />
+        <param name="onload" value="true" />
+      </feature>
+    </config-file>
+
+    <config-file target="AndroidManifest.xml" parent="/manifest">
+      <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+      <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+      <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
+      <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+      <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    </config-file>
+
+    <config-file target="AndroidManifest.xml" parent="/manifest/application">
+      <service android:name="it.metododiretto.ciaoremind.RemindService" android:exported="false" android:foregroundServiceType="specialUse">
+        <property android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE" android:value="study_reminder_on_unlock" />
+      </service>
+      <receiver android:name="it.metododiretto.ciaoremind.BootReceiver" android:exported="true">
+        <intent-filter>
+          <action android:name="android.intent.action.BOOT_COMPLETED" />
+          <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+        </intent-filter>
+      </receiver>
+    </config-file>
+
+    <source-file src="src/android/CiaoRemind.java" target-dir="src/it/metododiretto/ciaoremind" />
+    <source-file src="src/android/RemindService.java" target-dir="src/it/metododiretto/ciaoremind" />
+    <source-file src="src/android/BootReceiver.java" target-dir="src/it/metododiretto/ciaoremind" />
+  </platform>
+</plugin>

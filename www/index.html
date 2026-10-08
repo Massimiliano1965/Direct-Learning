@@ -4,37 +4,53 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: blob: gap: 'unsafe-inline' 'unsafe-eval'; img-src 'self' data: blob:; media-src 'self' data: blob:; connect-src 'self'">
-<meta name="theme-color" content="#0e131d">
+<meta name="theme-color" content="#0f172a">
 <title>CIAO</title>
 <link rel="stylesheet" href="css/app.css">
+<link rel="stylesheet" href="css/stile2026.css">
+<link rel="stylesheet" href="css/giorno.css">
 <script src="cordova.js"></script>
 </head>
 <body>
 
 <!-- ============ CHE LINGUA PARLI? (prima volta) ============ -->
 <section id="screen-lang" class="screen hidden">
-  <div class="brand"><div class="logo" id="logo2"></div><div><h1 class="brand-name">CIAO</h1><div class="tagline">Communicator for Immersive Audio-Oral learning</div></div></div>
+  <div class="brand"><div class="logo" id="logo2"></div><div><h1 class="brand-name">CIAO</h1><div class="tagline" data-t="tagline">Learn the language, solve the mystery.</div></div></div>
   <div id="lang-list"></div>
 </section>
 
 <!-- ============ MENU ============ -->
 <section id="screen-home" class="screen">
-  <div class="brand"><div class="logo" id="logo"></div><div><h1 class="brand-name">CIAO</h1><div class="tagline">Communicator for Immersive Audio-Oral learning</div></div></div>
+  <div class="brand"><div class="logo" id="logo"></div><div><h1 class="brand-name">CIAO</h1><div class="tagline" data-t="tagline">Learn the language, solve the mystery.</div></div></div>
+  <!-- in cima: le storie e la ricerca (storie.js, cerca.js) -->
+  <div id="home-quick"></div>
   <div class="card" id="trial-card"></div>
 
   <div class="label" data-t="labelTeacher">Teacher</div>
   <div id="teacher-list"></div>
-
+  <!-- le impostazioni subito sotto gli insegnanti (Massi): si aprono e si chiudono toccando «Impostazioni» -->
+  <details id="settings" class="settings">
+  <summary><span class="set-ico">⚙</span><span class="set-name" data-t="settings">Settings</span><span class="set-sum" id="set-sum"></span></summary>
+  <div class="set-body">
+  <div class="speed-row"><span class="speed-label" data-t="optSpeed">Speed</span>
+  <div class="seg seg-small" id="opt-speed"><button data-speed="slow" data-t="speedSlow">Slow</button><button data-speed="normal" data-t="speedNormal">Normal</button><button data-speed="fast" data-t="speedFast">Fast</button></div></div>
   <div id="lang-box"></div>
   <div id="reg-box"></div>
+  <label class="switch"><input type="checkbox" id="opt-text"> <span data-t="optText">Show the sentences in writing</span></label>
+  <div class="speed-label set-label" data-t="themeLabel">Colours</div>
+  <div class="seg" id="opt-theme"><button data-theme="notte" data-t="themeNight">Night</button><button data-theme="giorno" data-t="themeDay">Day</button><button data-theme="auto" data-t="themeAuto">Automatic</button></div>
+  <div class="speed-label set-label" data-t="remindLabel">Reminder to study</div>
+  <div class="seg" id="opt-remind"></div>
+  <div class="muted remind-note" id="remind-note"></div>
+  <label class="switch unlock-switch" id="opt-unlock"><input type="checkbox" id="opt-unlock-check"> <span data-t="unlockSwitch">Reminder when I unlock the phone (Android)</span></label>
+  <div class="muted remind-note" id="unlock-note"></div>
+  <button id="unlock-test" class="secondary hidden" data-t="unlockTest">Try it now</button>
+  </div>
+  </details>
+
 
   <div class="label" data-t="labelLessons">Lessons</div>
   <div id="lesson-list"></div>
-
-  <div class="label" data-t="labelOptions">Options</div>
-  <label class="switch"><input type="checkbox" id="opt-text"> <span data-t="optText">Show the sentences in writing</span></label>
-  <div class="speed-label" data-t="optSpeed">Speed</div>
-  <div class="seg" id="opt-speed"><button data-speed="slow" data-t="speedSlow">Slow</button><button data-speed="normal" data-t="speedNormal">Normal</button><button data-speed="fast" data-t="speedFast">Fast</button></div>
 
   <div style="height:18px"></div>
   <button id="btn-report" class="secondary" data-t="btnReport">Trial results</button>
@@ -45,6 +61,7 @@
   <div id="demo-caption" class="hidden"></div>
   <div class="topbar"><span><span id="l-title"></span><span id="l-level" class="level-tag"></span></span><span><button id="btn-fav" class="fav-star hidden" aria-label="★">☆</button><span id="l-count"></span></span></div>
   <div id="progress"><div id="progress-fill"></div></div>
+  <div id="role-badge"></div>
   <div id="l-teacher"></div>
   <div id="stage">
     <div id="stage-hand"></div><div id="stage-figure"></div>
@@ -83,6 +100,48 @@
   <button id="btn-favs-home" class="secondary" data-t="menu">Menu</button>
 </section>
 
+<!-- ============ LA RICERCA (cerca.js) ============ -->
+<section id="screen-search" class="screen hidden">
+  <h2 data-t="search">Search</h2>
+  <div class="search-bar"><span id="search-lens" class="search-lens"></span><input id="search-q" type="search" autocomplete="off" autocapitalize="none" spellcheck="false" data-tp="searchPh"><button id="search-mic" class="search-mic" aria-label="mic"></button></div>
+  <div id="search-out"></div>
+  <div style="height:18px"></div>
+  <button id="btn-search-home" class="secondary" data-t="menu">Menu</button>
+</section>
+
+<!-- ============ LE STORIE: LA PUNTATA (storie.js) ============ -->
+<section id="screen-story" class="screen hidden">
+  <div class="topbar"><span><span id="kj-title" class="kj-title"></span></span><span id="kj-ep" class="kj-ep"></span></div>
+  <div id="kj-stage"></div>
+  <div id="kj-text"></div>
+  <div id="kj-heard"></div>
+  <div id="kj-status"></div>
+  <div class="row"><button id="kj-replay" class="secondary" data-t="repeat">Repeat</button><button id="kj-next" data-t="storyNext">Next</button><button id="kj-mic" class="hidden" data-t="talk">Talk</button></div>
+  <button id="kj-go" class="hidden" data-t="storyGo">Next lesson</button>
+  <button id="kj-exit" class="ghost" data-t="menu">Menu</button>
+</section>
+
+<!-- ============ LE STORIE: LA SCELTA E LE PUNTATE ============ -->
+<section id="screen-storylist" class="screen hidden">
+  <h2 data-t="stories">Stories</h2>
+  <p class="muted kj-motto" data-t="tagline">Learn the language, solve the mystery.</p>
+  <div id="kj-choose"></div>
+  <div class="label" data-t="storyEpisodes">Episodes</div>
+  <div id="kj-list"></div>
+  <div style="height:18px"></div>
+  <button id="btn-story-home" class="secondary" data-t="menu">Menu</button>
+</section>
+
+<!-- ============ LA GUIDA AL PERMESSO «Mostra sopra le altre app» (promemoria.js) ============ -->
+<section id="screen-guide" class="screen hidden">
+  <h2 data-t="guideTitle">One permission</h2>
+  <div class="card" id="guide-body"></div>
+  <div style="height:16px"></div>
+  <button id="guide-open" data-t="guideOpen">Open the settings</button>
+  <button id="guide-info" class="secondary" data-t="guideInfo">Android won't let me</button>
+  <button id="guide-back" class="ghost" data-t="guideBack">Not now</button>
+</section>
+
 <!-- ============ RISULTATI ============ -->
 <section id="screen-report" class="screen hidden">
   <h2 data-t="reportTitle">Trial results</h2>
@@ -100,15 +159,19 @@
 (function () {
   // russo, arabo, cinese: le lezioni 1 e 2 con il motore comune (world.js)
   var W = { ru: 1, ar: 1, zh: 1 };
-  var f = W[BUILD_COURSE] ? ['teachers_world', 'course_' + BUILD_COURSE, 'data', 'logic', 'world', 'ui_lang'] : BUILD_COURSE === 'en' ? ['course_en', 'data', 'logic', 'grammar_en', 'ui_lang'] : ['course', 'data', 'logic', 'colors_it', 'numbers_it', 'geo_fig', 'geo_it', 'poss_it', 'size_it', 'third_it', 'nat_it', 'essere_it', 'altro_it', 'prep_it', 'anche_it', 'ora_it', 'appt_it', 'gender_it', 'verbs_it', 'perche_it', 'pron_it', 'sum_it', 'km_it', 'fam_it', 'avere_it', 'gen_it', 'plur_it', 'cece_it', 'costa_it', 'det_it', 'irr_it', 'test_it', 'contr_it', 'stare_it', 'celha_it', 'imper_it', 'qual_it', 'ne_it', 'passato_it', 'lho_it', 'ci_it', 'saluti_it', 'lui_it', 'giorni_it', 'mesi_it', 'suoi_it', 'loro_it', 'noi_it', 'dare_it', 'qualc_it', 'bigl_it', 'lile_it', 'chiama_it', 'tempi_it', 'liha_it', 'contr2_it', 'colaz_it', 'quale_it', 'fiori_it', 'nehai_it', 'rifl_it', 'gia_it', 'volere_it', 'potere_it', 'ancora_it', 'telef_it', 'dove_it', 'mici_it', 'essere2_it', 'visto_it', 'forme_it', 'lingua_it', 'parlacon_it', 'fatto_it', 'civuole_it', 'piace_it', 'stagioni_it', 'tempofa_it', 'sipuo_it', 'scelta_it', 'calendario_it', 'congiuntivo_it', 'turista_it', 'ripasso_it', 'ui_lang'];
+  var f = W[BUILD_COURSE] ? ['teachers_world', 'course_' + BUILD_COURSE, 'data', 'logic', 'world', 'ui_lang'] : BUILD_COURSE === 'en' ? ['course_en', 'data', 'logic', 'grammar_en', 'ui_lang'] : ['course', 'data', 'logic', 'colors_it', 'numbers_it', 'geo_fig', 'geo_it', 'poss_it', 'size_it', 'third_it', 'nat_it', 'essere_it', 'altro_it', 'prep_it', 'anche_it', 'ora_it', 'appt_it', 'gender_it', 'verbs_it', 'perche_it', 'pron_it', 'sum_it', 'km_it', 'fam_it', 'avere_it', 'gen_it', 'plur_it', 'cece_it', 'costa_it', 'det_it', 'irr_it', 'test_it', 'contr_it', 'stare_it', 'celha_it', 'imper_it', 'qual_it', 'ne_it', 'passato_it', 'lho_it', 'ci_it', 'saluti_it', 'lui_it', 'giorni_it', 'mesi_it', 'suoi_it', 'loro_it', 'noi_it', 'dare_it', 'qualc_it', 'bigl_it', 'lile_it', 'chiama_it', 'tempi_it', 'liha_it', 'contr2_it', 'colaz_it', 'quale_it', 'fiori_it', 'nehai_it', 'rifl_it', 'gia_it', 'volere_it', 'potere_it', 'ancora_it', 'telef_it', 'dove_it', 'mici_it', 'essere2_it', 'visto_it', 'forme_it', 'lingua_it', 'parlacon_it', 'fatto_it', 'civuole_it', 'piace_it', 'stagioni_it', 'tempofa_it', 'sipuo_it', 'scelta_it', 'calendario_it', 'congiuntivo_it', 'turista_it', 'movimento_it', 'persone_it', 'ripasso_it', 'ui_lang'];
   for (var i = 0; i < f.length; i++) document.write('<script src="js/' + f[i] + '.js"><\/script>');
 })();
 </script>
 <script src="js/teacher.js"></script>
+<script src="js/azioni_fig.js"></script>
 <script src="js/voice.js"></script>
 <script src="js/storage.js"></script>
 <script src="js/demo.js"></script>
 <script src="js/app.js"></script>
 <script src="js/favs.js"></script>
+<script src="js/cerca.js"></script>
+<script src="js/promemoria.js"></script>
+<script src="js/storie.js"></script>
 </body>
 </html>

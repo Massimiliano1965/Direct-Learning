@@ -91,7 +91,8 @@ function testReviewLessons(results) {
   return LESSONS.filter(l => ids.indexOf(l.id) !== -1).map(l => l.id);
 }
 // Numero della lezione nel menu (i test non contano)
-const lessonNumber = (l) => LESSONS.filter(x => !x.test).indexOf(l) + 1;
+// il numero della lezione dal suo nome: l39 → 39, l13b → «13b» (le lezioni aggiunte non spostano le altre)
+const lessonNumber = (l) => { const m = String(l.id).slice(1); return /^\d+$/.test(m) ? +m : m; };
 
 (function () {
   const bBuild = buildSteps, bWords = lessonWords;

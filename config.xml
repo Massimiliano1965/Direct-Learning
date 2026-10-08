@@ -12,11 +12,11 @@
     <preference name="AndroidWindowSplashScreenAnimatedIcon" value="res/splash-it.png" />
     <preference name="AndroidWindowSplashScreenIconBackgroundColor" value="#0e131d" />
     <preference name="FadeSplashScreenDuration" value="300" />
-    <icon density="mdpi" src="res/android/icon-mdpi.png" foreground="res/android/fg-mdpi.png" background="res/android/bg-mdpi.png" />
-    <icon density="hdpi" src="res/android/icon-hdpi.png" foreground="res/android/fg-hdpi.png" background="res/android/bg-hdpi.png" />
-    <icon density="xhdpi" src="res/android/icon-xhdpi.png" foreground="res/android/fg-xhdpi.png" background="res/android/bg-xhdpi.png" />
-    <icon density="xxhdpi" src="res/android/icon-xxhdpi.png" foreground="res/android/fg-xxhdpi.png" background="res/android/bg-xxhdpi.png" />
-    <icon density="xxxhdpi" src="res/android/icon-xxxhdpi.png" foreground="res/android/fg-xxxhdpi.png" background="res/android/bg-xxxhdpi.png" />
+    <icon density="mdpi" src="res/android/it/icon-mdpi.png" foreground="res/android/it/fg-mdpi.png" background="res/android/bg-mdpi.png" />
+    <icon density="hdpi" src="res/android/it/icon-hdpi.png" foreground="res/android/it/fg-hdpi.png" background="res/android/bg-hdpi.png" />
+    <icon density="xhdpi" src="res/android/it/icon-xhdpi.png" foreground="res/android/it/fg-xhdpi.png" background="res/android/bg-xhdpi.png" />
+    <icon density="xxhdpi" src="res/android/it/icon-xxhdpi.png" foreground="res/android/it/fg-xxhdpi.png" background="res/android/bg-xxhdpi.png" />
+    <icon density="xxxhdpi" src="res/android/it/icon-xxxhdpi.png" foreground="res/android/it/fg-xxxhdpi.png" background="res/android/bg-xxxhdpi.png" />
     <config-file target="AndroidManifest.xml" parent="/manifest">
       <queries>
         <intent><action android:name="android.speech.RecognitionService" /></intent>

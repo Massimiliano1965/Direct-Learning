@@ -16,6 +16,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 
 import android.Manifest;
 import android.os.Build;
@@ -33,6 +35,9 @@ import java.util.List;
 import java.util.Locale;
 
 public class SpeechRecognition extends CordovaPlugin {
+  private boolean mSendPartial = false;          // CIAO
+  private java.util.ArrayList<String> mLastHeard = null;   // CIAO: l'ultimo parziale sentito
+
 
   private static final String LOG_TAG = "SpeechRecognition";
 
@@ -162,6 +167,16 @@ public class SpeechRecognition extends CordovaPlugin {
     return SpeechRecognizer.isRecognitionAvailable(context);
   }
 
+  private boolean isOnline() {
+    try {
+      ConnectivityManager cm = (ConnectivityManager) activity.getSystemService(Context.CONNECTIVITY_SERVICE);
+      NetworkInfo ni = cm == null ? null : cm.getActiveNetworkInfo();
+      return ni != null && ni.isConnected();
+    } catch (Exception e) {
+      return true;   // se non si sa, come prima
+    }
+  }
+
   private void startListening(String language, int matches, String prompt, final Boolean showPartial, Boolean showPopup) {
     Log.d(LOG_TAG, "startListening() language: " + language + ", matches: " + matches + ", prompt: " + prompt + ", showPartial: " + showPartial + ", showPopup: " + showPopup);
 
@@ -172,8 +187,14 @@ public class SpeechRecognition extends CordovaPlugin {
     intent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, matches);
     intent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE,
             activity.getPackageName());
-    intent.putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, showPartial);
+    // CIAO: i risultati parziali si chiedono sempre (anche senza mostrarli): se alla fine Google dice «nessuna corrispondenza»
+    // per una parola corta («otto»), si usa l'ultimo parziale sentito invece di «non ho sentito»
+    intent.putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true);
+    mSendPartial = showPartial;
+    mLastHeard = null;
     intent.putExtra("android.speech.extra.DICTATION_MODE", showPartial);
+    // CIAO (Massi: anche in treno o nel bosco): senza rete si chiede il riconoscimento sul telefono
+    if (!isOnline()) intent.putExtra(RecognizerIntent.EXTRA_PREFER_OFFLINE, true);
 
     if (prompt != null) {
       intent.putExtra(RecognizerIntent.EXTRA_PROMPT, prompt);
@@ -280,6 +301,11 @@ public class SpeechRecognition extends CordovaPlugin {
 
     @Override
     public void onError(int errorCode) {
+      if ((errorCode == SpeechRecognizer.ERROR_NO_MATCH || errorCode == SpeechRecognizer.ERROR_SPEECH_TIMEOUT) && mLastHeard != null && mLastHeard.size() > 0) {
+        callbackContext.success(new JSONArray(mLastHeard));   // CIAO: c'era una parola sentita, la si usa
+        mLastHeard = null;
+        return;
+      }
       String errorMessage = getErrorText(errorCode);
       Log.d(LOG_TAG, "Error: " + errorMessage);
       callbackContext.error(errorMessage);
@@ -293,6 +319,8 @@ public class SpeechRecognition extends CordovaPlugin {
     public void onPartialResults(Bundle bundle) {
       ArrayList<String> matches = bundle.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
       Log.d(LOG_TAG, "SpeechRecognitionListener partialResults: " + matches);
+      if (matches != null && matches.size() > 0 && matches.get(0) != null && matches.get(0).trim().length() > 0) mLastHeard = matches;
+      if (!mSendPartial) return;   // CIAO: i parziali servono solo da riserva, non si mandano alla parte web
       JSONArray matchesJSON = new JSONArray(matches);
       try {
         if (matches != null

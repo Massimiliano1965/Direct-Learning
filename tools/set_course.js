@@ -21,6 +21,8 @@ let s = fs.readFileSync(x, 'utf8');
 s = s.replace(/<widget id="[^"]+"/, '<widget id="' + c.id + '"')
      .replace(/<name>[^<]*<\/name>/, '<name>' + c.name + '</name>')
      .replace(/(AndroidWindowSplashScreenAnimatedIcon" value=")[^"]+"/, '$1res/splash-' + code + '.png"')
+     // l'icona del corso, con la bandierina della lingua (res/build_icons.js)
+     .replace(/res\/android\/(?:[a-z]{2}\/)?(icon|fg)-/g, 'res/android/' + code + '/$1-')
      .replace(/<description>[^<]*<\/description>/, '<description>CIAO – Communicator for Immersive Audio-Oral learning. ' + c.desc + '</description>');
 fs.writeFileSync(x, s);
 console.log('Corso ' + code + ': ' + c.name + ' (' + c.id + ')');
