@@ -1,0 +1,189 @@
+'use strict';
+/* =====================================================================
+   I VERBI DI MOVIMENTO (proposta, prima serie): il signor Mario in 4 fotogrammi
+   per verbo, come una striscia di cartone animato. Stesso stile dell'insegnante
+   (teacher.js: tHead, tTorso, tArm, LOOKS), ma con gambe e braccia snodate.
+   ACTIONS[verbo] = 4 pose; actionFrame(verbo, i) = un fotogramma (SVG 120×120);
+   actionSheet(verbo) = i 4 fotogrammi affiancati (SVG 480×120).
+   Si legge da sinistra a destra; la freccia d'oro in basso dice la direzione.
+   ===================================================================== */
+const ACT_GROUND = 104, ACT_S = 0.5;
+const rad = d => d * Math.PI / 180;
+// gamba o braccio da angoli: a = angolo del primo pezzo (0 = giù, + = avanti/destra), b = piega del secondo
+function limb(p, a, b, l1, l2) {
+  const k = [p[0] + l1 * Math.sin(rad(a)), p[1] + l1 * Math.cos(rad(a))];
+  const e = [k[0] + l2 * Math.sin(rad(a + b)), k[1] + l2 * Math.cos(rad(a + b))];
+  return [k, e];
+}
+function actLeg(L, a, b, back) {
+  const hip = [50, 92];
+  const [k, f] = limb(hip, a, -b, 29, 29);
+  const d = `M${hip[0]} ${hip[1]} L${k[0]} ${k[1]} L${f[0]} ${f[1]}`;
+  const col = back ? L.suit2 : L.suit;
+  return `<path d="${d}" fill="none" stroke="#1a1824" stroke-width="12.5" stroke-linecap="round" stroke-linejoin="round" opacity=".45"/>
+    <path d="${d}" fill="none" stroke="${col}" stroke-width="10.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M${f[0] - 4} ${f[1] + 1} q0 -6 6 -5 l6 2 q3 1 2 4z" fill="${L.shoe}"/>`;
+}
+function actArm(L, side, a, b, finger) {
+  const s = side < 0 ? [36, 47] : [64, 47];
+  const [e, h] = limb(s, a, b, 23, 20);
+  return tArm(L, s, e, h, finger);
+}
+function actHand(side, a, b) { return limb(side < 0 ? [36, 47] : [64, 47], a, b, 23, 20)[1]; }
+
+/* ---------- gli oggetti ---------- */
+const AP = {
+  stone: x => `<path d="M${x - 6} ${ACT_GROUND} q1 -6 6 -6 q6 0 6 6z" fill="#8b93a7"/>`,
+  box: (x, y) => `<g transform="translate(${x} ${y === undefined ? ACT_GROUND : y})"><rect x="-13" y="-24" width="26" height="24" rx="2" fill="#c98a4b"/>
+    <path d="M-13 -16 h26 M0 -24 v8" stroke="#a96f35" stroke-width="2"/><rect x="-13" y="-24" width="26" height="24" rx="2" fill="none" stroke="#8a5a2a" stroke-width="1.2"/></g>`,
+  ball: (x, y) => `<circle cx="${x}" cy="${y}" r="4.5" fill="#e8862a"/><path d="M${x - 4.5} ${y} q4.5 -3 9 0" stroke="#fff" stroke-width="1" fill="none"/>`,
+  table: x => `<rect x="${x - 16}" y="${ACT_GROUND - 34}" width="32" height="4" rx="1" fill="#a0703f"/>
+    <path d="M${x - 13} ${ACT_GROUND - 30} V${ACT_GROUND} M${x + 13} ${ACT_GROUND - 30} V${ACT_GROUND}" stroke="#7c5430" stroke-width="3"/>`,
+  cup: (x, y) => `<path d="M${x - 4} ${y - 7} h8 l-1 7 h-6z" fill="#f4f4f6"/><path d="M${x + 4} ${y - 5.5} q3 0 2.5 2.5 q-.5 2 -2.8 1.6" stroke="#f4f4f6" stroke-width="1.3" fill="none"/>`,
+  // la porta: open 0 = chiusa, 1 = aperta (si vede di taglio)
+  door: (x, open) => {
+    const w = 22 * (1 - open * 0.75), top = ACT_GROUND - 66, R = x + 23;
+    return `<rect x="${x - 2}" y="${top - 3}" width="27" height="69" fill="#2a3448"/>
+      <rect x="${x}" y="${top}" width="23" height="66" fill="#121826"/>
+      <path d="M${R} ${top} L${R - w} ${top + open * 5} L${R - w} ${ACT_GROUND - open * 5} L${R} ${ACT_GROUND}z" fill="#9a6a3c"/>
+      <path d="M${R - 3} ${top + 6} L${R - w + 3} ${top + 6 + open * 4} L${R - w + 3} ${top + 28 + open * 2} L${R - 3} ${top + 28}z" fill="#87592f"/>
+      <circle cx="${R - w + 4}" cy="${ACT_GROUND - 36 + open * 2}" r="1.8" fill="#e6c77e"/>`;
+  },
+  // le scale: 4 gradini che salgono verso destra (o scendono se down)
+  stairs: down => {
+    let d = '';
+    for (let i = 0; i < 4; i++) { const x = 28 + i * 18, h = (down ? 3 - i : i) * 6 + 6; d += `<rect x="${x}" y="${ACT_GROUND - h}" width="18" height="${h}" fill="#3a4a66"/><path d="M${x} ${ACT_GROUND - h} h18" stroke="#6f86ad" stroke-width="1.5"/>`; }
+    return d;
+  }
+};
+// segni del movimento: linee della velocità, arco della traiettoria
+const speed = (x, y) => `<path d="M${x} ${y} h-12 M${x + 2} ${y + 8} h-16 M${x} ${y + 16} h-10" stroke="#8fb4ff" stroke-width="2" stroke-linecap="round" opacity=".7"/>`;
+const arc = d => `<path d="${d}" fill="none" stroke="#e6c77e" stroke-width="1.6" stroke-dasharray="3 3" opacity=".8"/>`;
+const dust = x => `<path d="M${x - 8} ${ACT_GROUND - 1} q-3 -4 -7 -2 M${x + 8} ${ACT_GROUND - 1} q3 -4 7 -2" stroke="#8b93a7" stroke-width="1.5" fill="none" stroke-linecap="round"/>`;
+
+/* ---------- le pose: x = dove sono i piedi, y = quanto è in alto, r = inclinazione (+ = in avanti),
+   legs = [anca, piega del ginocchio] gamba dietro e gamba davanti (0 = giù, + = avanti),
+   arms = [spalla, piega del gomito] braccio dietro e braccio davanti (+ = avanti / in su),
+   reach = [x, y] dove va la mano davanti (la piega la calcola reachArm), reach2 = anche l'altra ---------- */
+const W1 = { legs: [[-22, 8], [22, 4]], arms: [[22, 20], [-22, 10]] };       // passo lungo
+const W2 = { legs: [[-4, 18], [4, 2]], arms: [[6, 8], [-6, 8]] };            // piedi vicini
+const STAND = { legs: [[-3, 0], [3, 0]], arms: [[-4, 6], [4, 6]] };
+const UP_L = [[-170, 0], [170, 0]];
+const ACTIONS = {
+  camminare: { arrow: 1, frames: [
+    { x: 24, ...W1 }, { x: 44, ...W2 }, { x: 64, legs: [[22, 4], [-22, 8]], arms: [[-22, 10], [22, 20]] }, { x: 84, ...W2 } ] },
+  correre: { arrow: 1, frames: [
+    { x: 32, r: 12, legs: [[-40, 70], [40, 50]], arms: [[45, 90], [-45, 70]], face: 'open', fx: speed },
+    { x: 52, y: 6, r: 12, legs: [[-20, 100], [20, 80]], arms: [[-20, 80], [20, 90]], face: 'open', fx: speed },
+    { x: 72, r: 12, legs: [[40, 50], [-40, 70]], arms: [[-45, 70], [45, 90]], face: 'open', fx: speed },
+    { x: 90, y: 6, r: 12, legs: [[20, 80], [-20, 100]], arms: [[20, 90], [-20, 80]], face: 'open', fx: speed } ] },
+  saltare: { arrow: 0, frames: [
+    { x: 60, y: -9, r: 14, legs: [[70, 120], [70, 120]], arms: [[-50, 20], [-50, 20]] },
+    { x: 60, y: 8, legs: [[-4, 0], [4, 0]], arms: UP_L, face: 'open', fx: () => arc('M60 106 V94') },
+    { x: 60, y: 22, legs: [[60, 110], [70, 120]], arms: [[-150, 0], [150, 0]], face: 'open', happy: 1, fx: () => arc('M60 104 V84') },
+    { x: 60, y: -5, legs: [[40, 70], [40, 70]], arms: [[60, 20], [60, 20]], happy: 1, fx: () => dust(60) } ] },
+  cadere: { arrow: 1, frames: [
+    { x: 30, ...W1, props: () => AP.stone(60) },
+    { x: 54, r: 22, legs: [[-40, 30], [20, 10]], arms: [[80, 20], [70, 20]], face: 'o', props: () => AP.stone(60) },
+    { x: 66, r: 55, y: -8, legs: [[-50, 20], [-30, 10]], arms: [[120, 0], [110, 10]], face: 'o', props: () => AP.stone(52) },
+    { x: 46, r: 90, y: -22, legs: [[-4, 0], [4, 0]], arms: [[150, 0], [140, 10]], face: 'flat', fx: () => dust(62) } ] },
+  salire: { arrow: 1, scene: () => AP.stairs(false), frames: [
+    { x: 16, ...W2 },
+    { x: 37, y: 6, legs: [[-30, 10], [40, 80]], arms: [[20, 10], [-20, 10]] },
+    { x: 55, y: 12, legs: [[-30, 10], [40, 80]], arms: [[-20, 10], [20, 10]] },
+    { x: 91, y: 24, ...W2, happy: 1 } ] },
+  scendere: { arrow: 1, scene: () => AP.stairs(true), frames: [
+    { x: 37, y: 24, ...W2 },
+    { x: 55, y: 18, legs: [[-10, 30], [30, 0]], arms: [[20, 10], [-20, 10]] },
+    { x: 73, y: 12, legs: [[-10, 30], [30, 0]], arms: [[-20, 10], [20, 10]] },
+    { x: 106, ...W2, happy: 1 } ] },
+  prendere: { arrow: 0, scene: () => AP.table(94), frames: [
+    { x: 40, ...W2, props: () => AP.cup(94, ACT_GROUND - 34) },
+    { x: 62, ...W2, reach: [86, ACT_GROUND - 52], props: () => AP.cup(94, ACT_GROUND - 34) },
+    { x: 70, r: 8, ...W2, reach: [92, ACT_GROUND - 38], hold: 'cup' },
+    { x: 62, ...W2, reach: [76, ACT_GROUND - 58], happy: 1, hold: 'cup' } ] },
+  lanciare: { arrow: 1, frames: [
+    { x: 34, ...W2, arms: [[10, 10], [-30, 60]], hold: 'ball' },
+    { x: 34, r: -8, legs: [[-24, 8], [22, 4]], arms: [[40, 30], [-150, -30]], hold: 'ball' },
+    { x: 40, r: 10, legs: [[-24, 8], [24, 4]], arms: [[-30, 20], [110, 10]], face: 'open', props: () => AP.ball(80, 44), fx: () => arc('M62 52 Q72 40 80 44') },
+    { x: 40, r: 8, legs: [[-24, 8], [24, 4]], arms: [[-20, 20], [40, 30]], happy: 1, props: () => AP.ball(108, 98), fx: () => arc('M62 52 Q88 22 107 94') } ] },
+  aprire: { arrow: 0, frames: [
+    { x: 36, ...W2, props: () => AP.door(80, 0) },
+    { x: 60, ...W2, reach: () => doorKnob(80, 0), props: () => AP.door(80, 0) },
+    { x: 58, ...W2, reach: () => doorKnob(80, .5), props: () => AP.door(80, .5) },
+    { x: 56, ...STAND, happy: 1, props: () => AP.door(80, 1) } ] },
+  chiudere: { arrow: 0, frames: [
+    { x: 56, ...STAND, props: () => AP.door(80, 1) },
+    { x: 58, ...W2, reach: () => doorKnob(80, .9), props: () => AP.door(80, .9) },
+    { x: 60, ...W2, reach: () => doorKnob(80, .45), props: () => AP.door(80, .45) },
+    { x: 60, ...W2, reach: () => doorKnob(80, 0), props: () => AP.door(80, 0) } ] },
+  spingere: { arrow: 1, frames: [
+    { x: 28, r: 20, legs: [[-34, 10], [20, 40]], reach: [46, ACT_GROUND - 18], reach2: [46, ACT_GROUND - 14], props: () => AP.box(60) },
+    { x: 40, r: 24, legs: [[-40, 10], [24, 40]], reach: [58, ACT_GROUND - 18], reach2: [58, ACT_GROUND - 14], props: () => AP.box(72), fx: () => speed(56, 86) },
+    { x: 58, r: 24, legs: [[-40, 10], [24, 40]], reach: [76, ACT_GROUND - 18], reach2: [76, ACT_GROUND - 14], props: () => AP.box(90), fx: () => speed(74, 86) },
+    { x: 70, ...STAND, happy: 1, props: () => AP.box(100) } ] },
+  tirare: { arrow: -1, frames: [
+    { x: 30, r: -16, legs: [[-30, 10], [30, 10]], reach: [50, ACT_GROUND - 46], reach2: [48, ACT_GROUND - 44], props: () => AP.box(100), rope: 100 },
+    { x: 26, r: -20, legs: [[-30, 10], [34, 10]], reach: [44, ACT_GROUND - 46], reach2: [42, ACT_GROUND - 44], props: () => AP.box(84), rope: 84, fx: () => speed(110, 86) },
+    { x: 22, r: -20, legs: [[-30, 10], [34, 10]], reach: [40, ACT_GROUND - 46], reach2: [38, ACT_GROUND - 44], props: () => AP.box(68), rope: 68, fx: () => speed(94, 86) },
+    { x: 20, ...STAND, happy: 1, props: () => AP.box(52) } ] }
+};
+// dov'è la maniglia della porta (i cardini sono a destra, la maniglia a sinistra)
+function doorKnob(x, open) { return [x + 23 - 22 * (1 - open * 0.75) + 4, ACT_GROUND - 36 + open * 2]; }
+
+// dal disegno del personaggio al fotogramma e ritorno (spostamento, scala, inclinazione intorno alle anche)
+function frameT(p) { return { tx: p.x - 50 * ACT_S, ty: ACT_GROUND - (p.y || 0) - 150 * ACT_S, r: rad(p.r || 0) }; }
+function toFrame(p, q) {
+  const T = frameT(p), dx = q[0] - 50, dy = q[1] - 92, c = Math.cos(T.r), s = Math.sin(T.r);
+  return [T.tx + ACT_S * (50 + dx * c - dy * s), T.ty + ACT_S * (92 + dx * s + dy * c)];
+}
+function toFig(p, q) {
+  const T = frameT(p), X = (q[0] - T.tx) / ACT_S - 50, Y = (q[1] - T.ty) / ACT_S - 92, c = Math.cos(-T.r), s = Math.sin(-T.r);
+  return [50 + X * c - Y * s, 92 + X * s + Y * c];
+}
+// la mano va al punto t (coordinate del fotogramma): gomito in basso, come un braccio vero
+function reachArm(p, side, t) {
+  const S = side < 0 ? [36, 47] : [64, 47], T = toFig(p, t);
+  const dx = T[0] - S[0], dy = T[1] - S[1], d = Math.min(Math.hypot(dx, dy), 42.5);
+  const th = Math.atan2(dx, dy) * 180 / Math.PI;
+  const al = Math.acos(Math.max(-1, Math.min(1, (23 * 23 + d * d - 20 * 20) / (2 * 23 * d)))) * 180 / Math.PI;
+  const a = th - al, e = limb(S, a, 0, 23, 0)[0];
+  return [a, Math.atan2(T[0] - e[0], T[1] - e[1]) * 180 / Math.PI - a];
+}
+
+function actFigure(L, p) {
+  const legs = p.legs || W2.legs, arms = (p.arms || W2.arms).slice();
+  const reach = typeof p.reach === 'function' ? p.reach() : p.reach;
+  if (reach) arms[1] = reachArm(p, 1, reach);
+  if (p.reach2) arms[0] = reachArm(p, -1, p.reach2);
+  const f = { mouth: p.face || 'smile', happy: !!p.happy };
+  let body = actArm(L, -1, arms[0][0], arms[0][1]) + actLeg(L, legs[0][0], legs[0][1], true) + tTorso(L) + tHeadStill(L, f) +
+    actLeg(L, legs[1][0], legs[1][1]) + actArm(L, 1, arms[1][0], arms[1][1]);
+  if (p.hold) {
+    const h = actHand(1, arms[1][0], arms[1][1]);
+    body += `<g transform="translate(${h[0]} ${h[1]}) rotate(${-(p.r || 0)}) scale(${1 / ACT_S})">${p.hold === 'cup' ? AP.cup(1, 3) : AP.ball(0, -3)}</g>`;
+  }
+  return body;
+}
+function actionFrame(verb, i, look) {
+  const A = ACTIONS[verb], p = A.frames[i], L = LOOKS[look || 'mario'], T = frameT(p);
+  let s = `<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><rect width="120" height="120" rx="10" fill="#1b2333"/>
+    <path d="M6 ${ACT_GROUND} H114" stroke="#3a4a66" stroke-width="2" stroke-linecap="round"/>`;
+  if (A.scene) s += A.scene();
+  if (p.props) s += p.props();
+  if (p.fx) s += p.fx(p.x - 12, ACT_GROUND - 50 - (p.y || 0));
+  s += `<g transform="translate(${T.tx} ${T.ty}) scale(${ACT_S}) rotate(${p.r || 0} 50 92)">${actFigure(L, p)}</g>`;
+  if (p.rope) {   // la corda: dalla mano davanti alla scatola
+    const reach = p.reach, h = toFrame(p, actHand(1, ...reachArm(p, 1, reach)));
+    s += `<path d="M${h[0]} ${h[1]} Q${(h[0] + p.rope - 13) / 2} ${ACT_GROUND - 22} ${p.rope - 13} ${ACT_GROUND - 12}" stroke="#d8c08a" stroke-width="1.6" fill="none"/>`;
+  }
+  if (A.arrow) s += A.arrow > 0 ? `<path d="M46 114 H74 m-5 -4 l5 4 l-5 4" stroke="#c9a45c" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`
+    : `<path d="M74 114 H46 m5 -4 l-5 4 l5 4" stroke="#c9a45c" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`;
+  s += `<text x="9" y="16" font-family="sans-serif" font-size="9" font-weight="700" fill="#8f9bb3">${i + 1}</text></svg>`;
+  return s;
+}
+function actionSheet(verb, look) {
+  return `<svg viewBox="0 0 492 120" xmlns="http://www.w3.org/2000/svg">` +
+    [0, 1, 2, 3].map(i => `<g transform="translate(${i * 124} 0)">${actionFrame(verb, i, look).replace(/^<svg[^>]*>|<\/svg>$/g, '')}</g>`).join('') + `</svg>`;
+}
+if (typeof module !== 'undefined') module.exports = { ACTIONS, actionFrame, actionSheet };
