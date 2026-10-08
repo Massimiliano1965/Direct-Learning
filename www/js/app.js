@@ -9,7 +9,7 @@ const $ = (id) => document.getElementById(id);
 const IS_CORDOVA = !!window.cordova;
 let currentScreen = 'home';
 function showScreen(name, replace) {
-  ['lang', 'home', 'lesson', 'end', 'report', 'favs', 'search'].forEach(n => $('screen-' + n) && $('screen-' + n).classList.toggle('hidden', n !== name));
+  ['lang', 'home', 'lesson', 'end', 'report', 'favs', 'search', 'guide'].forEach(n => $('screen-' + n) && $('screen-' + n).classList.toggle('hidden', n !== name));
   const wasHome = currentScreen === 'home';
   currentScreen = name;
   document.documentElement.classList.toggle('fisso', name === 'lesson');   // la lezione non scorre mai
@@ -172,7 +172,7 @@ function renderHome() {
 
   $('opt-text').checked = !!DB.settings.showText;
   showSpeed();
-  if (typeof remindShow === 'function') remindShow();
+  if (typeof remindShow === 'function') { remindShow(); unlockShow(); }
   applyStaticText();
   applyUiWords();
 }

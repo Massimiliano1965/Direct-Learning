@@ -1,0 +1,7 @@
+{
+  "name": "cordova-plugin-ciaoremind",
+  "version": "1.0.0",
+  "description": "CIAO: promemoria allo sblocco del telefono (idea di Massi, dal blocco di StudyGame)",
+  "cordova": { "id": "cordova-plugin-ciaoremind", "platforms": ["android"] },
+  "license": "MIT"
+}

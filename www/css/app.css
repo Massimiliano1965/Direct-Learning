@@ -397,3 +397,10 @@ body.test-end #btn-again { display: none; }
 /* Il promemoria (promemoria.js): Spento / 8:00 / 13:00 / 18:00 / 21:00 */
 #opt-remind button { font-size: 15px; padding: 10px 2px; }
 .remind-note { font-size: 14px; line-height: 1.4; margin: 8px 2px 0; min-height: 1em; }
+
+/* Il promemoria allo sblocco (promemoria.js) e la guida al permesso */
+.unlock-switch { margin-top: 16px; }
+#unlock-test { margin-top: 8px; min-height: 48px; }
+.guide-steps { margin: 0; padding-left: 22px; font-size: 17px; line-height: 1.5; }
+.guide-steps li + li { margin-top: 8px; }
+.guide-more { margin: 14px 0 0; font-size: 14px; line-height: 1.45; }

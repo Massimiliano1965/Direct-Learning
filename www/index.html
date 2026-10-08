@@ -39,6 +39,9 @@
   <div class="speed-label" data-t="remindLabel">Reminder to study</div>
   <div class="seg" id="opt-remind"></div>
   <div class="muted remind-note" id="remind-note"></div>
+  <label class="switch unlock-switch" id="opt-unlock"><input type="checkbox" id="opt-unlock-check"> <span data-t="unlockSwitch">Reminder when I unlock the phone (Android)</span></label>
+  <div class="muted remind-note" id="unlock-note"></div>
+  <button id="unlock-test" class="secondary hidden" data-t="unlockTest">Try it now</button>
 
   <div style="height:18px"></div>
   <button id="btn-report" class="secondary" data-t="btnReport">Trial results</button>
@@ -94,6 +97,16 @@
   <div id="search-out"></div>
   <div style="height:18px"></div>
   <button id="btn-search-home" class="secondary" data-t="menu">Menu</button>
+</section>
+
+<!-- ============ LA GUIDA AL PERMESSO «Mostra sopra le altre app» (promemoria.js) ============ -->
+<section id="screen-guide" class="screen hidden">
+  <h2 data-t="guideTitle">One permission</h2>
+  <div class="card" id="guide-body"></div>
+  <div style="height:16px"></div>
+  <button id="guide-open" data-t="guideOpen">Open the settings</button>
+  <button id="guide-info" class="secondary" data-t="guideInfo">Android won't let me</button>
+  <button id="guide-back" class="ghost" data-t="guideBack">Not now</button>
 </section>
 
 <!-- ============ RISULTATI ============ -->
