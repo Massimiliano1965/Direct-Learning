@@ -43,8 +43,16 @@ const TEACHERS = worldTeachers(['Wei', 'Li', 'Mei', 'Jun'], '不对。');
 
 // il cinese si scrive senza spazi: si divide con le parole che si conoscono (le più lunghe prima)
 const ZH_LEX = ['桌子', '椅子', '窗户', '瓶子', '杯子', '电脑', '手机', '钥匙', '本子', '雨伞', '什么', '还是', '不是', '这', '是', '书', '笔', '门', '包', '伞', '吗', '不', '对', '窗'];
+// Con l'accento italiano i toni escono diversi e il microfono scrive un carattere che suona uguale (树 «albero» per 书 «libro»):
+// si riportano alla parola della lezione (Massi: «deve riconoscere anche la parlata normale»)
+const ZH_SOUND = [['被子', '杯子'], ['背子', '杯子'], ['辈子', '杯子'], ['笨子', '本子'], ['平子', '瓶子'], ['凭子', '瓶子'],
+  ['要是', '钥匙'], ['药师', '钥匙'], ['药匙', '钥匙'], ['首机', '手机'], ['收集', '手机'], ['店脑', '电脑'], ['卓子', '桌子'], ['捉子', '桌子'],
+  ['一子', '椅子'], ['以子', '椅子'], ['姨子', '椅子'], ['这事', '这是'], ['这时', '这是'], ['着是', '这是'], ['这市', '这是'], ['这个是', '这是'],
+  ['树', '书'], ['输', '书'], ['叔', '书'], ['熟', '书'], ['舒', '书'], ['比', '笔'], ['必', '笔'], ['币', '笔'], ['逼', '笔'],
+  ['们', '门'], ['闷', '门'], ['宝', '包'], ['报', '包'], ['抱', '包'], ['饱', '包'], ['三', '伞'], ['散', '伞'], ['嘛', '吗'], ['妈', '吗'], ['麻', '吗'], ['马', '吗']];
+function zhSound(t) { ZH_SOUND.forEach(([a, b]) => { t = t.split(a).join(b); }); return t; }
 function zhSplit(text) {
-  const t = String(text || ''), out = [];
+  const t = zhSound(String(text || '')), out = [];
   let i = 0;
   while (i < t.length) {
     const w = ZH_LEX.find(x => t.startsWith(x, i));
@@ -67,6 +75,7 @@ const PH = {
   negCore: (k) => '这不是' + ITEMS[k].word,
   askCore: (k) => '这是' + ITEMS[k].word + '吗',
   yesW: ['是', '对'], noW: ['不'], orW: ['还是'],
+  bareOk: true, notW: ['不是'],   // parlata normale: «书» da solo vale «这是书» (world.js)
   tokens: (text) => zhSplit(text).filter(w => /\p{L}/u.test(w)).map(w => w === '窗' ? '窗户' : w === '雨伞' ? '伞' : w),
   words: (text) => zhSplit(text),
   trKey: (w) => w,

@@ -63,6 +63,7 @@ const PH = {
   // il «questo» sbagliato (هذه con una parola maschile) e ليس / ليست scambiati
   badCores: (k) => [(ITEMS[k].f ? 'هذا ' : 'هذه ') + ITEMS[k].word, arDem(k) + ' ' + (ITEMS[k].f ? 'ليس ' : 'ليست ') + ITEMS[k].word],
   yesW: ['نعم'], noW: ['لا'], orW: ['ام', 'او'],
+  bareOk: true, notW: ['ليس', 'ليست'],   // parlata normale: la parola da sola vale la frase (world.js)
   tokens: (text) => arNorm(String(text || '')).replace(/[^\p{L}\s]/gu, ' ').split(/\s+/).filter(Boolean).map(w => AR_BASE[w] || (w === 'هاذا' ? 'هذا' : w)),
   words: (text) => text.match(/[\p{L}ً-ْٰ]+|[.,?!،؟]/gu) || [],
   trKey: (w) => w === '،' ? ',' : w === '؟' ? '?' : w.replace(/[ٌ-ْٰ]/g, ''),     // il «-an» (ً) resta: «kitàban»

@@ -19,11 +19,17 @@ norm = (text) => {
 const wCore = (str) => ' ' + PH.tokens(str).join(' ') + ' ';            // la frase come la scrive norm()
 const W_ALL = () => Object.keys(ITEMS);
 // Le affermazioni e le negazioni nella risposta (dopo aver tolto le negazioni, per non contarle due volte)
-negations = (s) => W_ALL().filter(k => s.indexOf(wCore(PH.negCore(k))) !== -1);
+// (Massi: «deve riconoscere anche la parlata normale») il microfono a volte perde il piccolo «questo» (это, هذا, 这):
+// la parola da sola vale la frase, e «не стол» / «ليس كتاب» / «不是书» vale la negazione. PH.notW = il «non» di ogni lingua.
+const wBare = (k) => wCore(ITEMS[k].word).trim();
+const wBareNeg = (s, k) => PH.bareOk && (PH.notW || []).some(n => s.indexOf(' ' + wCore(n).trim() + ' ' + wBare(k) + ' ') !== -1);
+negations = (s) => W_ALL().filter(k => s.indexOf(wCore(PH.negCore(k))) !== -1 || wBareNeg(s, k));
 claims = (s) => {
   let t = s;
   W_ALL().forEach(k => { t = t.split(wCore(PH.negCore(k))).join(' # '); });
-  return W_ALL().filter(k => t.indexOf(wCore(PH.isCore(k))) !== -1);
+  const c = W_ALL().filter(k => t.indexOf(wCore(PH.isCore(k))) !== -1);
+  if (!c.length && PH.bareOk) return W_ALL().filter(k => has(t, wBare(k)) && !wBareNeg(t, k));
+  return c;
 };
 // le forme sbagliate (es. in arabo: «هذه كتاب», il «questo» femminile con una parola maschile)
 const wBad = (s) => W_ALL().some(k => (PH.badCores ? PH.badCores(k) : []).some(b => s.indexOf(wCore(b)) !== -1));
@@ -31,6 +37,7 @@ const wBad = (s) => W_ALL().some(k => (PH.badCores ? PH.badCores(k) : []).some(b
 function wYesNo(s) {
   let t = s.split(wCore(PH.what)).join(' # ');      // «这是什么»: il «是» della domanda non è un «sì»
   W_ALL().forEach(k => { t = t.split(wCore(PH.negCore(k))).join(' # ').split(wCore(PH.isCore(k))).join(' # '); });
+  if (PH.bareOk) W_ALL().forEach(k => (PH.notW || []).forEach(n => { t = t.split(' ' + wCore(n).trim() + ' ' + wBare(k) + ' ').join(' # '); }));
   return { yes: PH.yesW.some(w => has(t, w)), no: PH.noW.some(w => has(t, w)) };
 }
 evaluate = function (step, text) {

@@ -25,7 +25,7 @@ const COURSE = {
 // Le parole (word = come si scrive; alias = come a volte la scrive il microfono)
 const ITEMS = {
   book:   { word: 'книга', art: '', alias: ['книгу', 'книги'] },
-  table:  { word: 'стол',  art: '', alias: ['стола'] },
+  table:  { word: 'стол',  art: '', alias: ['стола', 'столь', 'сталь', 'стал', 'стоп', 'столл', 'штоль', 'сто', '100', 'столе', 'stol', 'stoll', 'stop'] },
   chair:  { word: 'стул',  art: '', alias: ['стула'] },
   pen:    { word: 'ручка', art: '', alias: ['ручку', 'ручки'] },
   door:   { word: 'дверь', art: '', alias: ['двери'] },
@@ -42,6 +42,21 @@ const ITEMS = {
 const LESSONS = WORLD_LESSONS('r');
 const TEACHERS = worldTeachers(['Ivan', 'Olga', 'Anna', 'Pavel'], 'Нет.');
 
+// le forme che il microfono scrive al posto di «это»; le parole vere della lezione (mai «corrette»)
+const RU_ETO = ['эта', 'этот', 'эту', 'эти', 'эт', 'eto', 'etot', 'eta'];
+const RU_KNOWN = new Set(['да', 'нет', 'не', 'или', 'что', 'это']);
+// a una lettera di distanza (una cambiata, aggiunta o tolta)
+function ruNear(a, b) {
+  if (Math.abs(a.length - b.length) > 1 || a === b) return false;
+  let i = 0, j = 0, d = 0;
+  while (i < a.length && j < b.length) {
+    if (a[i] === b[j]) { i++; j++; continue; }
+    if (++d > 1) return false;
+    if (a.length > b.length) i++; else if (a.length < b.length) j++; else { i++; j++; }
+  }
+  return d + (a.length - i) + (b.length - j) <= 1;
+}
+
 // Le frasi della lezione
 const PH = {
   is:  (k) => 'Это ' + ITEMS[k].word + '.',
@@ -54,10 +69,27 @@ const PH = {
   negCore: (k) => 'это не ' + ITEMS[k].word,
   askCore: (k) => 'это ' + ITEMS[k].word,           // in russo la domanda è la stessa frase, con la voce che sale
   yesW: ['да'], noW: ['нет'], orW: ['или'],
+  bareOk: true, notW: ['не'],   // il microfono a volte perde il piccolo «это»: «стол» da solo vale «это стол» (world.js)
   // per riconoscere: minuscole, ё = е, senza punteggiatura, gli alias
   tokens: (text) => {
     const w = String(text || '').toLowerCase().replace(/ё/g, 'е').replace(/[^\p{L}\s-]/gu, ' ').split(/\s+/).filter(Boolean);
-    return w.map(x => { const k = Object.keys(ITEMS).find(k => ITEMS[k].alias.indexOf(x) !== -1); return k ? ITEMS[k].word : x; });
+    // (Massi: «стол detto 50 volte, non lo riconosce»): gli alias, «эта/этот» = «это»,
+    // e una parola sconosciuta a una sola lettera da una parola della lezione vale quella parola
+    // parlando di seguito il microfono a volte attacca le parole («этостол», «эстол»): si staccano
+    const W = Object.keys(ITEMS).map(k => ITEMS[k].word);
+    const split = [];
+    w.forEach(x => {
+      const m = W.find(it => x.length > it.length && x.endsWith(it) && ['это', 'эта', 'эт', 'э', 'этот'].indexOf(x.slice(0, -it.length)) !== -1);
+      if (m) split.push('это', m); else split.push(x);
+    });
+    const out = split.map(x => {
+      if (RU_ETO.indexOf(x) !== -1) return 'это';
+      const k = Object.keys(ITEMS).find(k => ITEMS[k].word === x || ITEMS[k].alias.indexOf(x) !== -1);
+      if (k) return ITEMS[k].word;
+      if (x.length >= 3 && !RU_KNOWN.has(x)) { const n = Object.keys(ITEMS).filter(k => ruNear(x, ITEMS[k].word)); if (n.length === 1) return ITEMS[n[0]].word; }
+      return x;
+    });
+    return out;
   },
   words: (text) => text.match(/\p{L}+|[.,?!]/gu) || [],
   trKey: (w) => w.toLowerCase().replace(/ё/g, 'е'),

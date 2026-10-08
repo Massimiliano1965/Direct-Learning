@@ -29,6 +29,20 @@ function check(name, cond) { count++; if (!cond) { fails++; console.log('FALLITO
   check(C + 'sbagliato: la cosa sbagliata', !ok(S.key('book'), PH.is('pen')) && !ok(S.yes('book'), PH.yes('pen')));
   check(C + 'sbagliato: sì e no scambiati', !ok(S.yes('book'), PH.no('book')) && !ok(S.neg('book', 'pen'), PH.yes('pen')));
   check(C + 'sbagliato: due cose nella risposta «o»', !ok(S.alt('book', 'pen'), PH.alt('book', 'pen')));
+  if (code === 'ru') {   // Massi, italiano che parla russo di seguito: il microfono attacca, perde «это», sbaglia una lettera
+    check(C + 'parlata normale: «стол», «эта стол», «этостол», «это стал», «это сто»', ['стол', 'Эта стол', 'этостол', 'это стал', 'это сто', 'этот стол'].every(t => ok(S.key('table'), t)));
+    check(C + 'parlata normale: «да стол», «нет не книга»', ok(S.yes('table'), 'да стол') && ok(S.neg('table', 'book'), 'нет не книга'));
+    check(C + 'parlata normale: ma «стул» non è «стол», «не стол» non è «стол»', !ok(S.key('table'), 'это стул') && !ok(S.key('table'), 'не стол') && !ok(S.yes('table'), 'да стул'));
+  }
+  if (code === 'zh') {   // i toni dell'accento italiano: caratteri che suonano uguali, il «这» perso
+    check(C + 'parlata normale: «这是树», «书», «这事书», «是书»', ['这是树', '书', '这事书', '是书'].every(t => ok(S.key('book'), t)));
+    check(C + 'parlata normale: «对，书», «不是笔»', ok(S.yes('book'), '对，书') && ok(S.neg('book', 'pen'), '不是笔'));
+    check(C + 'parlata normale: ma «笔» non è «书», «不是书» non è «书»', !ok(S.key('book'), '这是笔') && !ok(S.key('book'), '不是书'));
+  }
+  if (code === 'ar') {
+    check(C + 'parlata normale: «كتاب» da solo', ok(S.key('book'), 'كتاب') && ok(S.yes('book'), 'نعم كتاب'));
+    check(C + 'parlata normale: ma «ليس كتاب» non è «كتاب», «قلم» non è «كتاب»', !ok(S.key('book'), 'ليس كتاب') && !ok(S.key('book'), 'قلم'));
+  }
   check(C + 'il no con la frase giusta dopo', ok(S.neg('book', 'pen'), PH.no('pen') + ' ' + PH.is('book')));
   // domande dell'allievo
   check(C + 'allievo: che cos\'è', evalAsk('book', PH.what).kind === 'what' && answerAsk('book', { kind: 'what' }) === PH.is('book'));
