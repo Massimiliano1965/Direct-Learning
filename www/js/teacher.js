@@ -14,9 +14,9 @@
    ===================================================================== */
 const LOOKS = {
   // Gli insegnanti vestiti all'italiana (Massi: «pensa Armani, Versace, Valentino»; modern = giacca sciancrata, revers sottili)
-  // Max: Armani, giacca morbida color grigio-tortora, maglia nera girocollo sotto, niente cravatta
-  mass:   { man: true, skin: '#f0c6a4', skin2: '#dfae88', hair: '#a9a9b0', hair2: '#7d7d86', style: 'back', glasses: 'thin',
-            modern: true, under: 'tee', suit: '#7d756c', suit2: '#675f57', shirt: '#1f1f24', btn: '#4a443e', pocket: '#e9e4dc', pants: '#3a3a40', shoe: '#1b1b22' },
+  // Max: Armani, abito grigio antracite stretto e ben tagliato, camicia bianca aperta, fazzoletto d'oro; capelli brizzolati e pizzetto, niente occhiali (Massi)
+  mass:   { man: true, skin: '#f0c6a4', skin2: '#dfae88', hair: '#6f6f78', hair2: '#4f4f58', style: 'back', goatee: true, hairHi: '#9a9aa4',
+            modern: true, under: 'shirt', suit: '#41444f', suit2: '#33363f', shirt: '#f7f8fb', btn: '#24262d', pocket: '#d8b878', pants: '#3a3d47', shoe: '#141418' },
   // Isa: Valentino, giacca viola a doppio petto con i bottoni d'oro, camicetta di seta avorio
   giulia: { man: false, skin: '#eab892', skin2: '#d9a27c', hair: '#e2c06a', hair2: '#c29a45', style: 'bob',
             modern: true, under: 'silk', dbl: true, suit: '#5b3f8f', suit2: '#4a3277', shirt: '#f6efe4', btn: '#e6c77e', legs: '#d9a27c', shoe: '#1b1b22' },
@@ -77,7 +77,7 @@ function tTorso(L) {
 }
 // La giacca di oggi, all'italiana: spalle morbide, vita segnata, revers sottili, un bottone basso
 function tTorsoModern(L) {
-  const shape = L.man ? 'M35 46 q0 -5 7 -6.5 L50 38 L58 39.5 q7 1.5 7 6.5 L63 70 q.5 11 1.5 22 H35.5 q1 -11 1.5 -22z'
+  const shape = L.man ? 'M34.5 46 q0 -5 7.5 -6.5 L50 38 L58 39.5 q7.5 1.5 7.5 6.5 L61.8 70 q.6 11 1.6 22 H36.6 q1 -11 1.6 -22z'
                       : 'M36 46 q0 -5 7 -6 L50 39 L57 40 q7 1 7 6 L61.5 68 q0 12 2.5 24 H36 q2.5 -12 2.5 -24z';
   const vy = L.man ? 62 : 60;
   let t = `<path d="${shape}" fill="${L.suit}"/>`;
@@ -110,7 +110,7 @@ function tHead(L, f) {
     <ellipse cx="40.6" cy="24" rx="1.6" ry="2.6" fill="${L.skin2}"/><ellipse cx="59.4" cy="24" rx="1.6" ry="2.6" fill="${L.skin2}"/>
     <ellipse cx="50" cy="23" rx="9.2" ry="11.2" fill="${L.skin}"/>`;
   if (L.style === 'back') front = `<path d="M40.5 22 q-1 -12 9.5 -12.5 q10.5 .5 9.5 12.5 q-1 -5 -3 -7 q-6.5 -3 -13 0 q-2 2 -3 7z" fill="${L.hair}"/>
-    <path d="M44 13 q6 -2.5 12 0" stroke="#d8d8de" stroke-width=".9" fill="none"/>`;
+    <path d="M44 13 q6 -2.5 12 0" stroke="${L.hairHi || '#d8d8de'}" stroke-width=".9" fill="none"/>`;
   if (L.style === 'short') front = `<path d="M40.6 21 q-1.5 -11.5 9.4 -12 q11 .5 9.4 12 q-1 -4 -2.5 -5.5 q-4 1.5 -9 -.5 q-3 1 -5 0 q-1.5 1.5 -2.3 6z" fill="${L.hair}"/>`;
   if (L.style === 'bun') front = `<path d="M40.8 22 q-1 -12 9.2 -12 q10.2 0 9.2 12 q-3 -7 -9.2 -7.5 q-6.2 .5 -9.2 7.5z" fill="${L.hair}"/>`;
   if (L.style === 'long' || L.style === 'bob') front = `<path d="M40.6 23 q-1 -13 9.4 -13 q10.4 0 9.4 13 q-2 -7 -6 -8.5 q-6 3 -12.8 8.5z" fill="${L.hair}"/>`;
@@ -124,6 +124,7 @@ function tHead(L, f) {
       : `<ellipse cx="45.5" cy="23.6" rx="1" ry="1.2" fill="#2a2026"/><ellipse cx="54.5" cy="23.6" rx="1" ry="1.2" fill="#2a2026"/>`;
     if (L.glasses === 'thin') feat += `<rect x="42.4" y="21.6" width="6.2" height="4.2" rx="1.6" fill="none" stroke="#3a2a33" stroke-width=".8"/><rect x="51.4" y="21.6" width="6.2" height="4.2" rx="1.6" fill="none" stroke="#3a2a33" stroke-width=".8"/><path d="M48.6 23.2 h2.8" stroke="#3a2a33" stroke-width=".8"/>`;
   }
+  if (L.goatee) feat += `<path d="M46.4 29.5 q3.6 -1.9 7.2 0 q-3.6 1 -7.2 0z" fill="${L.hair2}"/><path d="M47.4 32.4 q2.6 1.1 5.2 0 l-.6 1.7 q-2 1 -4 0z" fill="${L.hair2}"/>`;
   feat += `<path d="M50 25 q-.8 2.6 -.2 3.6 h1" stroke="${L.skin2}" stroke-width=".9" fill="none" stroke-linecap="round"/>`;
   const lip = L.man ? '#7a4a3a' : '#a8424f';
   const m = { talk: `<ellipse cx="50" cy="31" rx="1.8" ry="1.2" fill="#6a2a2a"/>`,
