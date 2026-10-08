@@ -31,11 +31,44 @@
   const svg = el('svg', { viewBox: '0 0 ' + W + ' ' + H, width: '100%', height: '100%', preserveAspectRatio: 'xMidYMid meet' }, null);
   box.appendChild(svg);
 
-  // la testa di profilo (guarda a destra) e l'orecchio
-  const head = el('path', { d: 'M138 432 C140 400 122 372 116 338 C104 282 116 222 172 206 C228 192 266 226 265 268 C265 282 269 292 275 301 L288 324 C290 330 283 334 276 335 C279 341 280 345 276 349 C280 353 280 359 274 363 C272 374 269 384 258 388 C242 392 232 394 226 402 L224 432',
-    fill: 'none', stroke: '#111', 'stroke-width': 3.2, 'stroke-linecap': 'round', 'stroke-linejoin': 'round' }, svg);
-  const ear = el('path', { d: 'M162 286 C146 284 141 318 158 326 C166 329 170 321 167 314 C164 309 160 309 160 304', fill: 'none', stroke: '#111', 'stroke-width': 2.6, 'stroke-linecap': 'round' }, svg);
-  [head, ear].forEach(p => { const L = p.getTotalLength ? p.getTotalLength() : 900; p.style.strokeDasharray = L; p.style.strokeDashoffset = L; p.dataset.len = L; });
+  // la testa di profilo (guarda a destra), disegnata a tratto come un'illustrazione: prima il contorno, poi i dettagli
+  const LINE = (d, w, at, dur) => ({ d: d, w: w, at: at, dur: dur });
+  const PARTS = [
+    // il contorno: la nuca, poi il viso dalla fronte al collo (sopra ci sono i capelli, non il cranio liscio)
+    LINE('M138 432 C140 400 122 372 116 340', 3.2, 0, 400),
+    LINE('M263 262 C265 280 269 292 275 301 L288 324 C290 330 283 334 276 335 C279 341 280 345 276 349 C280 353 280 359 274 363 C272 374 269 384 258 388 C242 392 232 394 226 402 C229 410 232 416 227 422 L225 432', 3.2, 0, 900),
+    // i capelli mossi: il contorno a onde, il ciuffo sulla fronte, le ciocche, la basetta
+    LINE('M116 340 C104 318 103 290 110 266 C105 250 112 234 124 225 C127 209 142 199 158 197 C169 187 189 185 203 190 C219 183 239 189 249 201 C263 205 273 221 270 239 C274 251 269 260 263 262', 3, 150, 850),
+    LINE('M263 262 C252 256 247 244 251 233 C243 242 238 252 241 263', 1.8, 750, 350),
+    LINE('M150 207 C170 200 190 199 207 204', 1.5, 600, 400),
+    LINE('M134 233 C150 222 168 218 186 220 C200 212 218 212 233 219', 1.5, 650, 450),
+    LINE('M124 262 C136 246 152 238 170 236', 1.5, 700, 400),
+    LINE('M119 300 C125 282 137 270 153 264', 1.5, 750, 400),
+    LINE('M180 250 C184 264 183 278 178 290', 1.6, 800, 300),
+    LINE('M116 340 C121 349 126 353 133 356', 1.6, 850, 250),
+    // il sopracciglio, l'occhio con la pupilla e le ciglia
+    LINE('M234 268 C244 261 257 261 267 267', 2.4, 850, 300),
+    LINE('M244 285 C250 279 258 279 264 284 C258 288 250 289 244 285', 2, 950, 300),
+    LINE('M262 281 L267 278', 1.4, 1100, 150),
+    // la narice, la bocca, lo zigomo
+    LINE('M270 326 C274 323 279 325 280 329', 1.8, 1000, 250),
+    LINE('M261 350 C266 352 271 351 277 349', 1.8, 1050, 250),
+    LINE('M236 312 C244 324 248 336 246 348', 1.2, 1100, 300),
+    // l'orecchio con il padiglione, la mascella
+    LINE('M162 286 C146 284 141 318 158 326 C166 329 170 321 167 314 C164 309 160 309 160 304', 2.6, 400, 400),
+    LINE('M160 294 C153 298 152 310 157 315', 1.4, 800, 250),
+    LINE('M170 330 C182 356 200 378 226 400', 1.4, 950, 400),
+    // il colletto: camicia e revers di una giacca sartoriale
+    LINE('M128 436 C160 450 204 450 238 438', 2.2, 900, 400),
+    LINE('M178 448 L194 470 L210 448', 2, 1050, 350)
+  ];
+  const lines = PARTS.map(P => {
+    const p = el('path', { d: P.d, fill: 'none', stroke: '#111', 'stroke-width': P.w, 'stroke-linecap': 'round', 'stroke-linejoin': 'round' }, svg);
+    const L = p.getTotalLength ? p.getTotalLength() : 600;
+    p.style.strokeDasharray = L; p.style.strokeDashoffset = L;
+    return { p: p, L: L, at: P.at, dur: P.dur };
+  });
+  const pupil = el('circle', { cx: 257, cy: 284, r: 2.4, fill: '#111', opacity: 0 }, svg);
 
   // le lettere: ognuna parte da sinistra, entra nell'orecchio, gira nel vortice, esce dalla bocca
   const glyphs = [];
@@ -48,15 +81,15 @@
   }
   // i saluti: escono dalla bocca uno dopo l'altro e vanno al loro posto nel cerchio (come le stelle europee)
   const hellos = HELLO.map((w, i) => {
-    const a = -Math.PI / 2 + i * Math.PI * 2 / HELLO.length;
+    const a = -Math.PI / 2 + Math.PI / 12 + i * Math.PI * 2 / HELLO.length;   // un mezzo passo: in basso c'è il colletto
     const t = el('text', { x: MOUTH[0], y: MOUTH[1], 'font-size': i ? 15 : 19, 'font-weight': i ? 600 : 800, 'text-anchor': 'middle', 'dominant-baseline': 'central',
       fill: '#111', 'font-family': 'system-ui, sans-serif', opacity: 0 }, svg);
     t.textContent = w;
     return { el: t, a: a, start: T_OUT0 + 300 + i * 110 };
   });
-  const title = el('text', { x: W / 2, y: 530, 'font-size': 40, 'font-weight': 300, 'letter-spacing': 8, 'text-anchor': 'middle', fill: '#111', 'font-family': 'Georgia, serif', opacity: 0 }, svg);
+  const title = el('text', { x: W / 2, y: 562, 'font-size': 40, 'font-weight': 300, 'letter-spacing': 8, 'text-anchor': 'middle', fill: '#111', 'font-family': 'Georgia, serif', opacity: 0 }, svg);
   title.textContent = 'CIAO';
-  const motto = el('text', { x: W / 2, y: 562, 'font-size': 13, 'text-anchor': 'middle', fill: '#555', 'font-family': 'system-ui, sans-serif', opacity: 0 }, svg);
+  const motto = el('text', { x: W / 2, y: 590, 'font-size': 13, 'text-anchor': 'middle', fill: '#555', 'font-family': 'system-ui, sans-serif', opacity: 0 }, svg);
   try { motto.textContent = typeof tx === 'function' ? tx('tagline') : ''; } catch (e) {}
 
   let t0 = null, done = false;
@@ -65,8 +98,8 @@
     if (t0 === null) t0 = now;
     const t = now - t0;
     // 1. la testa si disegna
-    const h = ease(t / T_HEAD);
-    [head, ear].forEach(p => { p.style.strokeDashoffset = p.dataset.len * (1 - h); });
+    lines.forEach(l => { l.p.style.strokeDashoffset = l.L * (1 - ease((t - l.at) / l.dur)); });
+    pupil.setAttribute('opacity', clamp((t - 1150) / 200));
     // 2–3. le lettere
     glyphs.forEach(g => {
       const lt = t - g.start;
@@ -98,10 +131,10 @@
       const lt = t - s.start;
       if (lt < 0) { s.el.setAttribute('opacity', 0); return; }
       const k = ease(lt / 900), a = s.a + turn;
-      const ex = RING[0] + Math.cos(a) * R, ey = RING[1] + Math.sin(a) * R * 1.12;
+      const ex = RING[0] + Math.cos(a) * R * .88, ey = RING[1] + Math.sin(a) * R * 1.32;
       // dalla bocca escono in avanti, poi curvano verso il loro posto
       const cx = MOUTH[0] + 60, cy = MOUTH[1];
-      const x = (1 - k) * (1 - k) * MOUTH[0] + 2 * (1 - k) * k * cx + k * k * ex;
+      const x = (1 - k) * (1 - k) * MOUTH[0] + 2 * (1 - k) * k * cx + k * k * ex;   // ex: il cerchio entra nello schermo stretto
       const y = (1 - k) * (1 - k) * MOUTH[1] + 2 * (1 - k) * k * cy + k * k * ey;
       s.el.setAttribute('x', x.toFixed(1)); s.el.setAttribute('y', y.toFixed(1));
       s.el.setAttribute('opacity', clamp(lt / 250).toFixed(2));
