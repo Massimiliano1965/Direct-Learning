@@ -410,3 +410,30 @@ body.test-end #btn-again { display: none; }
 .speed-row .speed-label { margin: 0; font-size: 13px; line-height: 1.2; color: var(--muted); max-width: 34%; }
 .seg.seg-small { flex: 1; }
 .seg.seg-small button { min-height: 40px; padding: 6px 4px; font-size: 14px; }
+
+/* ===== «Il signor Kenji» (kenji.js): la puntata ===== */
+.lesson-btn.kj-btn { border: 1.5px solid var(--accent); background: linear-gradient(90deg, rgba(201,164,92,.18), rgba(201,164,92,.04)); font-weight: 700; color: #f3d36b; }
+.kj-title { font-family: var(--serif); font-size: 20px; color: var(--text); }
+.kj-ep { font-size: 13px; color: var(--accent); text-align: right; }
+#kj-stage { margin: 12px 0 0; border-radius: 16px; overflow: hidden; border: 1px solid var(--line); background: #1b2333; aspect-ratio: 200 / 120; }
+#kj-stage > svg { width: 100%; height: 100%; display: block; }
+#kj-stage.pop { animation: pop .35s ease-out; }
+#kj-stage.good { animation: glowGood .9s ease-out; }
+#kj-stage.bad { box-shadow: 0 0 0 2px var(--err); }
+#kj-text { white-space: pre-line; font-family: var(--serif); font-size: 26px; text-align: center; min-height: 72px; margin: 16px 4px 4px; line-height: 1.25; }
+#kj-text.prev { font-size: 19px; color: var(--muted); font-style: italic; }
+#kj-text.q { color: #e6c77e; }
+#kj-text.end { color: var(--accent); font-style: italic; }
+#kj-text.in { animation: textIn .35s ease-out; }
+#kj-heard { text-align: center; color: var(--muted); font-size: 15px; min-height: 20px; }
+#kj-status { text-align: center; color: var(--muted); font-size: 15px; min-height: 22px; margin: 4px 0 10px; }
+#kj-mic.rec { animation: talkflash 1s ease-in-out infinite; }
+#kj-go { margin-top: 10px; }
+.kj-watch { margin-bottom: 14px; }
+.kj-motto { font-family: var(--serif); font-style: italic; color: var(--accent); margin-top: -6px; }
+.kj-item { gap: 12px; }
+.kj-item .kj-num { width: 30px; height: 30px; flex: none; border-radius: 50%; background: var(--accent); color: var(--accent-ink); display: inline-flex; align-items: center; justify-content: center; font-weight: 800; }
+.kj-item.locked { opacity: .55; }
+.kj-item.locked .kj-num { background: var(--surface2); color: var(--muted); }
+.kj-item .kj-name { font-family: var(--serif); font-size: 18px; }
+@keyframes textIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }

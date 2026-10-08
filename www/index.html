@@ -14,13 +14,13 @@
 
 <!-- ============ CHE LINGUA PARLI? (prima volta) ============ -->
 <section id="screen-lang" class="screen hidden">
-  <div class="brand"><div class="logo" id="logo2"></div><div><h1 class="brand-name">CIAO</h1><div class="tagline">Communicator for Immersive Audio-Oral learning</div></div></div>
+  <div class="brand"><div class="logo" id="logo2"></div><div><h1 class="brand-name">CIAO</h1><div class="tagline" data-t="tagline">Learn the language, solve the mystery.</div></div></div>
   <div id="lang-list"></div>
 </section>
 
 <!-- ============ MENU ============ -->
 <section id="screen-home" class="screen">
-  <div class="brand"><div class="logo" id="logo"></div><div><h1 class="brand-name">CIAO</h1><div class="tagline">Communicator for Immersive Audio-Oral learning</div></div></div>
+  <div class="brand"><div class="logo" id="logo"></div><div><h1 class="brand-name">CIAO</h1><div class="tagline" data-t="tagline">Learn the language, solve the mystery.</div></div></div>
   <div class="card" id="trial-card"></div>
 
   <div class="label" data-t="labelTeacher">Teacher</div>
@@ -100,6 +100,27 @@
   <button id="btn-search-home" class="secondary" data-t="menu">Menu</button>
 </section>
 
+<!-- ============ «IL SIGNOR KENJI»: LA PUNTATA (kenji.js) ============ -->
+<section id="screen-story" class="screen hidden">
+  <div class="topbar"><span><span id="kj-title" class="kj-title"></span></span><span id="kj-ep" class="kj-ep"></span></div>
+  <div id="kj-stage"></div>
+  <div id="kj-text"></div>
+  <div id="kj-heard"></div>
+  <div id="kj-status"></div>
+  <div class="row"><button id="kj-replay" class="secondary" data-t="repeat">Repeat</button><button id="kj-next" data-t="storyNext">Next</button><button id="kj-mic" class="hidden" data-t="talk">Talk</button></div>
+  <button id="kj-go" class="hidden" data-t="storyGo">Next lesson</button>
+  <button id="kj-exit" class="ghost" data-t="menu">Menu</button>
+</section>
+
+<!-- ============ «IL SIGNOR KENJI»: LE PUNTATE ============ -->
+<section id="screen-storylist" class="screen hidden">
+  <h2>Il signor Kenji</h2>
+  <p class="muted kj-motto" data-t="tagline">Learn the language, solve the mystery.</p>
+  <div id="kj-list"></div>
+  <div style="height:18px"></div>
+  <button id="btn-story-home" class="secondary" data-t="menu">Menu</button>
+</section>
+
 <!-- ============ LA GUIDA AL PERMESSO «Mostra sopra le altre app» (promemoria.js) ============ -->
 <section id="screen-guide" class="screen hidden">
   <h2 data-t="guideTitle">One permission</h2>
@@ -140,5 +161,6 @@
 <script src="js/favs.js"></script>
 <script src="js/cerca.js"></script>
 <script src="js/promemoria.js"></script>
+<script src="js/kenji.js"></script>
 </body>
 </html>

@@ -30,6 +30,9 @@ const LOOK26 = {
   // Lucia Rossi: vestito viola stretto in vita con la cintura d'oro, sopra il ginocchio, tacchi
   lucia: { man: false, outfit: 'dress', skin: '#eab892', skin2: '#d9a27c', hair: '#5a3a28', hair2: '#45291c', style: 'bob',
     suit: '#6b4fa0', suit2: '#5a4189', shirt: '#5a4189', skirt: '#6b4fa0', skirtLen: 26, belt: '#e6c77e', shoe: '#2a1d2a', heels: true, earrings: '#e6c77e' },
+  // Kenji (la storia a puntate, kenji.js): ingegnere di Osaka, giacca blu petrolio, occhiali, camicia bianca aperta
+  kenji: { man: true, outfit: 'tailor', modern: true, under: 'shirt', skin: '#f0cfa8', skin2: '#ddb88e', hair: '#14100c', hair2: '#0a0806', style: 'short', glasses: 'thin',
+    suit: '#2c5f7c', suit2: '#234d66', shirt: '#f7f8fb', btn: '#1c3f54', pocket: '#c94a4a', pants: '#2a3446', pants2: '#222a3a', shoe: '#1b1b22' },
   // le persone della lezione 13b e 13c (giovane / anziano, di dov'è): bambini, ragazzi, signori anziani
   bambino: { man: true, outfit: 'bomber', skin: '#f1c7a5', skin2: '#e0b08c', hair: '#5a3a28', hair2: '#45291c', style: 'short',
     suit: '#e8862a', suit2: '#c96f1c', shirt: '#c96f1c', tee: '#f3d36b', pants: '#3f5f8a', pants2: '#33507a', shoe: '#f4f4f6', sole: '#c94a4a' },

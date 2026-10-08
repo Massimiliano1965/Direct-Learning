@@ -9,7 +9,7 @@ const $ = (id) => document.getElementById(id);
 const IS_CORDOVA = !!window.cordova;
 let currentScreen = 'home';
 function showScreen(name, replace) {
-  ['lang', 'home', 'lesson', 'end', 'report', 'favs', 'search', 'guide'].forEach(n => $('screen-' + n) && $('screen-' + n).classList.toggle('hidden', n !== name));
+  ['lang', 'home', 'lesson', 'end', 'report', 'favs', 'search', 'guide', 'story', 'storylist'].forEach(n => $('screen-' + n) && $('screen-' + n).classList.toggle('hidden', n !== name));
   const wasHome = currentScreen === 'home';
   currentScreen = name;
   document.documentElement.classList.toggle('fisso', name === 'lesson');   // la lezione non scorre mai
@@ -113,6 +113,14 @@ function renderHome() {
   fb.innerHTML = '<span>★ ' + tx('favs') + '</span><span class="score">' + ((DB.settings.favs || []).length || '') + '</span>';
   fb.onclick = () => showFavs();
   ll.appendChild(fb);
+  // la storia a puntate «Il signor Kenji» (kenji.js): sopra tutto, è il motivo per tornare
+  if (typeof showStoryList === 'function' && KJ_ON) {
+    const kb = document.createElement('button'), n = KENJI.filter((E, i) => kjOpen(i)).length;
+    kb.className = 'lesson-btn kj-btn';
+    kb.innerHTML = '<span>📖 Il signor Kenji</span><span class="score">' + n + ' / ' + KENJI.length + '</span>';
+    kb.onclick = () => showStoryList();
+    ll.insertBefore(kb, ll.firstChild);
+  }
   // la ricerca (cerca.js): una parola, un verbo, un articolo, scritta o a voce → la lezione, dal punto giusto
   if (typeof showSearch === 'function') {
     const sb = document.createElement('button');
@@ -1129,6 +1137,12 @@ function finishLesson() {
     (pct < 70 && toReview.length ? '<div class="t-notice"><h3 class="t-head">' + tx('testReview') + '</h3><div class="t-review">' +
       toReview.map(rid => '<button class="lesson-btn t-go" data-id="' + rid + '">' + tx('lesson', { n: lessonNumber(LESSONS.find(x => x.id === rid)) }) + '</button>').join('') + '</div></div>' : '');
   $('end-body').querySelectorAll('.t-go').forEach(b => { b.onclick = () => startLesson(b.dataset.id); });
+  // la puntata di «Il signor Kenji» che questa lezione ha appena sbloccato (kenji.js)
+  const ki = typeof kjIndexOf === 'function' ? kjIndexOf(id) : -1;
+  if (ki >= 0) {
+    $('end-body').insertAdjacentHTML('afterbegin', '<button class="kj-watch">📖 ' + tx('storyWatch', { n: ki + 1 }) + '<span class="hint">Il signor Kenji · ' + KENJI[ki].title + '</span></button>');
+    $('end-body').querySelector('.kj-watch').onclick = once(() => startEpisode(ki));
+  }
   showScreen('end', true);
 }
 
