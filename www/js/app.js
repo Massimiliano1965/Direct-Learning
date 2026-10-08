@@ -9,7 +9,7 @@ const $ = (id) => document.getElementById(id);
 const IS_CORDOVA = !!window.cordova;
 let currentScreen = 'home';
 function showScreen(name, replace) {
-  ['lang', 'home', 'lesson', 'end', 'report', 'favs'].forEach(n => $('screen-' + n).classList.toggle('hidden', n !== name));
+  ['lang', 'home', 'lesson', 'end', 'report', 'favs', 'search'].forEach(n => $('screen-' + n) && $('screen-' + n).classList.toggle('hidden', n !== name));
   const wasHome = currentScreen === 'home';
   currentScreen = name;
   document.documentElement.classList.toggle('fisso', name === 'lesson');   // la lezione non scorre mai
@@ -113,6 +113,14 @@ function renderHome() {
   fb.innerHTML = '<span>★ ' + tx('favs') + '</span><span class="score">' + ((DB.settings.favs || []).length || '') + '</span>';
   fb.onclick = () => showFavs();
   ll.appendChild(fb);
+  // la ricerca (cerca.js): una parola, un verbo, un articolo, scritta o a voce → la lezione, dal punto giusto
+  if (typeof showSearch === 'function') {
+    const sb = document.createElement('button');
+    sb.className = 'lesson-btn search-btn';
+    sb.innerHTML = '<span class="search-ico">' + LENS + '</span><span>' + tx('searchBtn') + '</span>';
+    sb.onclick = () => showSearch();
+    ll.insertBefore(sb, ll.firstChild);
+  }
   // i livelli (4 da 25, ognuno con il suo tema e colore) e dentro i capitoli da 5 lezioni (si aprono e si chiudono):
   // è aperto solo il capitolo dove l'allievo è arrivato (la prima lezione non ancora fatta)
   const lessonBtn = (l) => {
@@ -215,6 +223,7 @@ function showLangChoice() {
 // Scritte fisse della pagina (data-t = chiave della traduzione)
 function applyStaticText() {
   document.querySelectorAll('[data-t]').forEach(el => { el.textContent = tx(el.dataset.t, el.dataset.n ? { n: el.dataset.n } : undefined); });
+  document.querySelectorAll('[data-tp]').forEach(el => { el.placeholder = tx(el.dataset.tp); });
 }
 
 function avatarHtml(t, size) {
@@ -305,7 +314,7 @@ function startLesson(id, obj) {
   L = {
     run: RUN, lesson: lesson, items: items, teacher: teacher,
     steps: obj ? obj.steps : buildSteps(lesson), streak: 0,
-    i: 0, attempts: 0, noSpeech: 0, first: 0, busy: false, paused: false,
+    i: obj && obj.at ? obj.at : 0, attempts: 0, noSpeech: 0, first: 0, busy: false, paused: false,   // obj.at: dalla ricerca si parte da quel passo
     drill: null, di: 0, repFails: 0, errCount: 0,
     coach: true, coached: false,
     start: Date.now(), listenStart: 0,

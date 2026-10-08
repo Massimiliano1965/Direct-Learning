@@ -366,3 +366,30 @@ body.test-end #btn-again { display: none; }
 .chap .ch-done.all { color: #c9a45c; }
 .chap .lesson-btn { margin-left: 6px; margin-right: 6px; width: calc(100% - 12px); }
 .lv-group > .lesson-btn.test { margin: 6px 10px 12px; width: calc(100% - 20px); }
+
+/* ===== La ricerca (cerca.js): la casella con la lente e il microfono, i risultati per lezione ===== */
+.lesson-btn.search-btn { color: var(--muted); border-style: solid; gap: 12px; }
+.search-ico { display: inline-flex; color: var(--accent); }
+.search-bar { display: flex; align-items: center; gap: 8px; background: var(--surface); border: 1px solid var(--accent); border-radius: 14px; padding: 4px 6px 4px 12px; }
+.search-lens { display: inline-flex; color: var(--accent); flex: none; }
+#search-q { flex: 1; min-width: 0; height: 48px; border: 0; outline: none; background: transparent; color: var(--text); font: inherit; font-size: 19px; }
+#search-q::placeholder { color: var(--muted); }
+#search-q::-webkit-search-cancel-button { filter: invert(.6); }
+.search-mic { width: 48px; min-height: 48px; height: 48px; flex: none; padding: 0; margin: 0; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; }
+.search-mic.rec { background: var(--err); border-color: var(--err); color: #fff; animation: talkflash 1s ease-in-out infinite; }
+#search-out { margin-top: 14px; }
+.search-tip { line-height: 1.45; font-size: 16px; }
+.s-count { margin: 0 2px 8px; font-size: 14px; }
+.s-maybe { width: auto; min-height: 40px; padding: 6px 14px; margin: 4px 4px 0 0; font-size: 17px; display: inline-block; }
+.s-lesson { background: var(--surface); border: 1px solid var(--line); border-left: 4px solid var(--lvcol, #5a72a8); border-radius: 14px; padding: 8px 8px 4px; margin-bottom: 10px; }
+.s-lesson.lv1 { --lvcol: #5a72a8; } .s-lesson.lv2 { --lvcol: #5d8fc4; } .s-lesson.lv3 { --lvcol: #9a7fd6; } .s-lesson.lv4 { --lvcol: #d49abd; } .s-lesson.lv5 { --lvcol: #e6c77e; }
+.s-head { display: flex; align-items: baseline; gap: 10px; padding: 2px 6px 6px; }
+.s-name { font-weight: 800; color: var(--lvcol); white-space: nowrap; }
+.s-ch { font-size: 13px; color: var(--muted); }
+.s-row { display: flex; align-items: center; gap: 10px; text-align: left; min-height: 64px; padding: 6px 8px; margin: 0 0 4px; background: rgba(255,255,255,.03); color: var(--text); border: 1px solid transparent; font-weight: 400; }
+.s-row + .s-row { margin-top: 0; }
+.s-fig { width: 52px; height: 52px; flex: none; }
+.s-fig svg { width: 100%; height: 100%; display: block; }
+.s-text { flex: 1; font-family: var(--serif); font-size: 18px; line-height: 1.3; }
+.s-hit { color: #e6c77e; font-weight: 700; }
+.s-go { color: var(--accent); font-size: 14px; flex: none; }

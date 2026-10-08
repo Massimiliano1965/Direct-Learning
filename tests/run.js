@@ -2325,5 +2325,20 @@ check('88: prima e ora', run("SIMPF.present('ipf_m_read').prompt") === 'Prima ' 
     !evaluate(b, 'Il ragazzo è di Londra.').ok && !evaluate(b, 'Il ragazzo è a New York.').ok);
 }
 
+// La ricerca (cerca.js): la parola → le lezioni e il punto dove c'è
+{
+  vm.runInContext(fs.readFileSync(path.join(__dirname, '..', 'www', 'js', 'cerca.js'), 'utf8'), ctx, { filename: 'cerca.js' });
+  const ids = (q) => run('searchFind(' + JSON.stringify(q) + ')').hits.map(h => h.lesson.id);
+  check('ricerca: «vecchio» → la lezione 62', ids('vecchio').indexOf('l62') !== -1);
+  check('ricerca: «anziana» → la lezione 13b, e la frase', ids('anziana')[0] === 'l13b' && run('searchFind("anziana")').hits[0].rows[0].text.indexOf('anziana') !== -1);
+  check('ricerca: senza accenti e maiuscole («CAFFE» → caffè)', ids('CAFFE').length > 0);
+  check('ricerca: il verbo dall\'infinito («leggere» → legge, lezione 23)', ids('leggere').indexOf('l23') !== -1);
+  check('ricerca: più parole («ce l\'ha» → lezione 41)', ids('ce l\'ha').indexOf('l41') !== -1);
+  check('ricerca: l\'inizio della parola («passeg»… «camm» → cammina, lezione 101)', ids('camm').indexOf('l101') !== -1);
+  check('ricerca: niente → «Forse:» con la parola vicina («giovene» → giovane)', ids('giovene').length === 0 && run('searchFind("giovene")').maybe.indexOf('giovane') !== -1);
+  check('ricerca: il passo esiste nella sequenza salvata', run('(() => { const h = searchFind("porta").hits[0], r = h.rows[0]; return SEARCH_STEPS[r.id][r.i] && SEARCH_STEPS[r.id][r.i].show === r.show; })()'));
+  check('ricerca: niente domande di ripasso di altre lezioni', run('SEARCH_IX.every(r => !SEARCH_STEPS[r.id][r.i].review)'));
+}
+
 console.log(count - fails + ' / ' + count + ' test passati');
 process.exit(fails ? 1 : 0);
