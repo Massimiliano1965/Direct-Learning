@@ -15,13 +15,32 @@ function limb(p, a, b, l1, l2) {
   const e = [k[0] + l2 * Math.sin(rad(a + b)), k[1] + l2 * Math.cos(rad(a + b))];
   return [k, e];
 }
-// i vestiti del 2026 (Massi: «niente giacca e cravatta verde anni '60»): giubbotto blu, maglietta bianca, jeans, scarpe da ginnastica
-const LOOK26 = { mario: { man: true, skin: '#e2ae86', skin2: '#cc9670', hair: '#2a1d16', hair2: '#1c140f', style: 'short',
-  suit: '#26334d', suit2: '#1d283d', shirt: '#1d283d', tee: '#f2f2f4', pants: '#3f5f8a', pants2: '#33507a', shoe: '#f4f4f6', sole: '#b9c0cc' } };
+/* ---------- I vestiti di oggi (Massi: «niente giacca e cravatta verde anni '60, tutti alla moda, ognuno diverso;
+   anche l'occhio vuole la sua parte»). outfit: bomber, knit, blazer (con la minigonna), dress ---------- */
+const LOOK26 = {
+  // Mario: giubbotto blu aperto, maglietta bianca, jeans, scarpe da ginnastica
+  mario: { man: true, outfit: 'bomber', skin: '#e2ae86', skin2: '#cc9670', hair: '#2a1d16', hair2: '#1c140f', style: 'short',
+    suit: '#26334d', suit2: '#1d283d', shirt: '#1d283d', tee: '#f2f2f4', pants: '#3f5f8a', pants2: '#33507a', shoe: '#f4f4f6', sole: '#b9c0cc' },
+  // Carlo Rossi: maglione color cammello a V sulla camicia azzurra, pantaloni grigi, mocassini
+  carlo: { man: true, outfit: 'knit', skin: '#eab892', skin2: '#d9a27c', hair: '#3a2a20', hair2: '#2a1d16', style: 'short',
+    suit: '#c49a6c', suit2: '#a87f55', shirt: '#a87f55', tee: '#bcd4ee', pants: '#4a4f5a', pants2: '#3d424c', shoe: '#6a3d22' },
+  // Anna: giacca corta rosa, top nero, minigonna nera, tacchi alti
+  anna: { man: false, outfit: 'blazer', skin: '#f0c4a2', skin2: '#dcab86', hair: '#3a2418', hair2: '#2a1810', style: 'long',
+    suit: '#d46a8c', suit2: '#b8577a', shirt: '#b8577a', tee: '#1d1d24', skirt: '#1d1d24', skirtLen: 18, shoe: '#1d1d24', heels: true, earrings: '#e6c77e' },
+  // Lucia Rossi: vestito viola stretto in vita con la cintura d'oro, sopra il ginocchio, tacchi
+  lucia: { man: false, outfit: 'dress', skin: '#eab892', skin2: '#d9a27c', hair: '#5a3a28', hair2: '#45291c', style: 'bob',
+    suit: '#6b4fa0', suit2: '#5a4189', shirt: '#5a4189', skirt: '#6b4fa0', skirtLen: 26, belt: '#e6c77e', shoe: '#2a1d2a', heels: true, earrings: '#e6c77e' }
+};
 function actLeg(L, a, b, back) {
   const hip = [50, 92];
   const [k, f] = limb(hip, a, -b, 29, 29);
   const d = `M${hip[0]} ${hip[1]} L${k[0]} ${k[1]} L${f[0]} ${f[1]}`;
+  if (L.heels) {   // gambe nude, scarpa col tacco
+    const sk = back ? L.skin2 : L.skin;
+    return `<path d="${d}" fill="none" stroke="#1a1824" stroke-width="8.6" stroke-linecap="round" stroke-linejoin="round" opacity=".35"/>
+      <path d="${d}" fill="none" stroke="${sk}" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M${f[0] - 4} ${f[1] - 1} q6 -2 12 3 l.5 1.5 h-7 z" fill="${L.shoe}"/><path d="M${f[0] - 3.4} ${f[1] - 1} l-.6 5" stroke="${L.shoe}" stroke-width="2" stroke-linecap="round"/>`;
+  }
   const col = L.pants ? (back ? L.pants2 : L.pants) : (back ? L.suit2 : L.suit);
   const shoe = L.sole   // scarpa da ginnastica: bianca con la suola grigia
     ? `<path d="M${f[0] - 5} ${f[1] + 1} q0 -7 6 -6 l7 2.5 q3.5 1.2 2.5 3.5z" fill="${L.shoe}"/><path d="M${f[0] - 5} ${f[1] + 1} h15.5" stroke="${L.sole}" stroke-width="2" stroke-linecap="round"/>`
@@ -29,16 +48,38 @@ function actLeg(L, a, b, back) {
   return `<path d="${d}" fill="none" stroke="#1a1824" stroke-width="12.5" stroke-linecap="round" stroke-linejoin="round" opacity=".45"/>
     <path d="${d}" fill="none" stroke="${col}" stroke-width="10.5" stroke-linecap="round" stroke-linejoin="round"/>` + shoe;
 }
-// il busto con il giubbotto aperto e la maglietta (al posto di tTorso, che è giacca e cravatta)
+// il busto (al posto di tTorso, che è giacca e cravatta)
 function actTorso(L) {
-  if (!L.tee) return tTorso(L);
-  return `<path d="M34 46 q0 -5 7 -6 L50 38 L59 40 q7 1 7 6 L65 86 q-15 4 -30 0z" fill="${L.suit}"/>
+  if (L.outfit === 'bomber') return `<path d="M34 46 q0 -5 7 -6 L50 38 L59 40 q7 1 7 6 L65 86 q-15 4 -30 0z" fill="${L.suit}"/>
     <path d="M44 40 q6 4 12 0 L57 86 q-7 1.5 -14 0z" fill="${L.tee}"/>
     <path d="M44.5 40.5 q5.5 3.5 11 0" stroke="#d9d9de" stroke-width="1.2" fill="none"/>
     <path d="M44 40 L43 86 M56 40 L57 86" stroke="${L.suit2}" stroke-width="1.6"/>
     <path d="M35 84 q15 4.5 30 0 l.3 4 q-15.3 4.5 -30.6 0z" fill="${L.suit2}"/>
     <path d="M41 39.5 q9 -3 18 0 l-1 2.5 q-8 -2.5 -16 0z" fill="${L.suit2}"/>
     <path d="M37 89 h26 v4 h-26z" fill="${L.pants2}"/>`;
+  if (L.outfit === 'knit') return `<path d="M34 46 q0 -5 7 -6 L50 38 L59 40 q7 1 7 6 L64.5 88 q-14.5 3 -29 0z" fill="${L.suit}"/>
+    <path d="M44 40 L50 55 L56 40z" fill="${L.tee}"/>
+    <path d="M44 39.5 l3.5 5 l2.5 -4.5 l2.5 4.5 l3.5 -5" fill="${L.tee}" stroke="#9fb9d6" stroke-width=".8"/>
+    <path d="M43.6 40 L50 56 L56.4 40" stroke="${L.suit2}" stroke-width="1.8" fill="none"/>
+    <path d="M35.5 85 q14.5 3 29 0" stroke="${L.suit2}" stroke-width="3"/>
+    <path d="M38 89.5 h24 v3.5 h-24z" fill="${L.pants2}"/>`;
+  // donna: vita stretta
+  const shape = `M36 46 q0 -5 7 -6 L50 39 L57 40 q7 1 7 6 L61.5 68 q-.5 7 2.5 18 H37 q3 -11 2.5 -18z`;
+  if (L.outfit === 'blazer') return `<path d="${shape}" fill="${L.suit}"/>
+    <path d="M44.5 40 q5.5 3 11 0 L55 66 L50 70 L45 66z" fill="${L.tee}"/>
+    <path d="M44 40 L41.5 50 L45.5 52 L50 70 M56 40 L58.5 50 L54.5 52 L50 70" stroke="${L.suit2}" stroke-width="1.6" fill="${L.suit2}" fill-opacity=".5"/>
+    <circle cx="51.5" cy="73" r="1" fill="${L.suit2}"/>`;
+  return `<path d="${shape}" fill="${L.suit}"/>
+    <path d="M45 40 L50 49 L55 40z" fill="${L.skin}"/>
+    <path d="M45 40 L50 49 L55 40" stroke="${L.suit2}" stroke-width="1.2" fill="none"/>
+    <path d="M39.6 67 h21.8 l.2 4 h-22.2z" fill="${L.belt}"/><rect x="48.5" y="66.6" width="3.4" height="4.8" rx=".6" fill="none" stroke="#a8843f" stroke-width=".8"/>`;
+}
+// la gonna: copre le anche e l'inizio delle gambe (si disegna sopra le gambe)
+function actSkirt(L) {
+  if (!L.skirt) return '';
+  const y2 = 84 + L.skirtLen, e = L.skirtLen * .14, w = 32 + 2 * e;
+  return `<path d="M37.2 84 H62.8 L${66 + e} ${y2} q-${w / 2} 3 -${w} 0z" fill="${L.skirt}"/>
+    <path d="M${34 - e + .5} ${y2 - .3} q${w / 2 - .5} 3 ${w - 1} 0" stroke="#000" stroke-opacity=".2" stroke-width="1" fill="none"/>`;
 }
 function actArm(L, side, a, b, finger) {
   const s = side < 0 ? [36, 47] : [64, 47];
@@ -191,7 +232,8 @@ function actLerp(a, b, t) {
 function actFigure(L, q) {
   const f = { mouth: q.face || 'smile', happy: !!q.happy }, legs = q.legs, arms = q.arms;
   let body = actArm(L, -1, arms[0][0], arms[0][1]) + actLeg(L, legs[0][0], legs[0][1], true) + actTorso(L) + tHeadStill(L, f) +
-    actLeg(L, legs[1][0], legs[1][1]) + actArm(L, 1, arms[1][0], arms[1][1]);
+    (L.earrings ? `<circle cx="40.4" cy="27.2" r="1.1" fill="${L.earrings}"/><circle cx="59.6" cy="27.2" r="1.1" fill="${L.earrings}"/>` : '') +
+    actLeg(L, legs[1][0], legs[1][1]) + actSkirt(L) + actArm(L, 1, arms[1][0], arms[1][1]);
   if (q.hold) {
     const h = actHand(1, arms[1][0], arms[1][1]);
     body += `<g transform="translate(${h[0]} ${h[1]}) rotate(${-q.r}) scale(${1 / ACT_S})">${q.hold === 'cup' ? AP.cup(1, 3) : AP.ball(0, -3)}</g>`;
