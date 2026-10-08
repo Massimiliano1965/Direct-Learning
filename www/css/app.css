@@ -448,3 +448,8 @@ body.test-end #btn-again { display: none; }
 .kj-who { font-size: 13px; color: var(--muted); }
 .kj-plot { font-family: var(--serif); font-style: italic; font-size: 15px; line-height: 1.35; margin-top: 4px; }
 .kj-btn .hint { display: block; font-size: 13px; font-weight: 500; color: var(--muted); margin-top: 2px; }
+
+/* In cima al menu: le storie e la ricerca */
+#home-quick { display: grid; gap: 10px; margin: 0 0 14px; }
+#home-quick:empty { display: none; }
+#home-quick button + button { margin-top: 0; }

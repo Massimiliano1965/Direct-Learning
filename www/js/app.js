@@ -100,6 +100,25 @@ function renderHome() {
 
   renderReg();
 
+  // in cima al menu: le storie e la ricerca (si vedono subito, Massi)
+  const hq = $('home-quick');
+  hq.innerHTML = '';
+  // le storie a puntate (storie.js): sopra tutto, sono il motivo per tornare
+  if (typeof showStoryList === 'function' && KJ_ON) {
+    const kb = document.createElement('button'), S = kjStory(), n = S.episodes.filter((E, i) => kjOpen(i)).length;
+    kb.className = 'lesson-btn kj-btn';
+    kb.innerHTML = '<span>📖 ' + tx('stories') + '<small class="hint">' + S.icon + ' ' + S.title + '</small></span><span class="score">' + n + ' / ' + S.episodes.length + '</span>';
+    kb.onclick = () => showStoryList();
+    hq.appendChild(kb);
+  }
+  // la ricerca (cerca.js): una parola, un verbo, un articolo, scritta o a voce → la lezione, dal punto giusto
+  if (typeof showSearch === 'function') {
+    const sb = document.createElement('button');
+    sb.className = 'lesson-btn search-btn';
+    sb.innerHTML = '<span class="search-ico">' + LENS + '</span><span>' + tx('searchBtn') + '</span>';
+    sb.onclick = () => showSearch();
+    hq.appendChild(sb);
+  }
   const ll = $('lesson-list');
   ll.innerHTML = '';
   const db = document.createElement('button');
@@ -113,22 +132,6 @@ function renderHome() {
   fb.innerHTML = '<span>★ ' + tx('favs') + '</span><span class="score">' + ((DB.settings.favs || []).length || '') + '</span>';
   fb.onclick = () => showFavs();
   ll.appendChild(fb);
-  // le storie a puntate (storie.js): sopra tutto, sono il motivo per tornare
-  if (typeof showStoryList === 'function' && KJ_ON) {
-    const kb = document.createElement('button'), S = kjStory(), n = S.episodes.filter((E, i) => kjOpen(i)).length;
-    kb.className = 'lesson-btn kj-btn';
-    kb.innerHTML = '<span>📖 ' + tx('stories') + '<small class="hint">' + S.icon + ' ' + S.title + '</small></span><span class="score">' + n + ' / ' + S.episodes.length + '</span>';
-    kb.onclick = () => showStoryList();
-    ll.insertBefore(kb, ll.firstChild);
-  }
-  // la ricerca (cerca.js): una parola, un verbo, un articolo, scritta o a voce → la lezione, dal punto giusto
-  if (typeof showSearch === 'function') {
-    const sb = document.createElement('button');
-    sb.className = 'lesson-btn search-btn';
-    sb.innerHTML = '<span class="search-ico">' + LENS + '</span><span>' + tx('searchBtn') + '</span>';
-    sb.onclick = () => showSearch();
-    ll.insertBefore(sb, ll.firstChild);
-  }
   // i livelli (4 da 25, ognuno con il suo tema e colore) e dentro i capitoli da 5 lezioni (si aprono e si chiudono):
   // è aperto solo il capitolo dove l'allievo è arrivato (la prima lezione non ancora fatta)
   const lessonBtn = (l) => {
@@ -1274,6 +1277,9 @@ if (!DB.settings.uiLang && (COURSE.students || []).length === 1) { DB.settings.u
 if (DB.settings.uiLang && (COURSE.students || []).indexOf(DB.settings.uiLang) !== -1) setUiLang(DB.settings.uiLang);
 renderHome();
 if (!DB.settings.uiLang || (COURSE.students || []).indexOf(DB.settings.uiLang) === -1) showLangChoice();
+// le parti caricate dopo app.js (la ricerca, il promemoria, le storie) aggiungono le loro righe al menu:
+// quando la pagina è tutta pronta, il menu si ridisegna (prima mancavano «Cerca» e «Le storie» all'avvio)
+document.addEventListener('DOMContentLoaded', () => { if (currentScreen === 'home') renderHome(); });
 ttsWarmUp();
 document.addEventListener('deviceready', () => {
   document.addEventListener('backbutton', (e) => { if (e && e.preventDefault) e.preventDefault(); onBack(); }, false);
