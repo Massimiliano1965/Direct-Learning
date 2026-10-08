@@ -313,9 +313,10 @@ function later(fn, ms) {
    voice = quanto parla svelto l'insegnante (ognuno resta col suo carattere, tutti un po' più piano o più svelti);
    pace = pausa tra una domanda e l'altra; waits = quante volte il microfono riascolta in silenzio prima di arrendersi. */
 const SPEEDS = {
-  slow:   { voice: 0.85, pace: 1.7,  waits: 2 },
+  // (Massi: «la velocità non cambia, si allunga solo la pausa»: la voce adesso cambia davvero, le pause un po' meno)
+  slow:   { voice: 0.72, pace: 1.3,  waits: 2 },
   normal: { voice: 1,    pace: 1,    waits: 0 },
-  fast:   { voice: 1.12, pace: 0.7,  waits: 0 }
+  fast:   { voice: 1.3,  pace: 0.75, waits: 0 }
 };
 const speed = () => SPEEDS[DB.settings.speed] || SPEEDS.normal;
 (function () {
