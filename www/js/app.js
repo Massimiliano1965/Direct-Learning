@@ -162,8 +162,14 @@ function renderHome() {
       // se l'allievo apre o chiude un livello, l'app se lo ricorda (DB.settings.lvOpen)
       const started = Object.keys(DB.lessons).length > 0, mem = (DB.settings.lvOpen || {})[lv];
       lvBox.open = mem != null ? mem : started && (next.level || 1) === lv;
-      lvBox.innerHTML = '<summary class="level-head lv' + lv + '"><span class="lv-name">' + tx('level', { n: lv }) + '</span><span class="lv-theme">' + theme(lv) + '</span>' +
-        '<span class="lv-done">' + done + ' / ' + total + '</span></summary>';
+      // la testata del livello: il numero nel cerchio colorato, il tema, i disegni del livello, la barra di avanzamento (Massi: «troppo cupo, troppo uguale»)
+      // cinque disegni diversi, presi lungo il livello (uno per gruppo di lezioni)
+      const used = [], lsn = ls.filter(l => !l.test), step = Math.max(1, Math.floor(lsn.length / 5));
+      for (let i = 0; i < lsn.length && used.length < 5; i += step) { const w = (lsn[i].known || []).concat(lsn[i].fresh ? [lsn[i].fresh] : []).find(k => FIG[k] && used.indexOf(k) === -1 && !/^n\d/.test(k)); if (w) used.push(w); }
+      const pics = used.map(w => '<span class="lv-pic">' + FIG[w] + '</span>').join('');
+      lvBox.innerHTML = '<summary class="level-head lv' + lv + '"><span class="lv-badge">' + lv + '</span><span class="lv-text"><span class="lv-name">' + tx('level', { n: lv }) + '</span>' +
+        '<span class="lv-theme">' + theme(lv) + '</span></span><span class="lv-done">' + done + ' / ' + total + '</span>' +
+        '<span class="lv-pics">' + pics + '</span><span class="lv-bar"><i style="width:' + Math.round(done / total * 100) + '%"></i></span></summary>';
       lvBox.querySelector('summary').addEventListener('click', () => { DB.settings.lvOpen = DB.settings.lvOpen || {}; DB.settings.lvOpen[lv] = !lvBox.open; saveDB(); });   // solo il tocco dell'allievo
       const chs = [...new Set(ls.filter(l => !l.test).map(l => l.chapter))];
       chs.forEach(ci => {
@@ -171,8 +177,12 @@ function renderHome() {
         const ch = document.createElement('details');
         ch.className = 'chap';
         ch.open = Object.keys(DB.lessons).length > 0 && next.chapter === ci && !next.test;
-        ch.innerHTML = '<summary><span class="ch-name">' + chName(ci) + '</span><span class="ch-range">' + lessonNum(cl[0]) + '–' + lessonNum(cl[cl.length - 1]) + '</span>' +
-          '<span class="ch-done' + (cdone === cl.length ? ' all' : '') + '">' + cdone + ' / ' + cl.length + '</span></summary>';
+        // il capitolo: i disegni delle sue prime parole, il nome, la barra di avanzamento
+        const thumbs = cl.slice(0, 2).reduce((a, l) => a.concat((l.known || []).slice(0, 2)), []).filter(w => FIG[w]).slice(0, 3).map(w => '<span class="ch-pic">' + FIG[w] + '</span>').join('');
+        ch.innerHTML = '<summary><span class="ch-pics">' + thumbs + '</span><span class="ch-text"><span class="ch-name">' + chName(ci) + '</span>' +
+          '<span class="ch-range">' + tx('lessonsRange', { a: lessonNumber(cl[0]), b: lessonNumber(cl[cl.length - 1]) }) + '</span></span>' +
+          '<span class="ch-done' + (cdone === cl.length ? ' all' : '') + '">' + (cdone === cl.length ? '✓' : cdone + ' / ' + cl.length) + '</span>' +
+          '<span class="ch-bar"><i style="width:' + Math.round(cdone / cl.length * 100) + '%"></i></span></summary>';
         // le righe delle lezioni (con i disegni) si fanno solo quando il capitolo si apre: il menu resta leggero
         // sui telefoni economici (prima: 25.000 elementi e 646 disegni tutti insieme)
         const fill = () => { if (ch.dataset.filled) return; ch.dataset.filled = 1; cl.forEach(l => ch.appendChild(lessonBtn(l))); };
