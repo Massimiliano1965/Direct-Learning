@@ -36,6 +36,11 @@ const LOOK26 = {
   // la donna dal cappotto rosso (il giallo «La chiave di Venezia»): cappotto lungo rosso, cintura nera, capelli scuri, tacchi
   rossa: { man: false, outfit: 'dress', skin: '#f0d0b4', skin2: '#dcb898', hair: '#1c140f', hair2: '#120c08', style: 'long',
     suit: '#c8323b', suit2: '#a8262f', shirt: '#a8262f', skirt: '#c8323b', skirtLen: 36, belt: '#1d1d24', shoe: '#1d1d24', heels: true, earrings: '#e6c77e' },
+  // il giallo: Mario il commercialista (abito grigio, cravatta blu) e il commissario Bruno (giacca marrone, impermeabile)
+  commercialista: { man: true, outfit: 'tailor', modern: true, under: 'shirt', skin: '#e2ae86', skin2: '#cc9670', hair: '#2a1d16', hair2: '#1c140f', style: 'short',
+    suit: '#5b6270', suit2: '#4b515e', shirt: '#dfe9f6', tie: '#2f4a7a', btn: '#3a3f4a', pants: '#4b515e', pants2: '#3f4450', shoe: '#1b1b22' },
+  commissario: { man: true, outfit: 'tailor', modern: true, under: 'shirt', skin: '#d9a888', skin2: '#c48f6e', hair: '#5a5a62', hair2: '#3e3e46', style: 'back', goatee: true, hairHi: '#8a8a94',
+    suit: '#7a6248', suit2: '#64503a', shirt: '#f4f4f6', tie: '#2a3346', btn: '#4a3a2a', pants: '#3a3d47', pants2: '#30333c', shoe: '#2a1d16' },
   // le persone della lezione 13b e 13c (giovane / anziano, di dov'è): bambini, ragazzi, signori anziani
   bambino: { man: true, outfit: 'bomber', skin: '#f1c7a5', skin2: '#e0b08c', hair: '#5a3a28', hair2: '#45291c', style: 'short',
     suit: '#e8862a', suit2: '#c96f1c', shirt: '#c96f1c', tee: '#f3d36b', pants: '#3f5f8a', pants2: '#33507a', shoe: '#f4f4f6', sole: '#c94a4a' },

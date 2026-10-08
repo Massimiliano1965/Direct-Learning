@@ -51,7 +51,31 @@ Kenji non ci crede: nel quaderno di Rossi ci sono numeri che solo chi lavora con
 | 4 «La chiave 204» | telefono, chiave, quaderno, borsa, ombrello | Il telefono di Rossi squilla: «VENEZIA». Nella borsa: una chiave con il numero 204 e un quaderno pieno di numeri. Un ombrello bagnato… ma a Milano oggi c'è il sole | È un telefono. È una borsa. È una chiave. È un quaderno. È un ombrello? |
 | 5 «Il cappotto rosso» | nero, bianco, rosso (cappotto, valigia, portatile) | Dalla finestra: una donna con il cappotto rosso, una valigia nera e un portatile bianco sale su un taxi: STAZIONE | Il cappotto è rosso. La valigia è nera. Il portatile è bianco. Chi è? |
 
-**Le puntate 6–25 (prossime)**: 6–7 i numeri (il codice nel quaderno: 2-0-4…); 8–9 città e monumenti (le foto: Venezia, il ponte di Rialto); 10 il mio / il Suo (Anna: «La penna è mia»); 11 grande / piccolo (la chiave piccola, la cassaforte grande); 12 il suo / la sua (la borsa di Rossi o di Anna?); 13–13c le persone (la polizia, il commercialista, chi è giovane, chi è anziano, di dov'è la donna in rosso); 14 essere (Kenji si presenta alla polizia); 15 un altro (un'altra chiave); 16–17 articoli (l'elenco degli oggetti dell'ufficio, come in un verbale); 18 sul / nel (la chiave nel cassetto, la foto sul tavolo); 19 anche / neanche (Anna non sa niente. Neanche Mario.); 20–21 l'ora (il treno per Venezia alle 7:35); 22–25 che cosa fa (Anna telefona, Mario chiude il computer… perché?).
+**Le puntate 6–25 (fatte, 22 puntate con la 13b e la 13c)**
+| Lezione | Titolo | Che cosa succede |
+|---|---|---|
+| 6 | Il cassetto | Il quaderno: 4 – 2 – 6. Il lucchetto del cassetto (1 – 5 – 3). Dentro, una foto. |
+| 7 | La foto | I dieci della Rossi Seta: il numero otto è graffiato via. Entra Anna, la segretaria. |
+| 8 | Le cartoline | Sulla scrivania: Roma, Parigi, Londra, New York… e Venezia. |
+| 9 | Il ponte | Il Colosseo è a Roma… il ponte di Rialto è a Venezia, cerchiato di rosso. |
+| 10 | La mia borsa | «È la Sua valigia?» chiede Kenji ad Anna (la valigia nera). «No!» |
+| 11 | La chiave piccola | Nella valigia nera una chiave piccola; la 204 è grande. Una cassaforte. |
+| 12 | Il suo telefono | Il telefono di Anna squilla: VENEZIA. «Sbagliato.» |
+| 13 | Il commissario | Arriva la polizia: il commissario Bruno è italiano, Kenji giapponese. |
+| 13b | Il portiere | Il portiere anziano ha visto una ragazza giovane: «Il cappotto è rosso!» |
+| 13c | Di dov'è? | Sulla valigia nera un cartellino: PARIGI. Kenji è di Osaka, il commissario di Milano. |
+| 14 | Io sono Kenji | Gli interrogatori: «Io sono Kenji.» «Lei è giapponese?» Anna è nervosa. |
+| 15 | Un'altra valigia | Un'altra valigia: rossa, come il cappotto. |
+| 16 | Nella valigia rossa | Un'agenda, uno zaino, uno specchio, un'arancia. Nell'agenda: VENEZIA – 204 – C.R. |
+| 17 | Di chi è? | L'agenda è di Carlo Rossi. Lo specchio è di Anna? «No!» Lo zaino viene da Parigi. |
+| 18 | Nel cappotto | Nel cappotto di Rossi: un biglietto Milano → Venezia, 7:35. |
+| 19 | Anche la valigia | Il cappotto è rosso; anche la valigia; anche il rossetto sulla tazza. «Anche Anna?» |
+| 20 | Le otto | Sono le otto, le dieci, mezzogiorno, l'una… e Rossi non torna. |
+| 21 | Il taxi delle tre | L'agenda di Rossi: riunione alle nove, pranzo all'una, taxi alle tre → la stazione. |
+| 22 | L'etichetta rossa | Sull'ombrello nero un'etichetta rossa: HOTEL – VENEZIA – 204. |
+| 23 | Anna telefona | Kenji legge il quaderno; Anna telefona di nascosto; Mario il commercialista chiude il computer. |
+| 24 | Perché? | Mario prende l'agenda di Rossi. Perché? |
+| 25 | La prende | Kenji prende la chiave e la valigia: il treno per Venezia. Fine del primo livello. |
 
 ---
 

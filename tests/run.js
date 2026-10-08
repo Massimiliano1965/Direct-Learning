@@ -2366,9 +2366,9 @@ check('88: prima e ora', run("SIMPF.present('ipf_m_read').prompt") === 'Prima ' 
   vm.runInContext(fs.readFileSync(path.join(__dirname, '..', 'www', 'js', 'storie.js'), 'utf8'), ctx, { filename: 'storie.js' });
   run('DB.settings.story = undefined');
   const K = run('kjEps()');
-  check('storie: 3 storie da scegliere, il giallo pronto (5 puntate), solo nel corso di italiano', run('STORIES.length') === 3 && run('kjStory().id') === 'giallo' &&
-    K.length === 5 && K.every((E, i) => E.lesson === 'l' + (i + 1)) && run('KJ_ON') === true && run('kjIndexOf("l3")') === 2);
-  check('storie: ogni scena si disegna, ogni puntata finisce con «Continua…»', K.every(E => E.scenes.every(sc => typeof sc[0]() === 'string') && E.scenes[E.scenes.length - 1][1] === 'Continua…'));
+  check('storie: 3 storie da scegliere, il giallo con le puntate di tutto il livello 1 (una per lezione, 13b e 13c comprese), solo nel corso di italiano', run('STORIES.length') === 3 && run('kjStory().id') === 'giallo' &&
+    K.length === 27 && K.map(E => E.lesson).join() === run('LESSONS').filter(l => l.level === 1 && !l.test).map(l => l.id).join() && run('KJ_ON') === true && run('kjIndexOf("l3")') === 2);
+  check('storie: ogni scena si disegna, ogni puntata finisce con «Continua…»', K.every(E => E.scenes.every(sc => typeof sc[0]() === 'string' && sc[0]().indexOf('undefined') === -1 && sc[0]().indexOf('NaN') === -1) && E.scenes[E.scenes.length - 1][1].indexOf('Continua') === 0));
   check('storie: la risposta modello è giusta, quella sbagliata no', K.every(E => E.questions.every(Q => run('kjCheck')(Q, Q.model) && E.scenes[Q.show])) &&
     !run('kjCheck')(K[0].questions[0], 'È un tavolo.') && !run('kjCheck')(K[4].questions[0], 'Il cappotto è bianco.'));
   check('storie: si sblocca con la lezione fatta', run('DB.lessons = { l1: 80 }; [kjOpen(0), kjOpen(1)]').join() === 'true,false');

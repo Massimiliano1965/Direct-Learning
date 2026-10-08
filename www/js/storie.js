@@ -71,17 +71,19 @@ function gScreen(x, y) {
     '<rect x="' + (x + 36) + '" y="' + (y + 56) + '" width="12" height="8" fill="#1d2638"/><rect x="' + (x + 26) + '" y="' + (y + 63) + '" width="32" height="3" rx="1" fill="#1d2638"/>';
 }
 // il telefono che squilla: sullo schermo «VENEZIA»
-function gPhoneCall(x, y) {
+function gPhoneCall(x, y, k) {
+  if (k) return gScale(gPhoneCall(0, 0), x, y, k);
   return '<rect x="' + x + '" y="' + y + '" width="40" height="72" rx="6" fill="#1d1d24"/><rect x="' + (x + 3) + '" y="' + (y + 6) + '" width="34" height="58" rx="2" fill="#1f2b4d"/>' +
     '<text x="' + (x + 20) + '" y="' + (y + 26) + '" text-anchor="middle" font-family="Arial,sans-serif" font-size="6.6" font-weight="bold" fill="#f3eee2">VENEZIA</text>' +
     '<circle cx="' + (x + 11) + '" cy="' + (y + 52) + '" r="4.5" fill="#c8323b"/><circle cx="' + (x + 29) + '" cy="' + (y + 52) + '" r="4.5" fill="#3fae5a"/>' +
     '<path d="M' + (x - 5) + ' ' + (y + 20) + ' q-5 8 0 16 M' + (x - 10) + ' ' + (y + 16) + ' q-8 12 0 24 M' + (x + 45) + ' ' + (y + 20) + ' q5 8 0 16 M' + (x + 50) + ' ' + (y + 16) + ' q8 12 0 24" stroke="#c9a45c" stroke-width="2" fill="none"/>';
 }
 // la chiave con il cartellino «204»
-const gKey204 = (x, y) => kjPut('key', x, y, 70) + '<path d="M' + (x + 16) + ' ' + (y + 40) + ' l-6 16" stroke="#8d93a3" stroke-width="1"/>' +
+const gKey204 = (x, y, k) => k ? gScale(gKey204(0, 0), x, y, k) : kjPut('key', x, y, 70) + '<path d="M' + (x + 16) + ' ' + (y + 40) + ' l-6 16" stroke="#8d93a3" stroke-width="1"/>' +
   '<rect x="' + (x - 6) + '" y="' + (y + 54) + '" width="30" height="16" rx="3" fill="#f3eee2" stroke="#c9a45c"/><text x="' + (x + 9) + '" y="' + (y + 66) + '" text-anchor="middle" font-family="Georgia,serif" font-size="11" font-weight="bold" fill="#2a3346">204</text>';
 // il quaderno aperto pieno di numeri
-function gNumbers(x, y) {
+function gNumbers(x, y, k) {
+  if (k) return gScale(gNumbers(0, 0), x, y, k);
   const rows = ['12.03  —  48.000', '27.05  —  52.500', '04.09  —  61.000', '18.11  —  75.000'];
   return '<rect x="' + x + '" y="' + y + '" width="96" height="64" rx="2" fill="#f3eee2"/><path d="M' + (x + 48) + ' ' + y + ' v64" stroke="#c9b994"/>' +
     '<rect x="' + (x - 3) + '" y="' + (y - 2) + '" width="102" height="68" rx="3" fill="none" stroke="#8e2a2a" stroke-width="3"/>' +
@@ -104,6 +106,74 @@ const gTaxi = (x) => '<g transform="translate(' + x + ' 76)"><path d="M0 22 v-10
 const gSign = (x, y, t) => '<rect x="' + x + '" y="' + y + '" width="' + (t.length * 6 + 10) + '" height="13" rx="2" fill="#2f5d8a" stroke="#f3eee2"/><text x="' + (x + 5) + '" y="' + (y + 9.6) + '" font-family="Arial,sans-serif" font-size="8" font-weight="bold" fill="#f3eee2">' + t + '</text>';
 // la donna dal cappotto rosso (di spalle: non si vede il viso)
 const gRedCoat = (x, sc) => kjPerson('rossa', x, sc || 1, { face: 'flat' });
+
+
+const gScale = (svg, x, y, k) => '<g transform="translate(' + x + ' ' + y + ') scale(' + k + ')">' + svg + '</g>';
+// la scrivania con il cassetto (aperto: si vede la foto dentro)
+function gDesk(x, open) {
+  return '<rect x="' + x + '" y="52" width="100" height="8" rx="2" fill="#8e6741"/><rect x="' + (x + 4) + '" y="60" width="92" height="40" fill="#6b4a2e"/>' +
+    (open ? '<rect x="' + (x + 30) + '" y="64" width="40" height="18" fill="#3a2c22"/><rect x="' + (x + 26) + '" y="80" width="48" height="14" fill="#8e6741"/>' +
+      '<rect x="' + (x + 38) + '" y="66" width="22" height="14" fill="#f3eee2" transform="rotate(-6 ' + (x + 49) + ' 73)"/>'
+      : '<rect x="' + (x + 30) + '" y="66" width="40" height="16" rx="1" fill="#7a5735"/><circle cx="' + (x + 50) + '" cy="74" r="2" fill="#c9a45c"/>');
+}
+// il lucchetto a numeri del cassetto
+const gLock = (x, y, d) => '<rect x="' + x + '" y="' + y + '" width="54" height="26" rx="4" fill="#8d93a3"/>' +
+  d.map((c, i) => '<rect x="' + (x + 5 + i * 16) + '" y="' + (y + 5) + '" width="12" height="16" rx="2" fill="#f3eee2"/><text x="' + (x + 11 + i * 16) + '" y="' + (y + 17) + '" text-anchor="middle" font-family="Arial" font-size="11" font-weight="bold" fill="#2a3346">' + c + '</text>').join('');
+// la foto dei dieci della Rossi Seta (scratched: l'otto è graffiato via)
+function gPhoto(x, y, scratched, k) {
+  if (k) return gScale(gPhoto(0, 0, scratched), x, y, k);
+  let s = '<rect x="' + x + '" y="' + y + '" width="108" height="78" fill="#f3eee2"/><rect x="' + (x + 5) + '" y="' + (y + 5) + '" width="98" height="58" fill="#c9b994"/>';
+  for (let i = 0; i < 10; i++) {
+    const cx = x + 14 + (i % 5) * 20, cy = y + 18 + Math.floor(i / 5) * 24;
+    s += '<circle cx="' + cx + '" cy="' + cy + '" r="6" fill="#e2ae86"/><path d="M' + (cx - 8) + ' ' + (cy + 16) + ' q8 -12 16 0z" fill="' + ['#2f4a7a', '#5b4a8b', '#4a4f5a', '#2f7d7a', '#7a6248'][i % 5] + '"/>' +
+      '<text x="' + cx + '" y="' + (cy - 8) + '" text-anchor="middle" font-family="Arial" font-size="5" font-weight="bold" fill="#2a3346">' + (i + 1) + '</text>';
+    if (scratched && i === 7) s += '<path d="M' + (cx - 8) + ' ' + (cy - 6) + ' l16 14 M' + (cx + 8) + ' ' + (cy - 6) + ' l-16 14 M' + (cx - 9) + ' ' + (cy + 1) + ' h18" stroke="#2a2433" stroke-width="2.2"/>';
+  }
+  return s + '<text x="' + (x + 54) + '" y="' + (y + 73) + '" text-anchor="middle" font-family="Georgia,serif" font-size="6" font-style="italic" fill="#2a3346">Rossi Seta</text>';
+}
+// una cartolina: la figura della lezione e il nome della città (k = più grande)
+function gCard(key, x, y, label, k) {
+  k = k || 1;
+  const w = 50 * k, h = 62 * k;
+  return '<g transform="rotate(' + (((x * 7) % 9) - 4) + ' ' + (x + w / 2) + ' ' + (y + h / 2) + ')"><rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" fill="#f3eee2" stroke="#c9b994"/>' +
+    kjPut(key, x + 3 * k, y + 3 * k, 44 * k) + '<text x="' + (x + w / 2) + '" y="' + (y + h - 5 * k) + '" text-anchor="middle" font-family="Georgia,serif" font-size="' + (6.4 * k) + '" font-weight="bold" fill="#2a3346">' + label + '</text></g>';
+}
+// la cartolina di Venezia: il ponte di Rialto sul Canal Grande
+function gVenice(x, y, k) {
+  k = k || 1;
+  return gScale('<rect width="80" height="70" fill="#f3eee2" stroke="#c9b994"/><rect x="4" y="4" width="72" height="52" fill="#9cc8e6"/><rect x="4" y="38" width="72" height="18" fill="#3f7fb5"/>' +
+    '<path d="M10 38 q30 -22 60 0 v4 h-60z" fill="#e9dcc0"/><path d="M28 30 h24 v-8 h-24z" fill="#e9dcc0"/><path d="M30 22 l10 -6 l10 6z" fill="#c9b994"/>' +
+    '<path d="M18 48 q10 4 22 0" stroke="#1d1d24" stroke-width="2" fill="none"/>' +
+    '<text x="40" y="65" text-anchor="middle" font-family="Georgia,serif" font-size="7" font-weight="bold" fill="#2a3346">VENEZIA</text>', x, y, k);
+}
+// la valigia aperta (dentro: una chiave piccola che luccica)
+const gSuitOpen = (x, y, c) => '<rect x="' + x + '" y="' + y + '" width="70" height="40" rx="4" fill="' + (c || '#2a2a30') + '"/><path d="M' + x + ' ' + y + ' l8 -22 h54 l8 22z" fill="' + (c || '#3a3a44') + '" opacity=".85"/>' +
+  '<rect x="' + (x + 6) + '" y="' + (y + 6) + '" width="58" height="28" rx="2" fill="#e9e2d2"/><circle cx="' + (x + 40) + '" cy="' + (y + 20) + '" r="3" fill="#c9a45c"/><path d="M' + (x + 42) + ' ' + (y + 20) + ' h8 v3" stroke="#c9a45c" stroke-width="1.6" fill="none"/>';
+// la cassaforte dietro il quadro: una serratura piccola
+const gSafe = (x, y) => '<rect x="' + x + '" y="' + y + '" width="70" height="80" rx="4" fill="#5d6577"/><rect x="' + (x + 6) + '" y="' + (y + 6) + '" width="58" height="68" rx="3" fill="#8d93a3"/>' +
+  '<circle cx="' + (x + 35) + '" cy="' + (y + 32) + '" r="10" fill="#5d6577"/><rect x="' + (x + 33) + '" y="' + (y + 48) + '" width="4" height="10" rx="1" fill="#1d1d24"/>';
+// il cartellino della valigia o dell'ombrello, con un testo
+const gLabel = (x, y, t, k) => gScale('<path d="M0 0 h' + (t.length * 5.4 + 16) + ' v18 h-' + (t.length * 5.4 + 16) + 'z" fill="#f3eee2" stroke="#c9a45c"/><circle cx="7" cy="9" r="2.4" fill="#8d93a3"/>' +
+  '<text x="14" y="13" font-family="Georgia,serif" font-size="9" font-weight="bold" fill="#2a3346">' + t + '</text>', x, y, k || 1);
+// l'agenda aperta, con le righe scritte
+const gAgendaOpen = (x, y, rows) => '<rect x="' + x + '" y="' + y + '" width="120" height="78" rx="3" fill="#2e2f37"/><rect x="' + (x + 4) + '" y="' + (y + 4) + '" width="112" height="70" fill="#f3eee2"/>' +
+  '<path d="M' + (x + 60) + ' ' + (y + 4) + ' v70" stroke="#c9b994"/>' + rows.map((r, i) => '<text x="' + (x + 66) + '" y="' + (y + 22 + i * 16) + '" font-family="Georgia,serif" font-size="8.4" font-style="italic" fill="#2a3346">' + r + '</text>').join('') +
+  [0, 1, 2, 3].map(i => '<path d="M' + (x + 10) + ' ' + (y + 16 + i * 14) + ' h44" stroke="#c9b994"/>').join('');
+// il cappotto appeso all'attaccapanni
+const gHanger = (x, y) => '<path d="M' + (x + 20) + ' ' + y + ' v76" stroke="#6b4a2e" stroke-width="3"/><path d="M' + (x + 8) + ' ' + (y + 76) + ' h24" stroke="#6b4a2e" stroke-width="3"/>' +
+  '<path d="M' + (x + 8) + ' ' + (y + 10) + ' q12 -6 24 0 l4 48 h-32z" fill="#4a4f5a"/><path d="M' + (x + 20) + ' ' + (y + 6) + ' v52" stroke="#3a3d47" stroke-width="1"/>';
+// il biglietto del treno Milano — Venezia
+const gTicket = (x, y, k) => gScale('<rect width="64" height="30" rx="3" fill="#f3eee2" stroke="#c8323b" stroke-width="1.4"/><rect width="64" height="8" rx="3" fill="#c8323b"/>' +
+  '<text x="32" y="6.4" text-anchor="middle" font-family="Arial" font-size="5.4" font-weight="bold" fill="#fff">TRENITALIA</text>' +
+  '<text x="32" y="17" text-anchor="middle" font-family="Arial" font-size="6.4" font-weight="bold" fill="#2a3346">MILANO → VENEZIA</text>' +
+  '<text x="32" y="26" text-anchor="middle" font-family="Arial" font-size="5.6" fill="#2a3346">07:35</text>', x, y, k || 1);
+// la stazione: il tabellone delle partenze
+function gStation() {
+  return '<rect width="200" height="120" fill="#cfc4b0"/><path d="M0 0 L100 -10 L200 0 V40 H0z" fill="#8d93a3"/>' +
+    '<rect x="40" y="12" width="120" height="34" rx="2" fill="#1d1d24"/><text x="46" y="24" font-family="Courier New,monospace" font-size="7" fill="#f3d36b">07:35  VENEZIA S.L.  2</text>' +
+    '<text x="46" y="36" font-family="Courier New,monospace" font-size="7" fill="#f3d36b">07:50  ROMA       5</text>' +
+    '<rect y="96" width="200" height="24" fill="#8d93a3"/><path d="M0 104 H200 M0 112 H200" stroke="#5d6577" stroke-width="2"/>';
+}
 
 /* ---------- Le storie ----------
    episodes: { lesson, title, scenes: [[disegno, frase]], questions: [{ show, q, model, ok, no, mark }] } */
@@ -168,7 +238,231 @@ const STORIES = [
         { show: 0, q: 'Il cappotto è rosso o bianco?', model: 'Il cappotto è rosso.', ok: ['rosso'], no: ['bianco'] },
         { show: 0, q: 'La valigia è nera?', mark: [85, 70], model: 'Sì, la valigia è nera.', ok: ['nera'], no: ['non', 'bianca'] },
         { show: 1, q: 'Di che colore è il portatile?', mark: [45, 62], model: 'Il portatile è bianco.', ok: ['bianco'], no: ['nero', 'rosso'] }
+      ] },
+    /* ---------- Livello 1, seconda parte: le puntate 6–25 (Milano: il codice, le cartoline, la polizia, la valigia rossa, il taxi delle tre) ---------- */
+    { lesson: 'l6', title: 'Il cassetto', scenes: [
+        [() => '<rect width="200" height="120" fill="#d9cdb8"/>' + gNumbers(52, 26), 'È un quaderno.'],
+        [() => gOffice(false) + gDesk(40, false) + gLock(118, 64, ['1', '5', '3']), 'Uno… cinque… tre.'],
+        [() => '<rect width="200" height="120" fill="#d9cdb8"/>' + kjPut('n4', 20, 22, 56) + kjPut('n2', 72, 22, 56) + kjPut('n6', 124, 22, 56), 'È il numero quattro. È il numero due. È il numero sei.'],
+        [() => gOffice(false) + gDesk(40, true) + kjPerson('kenji', 150, 1, { arms: [[-4, 6], [-70, 30]], face: 'o' }), 'Il cassetto…'],
+        [() => '<rect width="200" height="120" fill="#d9cdb8"/>' + gPhoto(46, 18, false) + kjQ(160, 60, 30), 'Continua…']
+      ], questions: [
+        { show: 2, q: 'Che numero è?', mark: [152, 22], model: 'È il numero sei.', ok: ['sei'], no: ['due', 'quattro'] },
+        { show: 2, q: 'È il numero due?', mark: [100, 22], model: 'Sì, è il numero due.', ok: ['due'], no: ['non', 'no'] }
+      ] },
+    { lesson: 'l7', title: 'La foto', scenes: [
+        [() => '<rect width="200" height="120" fill="#d9cdb8"/>' + gPhoto(46, 18, false), 'Uno, due, tre… dieci.'],
+        [() => '<rect width="200" height="120" fill="#d9cdb8"/>' + gPhoto(46, 18, true), 'È il numero otto…'],
+        [() => '<rect width="200" height="120" fill="#d9cdb8"/>' + kjPut('n7', 30, 22, 60) + kjPut('n8', 110, 22, 60) + '<path d="M118 30 l44 44 M162 30 l-44 44" stroke="#c8323b" stroke-width="4"/>', 'Il sette, sì. L\'otto… no.'],
+        [() => gOffice(false) + '<rect x="146" y="28" width="34" height="68" fill="#4a3628"/><rect x="148" y="30" width="30" height="66" fill="#f3e9cf"/>' + kjPerson('anna', 163, .96, { face: 'o' }) + kjPerson('kenji', 60, 1, { arms: [[-4, 6], [95, 10]] }), 'Chi è?'],
+        [() => gOffice(false) + kjPerson('anna', 140, .96, { face: 'flat' }) + gPhoto(30, 26, true, .55) + kjQ(176, 40, 26), 'Continua…']
+      ], questions: [
+        { show: 2, q: 'È il sette o l\'otto?', mark: [60, 20], model: 'È il sette.', ok: ['sette'], no: ['otto'] },
+        { show: 1, q: 'Che numero è?', model: 'È il numero otto.', ok: ['otto'], no: ['sette', 'nove'] }
+      ] },
+    { lesson: 'l8', title: 'Le cartoline', scenes: [
+        [() => '<rect width="200" height="120" fill="#c9b994"/>' + gCard('g_roma', 14, 18, 'ROMA') + gCard('g_parigi', 76, 14, 'PARIGI') + gCard('g_londra', 138, 20, 'LONDRA'), 'Roma è una città. Parigi è una città.'],
+        [() => '<rect width="200" height="120" fill="#c9b994"/>' + gCard('g_italia', 30, 18, 'ITALIA', 1.2) + gCard('g_francia', 112, 18, 'FRANCIA', 1.2), 'L\'Italia è un paese. La Francia è un paese.'],
+        [() => '<rect width="200" height="120" fill="#c9b994"/>' + gCard('g_newyork', 40, 16, 'NEW YORK', 1.2) + gCard('g_cina', 116, 22, 'CINA', 1.1), 'New York è una città. La Cina è un paese.'],
+        [() => '<rect width="200" height="120" fill="#c9b994"/>' + gVenice(56, 12) + kjQ(156, 64, 30), 'E questa?'],
+        [() => gOffice(false) + kjPerson('kenji', 60, 1, { arms: [[-4, 6], [150, 40]], face: 'o' }) + gVenice(120, 30, .55), 'Continua…']
+      ], questions: [
+        { show: 0, q: 'Parigi è una città o un paese?', mark: [100, 14], model: 'Parigi è una città.', ok: ['citta'], no: ['paese'] },
+        { show: 1, q: 'L\'Italia è un paese?', mark: [56, 18], model: 'Sì, l\'Italia è un paese.', ok: ['paese'], no: ['non', 'citta'] }
+      ] },
+    { lesson: 'l9', title: 'Il ponte', scenes: [
+        [() => '<rect width="200" height="120" fill="#c9b994"/>' + gCard('g_colosseo', 20, 18, 'ROMA', 1.2) + gCard('g_eiffel', 108, 18, 'PARIGI', 1.2), 'Il Colosseo è a Roma. La Torre Eiffel è a Parigi.'],
+        [() => '<rect width="200" height="120" fill="#c9b994"/>' + gCard('g_bigben', 20, 18, 'LONDRA', 1.2) + gCard('g_liberta', 108, 18, 'NEW YORK', 1.2), 'Il Big Ben è a Londra. La Statua della Libertà è a New York.'],
+        [() => '<rect width="200" height="120" fill="#c9b994"/>' + gVenice(40, 8, 1.25) + '<circle cx="100" cy="62" r="20" fill="none" stroke="#c8323b" stroke-width="3"/>', 'Il ponte è a Venezia.'],
+        [() => '<rect width="200" height="120" fill="#c9b994"/>' + gVenice(20, 20, .9) + gKey204(130, 22), 'Venezia… e la chiave 204.'],
+        [() => gOffice(false) + kjPerson('kenji', 100, 1, { face: 'flat' }) + kjQ(136, 40, 30), 'Continua…']
+      ], questions: [
+        { show: 0, q: 'Dov\'è il Colosseo?', mark: [48, 16], model: 'Il Colosseo è a Roma.', ok: ['roma'], no: ['parigi'] },
+        { show: 1, q: 'Dov\'è il Big Ben?', mark: [48, 16], model: 'Il Big Ben è a Londra.', ok: ['londra'], no: ['new', 'york'] },
+        { show: 2, q: 'Il ponte è a Venezia?', model: 'Sì, il ponte è a Venezia.', ok: ['venezia'], no: ['non', 'no'] }
+      ] },
+    { lesson: 'l10', title: 'La mia borsa', scenes: [
+        [() => gOffice(false) + kjPerson('anna', 60, .96, { arms: [[-4, 6], [60, 30]] }) + kjPut('bag', 84, 66, 30) + kjBubble(70, 18, 70, 'La mia borsa.', 76), 'È la mia borsa.'],
+        [() => gOffice(false) + kjPut('suitcase_nero', 130, 52, 46) + kjPerson('kenji', 60, 1, { arms: [[-4, 6], [95, 10]] }) + kjBubble(70, 14, 70, 'È la Sua valigia?', 66), 'È la Sua valigia?'],
+        [() => gOffice(false) + kjPerson('anna', 100, .96, { face: 'flat', arms: [[-40, 20], [40, 20]] }) + kjBubble(108, 18, 34, 'No!', 112), 'No!'],
+        [() => '<rect width="200" height="120" fill="#d9cdb8"/>' + kjPut('suitcase_nero', 50, 14, 92) + kjQ(150, 56, 30), 'La valigia è nera…'],
+        [() => gOffice(false) + kjPut('suitcase_nero', 130, 52, 46) + kjQ(150, 40, 30) + kjPerson('kenji', 60, 1, { face: 'o' }), 'Continua…']
+      ], questions: [
+        { show: 0, q: 'È una borsa o una valigia?', mark: [99, 64], model: 'È una borsa.', ok: ['borsa'], no: ['valigia'] },
+        { show: 3, q: 'La valigia è nera?', model: 'Sì, la valigia è nera.', ok: ['nera'], no: ['non', 'bianca', 'rossa'] }
+      ] },
+    { lesson: 'l11', title: 'La chiave piccola', scenes: [
+        [() => gOffice(false) + gSuitOpen(60, 54) + kjPerson('kenji', 160, 1, { arms: [[-4, 6], [-60, 30]] }), 'La valigia nera…'],
+        [() => '<rect width="200" height="120" fill="#d9cdb8"/>' + kjPut('key', 80, 50, 34) + '<circle cx="97" cy="67" r="26" fill="none" stroke="#c9a45c" stroke-width="2" stroke-dasharray="4 3"/>', 'Una chiave. È piccola.'],
+        [() => '<rect width="200" height="120" fill="#d9cdb8"/>' + gKey204(20, 16) + kjPut('key', 140, 56, 30), 'Questa chiave è grande. Questa chiave è piccola.'],
+        [() => '<rect width="200" height="120" fill="#d9cdb8"/>' + gSafe(60, 18) + kjPut('key', 140, 62, 28) + kjQ(150, 50, 26), 'Grande… piccola…'],
+        [() => gOffice(false) + kjPerson('kenji', 90, 1, { arms: [[-4, 6], [120, 60]], face: 'o' }) + kjPut('key', 106, 30, 18) + kjQ(140, 46, 30), 'Continua…']
+      ], questions: [
+        { show: 1, q: 'La chiave è grande o piccola?', model: 'La chiave è piccola.', ok: ['piccola'], no: ['grande'] },
+        { show: 2, q: 'Questa chiave è grande?', mark: [44, 18], model: 'Sì, questa chiave è grande.', ok: ['grande'], no: ['non', 'piccola'] }
+      ] },
+    { lesson: 'l12', title: 'Il suo telefono', scenes: [
+        [() => gOffice(false) + kjPerson('anna', 70, .96) + kjPut('table', 110, 52, 56) + gPhoneCall(126, 22, .55), 'È il suo telefono.'],
+        [() => '<rect width="200" height="120" fill="#2b2a33"/>' + gPhoneCall(80, 20), 'VENEZIA.'],
+        [() => gOffice(false) + kjPerson('anna', 110, .96, { face: 'o', arms: [[-4, 6], [150, 110]] }) + kjPut('phone_nero', 108, 30, 16) + kjPerson('kenji', 40, 1, { face: 'o' }), 'Anna? …'],
+        [() => gOffice(false) + kjPerson('anna', 110, .96, { face: 'flat', arms: [[-4, 6], [10, 10]] }) + kjBubble(118, 20, 46, 'Sbagliato.', 118) + kjPerson('kenji', 40, 1), '«Sbagliato.»'],
+        [() => gOffice(false) + kjPerson('kenji', 60, 1, { face: 'flat' }) + kjQ(100, 40, 30) + gPhoneCall(130, 40, .4), 'Continua…']
+      ], questions: [
+        { show: 0, q: 'È il suo telefono?', mark: [137, 20], model: 'Sì, è il suo telefono.', ok: ['telefono'], no: ['non', 'no'] },
+        { show: 1, q: 'È un telefono o un computer?', model: 'È un telefono.', ok: ['telefono'], no: ['computer'] }
+      ] },
+    { lesson: 'l13', title: 'Il commissario', scenes: [
+        [() => gStreet() + '<rect x="20" y="78" width="60" height="20" rx="4" fill="#f4f4f6"/><rect x="22" y="84" width="56" height="5" fill="#2f5d8a"/><text x="50" y="96" text-anchor="middle" font-size="5.6" font-weight="bold" fill="#2f5d8a">POLIZIA</text>' + kjPerson('commissario', 130, 1), 'È un signore. È italiano.'],
+        [() => gOffice(false) + kjPerson('commissario', 60, 1, { arms: [[-4, 6], [95, 10]] }) + kjPerson('kenji', 140, 1), 'È un signore. È giapponese.'],
+        [() => '<rect width="200" height="120" fill="#d9cdb8"/>' + kjPut('n_m_italia', 26, 14, 70) + kjPut('n_m_giappone', 104, 14, 70), 'Italiano. Giapponese.'],
+        [() => gOffice(false) + kjPerson('commissario', 60, 1, { face: 'flat', arms: [[-40, 20], [40, 20]] }) + kjPerson('kenji', 140, 1, { face: 'o' }), '…'],
+        [() => gOffice(false) + kjPerson('commissario', 100, 1, { face: 'flat' }) + kjQ(140, 40, 30), 'Continua…']
+      ], questions: [
+        { show: 1, q: 'Kenji è giapponese o cinese?', model: 'Kenji è giapponese.', ok: ['giapponese'], no: ['cinese'] },
+        { show: 0, q: 'Il signore è italiano?', model: 'Sì, il signore è italiano.', ok: ['italiano'], no: ['non', 'no'] }
+      ] },
+    { lesson: 'l13b', title: 'Il portiere', scenes: [
+        [() => gStreet() + kjPerson('signore', 70, .96, { r: 5 }), 'È un signore. È anziano.'],
+        [() => gStreet() + kjPerson('signore', 50, .96, { r: 5, arms: [[-4, 6], [95, 10]] }) + kjPerson('commissario', 140, 1), 'Il signore è anziano. Il commissario non è giovane.'],
+        [() => gStreet() + gRedCoat(110, .9) + '<circle cx="110" cy="56" r="40" fill="none" stroke="#c9a45c" stroke-width="2" stroke-dasharray="4 3"/>', 'È una ragazza. È giovane.'],
+        [() => gStreet() + kjPerson('signore', 60, .96, { r: 5, face: 'o' }) + kjBubble(70, 14, 64, 'Il cappotto è rosso!', 66), '«Il cappotto è rosso!»'],
+        [() => gStreet() + kjPerson('kenji', 100, 1, { face: 'flat' }) + kjQ(136, 40, 30), 'Continua…']
+      ], questions: [
+        { show: 0, q: 'Il signore è giovane o anziano?', model: 'Il signore è anziano.', ok: ['anziano'], no: ['giovane'] },
+        { show: 2, q: 'La ragazza è giovane?', model: 'Sì, la ragazza è giovane.', ok: ['giovane'], no: ['non', 'anziana'] }
+      ] },
+    { lesson: 'l13c', title: 'Di dov\'è?', scenes: [
+        [() => gStreet() + kjPerson('signore', 50, .96, { r: 5 }) + kjBubble(60, 14, 64, 'Di dov\'è? Boh.', 56) + kjPerson('kenji', 150, 1), 'Di dov\'è la ragazza?'],
+        [() => '<rect width="200" height="120" fill="#d9cdb8"/>' + kjPut('suitcase_nero', 40, 14, 90) + gLabel(118, 40, 'PARIGI'), 'PARIGI.'],
+        [() => '<rect width="200" height="120" fill="#d9cdb8"/>' + gCard('g_eiffel', 70, 18, 'PARIGI', 1.2), 'La ragazza è di Parigi?'],
+        [() => gOffice(false) + kjPerson('kenji', 60, 1, { face: 'o' }) + kjPerson('commissario', 140, 1), 'Kenji è di Osaka. Il commissario è di Milano.'],
+        [() => '<rect width="200" height="120" fill="#d9cdb8"/>' + gLabel(70, 46, 'PARIGI') + kjQ(146, 64, 30), 'Continua…']
+      ], questions: [
+        { show: 2, q: 'Di dov\'è la ragazza?', model: 'La ragazza è di Parigi.', ok: ['parigi'], no: ['roma', 'milano'] },
+        { show: 3, q: 'Di dov\'è Kenji?', model: 'Kenji è di Osaka.', ok: ['osaka'], no: ['milano', 'parigi'] }
+      ] },
+    { lesson: 'l14', title: 'Io sono Kenji', scenes: [
+        [() => gOffice(false) + kjPerson('kenji', 60, 1, { arms: [[-4, 6], [40, 110]] }) + kjBubble(70, 12, 74, 'Io sono Kenji.', 66) + kjPerson('commissario', 150, 1), '«Io sono Kenji.»'],
+        [() => gOffice(false) + kjPerson('commissario', 140, 1, { arms: [[-4, 6], [-95, 10]] }) + kjBubble(70, 12, 70, 'Lei è giapponese?', 134) + kjPerson('kenji', 60, 1), '«Lei è giapponese?»'],
+        [() => gOffice(false) + kjPerson('kenji', 60, 1) + kjBubble(30, 12, 80, 'Sì, sono giapponese.', 60) + kjPerson('commissario', 150, 1), '«Sì, sono giapponese.»'],
+        [() => gOffice(false) + kjPerson('anna', 100, .96, { face: 'flat' }) + kjBubble(60, 14, 80, 'Io sono Anna. Io…', 100), 'Lei è Anna. È nervosa.'],
+        [() => gOffice(false) + kjPerson('anna', 100, .96, { face: 'flat' }) + kjQ(136, 40, 30), 'Continua…']
+      ], questions: [
+        { show: 1, q: 'Kenji è giapponese?', model: 'Sì, Kenji è giapponese.', ok: ['giapponese'], no: ['non', 'no'] },
+        { show: 3, q: 'Chi è? Anna o Kenji?', model: 'È Anna.', ok: ['anna'], no: ['kenji'] }
+      ] },
+    { lesson: 'l15', title: 'Un\'altra valigia', scenes: [
+        [() => gOffice(false) + kjPut('suitcase_nero', 40, 52, 46), 'È una valigia. La valigia è nera.'],
+        [() => gOffice(false) + kjPut('suitcase_nero', 30, 52, 46) + kjPut('suitcase_rosso', 110, 48, 50) + kjPerson('commissario', 176, 1, { arms: [[-4, 6], [-95, 10]] }), 'È un\'altra valigia. È rossa.'],
+        [() => '<rect width="200" height="120" fill="#d9cdb8"/>' + kjPut('suitcase_rosso', 50, 14, 90) + kjQ(150, 56, 30), 'Un\'altra valigia… rossa.'],
+        [() => '<rect width="200" height="120" fill="#d9cdb8"/>' + kjPut('coat_rosso', 30, 20, 70) + kjPut('suitcase_rosso', 106, 24, 70), 'Il cappotto è rosso. La valigia è rossa.'],
+        [() => gOffice(false) + kjPut('suitcase_rosso', 110, 48, 50) + kjPerson('kenji', 60, 1, { face: 'o' }) + kjQ(150, 40, 30), 'Continua…']
+      ], questions: [
+        { show: 1, q: 'La valigia è nera o rossa?', mark: [135, 46], model: 'La valigia è rossa.', ok: ['rossa'], no: ['nera'] },
+        { show: 0, q: 'È una valigia?', model: 'Sì, è una valigia.', ok: ['valigia'], no: ['non', 'no'] }
+      ] },
+    { lesson: 'l16', title: 'Nella valigia rossa', scenes: [
+        [() => gOffice(false) + gSuitOpen(60, 54, '#c8323b') + kjPerson('commissario', 160, 1, { arms: [[-4, 6], [-60, 30]] }), 'La valigia rossa…'],
+        [() => '<rect width="200" height="120" fill="#d9cdb8"/>' + kjPut('agenda', 20, 22, 60) + kjPut('backpack', 76, 22, 60) + kjPut('mirror', 132, 22, 60), 'Un\'agenda. Uno zaino. Uno specchio.'],
+        [() => '<rect width="200" height="120" fill="#d9cdb8"/>' + kjPut('orange', 60, 18, 80), 'E un\'arancia.'],
+        [() => '<rect width="200" height="120" fill="#d9cdb8"/>' + gAgendaOpen(40, 20, ['VENEZIA', '204', '— C.R.']), 'L\'agenda…'],
+        [() => '<rect width="200" height="120" fill="#d9cdb8"/>' + gAgendaOpen(40, 20, ['VENEZIA', '204', '— C.R.']) + kjQ(164, 70, 30), 'Continua…']
+      ], questions: [
+        { show: 1, q: 'Che cos\'è?', mark: [50, 20], model: 'È un\'agenda.', ok: ['agenda'], no: ['zaino'] },
+        { show: 1, q: 'È uno zaino o uno specchio?', mark: [106, 20], model: 'È uno zaino.', ok: ['zaino'], no: ['specchio'] },
+        { show: 2, q: 'È un\'arancia?', model: 'Sì, è un\'arancia.', ok: ['arancia'], no: ['non', 'no'] }
+      ] },
+    { lesson: 'l17', title: 'Di chi è?', scenes: [
+        [() => '<rect width="200" height="120" fill="#d9cdb8"/>' + gAgendaOpen(40, 20, ['VENEZIA', '204', '— C.R.']), 'L\'agenda è di Carlo Rossi.'],
+        [() => '<rect width="200" height="120" fill="#d9cdb8"/>' + kjPut('mirror', 40, 18, 70) + kjPerson('anna', 150, .96, { face: 'o' }), 'Lo specchio è di Anna?'],
+        [() => gOffice(false) + kjPerson('anna', 100, .96, { face: 'flat', arms: [[-40, 20], [40, 20]] }) + kjBubble(106, 16, 34, 'No!', 108), '«No!»'],
+        [() => '<rect width="200" height="120" fill="#d9cdb8"/>' + kjPut('backpack', 40, 18, 70) + gLabel(120, 44, 'PARIGI'), 'Lo zaino è di Parigi.'],
+        [() => gOffice(false) + kjPerson('kenji', 60, 1, { face: 'flat' }) + kjPerson('anna', 150, .96, { face: 'flat' }) + kjQ(96, 40, 30), 'Continua…']
+      ], questions: [
+        { show: 0, q: 'L\'agenda è di Carlo Rossi?', model: 'Sì, l\'agenda è di Carlo Rossi.', ok: ['rossi'], no: ['non', 'no'] },
+        { show: 1, q: 'Che cos\'è? Lo specchio o lo zaino?', model: 'È lo specchio.', ok: ['specchio'], no: ['zaino'] }
+      ] },
+    { lesson: 'l18', title: 'Nel cappotto', scenes: [
+        [() => gOffice(false) + gHanger(150, 20) + kjPerson('kenji', 60, 1), 'È un cappotto. È il cappotto di Carlo Rossi.'],
+        [() => '<rect width="200" height="120" fill="#d9cdb8"/>' + gScale(gHanger(0, 0), 30, 4, 1.3) + gTicket(110, 50), 'Nel cappotto…'],
+        [() => '<rect width="200" height="120" fill="#d9cdb8"/>' + gTicket(50, 30, 1.6), 'MILANO — VENEZIA.'],
+        [() => '<rect width="200" height="120" fill="#d9cdb8"/>' + kjPut('table', 50, 40, 90) + gTicket(62, 50, .6) + kjPut('key', 98, 40, 34), 'Sul tavolo: la chiave.'],
+        [() => '<rect width="200" height="120" fill="#d9cdb8"/>' + gTicket(50, 30, 1.6) + kjQ(170, 40, 30), 'Continua…']
+      ], questions: [
+        { show: 3, q: 'Dov\'è la chiave?', model: 'La chiave è sul tavolo.', ok: ['sul', 'tavolo'], no: ['nel'] },
+        { show: 1, q: 'È nel cappotto?', model: 'Sì, è nel cappotto.', ok: ['cappotto'], no: ['non', 'no'] }
+      ] },
+    { lesson: 'l19', title: 'Anche la valigia', scenes: [
+        [() => '<rect width="200" height="120" fill="#d9cdb8"/>' + kjPut('coat_rosso', 30, 20, 70) + kjPut('suitcase_rosso', 106, 24, 70), 'Il cappotto è rosso. Anche la valigia è rossa.'],
+        [() => '<rect width="200" height="120" fill="#d9cdb8"/>' + kjPut('cup', 40, 30, 60) + gLipstick(60, 44) + kjPut('mirror', 116, 24, 60), 'Il rossetto è rosso. Anche…'],
+        [() => '<rect width="200" height="120" fill="#d9cdb8"/>' + kjPut('suitcase_nero', 30, 24, 70) + kjPut('laptop_bianco', 110, 30, 60), 'La valigia nera non è di Anna. Neanche il portatile.'],
+        [() => gOffice(false) + kjPerson('commissario', 60, 1, { face: 'flat' }) + kjBubble(70, 14, 76, 'Anche Anna? Neanche…', 66) + kjPerson('kenji', 150, 1), '«Anche Anna?»'],
+        [() => gOffice(false) + kjPerson('kenji', 100, 1, { face: 'flat' }) + kjQ(136, 40, 30), 'Continua…']
+      ], questions: [
+        { show: 0, q: 'Anche la valigia è rossa?', model: 'Sì, anche la valigia è rossa.', ok: ['anche', 'rossa'], no: ['non', 'neanche'] },
+        { show: 2, q: 'Il portatile è bianco o nero?', mark: [140, 28], model: 'Il portatile è bianco.', ok: ['bianco'], no: ['nero'] }
+      ] },
+    { lesson: 'l20', title: 'Le otto', scenes: [
+        [() => '<rect width="200" height="120" fill="#d9cdb8"/>' + kjPut('h8', 60, 14, 80), 'Sono le otto.'],
+        [() => gOffice(false) + kjPut('h8', 150, 10, 34) + kjPerson('kenji', 60, 1, { face: 'flat' }) + kjPut('table', 90, 52, 56) + gNumbers(96, 46, .5), 'Sono le otto. E Rossi?'],
+        [() => '<rect width="200" height="120" fill="#d9cdb8"/>' + kjPut('h10', 60, 14, 80), 'Sono le dieci.'],
+        [() => '<rect width="200" height="120" fill="#d9cdb8"/>' + kjPut('h12d', 20, 20, 70) + kjPut('h1', 110, 20, 70), 'È mezzogiorno. È l\'una.'],
+        [() => gOffice(false) + kjPut('h3', 150, 10, 34) + kjPerson('kenji', 60, 1, { face: 'o' }) + kjQ(100, 40, 30), 'Continua…']
+      ], questions: [
+        { show: 0, q: 'Che ora è?', model: 'Sono le otto.', ok: ['otto'], no: ['dieci'] },
+        { show: 2, q: 'Sono le otto o le dieci?', model: 'Sono le dieci.', ok: ['dieci'], no: ['otto'] }
+      ] },
+    { lesson: 'l21', title: 'Il taxi delle tre', scenes: [
+        [() => '<rect width="200" height="120" fill="#d9cdb8"/>' + gAgendaOpen(40, 20, ['9 — riunione', '1 — pranzo', '3 — taxi']), 'L\'agenda di Rossi.'],
+        [() => '<rect width="200" height="120" fill="#d9cdb8"/>' + kjPut('a_meeting', 30, 20, 70) + kjPut('a_lunch', 106, 20, 70), 'La riunione è alle nove. Il pranzo è all\'una.'],
+        [() => '<rect width="200" height="120" fill="#d9cdb8"/>' + kjPut('a_taxi', 60, 14, 80), 'Il taxi è alle tre.'],
+        [() => gStreet() + gTaxi(70) + gSign(90, 54, 'STAZIONE') + kjPut('h3', 160, 6, 30), 'Alle tre: il taxi. La stazione.'],
+        [() => gStreet() + gTaxi(120) + kjPerson('kenji', 60, 1, { legs: [[-22, 8], [22, 4]], arms: [[22, 20], [-22, 10]] }) + kjQ(170, 50, 26), 'Continua…']
+      ], questions: [
+        { show: 2, q: 'A che ora è il taxi?', model: 'Il taxi è alle tre.', ok: ['tre'], no: ['nove', 'una'] },
+        { show: 1, q: 'La riunione è alle nove?', mark: [65, 18], model: 'Sì, la riunione è alle nove.', ok: ['nove'], no: ['non', 'no'] }
+      ] },
+    { lesson: 'l22', title: 'L\'etichetta rossa', scenes: [
+        [() => '<rect width="200" height="120" fill="#d9cdb8"/>' + kjPut('umbrella_nero', 50, 18, 84), 'L\'ombrello è nero.'],
+        [() => '<rect width="200" height="120" fill="#d9cdb8"/>' + kjPut('umbrella_nero', 30, 18, 84) + kjPut('label_rosso', 112, 34, 60), 'L\'etichetta è rossa.'],
+        [() => '<rect width="200" height="120" fill="#d9cdb8"/>' + gLabel(12, 40, 'HOTEL — VENEZIA — 204', 1.3), 'HOTEL… VENEZIA… 204.'],
+        [() => '<rect width="200" height="120" fill="#d9cdb8"/>' + gKey204(30, 20) + gLabel(110, 50, 'HOTEL 204'), 'HOTEL 204: è la chiave!'],
+        [() => gOffice(false) + kjPerson('kenji', 60, 1, { face: 'open', arms: [[-150, 0], [150, 0]] }) + gVenice(110, 30, .55), 'Continua…']
+      ], questions: [
+        { show: 0, q: 'L\'ombrello è nero o bianco?', model: 'L\'ombrello è nero.', ok: ['nero'], no: ['bianco'] },
+        { show: 1, q: 'L\'etichetta è rossa?', mark: [142, 32], model: 'Sì, l\'etichetta è rossa.', ok: ['rossa'], no: ['non', 'nera'] }
+      ] },
+    { lesson: 'l23', title: 'Anna telefona', scenes: [
+        [() => gOffice(false) + kjPerson('kenji', 70, 1, { arms: [[30, 110], [-30, 110]] }) + gNumbers(56, 50, .4), 'Kenji legge il quaderno.'],
+        [() => gStreet() + kjPerson('anna', 80, .96, { face: 'flat', arms: [[-4, 6], [150, 110]] }) + kjPut('phone_nero', 78, 30, 16), 'Anna telefona.'],
+        [() => gOffice(false) + kjPerson('commercialista', 70, 1, { arms: [[-4, 6], [80, 30]] }) + kjPut('table', 96, 52, 56) + kjPut('laptop', 104, 36, 40), 'È Mario. Mario chiude il computer.'],
+        [() => gOffice(false) + kjPerson('commercialista', 70, 1, { face: 'flat' }) + kjPerson('kenji', 150, 1, { face: 'o' }) + kjQ(110, 40, 26), 'Perché?'],
+        [() => gOffice(false) + kjPerson('commercialista', 100, 1, { face: 'smile' }) + kjQ(140, 40, 30), 'Continua…']
+      ], questions: [
+        { show: 1, q: 'Che cosa fa Anna?', model: 'Anna telefona.', ok: ['telefona'], no: ['legge', 'chiude'] },
+        { show: 2, q: 'Mario chiude il computer?', model: 'Sì, Mario chiude il computer.', ok: ['chiude'], no: ['non', 'apre'] }
+      ] },
+    { lesson: 'l24', title: 'Perché?', scenes: [
+        [() => gOffice(false) + kjPerson('kenji', 70, 1, { arms: [[-4, 6], [150, 110]] }) + kjPut('phone_nero', 68, 28, 16), 'Kenji prende il telefono per telefonare.'],
+        [() => gOffice(false) + kjPerson('kenji', 70, 1, { arms: [[-4, 6], [80, 30]] }) + gKey204(96, 50, .4), 'Kenji prende la chiave per aprire… che cosa?'],
+        [() => gOffice(false) + kjPerson('commercialista', 70, 1, { arms: [[-4, 6], [80, 30]] }) + kjPut('agenda_nero', 96, 50, 30), 'Mario prende l\'agenda. Perché?'],
+        [() => gOffice(false) + kjPerson('commercialista', 70, 1, { arms: [[-4, 6], [80, 30]] }) + kjPut('agenda_nero', 96, 50, 30) + '<path d="M150 50 h20 m-6 -5 l6 5 l-6 5" stroke="#c8323b" stroke-width="3" fill="none"/>', 'Perché? …'],
+        [() => gOffice(false) + kjPerson('kenji', 100, 1, { face: 'flat' }) + kjQ(136, 40, 30), 'Continua…']
+      ], questions: [
+        { show: 0, q: 'Perché Kenji prende il telefono?', model: 'Per telefonare.', ok: ['telefonare'], no: ['leggere'] },
+        { show: 2, q: 'Che cosa prende Mario?', model: 'Mario prende l\'agenda.', ok: ['agenda'], no: ['telefono'] }
+      ] },
+    { lesson: 'l25', title: 'La prende', scenes: [
+        [() => gOffice(false) + gKey204(110, 20, .8) + kjPerson('kenji', 60, 1, { face: 'flat' }), 'Kenji prende la chiave? …'],
+        [() => gOffice(false) + kjPerson('kenji', 60, 1, { arms: [[-4, 6], [80, 30]] }) + gKey204(76, 52, .4), 'Sì, la prende.'],
+        [() => gOffice(false) + kjPerson('kenji', 60, 1, { arms: [[-4, 6], [80, 30]] }) + kjPut('suitcase_nero', 76, 70, 28), 'Prende la valigia? Sì, la prende.'],
+        [() => gStation() + kjPerson('kenji', 50, 1, { legs: [[-22, 8], [22, 4]], arms: [[22, 20], [-22, 10]] }) + kjPut('suitcase_nero', 60, 76, 22), 'La stazione. Il treno per Venezia.'],
+        [() => gStation() + '<text x="100" y="112" text-anchor="middle" font-family="Georgia,serif" font-size="9" font-style="italic" fill="#e6c77e">Fine del primo livello</text>', 'Continua… a Venezia.']
+      ], questions: [
+        { show: 1, q: 'Kenji prende la chiave?', model: 'Sì, la prende.', ok: ['la', 'prende'], no: ['non', 'lo'] },
+        { show: 2, q: 'Kenji prende la valigia?', model: 'Sì, la prende.', ok: ['la', 'prende'], no: ['non', 'lo'] }
       ] }
+
   ] },
   { id: 'commedia', genre: 'commedia', icon: '☕', title: 'Il signor Weber a Napoli', who: 'Hans Weber, München → Napoli', soon: true,
     plot: { it: 'Sei mesi per aprire un ufficio a Napoli. Ha un piano perfetto. Napoli no.', en: 'Six months to open an office in Naples. He has a perfect plan. Naples does not.',
