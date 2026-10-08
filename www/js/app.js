@@ -718,16 +718,59 @@ function setPickable(on) {
 function askTurn(st, run) {
   L.pick = null;
   showIndicated(null);
-  setCue('pick');
-  setPickable(true);
   const t = L.teacher;
   const ready = () => {
     if (!alive(run)) return;
+    showIndicated(null);
+    setCue('pick');
+    setPickable(true);
     L.busy = false;
     setStatus(tx('pickAsk'), 'wait');
     sweepFinger(() => alive(run) && !L.pick && !L.paused);
   };
-  if (st.intro) Mouth.speak(COURSE.yourTurn, t.rate, t.pitch, ready); else ready();
+  if (st.intro) askDemo(run, () => Mouth.speak(COURSE.yourTurn, t.rate, t.pitch, ready)); else ready();
+}
+// L'intro dei ruoli invertiti (Massi: «dal drill alle domande passa senza intro»): prima tocca a un altro allievo.
+// Una domanda già fatta dall'insegnante in questa lezione, detta da un'altra voce (l'allievo), e l'insegnante risponde;
+// poi tocca a te. Solo frasi già sentite: niente spiegazioni, il metodo diretto.
+function askDemo(run, done) {
+  const boxes = Array.from(document.querySelectorAll('.object-box')).map(b => b.dataset.obj);
+  let ex = null;
+  for (let i = L.i - 1; i >= 0 && !ex; i--) {
+    const s = L.steps[i];
+    if (!s || s.review || !s.prompt || !s.show || boxes.indexOf(s.show) === -1 || !/[?？؟]\s*$/.test(shown(s.prompt))) continue;
+    try { const r = evalAsk(s.show, s.prompt); if (r && r.ok) ex = { X: s.show, q: s.prompt, r: r }; } catch (e) {}
+  }
+  if (!ex) { done(); return; }
+  const t = L.teacher, student = t.gender === 'f' ? 'm' : 'f';
+  setStatus('', '');
+  // il dito dell'«allievo» tocca la figura, poi la domanda
+  const f = $('pick-finger'), box = document.querySelector('.object-box[data-obj="' + ex.X + '"]');
+  if (f && box) {
+    const r = box.getBoundingClientRect();
+    f.innerHTML = HAND; f.style.left = (r.left + r.width / 2) + 'px'; f.style.top = (r.top + r.height * 0.35) + 'px';
+    f.classList.remove('hidden');
+    later(() => { if (alive(run)) restartAnim(f, 'tap'); }, 350);
+  }
+  showIndicated(ex.X);
+  setCue('q');
+  setPrompt(ex.q);
+  later(() => {
+    if (!alive(run)) return;
+    Mouth.speak(typeof synVoice === 'function' ? synVoice(ex.q) : ex.q, t.modelRate, 1, () => {
+      if (!alive(run)) return;
+      let a = '';
+      try { a = answerAsk(ex.X, ex.r); } catch (e) {}
+      setPrompt(a);
+      setCue('ok');
+      Mouth.speak(a, t.modelRate, t.pitch, () => {
+        if (!alive(run)) return;
+        setPrompt('');
+        hideFinger();
+        later(() => { if (alive(run)) done(); }, 600);
+      });
+    }, student);
+  }, 700);
 }
 // Il dito passa sopra ogni figura, la indica e poi sparisce (si ferma se l'allievo tocca prima)
 let sweepId = 0;
