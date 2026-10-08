@@ -83,10 +83,10 @@ const ACTIONS = {
     { x: 60, y: 22, legs: [[60, 110], [70, 120]], arms: [[-150, 0], [150, 0]], face: 'open', happy: 1, fx: () => arc('M60 104 V84') },
     { x: 60, y: -5, legs: [[40, 70], [40, 70]], arms: [[60, 20], [60, 20]], happy: 1, fx: () => dust(60) } ] },
   cadere: { arrow: 1, frames: [
-    { x: 30, ...W1, props: () => AP.stone(60) },
-    { x: 54, r: 22, legs: [[-40, 30], [20, 10]], arms: [[80, 20], [70, 20]], face: 'o', props: () => AP.stone(60) },
-    { x: 66, r: 55, y: -8, legs: [[-50, 20], [-30, 10]], arms: [[120, 0], [110, 10]], face: 'o', props: () => AP.stone(52) },
-    { x: 46, r: 90, y: -22, legs: [[-4, 0], [4, 0]], arms: [[150, 0], [140, 10]], face: 'flat', fx: () => dust(62) } ] },
+    { x: 30, ...W1, stone: 60 },
+    { x: 54, r: 22, legs: [[-40, 30], [20, 10]], arms: [[80, 20], [70, 20]], face: 'o', stone: 60 },
+    { x: 66, r: 55, y: -8, legs: [[-50, 20], [-30, 10]], arms: [[120, 0], [110, 10]], face: 'o', stone: 52 },
+    { x: 46, r: 90, y: -22, legs: [[-4, 0], [4, 0]], arms: [[150, 0], [140, 10]], face: 'flat', stone: 20, fx: () => dust(62) } ] },
   salire: { arrow: 1, scene: () => AP.stairs(false), frames: [
     { x: 16, ...W2 },
     { x: 37, y: 6, legs: [[-30, 10], [40, 80]], arms: [[20, 10], [-20, 10]] },
@@ -98,35 +98,35 @@ const ACTIONS = {
     { x: 73, y: 12, legs: [[-10, 30], [30, 0]], arms: [[-20, 10], [20, 10]] },
     { x: 106, ...W2, happy: 1 } ] },
   prendere: { arrow: 0, scene: () => AP.table(94), frames: [
-    { x: 40, ...W2, props: () => AP.cup(94, ACT_GROUND - 34) },
-    { x: 62, ...W2, reach: [86, ACT_GROUND - 52], props: () => AP.cup(94, ACT_GROUND - 34) },
+    { x: 40, ...W2, cup: 94 },
+    { x: 62, ...W2, reach: [86, ACT_GROUND - 52], cup: 94 },
     { x: 70, r: 8, ...W2, reach: [92, ACT_GROUND - 38], hold: 'cup' },
     { x: 62, ...W2, reach: [76, ACT_GROUND - 58], happy: 1, hold: 'cup' } ] },
   lanciare: { arrow: 1, frames: [
     { x: 34, ...W2, arms: [[10, 10], [-30, 60]], hold: 'ball' },
     { x: 34, r: -8, legs: [[-24, 8], [22, 4]], arms: [[40, 30], [-150, -30]], hold: 'ball' },
-    { x: 40, r: 10, legs: [[-24, 8], [24, 4]], arms: [[-30, 20], [110, 10]], face: 'open', props: () => AP.ball(80, 44), fx: () => arc('M62 52 Q72 40 80 44') },
-    { x: 40, r: 8, legs: [[-24, 8], [24, 4]], arms: [[-20, 20], [40, 30]], happy: 1, props: () => AP.ball(108, 98), fx: () => arc('M62 52 Q88 22 107 94') } ] },
+    { x: 40, r: 10, legs: [[-24, 8], [24, 4]], arms: [[-30, 20], [110, 10]], face: 'open', ball: [80, 44], fx: () => arc('M62 52 Q72 40 80 44') },
+    { x: 40, r: 8, legs: [[-24, 8], [24, 4]], arms: [[-20, 20], [40, 30]], happy: 1, ball: [108, 98], fx: () => arc('M62 52 Q88 22 107 94') } ] },
   aprire: { arrow: 0, frames: [
-    { x: 36, ...W2, props: () => AP.door(80, 0) },
-    { x: 60, ...W2, reach: () => doorKnob(80, 0), props: () => AP.door(80, 0) },
-    { x: 58, ...W2, reach: () => doorKnob(80, .5), props: () => AP.door(80, .5) },
-    { x: 56, ...STAND, happy: 1, props: () => AP.door(80, 1) } ] },
+    { x: 36, ...W2, door: 0 },
+    { x: 60, ...W2, reach: 'door', door: 0 },
+    { x: 58, ...W2, reach: 'door', door: .5 },
+    { x: 56, ...STAND, happy: 1, door: 1 } ] },
   chiudere: { arrow: 0, frames: [
-    { x: 56, ...STAND, props: () => AP.door(80, 1) },
-    { x: 58, ...W2, reach: () => doorKnob(80, .9), props: () => AP.door(80, .9) },
-    { x: 60, ...W2, reach: () => doorKnob(80, .45), props: () => AP.door(80, .45) },
-    { x: 60, ...W2, reach: () => doorKnob(80, 0), props: () => AP.door(80, 0) } ] },
+    { x: 56, ...STAND, door: 1 },
+    { x: 58, ...W2, reach: 'door', door: .9 },
+    { x: 60, ...W2, reach: 'door', door: .45 },
+    { x: 60, ...W2, reach: 'door', door: 0 } ] },
   spingere: { arrow: 1, frames: [
-    { x: 28, r: 20, legs: [[-34, 10], [20, 40]], reach: [46, ACT_GROUND - 18], reach2: [46, ACT_GROUND - 14], props: () => AP.box(60) },
-    { x: 40, r: 24, legs: [[-40, 10], [24, 40]], reach: [58, ACT_GROUND - 18], reach2: [58, ACT_GROUND - 14], props: () => AP.box(72), fx: () => speed(56, 86) },
-    { x: 58, r: 24, legs: [[-40, 10], [24, 40]], reach: [76, ACT_GROUND - 18], reach2: [76, ACT_GROUND - 14], props: () => AP.box(90), fx: () => speed(74, 86) },
-    { x: 70, ...STAND, happy: 1, props: () => AP.box(100) } ] },
+    { x: 28, r: 20, legs: [[-34, 10], [20, 40]], reach: [46, ACT_GROUND - 18], reach2: [46, ACT_GROUND - 14], box: 60 },
+    { x: 40, r: 24, legs: [[-40, 10], [24, 40]], reach: [58, ACT_GROUND - 18], reach2: [58, ACT_GROUND - 14], box: 72, fx: () => speed(56, 86) },
+    { x: 58, r: 24, legs: [[-40, 10], [24, 40]], reach: [76, ACT_GROUND - 18], reach2: [76, ACT_GROUND - 14], box: 90, fx: () => speed(74, 86) },
+    { x: 70, ...STAND, happy: 1, box: 100 } ] },
   tirare: { arrow: -1, frames: [
-    { x: 30, r: -16, legs: [[-30, 10], [30, 10]], reach: [50, ACT_GROUND - 46], reach2: [48, ACT_GROUND - 44], props: () => AP.box(100), rope: 100 },
-    { x: 26, r: -20, legs: [[-30, 10], [34, 10]], reach: [44, ACT_GROUND - 46], reach2: [42, ACT_GROUND - 44], props: () => AP.box(84), rope: 84, fx: () => speed(110, 86) },
-    { x: 22, r: -20, legs: [[-30, 10], [34, 10]], reach: [40, ACT_GROUND - 46], reach2: [38, ACT_GROUND - 44], props: () => AP.box(68), rope: 68, fx: () => speed(94, 86) },
-    { x: 20, ...STAND, happy: 1, props: () => AP.box(52) } ] }
+    { x: 30, r: -16, legs: [[-30, 10], [30, 10]], reach: [50, ACT_GROUND - 46], reach2: [48, ACT_GROUND - 44], box: 100, rope: 1 },
+    { x: 26, r: -20, legs: [[-30, 10], [34, 10]], reach: [44, ACT_GROUND - 46], reach2: [42, ACT_GROUND - 44], box: 84, rope: 1, fx: () => speed(110, 86) },
+    { x: 22, r: -20, legs: [[-30, 10], [34, 10]], reach: [40, ACT_GROUND - 46], reach2: [38, ACT_GROUND - 44], box: 68, rope: 1, fx: () => speed(94, 86) },
+    { x: 20, ...STAND, happy: 1, box: 52 } ] }
 };
 // dov'è la maniglia della porta (i cardini sono a destra, la maniglia a sinistra)
 function doorKnob(x, open) { return [x + 23 - 22 * (1 - open * 0.75) + 4, ACT_GROUND - 36 + open * 2]; }
@@ -151,39 +151,88 @@ function reachArm(p, side, t) {
   return [a, Math.atan2(T[0] - e[0], T[1] - e[1]) * 180 / Math.PI - a];
 }
 
-function actFigure(L, p) {
-  const legs = p.legs || W2.legs, arms = (p.arms || W2.arms).slice();
-  const reach = typeof p.reach === 'function' ? p.reach() : p.reach;
-  if (reach) arms[1] = reachArm(p, 1, reach);
-  if (p.reach2) arms[0] = reachArm(p, -1, p.reach2);
-  const f = { mouth: p.face || 'smile', happy: !!p.happy };
+// una posa con tutti i numeri: la mano che «va verso» diventa angoli di spalla e gomito
+function actResolve(p) {
+  const q = Object.assign({ y: 0, r: 0 }, p);
+  q.legs = (p.legs || W2.legs).map(l => l.slice());
+  q.arms = (p.arms || W2.arms).map(a => a.slice());
+  const reach = p.reach === 'door' ? doorKnob(80, p.door) : p.reach;
+  if (reach) q.arms[1] = reachArm(q, 1, reach);
+  if (p.reach2) q.arms[0] = reachArm(q, -1, p.reach2);
+  delete q.reach; delete q.reach2;
+  return q;
+}
+// a metà strada tra due pose (t da 0 a 1): i numeri scorrono, il resto (faccia, cosa ha in mano) cambia a metà
+function actLerp(a, b, t) {
+  const n = (u, v) => u === undefined ? v : v === undefined ? u : u + (v - u) * t;
+  const arr = (u, v) => u && v ? u.map((x, i) => Array.isArray(x) ? arr(x, v[i]) : n(x, v[i])) : (t < .5 ? u : v);
+  const q = Object.assign({}, t < .5 ? a : b);
+  ['x', 'y', 'r', 'door', 'box', 'stone', 'cup'].forEach(k => { q[k] = n(a[k], b[k]); });
+  ['legs', 'arms'].forEach(k => { q[k] = arr(a[k], b[k]); });
+  if (a.ball && b.ball) q.ball = arr(a.ball, b.ball);
+  return q;
+}
+function actFigure(L, q) {
+  const f = { mouth: q.face || 'smile', happy: !!q.happy }, legs = q.legs, arms = q.arms;
   let body = actArm(L, -1, arms[0][0], arms[0][1]) + actLeg(L, legs[0][0], legs[0][1], true) + tTorso(L) + tHeadStill(L, f) +
     actLeg(L, legs[1][0], legs[1][1]) + actArm(L, 1, arms[1][0], arms[1][1]);
-  if (p.hold) {
+  if (q.hold) {
     const h = actHand(1, arms[1][0], arms[1][1]);
-    body += `<g transform="translate(${h[0]} ${h[1]}) rotate(${-(p.r || 0)}) scale(${1 / ACT_S})">${p.hold === 'cup' ? AP.cup(1, 3) : AP.ball(0, -3)}</g>`;
+    body += `<g transform="translate(${h[0]} ${h[1]}) rotate(${-q.r}) scale(${1 / ACT_S})">${q.hold === 'cup' ? AP.cup(1, 3) : AP.ball(0, -3)}</g>`;
   }
   return body;
 }
-function actionFrame(verb, i, look) {
-  const A = ACTIONS[verb], p = A.frames[i], L = LOOKS[look || 'mario'], T = frameT(p);
+// un fotogramma (SVG 120×120) da una posa già risolta; label = il numerino in alto (solo nelle strisce)
+function actionPose(verb, q, look, label) {
+  const A = ACTIONS[verb], L = LOOKS[look || 'mario'], T = frameT(q);
   let s = `<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><rect width="120" height="120" rx="10" fill="#1b2333"/>
     <path d="M6 ${ACT_GROUND} H114" stroke="#3a4a66" stroke-width="2" stroke-linecap="round"/>`;
   if (A.scene) s += A.scene();
-  if (p.props) s += p.props();
-  if (p.fx) s += p.fx(p.x - 12, ACT_GROUND - 50 - (p.y || 0));
-  s += `<g transform="translate(${T.tx} ${T.ty}) scale(${ACT_S}) rotate(${p.r || 0} 50 92)">${actFigure(L, p)}</g>`;
-  if (p.rope) {   // la corda: dalla mano davanti alla scatola
-    const reach = p.reach, h = toFrame(p, actHand(1, ...reachArm(p, 1, reach)));
-    s += `<path d="M${h[0]} ${h[1]} Q${(h[0] + p.rope - 13) / 2} ${ACT_GROUND - 22} ${p.rope - 13} ${ACT_GROUND - 12}" stroke="#d8c08a" stroke-width="1.6" fill="none"/>`;
+  if (q.door !== undefined) s += AP.door(80, q.door);
+  if (q.stone !== undefined) s += AP.stone(q.stone);
+  if (q.cup !== undefined && !q.hold) s += AP.cup(q.cup, ACT_GROUND - 34);
+  if (q.box !== undefined) s += AP.box(q.box);
+  if (q.ball) s += AP.ball(q.ball[0], q.ball[1]);
+  if (q.fx) s += q.fx(q.x - 12, ACT_GROUND - 50 - q.y);
+  s += `<g transform="translate(${T.tx} ${T.ty}) scale(${ACT_S}) rotate(${q.r} 50 92)">${actFigure(L, q)}</g>`;
+  if (q.rope) {   // la corda: dalla mano davanti alla scatola
+    const h = toFrame(q, actHand(1, q.arms[1][0], q.arms[1][1])), bx = q.box - 13;
+    s += `<path d="M${h[0]} ${h[1]} Q${(h[0] + bx) / 2} ${ACT_GROUND - 22} ${bx} ${ACT_GROUND - 12}" stroke="#d8c08a" stroke-width="1.6" fill="none"/>`;
   }
   if (A.arrow) s += A.arrow > 0 ? `<path d="M46 114 H74 m-5 -4 l5 4 l-5 4" stroke="#c9a45c" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`
     : `<path d="M74 114 H46 m5 -4 l-5 4 l5 4" stroke="#c9a45c" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`;
-  s += `<text x="9" y="16" font-family="sans-serif" font-size="9" font-weight="700" fill="#8f9bb3">${i + 1}</text></svg>`;
-  return s;
+  if (label) s += `<text x="9" y="16" font-family="sans-serif" font-size="9" font-weight="700" fill="#8f9bb3">${label}</text>`;
+  return s + '</svg>';
 }
+function actionFrame(verb, i, look) { return actionPose(verb, actResolve(ACTIONS[verb].frames[i]), look, i + 1); }
 function actionSheet(verb, look) {
   return `<svg viewBox="0 0 492 120" xmlns="http://www.w3.org/2000/svg">` +
     [0, 1, 2, 3].map(i => `<g transform="translate(${i * 124} 0)">${actionFrame(verb, i, look).replace(/^<svg[^>]*>|<\/svg>$/g, '')}</g>`).join('') + `</svg>`;
 }
-if (typeof module !== 'undefined') module.exports = { ACTIONS, actionFrame, actionSheet };
+
+/* ---------- Il cartone animato (Massi): le 4 pose scorrono una nell'altra, poi ricomincia ----------
+   ACT_STEP = da una posa all'altra, ACT_HOLD = ferma sull'ultima prima di ricominciare (millisecondi) */
+const ACT_STEP = 520, ACT_HOLD = 800;
+const actEase = t => t < .5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+function actionLoopMs(verb) { return (ACTIONS[verb].frames.length - 1) * ACT_STEP + ACT_HOLD; }
+// la posa al tempo ms (sempre la stessa per lo stesso ms: serve anche alle prove)
+function actionAt(verb, ms, look) {
+  const F = ACTIONS[verb].frames, cache = ACTIONS[verb]._res || (ACTIONS[verb]._res = F.map(actResolve));
+  const t = ms % actionLoopMs(verb), k = Math.floor(t / ACT_STEP);
+  if (k >= F.length - 1) return actionPose(verb, cache[F.length - 1], look);
+  return actionPose(verb, actLerp(cache[k], cache[k + 1], actEase(t / ACT_STEP - k)), look);
+}
+// fa partire il cartone dentro el; restituisce la funzione per fermarlo
+function playAction(el, verb, look) {
+  let on = true, t0 = 0, last = -1;
+  const tick = now => {
+    if (!on) return;
+    if (!t0) t0 = now;
+    const f = Math.floor((now - t0) / 33);        // circa 30 immagini al secondo: leggero per il telefono
+    if (f !== last) { last = f; el.innerHTML = actionAt(verb, now - t0, look); }
+    requestAnimationFrame(tick);
+  };
+  requestAnimationFrame(tick);
+  return () => { on = false; };
+}
+if (typeof module !== 'undefined') module.exports = { ACTIONS, actionFrame, actionSheet, actionAt, playAction };
