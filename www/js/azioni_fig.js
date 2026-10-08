@@ -29,8 +29,27 @@ const LOOK26 = {
     suit: '#d46a8c', suit2: '#b8577a', shirt: '#b8577a', tee: '#1d1d24', skirt: '#1d1d24', skirtLen: 18, shoe: '#1d1d24', heels: true, earrings: '#e6c77e' },
   // Lucia Rossi: vestito viola stretto in vita con la cintura d'oro, sopra il ginocchio, tacchi
   lucia: { man: false, outfit: 'dress', skin: '#eab892', skin2: '#d9a27c', hair: '#5a3a28', hair2: '#45291c', style: 'bob',
-    suit: '#6b4fa0', suit2: '#5a4189', shirt: '#5a4189', skirt: '#6b4fa0', skirtLen: 26, belt: '#e6c77e', shoe: '#2a1d2a', heels: true, earrings: '#e6c77e' }
+    suit: '#6b4fa0', suit2: '#5a4189', shirt: '#5a4189', skirt: '#6b4fa0', skirtLen: 26, belt: '#e6c77e', shoe: '#2a1d2a', heels: true, earrings: '#e6c77e' },
+  // le persone della lezione 13b e 13c (giovane / anziano, di dov'è): bambini, ragazzi, signori anziani
+  bambino: { man: true, outfit: 'bomber', skin: '#f1c7a5', skin2: '#e0b08c', hair: '#5a3a28', hair2: '#45291c', style: 'short',
+    suit: '#e8862a', suit2: '#c96f1c', shirt: '#c96f1c', tee: '#f3d36b', pants: '#3f5f8a', pants2: '#33507a', shoe: '#f4f4f6', sole: '#c94a4a' },
+  bambina: { man: false, outfit: 'dress', skin: '#f1c7a5', skin2: '#e0b08c', hair: '#e2c06a', hair2: '#c29a45', style: 'long',
+    suit: '#f0b7cf', suit2: '#d998b4', shirt: '#d998b4', skirt: '#f0b7cf', skirtLen: 20, belt: '#ffffff', shoe: '#c94a7a', heels: true, flats: true },
+  ragazzo: { man: true, outfit: 'bomber', skin: '#d9a07a', skin2: '#c48a64', hair: '#1c140f', hair2: '#120c08', style: 'short',
+    suit: '#d1a03a', suit2: '#b3852a', shirt: '#b3852a', tee: '#f2f2f4', pants: '#2a2c33', pants2: '#212329', shoe: '#f4f4f6', sole: '#2a2c33' },
+  ragazza: { man: false, outfit: 'dress', skin: '#f0d0b4', skin2: '#dcb898', hair: '#1c140f', hair2: '#120c08', style: 'long',
+    suit: '#2f9a9a', suit2: '#257f7f', shirt: '#257f7f', skirt: '#2f9a9a', skirtLen: 20, belt: '#f3eee2', shoe: '#1d1d24', heels: true, earrings: '#e6c77e' },
+  signore: { man: true, outfit: 'tailor', modern: true, under: 'shirt', skin: '#f0c6a4', skin2: '#dfae88', hair: '#ececf0', hair2: '#c4c4cc', style: 'back', glasses: 'thin', hairHi: '#ffffff',
+    suit: '#8a7560', suit2: '#735f4c', shirt: '#f4f4f6', btn: '#5a4a3a', pocket: '#e6c77e', pants: '#5a5f69', pants2: '#4b505a', shoe: '#3a2a20' },
+  signora: { man: false, outfit: 'dress', skin: '#f1c7a5', skin2: '#e0b08c', hair: '#ececf0', hair2: '#c4c4cc', style: 'bun',
+    suit: '#9a86c4', suit2: '#8371ad', shirt: '#8371ad', skirt: '#9a86c4', skirtLen: 32, belt: '#e6c77e', shoe: '#3a2a3a', heels: true, flats: true, earrings: '#f4f4f6' }
 };
+// una persona in piedi (sc = grandezza: i bambini più piccoli), con i piedi a terra in x
+function actStanding(look, x, sc, pose) {
+  const L = LOOK26[look] || LOOKS[look], S = ACT_S * (sc || 1);
+  const q = actResolve(Object.assign({ x: 50 }, ACT_STAND, { happy: 1 }, pose || {}));
+  return `<g transform="translate(${x - 50 * S} ${ACT_GROUND - 150 * S}) scale(${S}) rotate(${q.r} 50 92)">${actFigure(L, q)}</g>`;
+}
 function actLeg(L, a, b, back) {
   const hip = [50, 92];
   const [k, f] = actLimb(hip, a, -b, 29, 29);
@@ -39,7 +58,7 @@ function actLeg(L, a, b, back) {
     const sk = back ? L.skin2 : L.skin;
     return `<path d="${d}" fill="none" stroke="#1a1824" stroke-width="8.6" stroke-linecap="round" stroke-linejoin="round" opacity=".35"/>
       <path d="${d}" fill="none" stroke="${sk}" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
-      <path d="M${f[0] - 4} ${f[1] - 1} q6 -2 12 3 l.5 1.5 h-7 z" fill="${L.shoe}"/><path d="M${f[0] - 3.4} ${f[1] - 1} l-.6 5" stroke="${L.shoe}" stroke-width="2" stroke-linecap="round"/>`;
+      <path d="M${f[0] - 4} ${f[1] - 1} q6 -2 12 3 l.5 1.5 h-7 z" fill="${L.shoe}"/>` + (L.flats ? '' : `<path d="M${f[0] - 3.4} ${f[1] - 1} l-.6 5" stroke="${L.shoe}" stroke-width="2" stroke-linecap="round"/>`);
   }
   const col = L.pants ? (back ? L.pants2 : L.pants) : (back ? L.suit2 : L.suit);
   const shoe = L.sole   // scarpa da ginnastica: bianca con la suola grigia

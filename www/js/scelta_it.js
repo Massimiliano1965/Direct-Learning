@@ -14,7 +14,7 @@ function choiceLesson(cfg) {
   const IT = cfg.items, CH = cfg.CH;
   const isX = (X) => !!IT[X];
   const ch = (X) => IT[X].c;
-  const others = (X) => Object.keys(CH).filter(c => c !== ch(X) && (!cfg.same || cfg.same(c, ch(X))));
+  const others = (X) => cfg.others ? cfg.others(X) : Object.keys(CH).filter(c => c !== ch(X) && (!cfg.same || cfg.same(c, ch(X))));   // others(X): le altre risposte possibili per quella figura
   const other = (X) => pick(others(X));
   const say = (X, c, neg) => cfg.say(X, c || ch(X), !!neg);
   const ask = (X, c) => cfg.ask ? cfg.ask(X, c || ch(X)) : say(X, c);          // la domanda dell'insegnante, se è diversa dalla risposta

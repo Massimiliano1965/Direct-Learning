@@ -99,6 +99,12 @@ const LESSONS = [
   { id: 'l12', title: 'Lezione 12', third: true, known: ['p3_f_phone', 'p3_m_laptop', 'p3_f_suitcase', 'p3_m_bag', 'p3_m_coat', 'p3_f_flask'] },
   // capitolo 2: «Paese e nazionalità» — un signore o una signora con la bandiera del suo paese (nat_it.js)
   { id: 'l13', title: 'Lezione 13', nat: true, known: ['n_m_italia', 'n_f_francia', 'n_m_inghilterra', 'n_f_germania', 'n_f_america', 'n_m_giappone', 'n_m_cina'] },
+  // Massi: «giovane e anziano ci vuole, quando introduciamo le persone» — Com'è il bambino? È giovane. (persone_it.js)
+  { id: 'l13b', title: 'Lezione 13b', eta: true, hilite: ['giovane', 'anziano', 'anziana'],
+    known: ['eta_bambino', 'eta_signora', 'eta_ragazzo', 'eta_bambina', 'eta_signore', 'eta_ragazza'] },
+  // Di dov'è il ragazzo? Il ragazzo è di New York. (persone_it.js; il cartello verde della città)
+  { id: 'l13c', title: 'Lezione 13c', dove: true, hilite: ['Di dov\'è', 'di'],
+    known: ['dove_ragazzo', 'dove_bambino', 'dove_signore', 'dove_ragazza', 'dove_signora', 'dove_bambina'] },
   // capitolo 2: «Il verbo essere» — io sono / Lei è / lui è / lei è, con le persone della lezione 13 (essere_it.js)
   { id: 'l14', title: 'Lezione 14', ess: true, known: ['e_me', 'e_you', 'n_m_inghilterra', 'n_f_francia', 'n_m_cina', 'n_f_america'] },
   // capitolo 2: «Un altro, un'altra» — lo stesso oggetto in due colori; il primo resta piccolo sotto il palco (altro_it.js)
@@ -409,11 +415,12 @@ const CHAPTERS = [
   [96, { it: 'Al ristorante e in viaggio', en: 'At the restaurant, travelling', de: 'Im Restaurant, auf Reisen', ja: 'レストランと旅' }],
   [101, { it: 'I verbi di movimento (prova)', en: 'Verbs of movement (preview)', de: 'Bewegungsverben (Vorschau)', ja: '動きの動詞（試し）' }]
 ];
-const lessonNum = (l) => +String(l.id).replace(/^l/, '');
+// «l13b» = una lezione aggiunta dopo la 13 (13,2): stesso capitolo e livello, senza rinumerare le altre
+const lessonNum = (l) => { const m = /^l(\d+)([a-z]?)$/.exec(String(l.id)); return m ? +m[1] + (m[2] ? (m[2].charCodeAt(0) - 96) / 10 : 0) : NaN; };
 const levelOfNum = (n) => Math.min(5, Math.ceil(n / LEVEL_SIZE));   // 5 = il livello nuovo (per ora le prove dei verbi di movimento)
 const chapterOf = (n) => { let c = 0; CHAPTERS.forEach((ch, i) => { if (n >= ch[0]) c = i; }); return c; };
 (function () {
-  const tests = LESSONS.filter(l => l.test), lessons = LESSONS.filter(l => !l.test && /^l\d+$/.test(l.id));
+  const tests = LESSONS.filter(l => l.test), lessons = LESSONS.filter(l => !l.test && /^l\d+[a-z]?$/.test(l.id));
   lessons.forEach(l => { l.level = levelOfNum(lessonNum(l)); l.chapter = chapterOf(lessonNum(l)); });
   // l'ordine: le lezioni per numero, il test di ogni livello dopo la sua ultima lezione
   const out = [];

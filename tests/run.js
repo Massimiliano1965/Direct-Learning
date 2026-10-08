@@ -6,7 +6,7 @@ const vm = require('vm');
 
 const ctx = { console: console };
 vm.createContext(ctx);
-['course.js', 'data.js', 'logic.js', 'colors_it.js', 'numbers_it.js', 'geo_fig.js', 'geo_it.js', 'poss_it.js', 'size_it.js', 'third_it.js', 'nat_it.js', 'essere_it.js', 'altro_it.js', 'prep_it.js', 'anche_it.js', 'ora_it.js', 'appt_it.js', 'gender_it.js', 'verbs_it.js', 'perche_it.js', 'pron_it.js', 'sum_it.js', 'km_it.js', 'fam_it.js', 'avere_it.js', 'gen_it.js', 'plur_it.js', 'cece_it.js', 'costa_it.js', 'det_it.js', 'irr_it.js', 'test_it.js', 'contr_it.js', 'stare_it.js', 'celha_it.js', 'imper_it.js', 'qual_it.js', 'ne_it.js', 'passato_it.js', 'lho_it.js', 'ci_it.js', 'saluti_it.js', 'lui_it.js', 'giorni_it.js', 'mesi_it.js', 'suoi_it.js', 'loro_it.js', 'noi_it.js', 'dare_it.js', 'qualc_it.js', 'bigl_it.js', 'lile_it.js', 'chiama_it.js', 'tempi_it.js', 'liha_it.js', 'contr2_it.js', 'colaz_it.js', 'quale_it.js', 'fiori_it.js', 'nehai_it.js', 'rifl_it.js', 'gia_it.js', 'volere_it.js', 'potere_it.js', 'ancora_it.js', 'telef_it.js', 'dove_it.js', 'mici_it.js', 'essere2_it.js', 'visto_it.js', 'forme_it.js', 'lingua_it.js', 'parlacon_it.js', 'fatto_it.js', 'civuole_it.js', 'piace_it.js', 'stagioni_it.js', 'tempofa_it.js', 'sipuo_it.js', 'scelta_it.js', 'calendario_it.js', 'congiuntivo_it.js', 'turista_it.js', 'movimento_it.js', 'ripasso_it.js', 'ui_lang.js'].forEach(f => {
+['course.js', 'data.js', 'logic.js', 'colors_it.js', 'numbers_it.js', 'geo_fig.js', 'geo_it.js', 'poss_it.js', 'size_it.js', 'third_it.js', 'nat_it.js', 'essere_it.js', 'altro_it.js', 'prep_it.js', 'anche_it.js', 'ora_it.js', 'appt_it.js', 'gender_it.js', 'verbs_it.js', 'perche_it.js', 'pron_it.js', 'sum_it.js', 'km_it.js', 'fam_it.js', 'avere_it.js', 'gen_it.js', 'plur_it.js', 'cece_it.js', 'costa_it.js', 'det_it.js', 'irr_it.js', 'test_it.js', 'contr_it.js', 'stare_it.js', 'celha_it.js', 'imper_it.js', 'qual_it.js', 'ne_it.js', 'passato_it.js', 'lho_it.js', 'ci_it.js', 'saluti_it.js', 'lui_it.js', 'giorni_it.js', 'mesi_it.js', 'suoi_it.js', 'loro_it.js', 'noi_it.js', 'dare_it.js', 'qualc_it.js', 'bigl_it.js', 'lile_it.js', 'chiama_it.js', 'tempi_it.js', 'liha_it.js', 'contr2_it.js', 'colaz_it.js', 'quale_it.js', 'fiori_it.js', 'nehai_it.js', 'rifl_it.js', 'gia_it.js', 'volere_it.js', 'potere_it.js', 'ancora_it.js', 'telef_it.js', 'dove_it.js', 'mici_it.js', 'essere2_it.js', 'visto_it.js', 'forme_it.js', 'lingua_it.js', 'parlacon_it.js', 'fatto_it.js', 'civuole_it.js', 'piace_it.js', 'stagioni_it.js', 'tempofa_it.js', 'sipuo_it.js', 'scelta_it.js', 'calendario_it.js', 'congiuntivo_it.js', 'turista_it.js', 'movimento_it.js', 'persone_it.js', 'ripasso_it.js', 'ui_lang.js'].forEach(f => {
   vm.runInContext(fs.readFileSync(path.join(__dirname, '..', 'www', 'js', f), 'utf8'), ctx, { filename: f });
 });
 const run = (code) => vm.runInContext(code, ctx);
@@ -14,7 +14,7 @@ const evaluate = run('evaluate');
 const evaluateAll = run('evaluateAll');
 const buildSteps = run('buildSteps');
 const answerSteps = run('answerSteps');
-const LESSONS = run('LESSONS').filter(l => !l.colors && !l.numbers && !l.geo && !l.poss && !l.size && !l.third && !l.nat && !l.ess && !l.altro && !l.prep && !l.anche && !l.ora && !l.appt && !l.verbs && !l.purp && !l.pron && !l.sum && !l.km && !l.fam && !l.ea && !l.pl && !l.ce && !l.co && !l.dt && !l.ct && !l.sta && !l.cl && !l.imp && !l.qd && !l.ne && !l.ps && !l.lh && !l.cv && !l.sa && !l.lm && !l.gd && !l.ms && !l.sp && !l.lo && !l.nv && !l.da && !l.qn && !l.bv && !l.lp && !l.cm && !l.tv && !l.lq && !l.cz && !l.qu && !l.fi && !l.nh && !l.rf && !l.gn && !l.vo && !l.po && !l.dv && !l.an && !l.tl && !l.dvp && !l.mc && !l.pe && !l.vi && !l.fu && !l.ge && !l.lg && !l.pc && !l.md && !l.cu && !l.pi && !l.sg && !l.tf && !l.ipf && !l.spu && !l.bar && !l.moda && !l.via && !l.hot && !l.mit && !l.cibo && !l.vor && !l.cal && !l.casa && !l.cg && !l.tu && !l.mov && !l.mani && !l.test);   // lezioni con gli oggetti (colori e numeri hanno i loro test)
+const LESSONS = run('LESSONS').filter(l => !l.colors && !l.numbers && !l.geo && !l.poss && !l.size && !l.third && !l.nat && !l.ess && !l.altro && !l.prep && !l.anche && !l.ora && !l.appt && !l.verbs && !l.purp && !l.pron && !l.sum && !l.km && !l.fam && !l.ea && !l.pl && !l.ce && !l.co && !l.dt && !l.ct && !l.sta && !l.cl && !l.imp && !l.qd && !l.ne && !l.ps && !l.lh && !l.cv && !l.sa && !l.lm && !l.gd && !l.ms && !l.sp && !l.lo && !l.nv && !l.da && !l.qn && !l.bv && !l.lp && !l.cm && !l.tv && !l.lq && !l.cz && !l.qu && !l.fi && !l.nh && !l.rf && !l.gn && !l.vo && !l.po && !l.dv && !l.an && !l.tl && !l.dvp && !l.mc && !l.pe && !l.vi && !l.fu && !l.ge && !l.lg && !l.pc && !l.md && !l.cu && !l.pi && !l.sg && !l.tf && !l.ipf && !l.spu && !l.bar && !l.moda && !l.via && !l.hot && !l.mit && !l.cibo && !l.vor && !l.cal && !l.casa && !l.cg && !l.tu && !l.mov && !l.mani && !l.eta && !l.dove && !l.test);   // lezioni con gli oggetti (colori e numeri hanno i loro test)
 const NUM_LESSONS = run('LESSONS').filter(l => l.numbers);
 const COLOR_LESSONS = run('LESSONS').filter(l => l.colors);
 const ITEMS = run('ITEMS');
@@ -2130,9 +2130,9 @@ check('88: prima e ora', run("SIMPF.present('ipf_m_read').prompt") === 'Prima ' 
 {
   const L = run('LESSONS'), lv = (n) => L.find(l => l.id === 'l' + n).level, idx = (id) => L.findIndex(l => l.id === id);
   check('livelli da 25: 1–25, 26–50, 51–75, 76–100 (101 e oltre: livello 5)', lv(101) === 5 && lv(1) === 1 && lv(25) === 1 && lv(26) === 2 && lv(50) === 2 && lv(51) === 3 && lv(75) === 3 && lv(76) === 4 && lv(100) === 4 &&
-    [1, 2, 3, 4].every(v => L.filter(l => l.level === v && !l.test).length === 25));
+    [1, 2, 3, 4].every(v => L.filter(l => l.level === v && !l.test && /^l\d+$/.test(l.id)).length === 25));
   check('i test dopo la 25ª, 50ª, 75ª, 100ª lezione', idx('t1') === idx('l25') + 1 && idx('t2') === idx('l50') + 1 && idx('t3') === idx('l75') + 1 && idx('t4') === idx('l100') + 1);
-  check('20 capitoli da 5 lezioni (più quello di prova del livello 5), con il nome in 4 lingue', run('CHAPTERS').length === 21 && [0, 5, 19].every(c => L.filter(l => l.chapter === c && !l.test).length === 5) &&
+  check('20 capitoli da 5 lezioni (più quello di prova del livello 5), con il nome in 4 lingue', run('CHAPTERS').length === 21 && [0, 5, 19].every(c => L.filter(l => l.chapter === c && !l.test && /^l\d+$/.test(l.id)).length === 5) &&
     run('CHAPTERS').every(c => c[1].it && c[1].en && c[1].de && c[1].ja) && [1, 2, 3, 4].every(v => run('LEVEL_THEMES')[v].ja));
   check('i test chiedono solo le lezioni del loro livello', [1, 2, 3, 4].every(v => { const st = buildSteps(L.find(l => l.id === 't' + v)); return st.filter(s => s.tlesson).every(s => L.find(l => l.id === s.tlesson).level === v); }));
 }
@@ -2305,6 +2305,24 @@ check('88: prima e ora', run("SIMPF.present('ipf_m_read').prompt") === 'Prima ' 
     !evaluate(k, 'Mario corre.').ok && !evaluate(k, 'Mario camminare.').ok);
   check('102: «Anna apre la porta.» giusto, «chiude» sbagliato', evaluate(k2, 'Anna apre la porta.').ok && !evaluate(k2, 'Anna chiude la porta.').ok);
   check('101, 102: il cartone animato per ogni figura', run('Object.keys(AZ_ANIM).length') === 12);
+}
+// Lezioni 13b e 13c: le persone (giovane / anziano, di dov'è), subito dopo la 13
+{
+  const L13 = run('LESSONS'), at = (id) => L13.findIndex(l => l.id === id);
+  check('13b e 13c dopo la 13, prima della 14, nel livello 1', at('l13b') === at('l13') + 1 && at('l13c') === at('l13') + 2 && at('l14') === at('l13') + 3 &&
+    L13[at('l13b')].level === 1 && run('lessonNumber')(L13[at('l13b')]) === '13b' && run('lessonNumber')(L13[at('l14')]) === 14);
+  ['l13b', 'l13c'].forEach(id => {
+    const st = buildSteps(L13.find(l => l.id === id)), models = st.filter(s => s.model && s.type !== 'reveal');
+    check(id + ': risposte modello giuste', models.length > 20 && models.every(s => evaluate(s, s.model).ok));
+    check(id + ': ripetizioni giuste', models.every(s => buildDrill(s, 5, s.reviewItems || []).every(d => evaluate(d, d.model).ok)));
+    check(id + ': «no» con la parola giusta (anziana per lei)', st.filter(s => s.type === 'neg').every(s => !/la signora non è anziano|la bambina non è anziano|la ragazza non è anziano/.test(s.model)));
+  });
+  const key = (id, X) => buildSteps(L13.find(l => l.id === id)).find(s => s.type === 'key' && s.show === X);
+  const a = key('l13b', 'eta_signora'), b = key('l13c', 'dove_ragazzo');
+  check('13b: «La signora è anziana.» giusto, «giovane» e «anziano» sbagliati', evaluate(a, 'La signora è anziana.').ok && evaluate(a, 'È anziana.').ok &&
+    !evaluate(a, 'La signora è giovane.').ok && !evaluate(a, 'La signora è anziano.').ok);
+  check('13c: «È di New York.» giusto, «di Londra» e «a New York» sbagliati', evaluate(b, 'Il ragazzo è di New York.').ok && evaluate(b, 'È di New York.').ok &&
+    !evaluate(b, 'Il ragazzo è di Londra.').ok && !evaluate(b, 'Il ragazzo è a New York.').ok);
 }
 
 console.log(count - fails + ' / ' + count + ' test passati');

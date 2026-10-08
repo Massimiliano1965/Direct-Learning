@@ -17,12 +17,12 @@ const LOOKS = {
   // Max: Armani, abito grigio antracite stretto e ben tagliato, camicia bianca aperta, fazzoletto d'oro; capelli brizzolati e pizzetto, niente occhiali (Massi)
   mass:   { man: true, skin: '#f0c6a4', skin2: '#dfae88', hair: '#6f6f78', hair2: '#4f4f58', style: 'back', goatee: true, hairHi: '#9a9aa4',
             modern: true, under: 'shirt', suit: '#41444f', suit2: '#33363f', shirt: '#f7f8fb', btn: '#24262d', pocket: '#d8b878', pants: '#3a3d47', shoe: '#141418' },
-  // Isa: Valentino, giacca viola a doppio petto con i bottoni d'oro, camicetta di seta avorio
+  // Isa: Valentino, giacca rosa cipria a doppio petto con i bottoni d'oro, camicetta di seta avorio (Massi: niente viola)
   giulia: { man: false, skin: '#eab892', skin2: '#d9a27c', hair: '#e2c06a', hair2: '#c29a45', style: 'bob',
-            modern: true, under: 'silk', dbl: true, suit: '#5b3f8f', suit2: '#4a3277', shirt: '#f6efe4', btn: '#e6c77e', legs: '#d9a27c', shoe: '#1b1b22' },
-  // Pietro: abito blu notte stretto, camicia bianca, cravatta sottile, fazzoletto bianco nel taschino
+            modern: true, under: 'silk', dbl: true, suit: '#d39aa6', suit2: '#bc818e', shirt: '#f6efe4', btn: '#c9a45c', legs: '#d9a27c', shoe: '#1b1b22' },
+  // Pietro: abito blu Savoia (più chiaro: il blu notte si confondeva col fondo), camicia bianca, cravatta azzurra sottile, fazzoletto bianco
   luca:   { man: true, skin: '#eab892', skin2: '#d9a27c', hair: '#4a3326', hair2: '#38261c', style: 'short',
-            modern: true, under: 'shirt', suit: '#1f2b4d', suit2: '#18223e', shirt: '#f7f8fb', tie: '#6a7aa3', btn: '#18223e', pocket: '#f7f8fb', shoe: '#2a1d16' },
+            modern: true, under: 'shirt', suit: '#3a62a8', suit2: '#2f5290', shirt: '#f7f8fb', tie: '#9fc0ea', btn: '#24447a', pocket: '#f7f8fb', pants: '#2f5290', shoe: '#2a1d16' },
   // Erika (chiave sara: era Sara): Versace, giacca avorio con i bottoni d'oro, top e gonna neri, collana d'oro
   sara:   { man: false, skin: '#f1c7a5', skin2: '#e0b08c', hair: '#a8522a', hair2: '#8a4020', style: 'long',
             modern: true, under: 'silk', suit: '#efe8dc', suit2: '#d6ccbb', shirt: '#1c1c22', btn: '#c9a45c', necklace: '#e6c77e', skirt: '#1c1c22', legs: '#e0b08c', shoe: '#1b1b22' },
