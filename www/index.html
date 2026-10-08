@@ -100,7 +100,7 @@
   <button id="btn-search-home" class="secondary" data-t="menu">Menu</button>
 </section>
 
-<!-- ============ «IL SIGNOR KENJI»: LA PUNTATA (kenji.js) ============ -->
+<!-- ============ LE STORIE: LA PUNTATA (storie.js) ============ -->
 <section id="screen-story" class="screen hidden">
   <div class="topbar"><span><span id="kj-title" class="kj-title"></span></span><span id="kj-ep" class="kj-ep"></span></div>
   <div id="kj-stage"></div>
@@ -112,10 +112,12 @@
   <button id="kj-exit" class="ghost" data-t="menu">Menu</button>
 </section>
 
-<!-- ============ «IL SIGNOR KENJI»: LE PUNTATE ============ -->
+<!-- ============ LE STORIE: LA SCELTA E LE PUNTATE ============ -->
 <section id="screen-storylist" class="screen hidden">
-  <h2>Il signor Kenji</h2>
+  <h2 data-t="stories">Stories</h2>
   <p class="muted kj-motto" data-t="tagline">Learn the language, solve the mystery.</p>
+  <div id="kj-choose"></div>
+  <div class="label" data-t="storyEpisodes">Episodes</div>
   <div id="kj-list"></div>
   <div style="height:18px"></div>
   <button id="btn-story-home" class="secondary" data-t="menu">Menu</button>
@@ -161,6 +163,6 @@
 <script src="js/favs.js"></script>
 <script src="js/cerca.js"></script>
 <script src="js/promemoria.js"></script>
-<script src="js/kenji.js"></script>
+<script src="js/storie.js"></script>
 </body>
 </html>

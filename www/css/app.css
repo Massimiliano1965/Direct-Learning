@@ -437,3 +437,14 @@ body.test-end #btn-again { display: none; }
 .kj-item.locked .kj-num { background: var(--surface2); color: var(--muted); }
 .kj-item .kj-name { font-family: var(--serif); font-size: 18px; }
 @keyframes textIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+/* Le storie: le schede per scegliere (giallo, commedia, romantica) */
+#kj-choose { display: grid; gap: 10px; margin-top: 8px; }
+.kj-card { display: flex; flex-direction: column; align-items: flex-start; gap: 3px; text-align: left; background: var(--surface); color: var(--text); border: 1px solid var(--line); border-radius: 16px; padding: 14px 16px; font-weight: 400; }
+.kj-card.on { border-color: var(--accent); box-shadow: 0 0 0 1px rgba(201,164,92,.4); }
+.kj-card.soon { opacity: .55; }
+.kj-genre { font-size: 12px; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; color: var(--accent); }
+.kj-ctitle { font-family: var(--serif); font-size: 21px; }
+.kj-who { font-size: 13px; color: var(--muted); }
+.kj-plot { font-family: var(--serif); font-style: italic; font-size: 15px; line-height: 1.35; margin-top: 4px; }
+.kj-btn .hint { display: block; font-size: 13px; font-weight: 500; color: var(--muted); margin-top: 2px; }

@@ -2361,15 +2361,18 @@ check('88: prima e ora', run("SIMPF.present('ipf_m_read').prompt") === 'Prima ' 
   check('promemoria: spento → nessuna notifica', sched.length === 0);
 }
 
-// «Il signor Kenji» (kenji.js): le puntate dopo le lezioni 1–5
+// Le storie (storie.js): il giallo «La chiave di Venezia», puntate dopo le lezioni 1–5
 {
-  vm.runInContext(fs.readFileSync(path.join(__dirname, '..', 'www', 'js', 'kenji.js'), 'utf8'), ctx, { filename: 'kenji.js' });
-  const K = run('KENJI');
-  check('Kenji: 5 puntate, una per lezione (1–5), solo nel corso di italiano', K.length === 5 && K.every((E, i) => E.lesson === 'l' + (i + 1)) && run('KJ_ON') === true && run('kjIndexOf("l3")') === 2);
-  check('Kenji: ogni scena si disegna, ogni puntata finisce con «Continua…»', K.every(E => E.scenes.every(sc => typeof sc[0]() === 'string') && E.scenes[E.scenes.length - 1][1] === 'Continua…'));
-  check('Kenji: la risposta modello è giusta, quella sbagliata no', K.every(E => E.questions.every(Q => run('kjCheck')(Q, Q.model) && E.scenes[Q.show])) &&
-    !run('kjCheck')(K[0].questions[0], 'È una sedia.') && !run('kjCheck')(K[4].questions[1], 'La sedia è bianca.'));
-  check('Kenji: si sblocca con la lezione fatta', run('DB.lessons = { l1: 80 }; [kjOpen(0), kjOpen(1)]').join() === 'true,false');
+  vm.runInContext(fs.readFileSync(path.join(__dirname, '..', 'www', 'js', 'storie.js'), 'utf8'), ctx, { filename: 'storie.js' });
+  run('DB.settings.story = undefined');
+  const K = run('kjEps()');
+  check('storie: 3 storie da scegliere, il giallo pronto (5 puntate), solo nel corso di italiano', run('STORIES.length') === 3 && run('kjStory().id') === 'giallo' &&
+    K.length === 5 && K.every((E, i) => E.lesson === 'l' + (i + 1)) && run('KJ_ON') === true && run('kjIndexOf("l3")') === 2);
+  check('storie: ogni scena si disegna, ogni puntata finisce con «Continua…»', K.every(E => E.scenes.every(sc => typeof sc[0]() === 'string') && E.scenes[E.scenes.length - 1][1] === 'Continua…'));
+  check('storie: la risposta modello è giusta, quella sbagliata no', K.every(E => E.questions.every(Q => run('kjCheck')(Q, Q.model) && E.scenes[Q.show])) &&
+    !run('kjCheck')(K[0].questions[0], 'È un tavolo.') && !run('kjCheck')(K[4].questions[0], 'Il cappotto è bianco.'));
+  check('storie: si sblocca con la lezione fatta', run('DB.lessons = { l1: 80 }; [kjOpen(0), kjOpen(1)]').join() === 'true,false');
+  check('storie: una storia «in arrivo» non si può scegliere', run('DB.settings.story = "commedia"; kjStory().id') === 'giallo');
 }
 
 console.log(count - fails + ' / ' + count + ' test passati');

@@ -113,11 +113,11 @@ function renderHome() {
   fb.innerHTML = '<span>★ ' + tx('favs') + '</span><span class="score">' + ((DB.settings.favs || []).length || '') + '</span>';
   fb.onclick = () => showFavs();
   ll.appendChild(fb);
-  // la storia a puntate «Il signor Kenji» (kenji.js): sopra tutto, è il motivo per tornare
+  // le storie a puntate (storie.js): sopra tutto, sono il motivo per tornare
   if (typeof showStoryList === 'function' && KJ_ON) {
-    const kb = document.createElement('button'), n = KENJI.filter((E, i) => kjOpen(i)).length;
+    const kb = document.createElement('button'), S = kjStory(), n = S.episodes.filter((E, i) => kjOpen(i)).length;
     kb.className = 'lesson-btn kj-btn';
-    kb.innerHTML = '<span>📖 Il signor Kenji</span><span class="score">' + n + ' / ' + KENJI.length + '</span>';
+    kb.innerHTML = '<span>📖 ' + tx('stories') + '<small class="hint">' + S.icon + ' ' + S.title + '</small></span><span class="score">' + n + ' / ' + S.episodes.length + '</span>';
     kb.onclick = () => showStoryList();
     ll.insertBefore(kb, ll.firstChild);
   }
@@ -1137,10 +1137,10 @@ function finishLesson() {
     (pct < 70 && toReview.length ? '<div class="t-notice"><h3 class="t-head">' + tx('testReview') + '</h3><div class="t-review">' +
       toReview.map(rid => '<button class="lesson-btn t-go" data-id="' + rid + '">' + tx('lesson', { n: lessonNumber(LESSONS.find(x => x.id === rid)) }) + '</button>').join('') + '</div></div>' : '');
   $('end-body').querySelectorAll('.t-go').forEach(b => { b.onclick = () => startLesson(b.dataset.id); });
-  // la puntata di «Il signor Kenji» che questa lezione ha appena sbloccato (kenji.js)
+  // la puntata della storia scelta che questa lezione ha appena sbloccato (storie.js)
   const ki = typeof kjIndexOf === 'function' ? kjIndexOf(id) : -1;
   if (ki >= 0) {
-    $('end-body').insertAdjacentHTML('afterbegin', '<button class="kj-watch">📖 ' + tx('storyWatch', { n: ki + 1 }) + '<span class="hint">Il signor Kenji · ' + KENJI[ki].title + '</span></button>');
+    $('end-body').insertAdjacentHTML('afterbegin', '<button class="kj-watch">📖 ' + tx('storyWatch', { n: ki + 1 }) + '<span class="hint">' + kjStory().title + ' · ' + kjEps()[ki].title + '</span></button>');
     $('end-body').querySelector('.kj-watch').onclick = once(() => startEpisode(ki));
   }
   showScreen('end', true);
