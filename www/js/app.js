@@ -172,6 +172,7 @@ function renderHome() {
 
   $('opt-text').checked = !!DB.settings.showText;
   showSpeed();
+  if (typeof remindShow === 'function') remindShow();
   applyStaticText();
   applyUiWords();
 }
@@ -1105,6 +1106,7 @@ function finishLesson() {
   const id = L.lesson.id;
   const t = L.teacher;
   if (DB.lessons[id] == null || pct > DB.lessons[id]) DB.lessons[id] = pct;
+  if (typeof remindStudied === 'function') remindStudied();   // oggi ha studiato: il promemoria di oggi non arriva (promemoria.js)
   // dopo un test: la lezione da ripassare rifatta bene (80% o più) esce dalla lista del ripasso
   const tests = DB.settings.tests || {};
   Object.keys(tests).forEach(k => { if (pct >= 80) tests[k].review = (tests[k].review || []).filter(x => x !== id); });

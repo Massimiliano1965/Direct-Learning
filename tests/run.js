@@ -2340,5 +2340,26 @@ check('88: prima e ora', run("SIMPF.present('ipf_m_read').prompt") === 'Prima ' 
   check('ricerca: niente domande di ripasso di altre lezioni', run('SEARCH_IX.every(r => !SEARCH_STEPS[r.id][r.i].review)'));
 }
 
+// Il promemoria per studiare (promemoria.js): con un finto plugin delle notifiche
+{
+  const sched = [];
+  run('var DB = { lessons: { l1: 90, l2: 80 }, settings: {} }; var saveDB = () => {}; var todayKey = () => "2026-10-08"; var selectedTeacherKey = () => "mass";' +
+      'var $ = () => null; var document = { addEventListener: () => {} };');
+  ctx.__sched = sched;
+  run('var window = { cordova: { plugins: { notification: { local: { cancel: (ids, cb) => cb(), schedule: (l) => __sched.push(...[].concat(l)), requestPermission: (cb) => cb(true), on: () => {} } } } } };');
+  vm.runInContext(fs.readFileSync(path.join(__dirname, '..', 'www', 'js', 'promemoria.js'), 'utf8'), ctx, { filename: 'promemoria.js' });
+  run('DB.settings.remind = 23; remindRefresh();');
+  const now = new Date(), late = now.getHours() >= 23;
+  check('promemoria: 7 giorni di notifiche (oggi compreso, se l\'ora non è passata)', sched.length === (late ? 6 : 7));
+  check('promemoria: l\'insegnante, una frase già imparata, la lezione che tocca (la 3)', sched.every(n => n.title.indexOf('Max') === 0 && /▶ .*3$/.test(n.text) && n.text.split('\n')[0].length > 3 && n.data.study === 1));
+  check('promemoria: il tasto «Tra un\'ora»', sched[0].actions[0].id === 'remind_later');
+  sched.length = 0;
+  run('DB.settings.lastStudy = "2026-10-08"; remindRefresh();');
+  check('promemoria: oggi ha già studiato → niente notifica oggi', sched.length === 6 && sched.every(n => n.id !== 7001));
+  sched.length = 0;
+  run('DB.settings.remind = null; remindRefresh();');
+  check('promemoria: spento → nessuna notifica', sched.length === 0);
+}
+
 console.log(count - fails + ' / ' + count + ' test passati');
 process.exit(fails ? 1 : 0);
