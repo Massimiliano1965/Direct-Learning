@@ -273,6 +273,16 @@ $('opt-text').onchange = (e) => { DB.settings.showText = e.target.checked; saveD
 function showSpeed() {
   const cur = SPEEDS[DB.settings.speed] ? DB.settings.speed : 'normal';
   document.querySelectorAll('#opt-speed button').forEach(b => b.classList.toggle('on', b.dataset.speed === cur));
+  setSum();
+}
+// sulla riga «Impostazioni» (chiusa) si vede com'è adesso: la velocità e i colori
+function setSum() {
+  const el = $('set-sum');
+  if (!el) return;
+  try {
+    const sp = SPEEDS[DB.settings.speed] ? DB.settings.speed : 'normal', th = DB.settings.theme || 'auto';
+    el.textContent = tx('speed' + sp[0].toUpperCase() + sp.slice(1)) + ' · ' + tx({ notte: 'themeNight', giorno: 'themeDay', auto: 'themeAuto' }[th]);
+  } catch (e) {}
 }
 // Toccando una velocità, l'insegnante scelto si presenta («Ciao, sono Pietro.» … «Parliamo italiano insieme.»), con la pausa in mezzo
 let speedDemo = null;
@@ -1310,6 +1320,7 @@ function applyTheme() {
   const m = document.querySelector('meta[name="theme-color"]');
   if (m) m.setAttribute('content', day ? '#f6f1e7' : '#0f172a');
   document.querySelectorAll('#opt-theme button').forEach(b => b.classList.toggle('on', b.dataset.theme === (DB.settings.theme || 'auto')));
+  setSum();
 }
 document.querySelectorAll('#opt-theme button').forEach(b => { b.onclick = () => { DB.settings.theme = b.dataset.theme; saveDB(); applyTheme(); }; });
 document.addEventListener('resume', applyTheme, false);   // in automatico: tornando all'app, il colore giusto per l'ora

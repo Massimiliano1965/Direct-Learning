@@ -126,3 +126,26 @@ html[data-level] #stage { background: linear-gradient(180deg, var(--surface2), v
 .lv-group { border-radius: 20px; }
 .lv-group > summary { padding: 18px 18px; }
 .level-tag { font-family: var(--sans); }
+
+/* ---------- Di notte niente oro pieno (Massi: «un pugno nell'occhio»): i tasti principali e le scelte accese
+   sono vetro dorato tenue, con la scritta oro. :where = peso zero, così i tasti con uno stile loro restano come sono. */
+:where(html:not(.giorno)) button { background: rgba(201, 164, 92, .13); border-color: rgba(201, 164, 92, .42); color: #e9cf8f; box-shadow: none; }
+:where(html:not(.giorno)) button:active { background: rgba(201, 164, 92, .22); }
+:where(html:not(.giorno)) .seg button.on { background: rgba(201, 164, 92, .16); color: #edd394; box-shadow: inset 0 0 0 1.5px rgba(201, 164, 92, .55); }
+
+/* ---------- Le impostazioni: una riga sotto gli insegnanti, si apre e si chiude ---------- */
+.settings { margin: 14px 0 0; border: 1px solid var(--line); border-radius: 18px; background: var(--surface); box-shadow: var(--shadow); }
+.settings > summary { list-style: none; display: flex; align-items: center; gap: 12px; padding: 14px 18px; min-height: 56px; cursor: pointer; }
+.settings > summary::-webkit-details-marker { display: none; }
+.settings .set-ico { font-size: 20px; color: var(--accent); line-height: 1; }
+.settings .set-name { font-weight: 700; font-size: 17px; }
+.settings .set-sum { margin-left: auto; font-size: 13px; color: var(--muted); }
+.settings > summary::after { content: '›'; font-size: 24px; color: var(--muted); transition: transform .25s var(--ease); margin-left: 4px; }
+.settings[open] > summary::after { transform: rotate(90deg); }
+.settings[open] > summary .set-sum { visibility: hidden; }
+.settings .set-body { padding: 4px 16px 16px; border-top: 1px solid var(--line); }
+.settings .set-body .speed-row { margin-top: 14px; }
+.settings .set-label { margin: 16px 0 8px 2px; font-size: 13px; color: var(--muted); }
+.settings .set-body .label { margin: 18px 0 8px 2px; font-size: 12px; }
+.settings .set-body .switch { margin-top: 14px; box-shadow: none; }
+.settings .set-body #lang-box { margin-top: 14px; }

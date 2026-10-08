@@ -28,26 +28,29 @@
 
   <div class="label" data-t="labelTeacher">Teacher</div>
   <div id="teacher-list"></div>
-  <!-- la velocità della voce subito sotto gli insegnanti (Massi: si prova l'insegnante e si regola lì) -->
+  <!-- le impostazioni subito sotto gli insegnanti (Massi): si aprono e si chiudono toccando «Impostazioni» -->
+  <details id="settings" class="settings">
+  <summary><span class="set-ico">⚙</span><span class="set-name" data-t="settings">Settings</span><span class="set-sum" id="set-sum"></span></summary>
+  <div class="set-body">
   <div class="speed-row"><span class="speed-label" data-t="optSpeed">Speed</span>
   <div class="seg seg-small" id="opt-speed"><button data-speed="slow" data-t="speedSlow">Slow</button><button data-speed="normal" data-t="speedNormal">Normal</button><button data-speed="fast" data-t="speedFast">Fast</button></div></div>
-
   <div id="lang-box"></div>
   <div id="reg-box"></div>
-
-  <div class="label" data-t="labelLessons">Lessons</div>
-  <div id="lesson-list"></div>
-
-  <div class="label" data-t="labelOptions">Options</div>
   <label class="switch"><input type="checkbox" id="opt-text"> <span data-t="optText">Show the sentences in writing</span></label>
-  <div class="speed-label" data-t="themeLabel">Colours</div>
+  <div class="speed-label set-label" data-t="themeLabel">Colours</div>
   <div class="seg" id="opt-theme"><button data-theme="notte" data-t="themeNight">Night</button><button data-theme="giorno" data-t="themeDay">Day</button><button data-theme="auto" data-t="themeAuto">Automatic</button></div>
-  <div class="speed-label" data-t="remindLabel">Reminder to study</div>
+  <div class="speed-label set-label" data-t="remindLabel">Reminder to study</div>
   <div class="seg" id="opt-remind"></div>
   <div class="muted remind-note" id="remind-note"></div>
   <label class="switch unlock-switch" id="opt-unlock"><input type="checkbox" id="opt-unlock-check"> <span data-t="unlockSwitch">Reminder when I unlock the phone (Android)</span></label>
   <div class="muted remind-note" id="unlock-note"></div>
   <button id="unlock-test" class="secondary hidden" data-t="unlockTest">Try it now</button>
+  </div>
+  </details>
+
+
+  <div class="label" data-t="labelLessons">Lessons</div>
+  <div id="lesson-list"></div>
 
   <div style="height:18px"></div>
   <button id="btn-report" class="secondary" data-t="btnReport">Trial results</button>
