@@ -66,3 +66,8 @@ Leggi questo file prima di tutto. Poi `docs/percorso.md` (l'ordine delle lezioni
 - Play Store: dopo. iPhone: dopo.
 - Giapponese (nihongo): ok, va fatto controllare a un madrelingua.
 - Splash: fatto, uno per app con la bandierina (res/build_splash.js; set_course.js lo sceglie).
+
+## Durata delle lezioni e «paura» del numero (8/10/2026, da fare)
+- Stima (circa 7 s per domanda): livello 1 = 55–88 domande, 8–11 min; lezioni 26–31 circa 11 min; dalla 32 circa 40 domande, 5–6 min.
+- Decisione di Massi: lezioni di livello 1 al massimo 7–8 minuti (60 domande al massimo); le lezioni 26–31 veloci come le altre del livello 2; una barra in alto che mostra quanto manca alla fine della lezione.
+- Il numero 100+ può spaventare: nel menu non mostrare «lezione 87 di 125», ma il capitolo e «lezione 2 di 5»; i livelli chiusi aiutano già; mostrare un traguardo vicino («ancora 3 lezioni e finisci il capitolo»).
