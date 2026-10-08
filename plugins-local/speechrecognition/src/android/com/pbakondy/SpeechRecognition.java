@@ -16,6 +16,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 
 import android.Manifest;
 import android.os.Build;
@@ -165,6 +167,16 @@ public class SpeechRecognition extends CordovaPlugin {
     return SpeechRecognizer.isRecognitionAvailable(context);
   }
 
+  private boolean isOnline() {
+    try {
+      ConnectivityManager cm = (ConnectivityManager) activity.getSystemService(Context.CONNECTIVITY_SERVICE);
+      NetworkInfo ni = cm == null ? null : cm.getActiveNetworkInfo();
+      return ni != null && ni.isConnected();
+    } catch (Exception e) {
+      return true;   // se non si sa, come prima
+    }
+  }
+
   private void startListening(String language, int matches, String prompt, final Boolean showPartial, Boolean showPopup) {
     Log.d(LOG_TAG, "startListening() language: " + language + ", matches: " + matches + ", prompt: " + prompt + ", showPartial: " + showPartial + ", showPopup: " + showPopup);
 
@@ -181,6 +193,8 @@ public class SpeechRecognition extends CordovaPlugin {
     mSendPartial = showPartial;
     mLastHeard = null;
     intent.putExtra("android.speech.extra.DICTATION_MODE", showPartial);
+    // CIAO (Massi: anche in treno o nel bosco): senza rete si chiede il riconoscimento sul telefono
+    if (!isOnline()) intent.putExtra(RecognizerIntent.EXTRA_PREFER_OFFLINE, true);
 
     if (prompt != null) {
       intent.putExtra(RecognizerIntent.EXTRA_PROMPT, prompt);

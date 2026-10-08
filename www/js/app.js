@@ -398,7 +398,7 @@ function stopLesson() {
   }
   L = null;
   if (typeof favUpdateStar === 'function') favUpdateStar();
-  $('screen-lesson').classList.remove('tunnel');
+  $('screen-lesson').classList.remove('tunnel', 'role-you');
   hideMark();
   hideYourTurn();
   $('stage-places').innerHTML = '';
@@ -651,8 +651,33 @@ function runStep() {
   L.attempts = 0;
   L.noSpeech = 0;
   drawStep();
+  roleSwitch(cur());
   if (typeof favUpdateStar === 'function') favUpdateStar();
   askStep();
+}
+// I ruoli invertiti (Massi): quando è l'allievo a fare la domanda la scena cambia colore, si sente un suono pulito
+// e compare «Adesso chiedi tu»; quando torna a chiedere l'insegnante, tutto torna come prima
+function roleSwitch(st) {
+  try {
+    const scr = $('screen-lesson'), you = !!(st && st.type === 'ask' && L && !L.test), was = scr.classList.contains('role-you');
+    scr.classList.toggle('role-you', you);
+    if (you && !was) { $('role-badge').textContent = tx('roleYou'); roleChime(); }
+  } catch (e) {}
+}
+let roleCtx = null;
+function roleChime() {
+  try {
+    const C = window.AudioContext || window.webkitAudioContext;
+    if (!C) return;
+    const a = roleCtx || (roleCtx = new C());
+    if (a.state === 'suspended') a.resume();
+    [[660, 0], [990, .13]].forEach(([f, d]) => {   // due note brevi, piano: «din-din»
+      const o = a.createOscillator(), g = a.createGain(), t = a.currentTime + d;
+      o.type = 'sine'; o.frequency.value = f;
+      g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(.16, t + .015); g.gain.exponentialRampToValueAtTime(.0001, t + .38);
+      o.connect(g); g.connect(a.destination); o.start(t); o.stop(t + .42);
+    });
+  } catch (e) {}
 }
 
 function askStep() {
