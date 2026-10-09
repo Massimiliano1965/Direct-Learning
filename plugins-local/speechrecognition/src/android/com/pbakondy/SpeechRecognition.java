@@ -16,6 +16,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.media.AudioManager;
+import android.os.Handler;
+import android.os.Looper;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
@@ -134,6 +137,7 @@ public class SpeechRecognition extends CordovaPlugin {
             if(recognizer != null) {
               recognizer.stopListening();
             }
+            setBeepMuted(false);   // fermato dall'app: l'insegnante sta per parlare, l'audio torna subito
             callbackContextStop.success();
           }
         });
@@ -166,6 +170,34 @@ public class SpeechRecognition extends CordovaPlugin {
   private boolean isRecognitionAvailable() {
     return SpeechRecognizer.isRecognitionAvailable(context);
   }
+
+  // CIAO (Massi: «il continuo blip blip quando si accende il microfono»): il «bip» lo suona il riconoscimento di Google
+  // a ogni accensione. Mentre il microfono ascolta si abbassano i suoni di sistema, poi si rimettono come erano.
+  private static final int[] BEEP_STREAMS = { AudioManager.STREAM_MUSIC, AudioManager.STREAM_NOTIFICATION, AudioManager.STREAM_SYSTEM };
+  private boolean beepMuted = false;
+  private final Handler beepHandler = new Handler(Looper.getMainLooper());
+  private final Runnable beepUnmuteRun = new Runnable() { public void run() { setBeepMuted(false); } };
+  private void setBeepMuted(boolean mute) {
+    beepHandler.removeCallbacks(beepUnmuteRun);
+    if (mute == beepMuted) return;
+    try {
+      AudioManager am = (AudioManager) activity.getSystemService(Context.AUDIO_SERVICE);
+      if (am == null) return;
+      for (int st : BEEP_STREAMS) {
+        try {
+          if (Build.VERSION.SDK_INT >= 23) am.adjustStreamVolume(st, mute ? AudioManager.ADJUST_MUTE : AudioManager.ADJUST_UNMUTE, 0);
+          else am.setStreamMute(st, mute);
+        } catch (Exception e) { }   // «Non disturbare» può vietarlo: pazienza, si sente il bip
+      }
+      beepMuted = mute;
+    } catch (Exception e) { }
+  }
+  private void unmuteBeepLater(int ms) { beepHandler.removeCallbacks(beepUnmuteRun); beepHandler.postDelayed(beepUnmuteRun, ms); }
+
+  @Override
+  public void onPause(boolean multitasking) { setBeepMuted(false); super.onPause(multitasking); }
+  @Override
+  public void onDestroy() { setBeepMuted(false); super.onDestroy(); }
 
   private boolean isOnline() {
     try {
@@ -206,6 +238,7 @@ public class SpeechRecognition extends CordovaPlugin {
       view.post(new Runnable() {
         @Override
         public void run() {
+          setBeepMuted(true);
           recognizer.startListening(intent);
         }
       });
@@ -302,10 +335,12 @@ public class SpeechRecognition extends CordovaPlugin {
     @Override
     public void onError(int errorCode) {
       if ((errorCode == SpeechRecognizer.ERROR_NO_MATCH || errorCode == SpeechRecognizer.ERROR_SPEECH_TIMEOUT) && mLastHeard != null && mLastHeard.size() > 0) {
+        setBeepMuted(false);
         callbackContext.success(new JSONArray(mLastHeard));   // CIAO: c'era una parola sentita, la si usa
         mLastHeard = null;
         return;
       }
+      unmuteBeepLater(250);   // il bip di fine suona subito: poi l'audio torna
       String errorMessage = getErrorText(errorCode);
       Log.d(LOG_TAG, "Error: " + errorMessage);
       callbackContext.error(errorMessage);
@@ -344,6 +379,7 @@ public class SpeechRecognition extends CordovaPlugin {
 
     @Override
     public void onResults(Bundle results) {
+      setBeepMuted(false);    // il bip di fine è già passato (a fine parlato): l'insegnante risponde subito, con l'audio
       ArrayList<String> matches = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
       Log.d(LOG_TAG, "SpeechRecognitionListener results: " + matches);
       try {
