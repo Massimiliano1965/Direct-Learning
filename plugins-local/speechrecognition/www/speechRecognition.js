@@ -6,6 +6,10 @@ module.exports = {
     options = options || {};
     cordova.exec(successCallback, errorCallback, 'SpeechRecognition', 'startListening', [ options.language, options.matches, options.prompt, options.showPartial, options.showPopup ]);
   },
+  // CIAO: rimette l'audio abbassato durante l'ascolto (contro il «bip» di Google), prima che parli l'insegnante
+  unmuteBeep: function(successCallback, errorCallback) {
+    cordova.exec(successCallback, errorCallback, 'SpeechRecognition', 'unmuteBeep', []);
+  },
   stopListening: function(successCallback, errorCallback) {
     cordova.exec(successCallback, errorCallback, 'SpeechRecognition', 'stopListening', []);
   },

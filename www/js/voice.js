@@ -125,6 +125,17 @@ const Mouth = {
     const estimate = 1200 + text.length * 90 / (rate || 1);
 
     if (window.TTS && typeof window.TTS.speak === 'function') {
+      // durante l'ascolto il telefono tiene l'audio abbassato (niente «bip» di Google): prima di parlare si rimette
+      const sr = pluginSR();
+      if (sr && typeof sr.unmuteBeep === 'function' && !this.unmuted) {
+        let go = false;
+        const goOn = () => { if (go) return; go = true; this.unmuted = true; if (tok === this.token) Mouth._speakRaw.call(this, text, rate, pitch, cb, gender); };
+        try { sr.unmuteBeep(goOn, goOn); } catch (e) { goOn(); }
+        setTimeout(goOn, 250);
+        this.clearTimers();
+        return;
+      }
+      this.unmuted = false;
       // Rete di sicurezza larga: comprende i tentativi
       timer = this.later(giveUp, estimate + 8000);
       const wait = ms => new Promise(r => this.later(r, ms));
@@ -192,6 +203,7 @@ const Mouth = {
     ttsHardStop();
   }
 };
+Mouth._speakRaw = Mouth.speak;   // l'originale (app.js la avvolge per la velocità: qui non si moltiplica due volte)
 
 function pluginSR() { return window.plugins && window.plugins.speechRecognition; }
 

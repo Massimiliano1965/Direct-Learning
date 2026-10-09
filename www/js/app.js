@@ -667,6 +667,7 @@ function roleSwitch(st) {
 }
 let roleCtx = null;
 function roleChime() {
+  try { const sr = pluginSR(); if (sr && sr.unmuteBeep) sr.unmuteBeep(() => {}, () => {}); } catch (e) {}   // l'audio abbassato dal microfono torna
   try {
     const C = window.AudioContext || window.webkitAudioContext;
     if (!C) return;
